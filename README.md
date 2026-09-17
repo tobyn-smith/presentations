@@ -2,15 +2,19 @@
 
 Live slides with phone check-in.
 
-- Students: `/` (on a computer, `/desk` if you want the wide layout)
-- Presenter: `/adminpresentation`
-- Backup, no phones: `/slideshow`
-- Script: `/script`
+**Live example:** [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/)
+
+- Students: [/](https://tobyn-smith.github.io/presentations/) (on a computer, [/desk](https://tobyn-smith.github.io/presentations/desk/) for the wide layout)
+- Presenter: [/adminpresentation](https://tobyn-smith.github.io/presentations/adminpresentation/) — key `example`
+- Backup, no phones: [/slideshow](https://tobyn-smith.github.io/presentations/slideshow/)
+- Script: [/script](https://tobyn-smith.github.io/presentations/script/)
+
+The slideshow is the always-on demo. Student and presenter views share a room, so open presenter first if you want phones to follow the boards.
 
 ## Set up
 
 1. Copy this repo.
-2. GitHub Pages: Settings, Pages, deploy from `main`, root.
+2. GitHub Pages: Settings, Pages, deploy from `main`, root. A workflow in `.github/workflows/pages.yml` publishes the same way.
 3. `config.js`: title, `presenterKey`, `joinUrl` (your Pages URL), and `room` (pick a unique ntfy topic).
 4. `roster.js`: names as strings in `NAMES`.
 5. `slides.js`: the boards.
