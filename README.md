@@ -11,10 +11,12 @@ Live slides with phone check-in.
 
 The slideshow is the always-on demo. Student and presenter views share a room, so open presenter first if you want phones to follow the boards.
 
+Turn the site on once: Settings → Pages → Deploy from a branch → `main` → `/ (root)`. Same as the other public pages repos. Until that switch is on, the URL above 404s.
+
 ## Set up
 
 1. Copy this repo.
-2. GitHub Pages: Settings, Pages, deploy from `main`, root. A workflow in `.github/workflows/pages.yml` publishes the same way.
+2. GitHub Pages: Settings, Pages, deploy from `main`, root. `.nojekyll` is already in the repo so Pages serves the files as-is.
 3. `config.js`: title, `presenterKey`, `joinUrl` (your Pages URL), and `room` (pick a unique ntfy topic).
 4. `roster.js`: names as strings in `NAMES`.
 5. `slides.js`: the boards.

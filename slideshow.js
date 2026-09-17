@@ -175,6 +175,11 @@
       + talkHtml(s);
   }
 
+  var brand = (window.DECK && DECK.title) || "Discussion";
+  document.querySelectorAll(".brand-mark").forEach(function (el) {
+    el.textContent = brand;
+  });
+
   function fromHash() {
     var n = parseInt(String(location.hash || "").replace(/^#/, ""), 10);
     if (!isFinite(n) || n < 1) return 0;
@@ -187,8 +192,8 @@
     var changed = n !== i;
     i = n;
     var s = slides[i];
-    document.title = "Slideshow · " + (s.title || "Discussion");
-    kicker.textContent = s.kicker || "Discussion";
+    document.title = "Slideshow · " + (s.title || brand);
+    kicker.textContent = s.kicker || brand;
     counter.textContent = String(i + 1);
     prevBtn.disabled = i === 0;
     nextBtn.disabled = i === slides.length - 1;
