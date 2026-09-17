@@ -278,7 +278,7 @@
   function paint() {
     val("title").value = state.deck.title;
     val("presenterKey").value = state.deck.presenterKey;
-    val("room").value = state.deck.room;
+    val("room").value = state.deck.room === DEFAULT_ROOM ? "" : state.deck.room;
     val("joinUrl").value = studentLink() || state.deck.joinUrl;
     val("names-box").value = state.names.join("\n");
     paintBoards();
@@ -300,7 +300,7 @@
     state.names = val("names-box").value.split(/\n+/).map(function (n) {
       return n.replace(/\s+/g, " ").trim();
     }).filter(Boolean);
-    val("room").value = state.deck.room;
+    val("room").value = state.deck.room === DEFAULT_ROOM ? "" : state.deck.room;
     val("joinUrl").value = state.deck.joinUrl;
   }
 
