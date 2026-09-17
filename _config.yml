@@ -1,0 +1,6 @@
+title: presentations
+url: https://tobynsmith.me
+baseurl: /presentations
+exclude:
+  - README.md
+  - .gitignore
