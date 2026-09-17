@@ -61,7 +61,7 @@
     || (location.origin + location.pathname.replace(/[^/]+$/, ""));
   if (a) {
     a.href = url;
-    a.textContent = url.replace(/^https:\/\//, "");
+    a.textContent = url.replace(/^https?:\/\//, "");
   }
   var card = document.getElementById("student-card");
   if (card) card.href = url;

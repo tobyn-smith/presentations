@@ -68,7 +68,7 @@
     var base = stripRoomParam(url).trim();
     var word = String(room || "").replace(/[^a-zA-Z0-9_-]/g, "");
     if (!base) return "";
-    if (!word || word === autoRoom()) return base;
+    if (!word || word === autoRoom() || (word === DEMO_ROOM && !isDemoHost())) return base;
     return base + (base.indexOf("?") >= 0 ? "&" : "?") + "room=" + encodeURIComponent(word);
   }
 
