@@ -1,6 +1,6 @@
 /* Backup slideshow. Same boards, no join, no answers. */
 (function () {
-  var slides = window.SLIDES || [];
+  function slides() { return window.SLIDES || []; }
   var stage = document.getElementById("stage");
   var kicker = document.getElementById("kicker");
   var counter = document.getElementById("counter");
@@ -183,20 +183,20 @@
   function fromHash() {
     var n = parseInt(String(location.hash || "").replace(/^#/, ""), 10);
     if (!isFinite(n) || n < 1) return 0;
-    return Math.min(slides.length - 1, n - 1);
+    return Math.min(slides().length - 1, n - 1);
   }
 
   function show(n, push) {
-    if (!slides.length) return;
-    n = Math.max(0, Math.min(slides.length - 1, n));
+    if (!slides().length) return;
+    n = Math.max(0, Math.min(slides().length - 1, n));
     var changed = n !== i;
     i = n;
-    var s = slides[i];
+    var s = slides()[i];
     document.title = "Slideshow · " + (s.title || brand);
     kicker.textContent = s.kicker || brand;
     counter.textContent = String(i + 1);
     prevBtn.disabled = i === 0;
-    nextBtn.disabled = i === slides.length - 1;
+    nextBtn.disabled = i === slides().length - 1;
     stage.className = "stage fade";
     stage.classList.toggle("prompt", s.type === "prompt");
     stage.classList.toggle("has-recap", !!(s.recap && s.recap.length));
@@ -236,7 +236,7 @@
       go(0);
     } else if (e.key === "End") {
       e.preventDefault();
-      go(slides.length - 1);
+      go(slides().length - 1);
     }
   });
   stage.addEventListener("click", function (e) {
@@ -244,5 +244,6 @@
     go(i + 1);
   });
   window.addEventListener("hashchange", function () { show(fromHash(), false); });
+  document.addEventListener("deck-content", function () { show(i, false); });
   show(fromHash(), true);
 })();

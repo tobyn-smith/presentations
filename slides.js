@@ -4,7 +4,7 @@ window.SLIDES = [
     type: "title",
     kicker: "Live example",
     title: "Phone check-in, shared boards",
-    lede: "Scan the code, pick a name, wait for Go live. This Pages site is the working copy.",
+    lede: "Scan the code, pick a name, wait for Go live.",
     agenda: [
       "Check in from a phone",
       "Look at a board together",
@@ -38,11 +38,11 @@ window.SLIDES = [
     type: "points",
     kicker: "2",
     title: "Try the other pages",
-    lead: "This repo is the site. Each path is a different job.",
+    lead: "Start is the map. Each card is a different job.",
     points: [
-      { title: "Students", body: "Open / on a phone. /desk is the wide layout on a computer." },
-      { title: "Presenter", body: "Open /adminpresentation. The key for this example is example." },
-      { title: "Backup", body: "Open /slideshow if you only want the boards, no phones." }
+      { title: "Students", body: "Phones open the home page. Computer layout is the wide version." },
+      { title: "Present", body: "QR, Go live, next and back. On this example the key is example." },
+      { title: "Change the boards", body: "Open Edit. Type in the boxes. No files." }
     ]
   },
   {

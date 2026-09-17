@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-size="2" data-space="roomy" data-font="lexend">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Start</title>
+<link rel="stylesheet" href="script.css" />
+<link rel="stylesheet" href="edit.css" />
+</head>
+<body>
+<header class="top">
+  <p class="kicker">Presentations</p>
+</header>
+
+<main class="wrap">
+  <h1>Start here</h1>
+  <p class="lede">Pick a card. On this example the key is <strong>example</strong>.</p>
+
+  <div class="home-grid">
+    <a class="home-card" href="edit.html">
+      <strong>Change the slides</strong>
+      <span>Type in boxes. Names, boards, what you say. Saves on this computer.</span>
+    </a>
+    <a class="home-card" href="adminpresentation.html">
+      <strong>Present</strong>
+      <span>QR code, Go live, next and back. Type <em>example</em> if it asks for a key.</span>
+    </a>
+    <a class="home-card" href="slideshow.html">
+      <strong>Just the slideshow</strong>
+      <span>Same boards, no phones. Use this if check-in will not start.</span>
+    </a>
+    <a class="home-card" href="index.html" id="student-card">
+      <strong>What students open</strong>
+      <span id="student-hint">The phone page. Copy the link if you want to text it.</span>
+    </a>
+    <a class="home-card" href="script.html">
+      <strong>What you say</strong>
+      <span>Speaker notes. Bigger type if you want it.</span>
+    </a>
+    <a class="home-card" href="desk.html">
+      <strong>Computer layout</strong>
+      <span>The student page, but wide. For someone following on a laptop.</span>
+    </a>
+  </div>
+
+  <p class="hint" id="link-row">
+    Student link: <a id="student-link" href="index.html">this page’s student view</a>
+    · <button type="button" id="copy-link" class="inline-btn">Copy it</button>
+  </p>
+</main>
+
+<script src="config.js"></script>
+<script src="apply-content.js"></script>
+<script>
+(function () {
+  var a = document.getElementById("student-link");
+  var hint = document.getElementById("student-hint");
+  var url = (window.DECK && DECK.joinUrl) || (location.origin + location.pathname.replace(/[^/]+$/, "") );
+  if (a) {
+    a.href = url;
+    a.textContent = url.replace(/^https:\/\//, "");
+  }
+  var card = document.getElementById("student-card");
+  if (card) card.href = url;
+  if (hint && window.DECK && DECK.joinUrl) {
+    hint.textContent = "Phones open that link. Copy it if you would rather text than use the QR.";
+  }
+  var btn = document.getElementById("copy-link");
+  if (btn) btn.addEventListener("click", function () {
+    function ok() { btn.textContent = "Copied"; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(ok).catch(function () { window.prompt("Copy this", url); });
+    } else {
+      window.prompt("Copy this", url);
+    }
+  });
+})();
+</script>
+</body>
+</html>

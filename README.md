@@ -1,83 +1,49 @@
-<h1 align="center">Presentations</h1>
+# Presentations
 
-<p align="center">
-  Live slides with phone check-in.<br>
-  Students join from a phone. You drive the boards. A backup slideshow sits ready if the room will not start.
-</p>
+People join from a phone. You run the boards. If check-in dies, the slideshow still works.
 
-<p align="center">
-  <b><a href="https://tobynsmith.me/presentations/">tobynsmith.me/presentations</a></b>
-</p>
+Live copy: **[tobynsmith.me/presentations](https://tobynsmith.me/presentations/)**
 
-<p align="center">
-  <a href="https://tobynsmith.me/presentations/">Students</a> ·
-  <a href="https://tobynsmith.me/presentations/desk/">Computer</a> ·
-  <a href="https://tobynsmith.me/presentations/adminpresentation/">Presenter</a> ·
-  <a href="https://tobynsmith.me/presentations/slideshow/">Slideshow</a> ·
-  <a href="https://tobynsmith.me/presentations/script/">Script</a>
-</p>
+New here? Open **[Start](https://tobynsmith.me/presentations/start/)**. The cards are the whole thing. You do not need to touch the files.
 
-**Contents** ·
-[Open a page](#open-a-page) ·
-[Run a room](#run-a-room) ·
-[Make it yours](#make-it-yours) ·
-[If something sticks](#if-something-sticks)
+## Running a room
 
-## Open a page
+1. Open [Start](https://tobynsmith.me/presentations/start/), then Present. On this example the key is `example`.
+2. Leave the title up. People scan the QR, or you text them the student link.
+3. Names show on the right when they are in.
+4. Hit **Go live**.
+5. Next and Back as usual. Question boards collect answers. Hands show at the top.
 
-The live copy is [tobynsmith.me/presentations](https://tobynsmith.me/presentations/). Same shape as `/reader` and `/poems` on the homepage.
+If phones sit on Hold, open Room tools and tap **Push live again**. If that still fails, open the [slideshow](https://tobynsmith.me/presentations/slideshow/) and keep talking. I do that more often than I want to admit.
 
-| Who | Open this | What you get |
-|---|---|---|
-| Students | [the home page](https://tobynsmith.me/presentations/) | Check in, pick a name, follow the boards |
-| On a computer | [`/desk`](https://tobynsmith.me/presentations/desk/) | The same view, wide |
-| You | [`/adminpresentation`](https://tobynsmith.me/presentations/adminpresentation/) | QR, Go live, next / back. Key: `example` |
-| Backup | [`/slideshow`](https://tobynsmith.me/presentations/slideshow/) | The boards only. No phones, no key |
-| Notes | [`/script`](https://tobynsmith.me/presentations/script/) | What you say, with bigger type if you want it |
+## Changing the slides
 
-The slideshow is the always-on demo. Open it if you only want to click through the boards.
+Open [Edit](https://tobynsmith.me/presentations/edit/). Type in the boxes. It saves on that computer.
 
-GitHub also serves the same files at [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/). The join code and QR use the `tobynsmith.me` link.
+Do this on the laptop you will present from. Present and the slideshow on that same computer will use your copy. Students get it too once you Go live.
 
-## Run a room
+The class list is one name per line. Leave it blank if people can type their own names.
 
-1. Open the [presenter page](https://tobynsmith.me/presentations/adminpresentation/). Type `example`.
-2. Leave the title up so people can scan the QR, or send them [the home page](https://tobynsmith.me/presentations/).
-3. Wait until names show on the right.
-4. Press **Go live**.
-5. Step through the boards. People type on question slides; hands show up at the top.
-6. If phones will not join, open the [slideshow](https://tobynsmith.me/presentations/slideshow/) and keep going.
+Switching computers: **Download a backup** at the bottom of Edit, then **Open a backup** on the other one.
 
-Room tools (the button on the presenter bar) republish a slide, free leftover names, or end the room.
+If someone else might be using this live example at the same time, put a room word on Edit (something like `period3`). The student link updates. Give people that link, not the bare homepage.
 
-## Make it yours
+## Pages
 
-Four files. That is the whole edit.
+[Start](https://tobynsmith.me/presentations/start/) is the card page. [Students](https://tobynsmith.me/presentations/) is what phones open. You present from [here](https://tobynsmith.me/presentations/adminpresentation/) (key on the example: `example`). [Slideshow](https://tobynsmith.me/presentations/slideshow/) is the same boards with no phones. [Edit](https://tobynsmith.me/presentations/edit/) is names and slides. [Script](https://tobynsmith.me/presentations/script/) is what you say. [Computer layout](https://tobynsmith.me/presentations/desk/) is the student page, wide.
 
-| File | Change this |
-|---|---|
-| `config.js` | Title, presenter key, `joinUrl`, and `room` (a unique ntfy topic) |
-| `roster.js` | Names in `NAMES`, one string each |
-| `slides.js` | The boards |
-| `script.html` | What you say |
+GitHub also serves the same files at [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/). The QR still points at tobynsmith.me.
 
-Then:
+## Your own copy
 
-1. Copy the repo, or fork it.
-2. GitHub Pages is already on: `main`, root, via `.github/workflows/jekyll-gh-pages.yml`.
-3. Point `joinUrl` at your own Pages URL so the QR matches.
-4. Put this folder on the homepage site as `presentations/`, the same way `/reader` and `/poems` sit on [tobynsmith.me](https://tobynsmith.me/).
-
-A key saved in Room tools only sticks on that browser. Change `presenterKey` in `config.js` if you want it permanent.
-
-`?local=1` on any page keeps the room on this computer. Bump `session` in `config.js` if leftover ntfy messages are still hanging around.
+Drop this folder onto a site the same way `/reader` and `/poems` sit on [tobynsmith.me](https://tobynsmith.me/). Then change the student link on Edit so the QR matches that address.
 
 <details>
-<summary><b>Optional: Firebase, if campus blocks ntfy</b></summary>
+<summary>Campus is blocking the room</summary>
 
 <br>
 
-Add a Realtime Database, put `databaseURL` in `config.js`, and use rules like:
+If ntfy never connects, someone who does not mind config files can add a Firebase Realtime Database, put the `databaseURL` in `config.js`, and use rules like:
 
 ```json
 {
@@ -90,13 +56,6 @@ Add a Realtime Database, put `databaseURL` in `config.js`, and use rules like:
 }
 ```
 
+The slideshow does not need any of that.
+
 </details>
-
-## If something sticks
-
-| What you see | What to try |
-|---|---|
-| Phones stay on Hold | Presenter: Room tools → **Push live again** |
-| Late phones on the wrong board | **Republish this slide** |
-| Yesterday's names still Taken | **Free leftover names** |
-| The room will not start | Open [`/slideshow`](https://tobynsmith.me/presentations/slideshow/) |

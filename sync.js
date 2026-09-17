@@ -1,7 +1,14 @@
 /* BroadcastChannel, ntfy, optional Firebase REST. */
 (function (global) {
   var cfg = global.DECK || {};
-  var room = String(cfg.room || "session").replace(/[^a-zA-Z0-9_-]/g, "");
+  function queryRoom() {
+    try {
+      return String(new URLSearchParams(location.search).get("room") || "").replace(/[^a-zA-Z0-9_-]/g, "");
+    } catch (e) {
+      return "";
+    }
+  }
+  var room = String(queryRoom() || cfg.room || "session").replace(/[^a-zA-Z0-9_-]/g, "");
   var session = String(cfg.session || "1");
   var slide = 0;
   var responses = {};
@@ -19,6 +26,9 @@
   var wantLive = false;
   var kicks = {};
   var kickFns = [];
+  var packFns = [];
+  var lastPackSig = "";
+  var packBuf = {};
   var presenting = false;
   var heartbeat = null;
   var leaveBound = null;
@@ -191,6 +201,21 @@
       (global.SLIDES || []).forEach(function (s, i) { emitResp(String(i)); });
       return;
     }
+    if (msg.t === "pack" && msg.data) {
+      takePack(msg.data);
+      return;
+    }
+    if (msg.t === "packpart" && msg.id != null) {
+      var buf = packBuf[msg.id] || (packBuf[msg.id] = { n: +msg.n || 0, parts: [] });
+      buf.parts[+msg.i] = String(msg.p || "");
+      var got = 0;
+      for (var pi = 0; pi < buf.parts.length; pi++) if (buf.parts[pi] != null) got++;
+      if (buf.n && got >= buf.n) {
+        try { takePack(JSON.parse(buf.parts.join(""))); } catch (e) {}
+        delete packBuf[msg.id];
+      }
+      return;
+    }
     if (msg.t === "probe") return;
     if (msg.t === "here") { noteHere(msg.at); return; }
     if (msg.t === "gone") { noteGone(msg.at); return; }
@@ -330,6 +355,82 @@
     if (n != null) apply({ t: "slide", n: n }, "fb");
   }
 
+  function takePack(data) {
+    if (!data || typeof data !== "object") return;
+    var sig = JSON.stringify({
+      slides: data.slides || [],
+      names: data.names || [],
+      title: data.deck && data.deck.title
+    });
+    if (sig === lastPackSig) return;
+    lastPackSig = sig;
+    var safe = {
+      deck: data.deck ? {
+        title: data.deck.title,
+        joinUrl: data.deck.joinUrl,
+        room: data.deck.room,
+        session: data.deck.session
+      } : null,
+      names: data.names,
+      slides: data.slides,
+      script: data.script
+    };
+    if (global.DeckContent && DeckContent.apply) DeckContent.apply(safe);
+    else {
+      if (safe.deck && global.DECK) {
+        if (safe.deck.title != null) global.DECK.title = safe.deck.title;
+        if (safe.deck.joinUrl != null) global.DECK.joinUrl = safe.deck.joinUrl;
+      }
+      if (safe.slides && safe.slides.length) global.SLIDES = safe.slides;
+      if (safe.names && global.Roster && Roster.setNames) Roster.setNames(safe.names);
+    }
+    packFns.forEach(function (fn) { fn(); });
+  }
+
+  function packData() {
+    return {
+      deck: {
+        title: cfg.title || "",
+        joinUrl: cfg.joinUrl || "",
+        room: room,
+        session: session
+      },
+      names: (global.Roster && Roster.names) ? Roster.names.slice() : [],
+      slides: global.SLIDES || []
+    };
+  }
+
+  function sharePack() {
+    var data = packData();
+    lastPackSig = JSON.stringify({
+      slides: data.slides || [],
+      names: data.names || [],
+      title: data.deck && data.deck.title
+    });
+    var msg = { t: "pack", session: session, data: data };
+    try { if (bc) bc.postMessage(msg); } catch (e) {}
+    if (firebaseConfigured()) fbWrite("pack", data);
+    var raw = JSON.stringify(data);
+    var CHUNK = 2400;
+    if (raw.length <= CHUNK) {
+      publishNtfy({ t: "pack", session: session, data: data });
+      return;
+    }
+    var id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    var n = Math.ceil(raw.length / CHUNK);
+    var i;
+    for (i = 0; i < n; i++) {
+      publishNtfy({
+        t: "packpart",
+        session: session,
+        id: id,
+        i: i,
+        n: n,
+        p: raw.slice(i * CHUNK, i * CHUNK + CHUNK)
+      });
+    }
+  }
+
   function takeRoster(val) {
     if (!global.Roster || !Roster.setNames) return;
     var list = [];
@@ -426,7 +527,8 @@
     else takeHere(data.here);
     takeSlide(data.slide);
     takeSeats(data.seats);
-        if (data.roster) takeRoster(data.roster);
+    if (data.roster) takeRoster(data.roster);
+    if (data.pack) takePack(data.pack);
     takeHands(data.hands);
     takeResponses(data.responses);
   }
@@ -629,6 +731,7 @@
     onPresenting: function (fn) { presentFns.push(fn); fn(presenting); },
     present: function () {
       wantLive = true;
+      sharePack();
       function beat() {
         if (!wantLive) return;
         shout({ t: "here", at: Math.max(Date.now(), lastGoneAt + 1) });
@@ -814,9 +917,12 @@
       });
     },
     republish: function () {
+      sharePack();
       shout({ t: "slide", n: slide });
       if (presenting) shout({ t: "here", at: Date.now() });
     },
+    sharePack: sharePack,
+    onPack: function (fn) { packFns.push(fn); },
     clearSeats: function () {
       seats = {};
       lastSeatSig = "";

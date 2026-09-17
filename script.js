@@ -2,6 +2,51 @@
   var html = document.documentElement;
   var KEY = "deck-script";
 
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function lines(text, tag) {
+    return String(text || "").split(/\n+/).map(function (row) {
+      return row.trim();
+    }).filter(Boolean).map(function (row) {
+      return tag === "p" ? '<p class="say">' + esc(row) + "</p>" : "<li>" + esc(row) + "</li>";
+    }).join("");
+  }
+
+  function paintScript() {
+    var parts = window.SCRIPT || [];
+    var jumps = document.getElementById("jumps");
+    var root = document.getElementById("script-root");
+    if (!root) return;
+    if (jumps) {
+      jumps.innerHTML = parts.map(function (sec) {
+        return '<a href="#' + esc(sec.id) + '">' + esc(sec.title || "Part") + "</a>";
+      }).join("");
+    }
+    root.innerHTML = "<h1>Speaker script</h1>"
+      + '<p class="lede">Paragraphs are what you say. Bullets are cues. Do not read the boards. Tap Here on the part you are on.</p>'
+      + parts.map(function (sec) {
+        var say = lines(sec.say, "p");
+        var notes = lines(sec.notes, "li");
+        return '<section class="sec" id="' + esc(sec.id) + '">'
+          + '<div class="sec-head">'
+          + "<h2>" + esc(sec.title || "Part") + "</h2>"
+          + '<button type="button" class="here" data-mark="' + esc(sec.id) + '">Here</button>'
+          + "</div>"
+          + say
+          + (notes ? '<ul class="note">' + notes + "</ul>" : "")
+          + "</section>";
+      }).join("");
+  }
+
+  paintScript();
+  document.addEventListener("deck-content", function () {
+    paintScript();
+    if (state.here) mark(state.here, false);
+  });
+
   function load() {
     try {
       return JSON.parse(localStorage.getItem(KEY) || "{}");
