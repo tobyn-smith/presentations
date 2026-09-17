@@ -1,4 +1,5 @@
-/* Form fields on top of the speaker-script paper. */
+body { padding-bottom: 11rem; }
+#app { min-height: 100vh; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
 .edit-lock {
   max-width: 28rem;

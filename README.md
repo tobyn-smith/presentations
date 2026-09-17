@@ -4,12 +4,12 @@ People join from a phone. You run the boards. If check-in dies, the slideshow st
 
 Live copy: **[tobynsmith.me/presentations](https://tobynsmith.me/presentations/)**
 
-If you have not used this, open **[Start](https://tobynsmith.me/presentations/start/)**. That page is the map. You can ignore the files.
+New here? Open **[Start](https://tobynsmith.me/presentations/start/)**. The cards are the whole thing. You do not need to touch the files.
 
 ## Running a room
 
 1. Open [Start](https://tobynsmith.me/presentations/start/), then Present. On this example the key is `example`.
-2. Leave the title up. People scan the QR, or you send them the student link.
+2. Leave the title up. People scan the QR, or you text them the student link.
 3. Names show on the right when they are in.
 4. Hit **Go live**.
 5. Next and Back as usual. Question boards collect answers. Hands show at the top.
@@ -24,19 +24,13 @@ Do this on the laptop you will present from. Present and the slideshow on that s
 
 The class list is one name per line. Leave it blank if people can type their own names.
 
-If you switch computers, tap **Download a backup** at the bottom of Edit, then **Open a backup** on the other one.
+Switching computers: **Download a backup** at the bottom of Edit, then **Open a backup** on the other one.
 
 If someone else might be using this live example at the same time, put a room word on Edit (something like `period3`). The student link updates. Give people that link, not the bare homepage.
 
 ## Pages
 
-- [Start](https://tobynsmith.me/presentations/start/) — the map
-- [Students](https://tobynsmith.me/presentations/) — phones
-- [Present](https://tobynsmith.me/presentations/adminpresentation/) — you. Key on the example: `example`
-- [Slideshow](https://tobynsmith.me/presentations/slideshow/) — boards only
-- [Edit](https://tobynsmith.me/presentations/edit/) — change slides and names
-- [Script](https://tobynsmith.me/presentations/script/) — what you say
-- [Computer layout](https://tobynsmith.me/presentations/desk/) — student view, wide
+[Start](https://tobynsmith.me/presentations/start/) is the card page. [Students](https://tobynsmith.me/presentations/) is what phones open. You present from [here](https://tobynsmith.me/presentations/adminpresentation/) (key on the example: `example`). [Slideshow](https://tobynsmith.me/presentations/slideshow/) is the same boards with no phones. [Edit](https://tobynsmith.me/presentations/edit/) is names and slides. [Script](https://tobynsmith.me/presentations/script/) is what you say. [Computer layout](https://tobynsmith.me/presentations/desk/) is the student page, wide.
 
 GitHub also serves the same files at [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/). The QR still points at tobynsmith.me.
 
@@ -49,7 +43,7 @@ Drop this folder onto a site the same way `/reader` and `/poems` sit on [tobynsm
 
 <br>
 
-If ntfy never connects, someone tech-y can add a Firebase Realtime Database, put the `databaseURL` in `config.js`, and use rules like:
+If ntfy never connects, someone who does not mind config files can add a Firebase Realtime Database, put the `databaseURL` in `config.js`, and use rules like:
 
 ```json
 {
@@ -62,6 +56,6 @@ If ntfy never connects, someone tech-y can add a Firebase Realtime Database, put
 }
 ```
 
-You still do not need that for the slideshow.
+The slideshow does not need any of that.
 
 </details>
