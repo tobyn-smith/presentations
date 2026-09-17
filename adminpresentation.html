@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<title>Presenter</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3C/svg%3E" />
+<meta http-equiv="Cache-Control" content="no-store" />
+<link rel="stylesheet" href="type.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="role-pres" data-role="presenter">
+<div id="gate" class="lock" hidden>
+  <p class="lock-kicker">Presenter</p>
+  <h1 id="gate-title">Discussion</h1>
+  <p>Enter the presenter key to open the slides.</p>
+  <form id="gate-form">
+    <input id="key" type="password" autocomplete="current-password" placeholder="Presenter key" />
+    <button type="submit">Open</button>
+    <p class="err" id="gate-err" hidden>That key does not match.</p>
+    <p class="backup-link"><a href="slideshow.html">Phones down? Open the slideshow.</a></p>
+  </form>
+</div>
+<main class="deck" id="app" hidden>
+  <div class="board">
+    <span class="accent-tab" aria-hidden="true"></span>
+    <header class="chrome">
+      <div class="chrome-left">
+        <p class="kicker" id="kicker">Discussion</p>
+        <p class="join-chip" id="join-chip"></p>
+      </div>
+      <div class="chrome-right">
+        <div class="hands" id="hands" hidden></div>
+        <p class="live-status" id="live-status"></p>
+        <button type="button" class="live-btn" id="live" aria-pressed="false">Go live</button>
+        <button type="button" class="fs-btn" id="fs-btn" aria-pressed="false">Full screen</button>
+        <button type="button" class="failsafe-btn" id="failsafe-open">Room tools</button>
+      </div>
+    </header>
+    <section class="stage" id="stage" aria-live="polite"></section>
+    <footer class="brand">
+      <p class="brand-mark">Discussion</p>
+      <div class="brand-right">
+        <div class="foot">
+          <div class="nav">
+            <button type="button" id="reset" hidden>Clear answers</button>
+            <button type="button" id="wipe">Clear all</button>
+            <button type="button" id="prev">Back</button>
+            <button type="button" id="next">Next</button>
+          </div>
+        </div>
+        <p class="slide-num" id="counter"></p>
+      </div>
+    </footer>
+  </div>
+</main>
+<div class="failsafe" id="failsafe" hidden>
+  <div class="failsafe-card" role="dialog" aria-labelledby="failsafe-title">
+    <div class="failsafe-head">
+      <h2 id="failsafe-title">Room tools</h2>
+      <button type="button" class="failsafe-close" id="failsafe-close">Close</button>
+    </div>
+    <p class="failsafe-lead">If phones stick on Hold, land on the wrong slide, or someone will not leave, use these from this panel.</p>
+    <dl class="failsafe-status" id="failsafe-status"></dl>
+    <pre class="failsafe-log" id="failsafe-log" hidden></pre>
+    <h3 class="failsafe-h">Presenter key</h3>
+    <form class="failsafe-key" id="key-change">
+      <input id="new-key" type="password" autocomplete="new-password" placeholder="New key" />
+      <button type="submit">Save key</button>
+      <p class="failsafe-ok" id="key-saved" hidden>Saved on this browser.</p>
+    </form>
+    <h3 class="failsafe-h">Class list</h3>
+    <form class="failsafe-roster" id="roster-form">
+      <textarea id="roster-text" placeholder="One name per line"></textarea>
+      <button type="submit">Save list</button>
+      <p class="failsafe-ok" id="roster-saved" hidden>Saved.</p>
+    </form>
+    <h3 class="failsafe-h">People in the room</h3>
+    <ul class="failsafe-people" id="failsafe-people"></ul>
+    <div class="failsafe-cmds">
+      <button type="button" id="fs-push">
+        <strong>Push live again</strong>
+        <span>Write Go live to Firebase, republish this slide, and confirm the room read it back.</span>
+      </button>
+      <button type="button" id="fs-slide">
+        <strong>Republish this slide</strong>
+        <span>Send the current slide index again so late phones catch up.</span>
+      </button>
+      <button type="button" id="fs-title">
+        <strong>Show the QR / title</strong>
+        <span>Jump everyone to slide 1 so late arrivals can see the join code.</span>
+      </button>
+      <button type="button" id="fs-probe">
+        <strong>Test phone paths</strong>
+        <span>Ping Firebase read/write and ntfy. Tells you which path campus is blocking.</span>
+      </button>
+      <button type="button" id="fs-pull">
+        <strong>Pull room</strong>
+        <span>Reload seats, hands, answers, and Go live from Firebase.</span>
+      </button>
+      <button type="button" id="fs-seats">
+        <strong>Free leftover names</strong>
+        <span>Wipe the seat list if yesterday’s names still show as Taken.</span>
+      </button>
+      <button type="button" id="fs-unkick">
+        <strong>Allow removed people back</strong>
+        <span>Clear the kick list so a removed name can check in again from a new session.</span>
+      </button>
+      <button type="button" id="fs-end">
+        <strong>End room</strong>
+        <span>Send everyone back to Hold. Same as End live.</span>
+      </button>
+      <button type="button" id="fs-copy">
+        <strong>Copy status</strong>
+        <span>Copy a report you can paste into a message if you still need help.</span>
+      </button>
+      <a class="failsafe-backup" href="slideshow.html" target="_blank" rel="noopener">
+        <strong>Open the backup slideshow</strong>
+        <span>Same boards, no phones, no Go live. Use this if the room will not start.</span>
+      </a>
+    </div>
+  </div>
+</div>
+<script src="config.js"></script>
+<script>
+(function () {
+  var cfg = window.DECK || {};
+  var store = "deck-key";
+  var gate = document.getElementById("gate");
+  var app = document.getElementById("app");
+  var title = document.getElementById("gate-title");
+  if (title) title.textContent = cfg.title || "Discussion";
+
+  function need() {
+    try {
+      var saved = localStorage.getItem(store);
+      if (saved) return saved;
+    } catch (e) {}
+    return cfg.presenterKey || "";
+  }
+
+  function open() {
+    gate.hidden = true;
+    app.hidden = false;
+  }
+
+  var want = need();
+  if (!want) {
+    open();
+  } else {
+    try {
+      if (sessionStorage.getItem(store) === want) {
+        open();
+      } else {
+        gate.hidden = false;
+      }
+    } catch (e) {
+      gate.hidden = false;
+    }
+  }
+
+  document.getElementById("gate-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = document.getElementById("key").value;
+    if (v === need()) {
+      try { sessionStorage.setItem(store, v); } catch (err) {}
+      open();
+    } else {
+      document.getElementById("gate-err").hidden = false;
+    }
+  });
+
+  var keyForm = document.getElementById("key-change");
+  if (keyForm) keyForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = document.getElementById("new-key").value;
+    if (!v) return;
+    try {
+      localStorage.setItem(store, v);
+      sessionStorage.setItem(store, v);
+    } catch (err) {}
+    document.getElementById("key-saved").hidden = false;
+    document.getElementById("new-key").value = "";
+  });
+})();
+</script>
+<script src="roster.js"></script>
+<script src="slides.js"></script>
+<script src="sync.js"></script>
+<script src="deck.js"></script>
+<script>
+(function () {
+  var rosterForm = document.getElementById("roster-form");
+  var rosterText = document.getElementById("roster-text");
+  function fillRoster() {
+    if (!rosterText || !window.Roster) return;
+    rosterText.value = (Roster.names || []).join("\n");
+  }
+  fillRoster();
+  if (rosterForm) rosterForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var names = rosterText.value.split(/\n+/).map(function (n) {
+      return n.replace(/\s+/g, " ").trim();
+    }).filter(Boolean);
+    var done = window.DeckSync && DeckSync.setRoster
+      ? DeckSync.setRoster(names)
+      : (Roster.setNames(names), Promise.resolve(true));
+    Promise.resolve(done).then(function () {
+      document.getElementById("roster-saved").hidden = false;
+      fillRoster();
+    });
+  });
+})();
+</script>
+</body>
+</html>

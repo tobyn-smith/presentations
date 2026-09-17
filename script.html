@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-size="2" data-space="roomy" data-font="lexend">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<title>Speaker script</title>
+<link rel="stylesheet" href="script.css" />
+</head>
+<body>
+<header class="top">
+  <p class="kicker">Speaker script</p>
+  <nav class="jump" aria-label="Jump to a part">
+    <a href="#before">Before</a>
+    <a href="#title">Title</a>
+    <a href="#s1">1</a>
+    <a href="#s2">2</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <h1>Speaker script</h1>
+  <p class="lede">Paragraphs are what you say. Bullets are cues. Do not read the boards. Tap Here on the part you are on.</p>
+
+  <section class="sec" id="before">
+    <div class="sec-head">
+      <h2>Before</h2>
+      <button type="button" class="here" data-mark="before">Here</button>
+    </div>
+    <ul class="note">
+      <li>Open the <a href="adminpresentation.html">presenter page</a></li>
+      <li>Key is presenterKey in config.js</li>
+      <li>Leave the title up with the QR</li>
+      <li>If the room will not start, open the <a href="slideshow.html">backup slideshow</a></li>
+      <li>Do not press Go live until names are showing</li>
+    </ul>
+  </section>
+
+  <section class="sec" id="title">
+    <div class="sec-head">
+      <h2>Title</h2>
+      <button type="button" class="here" data-mark="title">Here</button>
+    </div>
+    <p class="say"></p>
+    <ul class="note">
+      <li>Let people scan.</li>
+      <li>Once enough names are on the right: Go live.</li>
+    </ul>
+  </section>
+
+  <section class="sec" id="s1">
+    <div class="sec-head">
+      <h2>1</h2>
+      <button type="button" class="here" data-mark="s1">Here</button>
+    </div>
+    <p class="say"></p>
+  </section>
+
+  <section class="sec" id="s2">
+    <div class="sec-head">
+      <h2>2</h2>
+      <button type="button" class="here" data-mark="s2">Here</button>
+    </div>
+    <p class="say"></p>
+  </section>
+</main>
+
+<div class="tools" role="toolbar" aria-label="Reading controls">
+  <p class="now" id="now">Not marked yet. Tap Here on a part.</p>
+  <button type="button" id="smaller" aria-label="Smaller text">A-</button>
+  <button type="button" id="bigger" aria-label="Bigger text">A+</button>
+  <button type="button" id="space" aria-pressed="false">More space</button>
+  <button type="button" id="font">OpenDyslexic</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

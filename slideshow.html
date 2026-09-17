@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Slideshow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3C/svg%3E" />
+<meta http-equiv="Cache-Control" content="no-store" />
+<link rel="stylesheet" href="type.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="role-pres is-backup">
+<main class="deck" id="app">
+  <div class="board">
+    <span class="accent-tab" aria-hidden="true"></span>
+    <header class="chrome">
+      <div class="chrome-left">
+        <p class="kicker" id="kicker">Discussion</p>
+        <p class="join-chip">Slideshow · no phones</p>
+      </div>
+    </header>
+    <section class="stage" id="stage" aria-live="polite"></section>
+    <footer class="brand">
+      <p class="brand-mark">Discussion</p>
+      <div class="brand-right">
+        <div class="foot">
+          <div class="nav">
+            <button type="button" id="prev">Back</button>
+            <button type="button" id="next">Next</button>
+          </div>
+        </div>
+        <p class="slide-num" id="counter"></p>
+      </div>
+    </footer>
+  </div>
+</main>
+<script src="config.js"></script>
+<script src="slides.js"></script>
+<script src="slideshow.js"></script>
+</body>
+</html>
