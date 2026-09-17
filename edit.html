@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-size="2" data-space="roomy" data-font="lexend">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Edit the session</title>
+<link rel="stylesheet" href="script.css" />
+<link rel="stylesheet" href="edit.css" />
+</head>
+<body>
+<div id="gate" class="edit-lock" hidden>
+  <p class="kicker">Edit the session</p>
+  <h1>Presenter key</h1>
+  <p>Same key as Present. That keeps students from changing the boards.</p>
+  <form id="gate-form">
+    <label class="sr" for="key">Presenter key</label>
+    <input id="key" type="password" autocomplete="current-password" placeholder="Presenter key" />
+    <button type="submit">Open</button>
+    <p class="err" id="gate-err" hidden>That key does not match.</p>
+  </form>
+  <p class="hint">On the live example the key is <strong>example</strong>.</p>
+</div>
+
+<div id="app" hidden>
+  <header class="top">
+    <p class="kicker">Edit the session</p>
+    <p class="edit-status" id="status">Type in the boxes. This computer keeps a copy.</p>
+    <nav class="jump" aria-label="Jump">
+      <a href="start.html">Start</a>
+      <a href="#session">Session</a>
+      <a href="#names">Names</a>
+      <a href="#boards">Boards</a>
+      <a href="#script">What you say</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <h1>Change the slides and the class list</h1>
+    <p class="lede">No code. Do this on the computer you will present from. Save, then open Present or the slideshow on this same computer.</p>
+
+    <section class="sec" id="session">
+      <h2>Session</h2>
+      <label>Title
+        <input id="title" type="text" />
+      </label>
+      <label>Presenter key
+        <input id="presenterKey" type="text" autocomplete="off" />
+      </label>
+      <label>Room word
+        <input id="room" type="text" autocomplete="off" spellcheck="false" />
+      </label>
+      <p class="hint">If someone else might be using this live example at the same time, change the room word to something yours, like period3. Students do not type it. It gets baked into the link below.</p>
+      <label>Link people should open
+        <input id="joinUrl" type="url" />
+      </label>
+      <p class="hint">The QR on the title board uses that link. <button type="button" id="copy-link" class="inline-btn">Copy it</button></p>
+    </section>
+
+    <section class="sec" id="names">
+      <h2>Class list</h2>
+      <p class="hint">One name per line. Leave this blank if anyone may type their own name.</p>
+      <label class="sr" for="names-box">Names</label>
+      <textarea id="names-box" rows="8" placeholder="Alex Chen"></textarea>
+    </section>
+
+    <section class="sec" id="boards">
+      <div class="sec-head">
+        <h2>Boards</h2>
+      </div>
+      <p class="hint">A title board first is easiest. Add talking points or a question when you need one.</p>
+      <div id="board-list"></div>
+      <div class="add-row">
+        <button type="button" id="add-title">Add a title board</button>
+        <button type="button" id="add-points">Add talking points</button>
+        <button type="button" id="add-question">Add a question</button>
+      </div>
+    </section>
+
+    <section class="sec" id="script">
+      <h2>What you say</h2>
+      <p class="hint">Speaker notes. Paragraphs are what you say. Cues are reminders. They follow the boards above.</p>
+      <div id="script-list"></div>
+    </section>
+  </main>
+
+  <div class="tools" role="toolbar" aria-label="Save and preview">
+    <p class="now" id="now">Not saved yet.</p>
+    <button type="button" id="save">Save</button>
+    <a class="tool-link" href="slideshow.html">See the slideshow</a>
+    <a class="tool-link" href="adminpresentation.html">Present</a>
+    <label class="tool-link file-btn">Open a backup
+      <input id="restore" type="file" accept=".json,application/json" />
+    </label>
+    <button type="button" id="backup">Download a backup</button>
+    <button type="button" id="forget">Forget my edits</button>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="roster.js"></script>
+<script src="slides.js"></script>
+<script src="script-content.js"></script>
+<script src="apply-content.js"></script>
+<script src="edit.js"></script>
+</body>
+</html>

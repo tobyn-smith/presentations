@@ -107,7 +107,8 @@ a {
   -webkit-overflow-scrolling: touch;
 }
 .jump a,
-.tools button {
+.tools button,
+.tools a.tool-link {
   flex: none;
   appearance: none;
   border: 2px solid var(--ink);

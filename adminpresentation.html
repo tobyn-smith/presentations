@@ -17,12 +17,14 @@
 <div id="gate" class="lock" hidden>
   <p class="lock-kicker">Presenter</p>
   <h1 id="gate-title">Discussion</h1>
-  <p>Enter the presenter key to open the slides.</p>
+  <p>Enter the presenter key to open the slides. On this example it is <strong>example</strong>.</p>
   <form id="gate-form">
     <input id="key" type="password" autocomplete="current-password" placeholder="Presenter key" />
     <button type="submit">Open</button>
     <p class="err" id="gate-err" hidden>That key does not match.</p>
+    <p class="backup-link"><a href="start.html">Not sure where to start?</a></p>
     <p class="backup-link"><a href="slideshow.html">Phones down? Open the slideshow.</a></p>
+    <p class="backup-link"><a href="edit.html">Change the slides or the class list.</a></p>
   </form>
 </div>
 <main class="deck" id="app" hidden>
@@ -118,14 +120,25 @@
         <strong>Copy status</strong>
         <span>Copy a report you can paste into a message if you still need help.</span>
       </button>
+      <a class="failsafe-backup" href="start.html">
+        <strong>Start here</strong>
+        <span>The simple map of pages. Change slides, present, or open the slideshow.</span>
+      </a>
       <a class="failsafe-backup" href="slideshow.html" target="_blank" rel="noopener">
         <strong>Open the backup slideshow</strong>
         <span>Same boards, no phones, no Go live. Use this if the room will not start.</span>
+      </a>
+      <a class="failsafe-backup" href="edit.html">
+        <strong>Change slides and names</strong>
+        <span>Plain boxes. No code. Saved on this computer.</span>
       </a>
     </div>
   </div>
 </div>
 <script src="config.js"></script>
+<script src="roster.js"></script>
+<script src="slides.js"></script>
+<script src="apply-content.js"></script>
 <script>
 (function () {
   var cfg = window.DECK || {};
@@ -188,8 +201,6 @@
   });
 })();
 </script>
-<script src="roster.js"></script>
-<script src="slides.js"></script>
 <script src="sync.js"></script>
 <script src="deck.js"></script>
 <script>

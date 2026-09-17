@@ -1,5 +1,5 @@
 (function () {
-  var slides = window.SLIDES || [];
+  function slides() { return window.SLIDES || []; }
   var role = document.body.getAttribute("data-role");
   var isPres = role === "presenter";
   var stage = document.getElementById("stage");
@@ -47,7 +47,7 @@
 
   function go(n) {
     if (!unlocked()) return;
-    n = Math.max(0, Math.min(slides.length - 1, n));
+    n = Math.max(0, Math.min(slides().length - 1, n));
     if (isPres) DeckSync.setSlide(n);
     else if (DeckSync.isPresenting()) render(n);
   }
@@ -260,7 +260,7 @@
   }
 
   function render(i) {
-    var s = slides[i];
+    var s = slides()[i];
     if (!s) return;
     var changed = i !== lastIndex;
     lastIndex = i;
@@ -268,10 +268,10 @@
     stage.classList.remove("hold");
     document.title = (isPres ? "Presenter · " : "") + (s.title || brand());
     kicker.textContent = s.kicker || brand();
-    if (counter) counter.textContent = isPres ? String(i + 1) : ((i + 1) + " / " + slides.length);
+    if (counter) counter.textContent = isPres ? String(i + 1) : ((i + 1) + " / " + slides().length);
     if (resetBtn) resetBtn.hidden = s.type !== "prompt";
     if (prevBtn) prevBtn.disabled = i === 0;
-    if (nextBtn) nextBtn.disabled = i === slides.length - 1;
+    if (nextBtn) nextBtn.disabled = i === slides().length - 1;
     stage.classList.toggle("prompt", s.type === "prompt");
     stage.classList.toggle("has-notes", s.type === "prompt" && (s.viz === "bars-list" || s.viz === "list" || s.viz === "words"));
     stage.classList.toggle("has-recap", !!(s.recap && s.recap.length));
@@ -1073,7 +1073,7 @@
   DeckSync.onResponses(function (id, list) {
     var i = DeckSync.getSlide();
     if (String(i) !== String(id)) return;
-    var s = slides[i];
+    var s = slides()[i];
     if (!s || s.type !== "prompt") return;
     if (isPres) {
       paintResponses(s, i, list);
@@ -1100,7 +1100,7 @@
         go(0);
       } else if (e.key === "End") {
         e.preventDefault();
-        go(slides.length - 1);
+        go(slides().length - 1);
       }
     });
     if (prevBtn) prevBtn.addEventListener("click", function () { go(DeckSync.getSlide() - 1); });
@@ -1178,4 +1178,15 @@
     }
   }
   bindReading();
+  document.addEventListener("deck-content", function () {
+    if (!unlocked()) return;
+    var n = DeckSync.getSlide();
+    n = Math.max(0, Math.min(slides().length - 1, n));
+    if (isPres) {
+      render(n);
+      if (DeckSync.isPresenting() && DeckSync.sharePack) DeckSync.sharePack();
+    } else if (DeckSync.isPresenting()) {
+      render(n);
+    }
+  });
 })();
