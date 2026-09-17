@@ -22,7 +22,7 @@
   function cfg() { return window.DECK || {}; }
   function brand() { return cfg().title || "Discussion"; }
   function joinHref() {
-    if (cfg().joinUrl) return String(cfg().joinUrl);
+    if (window.DeckContent && DeckContent.joinHref) return DeckContent.joinHref();
     var path = location.pathname.replace(/[^/]+$/, "");
     if (path.slice(-1) !== "/") path += "/";
     return location.origin + path;
@@ -417,7 +417,7 @@
   function htmlFor(s, i) {
     if (s.type === "title") {
       var href = joinHref();
-      var shown = href.replace(/^https:\/\//, "");
+      var shown = href.replace(/^https?:\/\//, "");
       var join = isPres
         ? '<div class="join">'
           + '<img class="join-qr" src="' + qrSrc(href) + '" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
@@ -787,7 +787,7 @@
       ["Phones", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Firebase path is open" : "Not confirmed yet")],
       ["Transport", snap.status.detail || snap.status.mode],
       ["Checked in", String(snap.seats.length)],
-      ["Join", (snap.join || "").replace(/^https:\/\//, "")],
+      ["Join", (snap.join || "").replace(/^https?:\/\//, "")],
       ["Slide", String((snap.slide || 0) + 1)],
       ["Last error", snap.error || "None"]
     ];
@@ -959,7 +959,7 @@
     var joinChip = document.getElementById("join-chip");
     if (joinChip) {
       var href = joinHref();
-      joinChip.textContent = href.replace(/^https:\/\//, "");
+      joinChip.textContent = href.replace(/^https?:\/\//, "");
     }
 
     if (liveBtn) liveBtn.addEventListener("click", function () {
@@ -1179,6 +1179,10 @@
   }
   bindReading();
   document.addEventListener("deck-content", function () {
+    var joinChip = document.getElementById("join-chip");
+    if (joinChip && isPres) {
+      joinChip.textContent = joinHref().replace(/^https?:\/\//, "");
+    }
     if (!unlocked()) return;
     var n = DeckSync.getSlide();
     n = Math.max(0, Math.min(slides().length - 1, n));

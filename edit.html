@@ -50,11 +50,14 @@
       <label>Room word (optional)
         <input id="room" type="text" autocomplete="off" spellcheck="false" placeholder="period3" />
       </label>
-      <p class="hint">Only needed if someone else might be using this live example at the same time. Students do not type it. It gets baked into the link below.</p>
-      <label>Link people should open
-        <input id="joinUrl" type="url" />
+      <p class="hint">Only needed if another class might be on this same copy at the same time. Students do not type it.</p>
+      <p class="hint">QR and the student link follow this website: <strong id="join-preview"></strong>
+        <button type="button" id="copy-link" class="inline-btn">Copy it</button>
+      </p>
+      <label>Different address, if you have one
+        <input id="joinUrl" type="url" placeholder="https://" />
       </label>
-      <p class="hint">The QR on the title board uses that link. <button type="button" id="copy-link" class="inline-btn">Copy it</button></p>
+      <p class="hint">Leave this blank. Paste a link only if this copy lives at a custom domain.</p>
     </section>
 
     <section class="sec" id="names">

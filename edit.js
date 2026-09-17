@@ -167,11 +167,16 @@
     var slides = saved && saved.slides ? saved.slides : (window.SLIDES || []);
     var names = saved && saved.names ? saved.names : ((window.Roster && Roster.names) || []);
     var script = saved && saved.script ? saved.script : (window.SCRIPT || []);
+    var room = deck.room || "";
+    if (room === DEFAULT_ROOM && location.hostname !== "tobynsmith.me" && location.hostname !== "www.tobynsmith.me" && location.hostname !== "tobyn-smith.github.io") {
+      room = "";
+    }
+    var join = deck.joinUrl || "";
     state.deck = {
       title: deck.title || "",
       presenterKey: deck.presenterKey || "",
-      joinUrl: deck.joinUrl || "",
-      room: deck.room || "session-1",
+      joinUrl: join,
+      room: room,
       session: deck.session || "1"
     };
     state.names = names.slice();
@@ -219,11 +224,28 @@
   }
 
   function studentLink() {
-    var base = stripRoomParam(state.deck.joinUrl || "").trim();
+    var stored = stripRoomParam(state.deck.joinUrl || "").trim();
+    var base = (stored && !isAutoJoin(stored))
+      ? stored
+      : ((window.DeckContent && DeckContent.siteJoin && DeckContent.siteJoin()) || "");
     var word = cleanRoom(state.deck.room);
+    if (window.DeckContent && DeckContent.withRoom) return DeckContent.withRoom(base, word);
     if (!base) return "";
-    if (!word || word === DEFAULT_ROOM) return base;
+    if (!word) return base;
     return base + (base.indexOf("?") >= 0 ? "&" : "?") + "room=" + encodeURIComponent(word);
+  }
+
+  function autoRoomNow() {
+    return (window.DeckContent && DeckContent.siteRoom && DeckContent.siteRoom()) || DEFAULT_ROOM;
+  }
+
+  function isAutoJoin(url) {
+    var base = stripRoomParam(url || "");
+    var site = (window.DeckContent && DeckContent.siteJoin && DeckContent.siteJoin()) || "";
+    if (!base) return true;
+    if (site && base.replace(/\/+$/, "") === stripRoomParam(site).replace(/\/+$/, "")) return true;
+    if (window.DeckContent && DeckContent.isDemoJoin && DeckContent.isDemoJoin(base)) return true;
+    return false;
   }
 
   function paintBoards() {
@@ -278,8 +300,10 @@
   function paint() {
     val("title").value = state.deck.title;
     val("presenterKey").value = state.deck.presenterKey;
-    val("room").value = state.deck.room === DEFAULT_ROOM ? "" : state.deck.room;
-    val("joinUrl").value = studentLink() || state.deck.joinUrl;
+    val("room").value = (!state.deck.room || state.deck.room === autoRoomNow()) ? "" : state.deck.room;
+    val("joinUrl").value = isAutoJoin(state.deck.joinUrl) ? "" : stripRoomParam(state.deck.joinUrl);
+    var prev = document.getElementById("join-preview");
+    if (prev) prev.textContent = (studentLink() || "").replace(/^https?:\/\//, "");
     val("names-box").value = state.names.join("\n");
     paintBoards();
     paintScript();
@@ -288,20 +312,24 @@
   function collect() {
     state.deck.title = val("title").value.replace(/\s+/g, " ").trim();
     state.deck.presenterKey = val("presenterKey").value.trim();
-    state.deck.room = cleanRoom(val("room").value) || DEFAULT_ROOM;
+    state.deck.room = cleanRoom(val("room").value);
     var typed = val("joinUrl").value.trim();
-    try {
-      var u = new URL(typed, location.href);
-      var r = u.searchParams.get("room");
-      if (r) state.deck.room = cleanRoom(r) || state.deck.room;
-    } catch (e) {}
-    state.deck.joinUrl = stripRoomParam(typed);
-    state.deck.joinUrl = studentLink();
+    if (typed) {
+      try {
+        var u = new URL(typed, location.href);
+        var r = u.searchParams.get("room");
+        if (r) state.deck.room = cleanRoom(r) || state.deck.room;
+      } catch (e) {}
+    }
+    var base = stripRoomParam(typed);
+    state.deck.joinUrl = isAutoJoin(base) ? "" : base;
     state.names = val("names-box").value.split(/\n+/).map(function (n) {
       return n.replace(/\s+/g, " ").trim();
     }).filter(Boolean);
-    val("room").value = state.deck.room === DEFAULT_ROOM ? "" : state.deck.room;
+    val("room").value = (!state.deck.room || state.deck.room === autoRoomNow()) ? "" : state.deck.room;
     val("joinUrl").value = state.deck.joinUrl;
+    var prev = document.getElementById("join-preview");
+    if (prev) prev.textContent = (studentLink() || "").replace(/^https?:\/\//, "");
   }
 
   function payload() {
@@ -462,7 +490,7 @@
     });
     document.getElementById("copy-link").addEventListener("click", function () {
       collect();
-      var url = state.deck.joinUrl;
+      var url = studentLink();
       function ok() { setStatus("Copied the student link."); }
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).then(ok).catch(function () { window.prompt("Copy this link", url); });
