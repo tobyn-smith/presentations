@@ -22,7 +22,7 @@
   function cfg() { return window.DECK || {}; }
   function brand() { return cfg().title || "Discussion"; }
   function joinHref() {
-    if (cfg().joinUrl) return String(cfg().joinUrl);
+    if (window.DeckContent && DeckContent.joinHref) return DeckContent.joinHref();
     var path = location.pathname.replace(/[^/]+$/, "");
     if (path.slice(-1) !== "/") path += "/";
     return location.origin + path;
@@ -1179,6 +1179,10 @@
   }
   bindReading();
   document.addEventListener("deck-content", function () {
+    var joinChip = document.getElementById("join-chip");
+    if (joinChip && isPres) {
+      joinChip.textContent = joinHref().replace(/^https:\/\//, "");
+    }
     if (!unlocked()) return;
     var n = DeckSync.getSlide();
     n = Math.max(0, Math.min(slides().length - 1, n));

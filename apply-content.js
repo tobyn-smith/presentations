@@ -1,7 +1,10 @@
 /* Saved session from Edit. Stays on this computer. Also honours a room=
-   in the link, and a session.json sitting next to these files. */
+   in the link, and a session.json sitting next to these files.
+   Join / QR follow this website so a fork is not stuck on the demo URL. */
 (function (global) {
   var KEY = "deck-content";
+  var DEMO_JOIN = "https://tobynsmith.me/presentations/";
+  var DEMO_ROOM = "tobyn-smith-presentations";
   var ch = null;
 
   function queryRoom() {
@@ -14,14 +17,68 @@
     }
   }
 
+  function isDemoHost() {
+    var host = String(location.hostname || "");
+    return host === "tobynsmith.me" || host === "www.tobynsmith.me" || host === "tobyn-smith.github.io";
+  }
+
+  function isDemoJoin(url) {
+    try {
+      var u = new URL(String(url || "").trim(), location.href);
+      var host = u.hostname;
+      if (host !== "tobynsmith.me" && host !== "www.tobynsmith.me") return false;
+      return /\/presentations\/?$/.test(u.pathname);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function siteJoin() {
+    if (location.protocol === "file:") return "";
+    var path = String(location.pathname || "/");
+    path = path.replace(/\/index\.html$/i, "/");
+    path = path.replace(/\/[^/]+\.html$/i, "/");
+    path = path.replace(/\/(adminpresentation|slideshow|script|edit|start|desk)\/?$/i, "/");
+    if (!path) path = "/";
+    if (path.slice(-1) !== "/") path += "/";
+    if (location.hostname === "tobyn-smith.github.io" && /\/presentations\/?$/.test(path)) {
+      return DEMO_JOIN;
+    }
+    return location.origin + path;
+  }
+
+  function autoRoom() {
+    if (isDemoHost()) return DEMO_ROOM;
+    var slug = String(location.hostname || "session")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 48);
+    return slug || "session";
+  }
+
+  function stripRoomParam(url) {
+    return String(url || "")
+      .replace(/([?&])room=[^&]*/g, "$1")
+      .replace(/\?&/, "?")
+      .replace(/&&+/g, "&")
+      .replace(/[?&]$/, "");
+  }
+
+  function withRoom(url, room) {
+    var base = stripRoomParam(url).trim();
+    var word = String(room || "").replace(/[^a-zA-Z0-9_-]/g, "");
+    if (!base) return "";
+    if (!word || word === autoRoom()) return base;
+    return base + (base.indexOf("?") >= 0 ? "&" : "?") + "room=" + encodeURIComponent(word);
+  }
+
   function ping() {
     try { document.dispatchEvent(new Event("deck-content")); } catch (e) {}
   }
 
   function apply(data) {
     if (!data) {
-      var only = queryRoom();
-      if (only && global.DECK) global.DECK.room = only;
+      finishResolve();
       return;
     }
     if (data.deck && global.DECK) {
@@ -29,12 +86,33 @@
         if (data.deck[k] != null) global.DECK[k] = data.deck[k];
       });
     }
-    var qRoom = queryRoom();
-    if (qRoom && global.DECK) global.DECK.room = qRoom;
     if (data.slides && data.slides.length) global.SLIDES = data.slides;
     if (data.script && data.script.length) global.SCRIPT = data.script;
     if (data.names && global.Roster && Roster.setNames) Roster.setNames(data.names);
+    finishResolve();
     ping();
+  }
+
+  function resolveRoom() {
+    var q = queryRoom();
+    if (q) return q;
+    var cfg = global.DECK && String(DECK.room || "").replace(/[^a-zA-Z0-9_-]/g, "");
+    if (cfg && !(cfg === DEMO_ROOM && !isDemoHost())) return cfg;
+    return autoRoom();
+  }
+
+  function resolveJoin() {
+    var raw = global.DECK ? String(DECK.joinUrl || "").trim() : "";
+    if (raw && !isDemoJoin(raw)) return stripRoomParam(raw);
+    return siteJoin();
+  }
+
+  function finishResolve() {
+    if (!global.DECK) return;
+    global.DECK.room = resolveRoom();
+    var join = resolveJoin();
+    if (isDemoJoin(join) && !isDemoHost()) join = siteJoin();
+    global.DECK.joinUrl = withRoom(join, global.DECK.room);
   }
 
   function read() {
@@ -46,6 +124,11 @@
     } catch (e) {
       return null;
     }
+  }
+
+  function joinHref() {
+    finishResolve();
+    return (global.DECK && DECK.joinUrl) || siteJoin();
   }
 
   function openChannel() {
@@ -93,8 +176,14 @@
 
   global.DeckContent = {
     key: KEY,
+    demoJoin: DEMO_JOIN,
     read: read,
     apply: apply,
+    siteJoin: siteJoin,
+    siteRoom: autoRoom,
+    joinHref: joinHref,
+    withRoom: withRoom,
+    isDemoJoin: isDemoJoin,
     save: function (next) {
       localStorage.setItem(KEY, JSON.stringify(next));
       if (next.names) {

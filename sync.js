@@ -833,7 +833,7 @@
         at: Date.now(),
         room: room,
         session: session,
-        join: cfg.joinUrl || (location.origin + location.pathname.replace(/[^/]+$/, "")),
+        join: (global.DeckContent && DeckContent.joinHref && DeckContent.joinHref()) || cfg.joinUrl || (location.origin + location.pathname.replace(/[^/]+$/, "")),
         localOnly: localOnly,
         forceFirebase: forceFirebase,
         presenting: presenting,

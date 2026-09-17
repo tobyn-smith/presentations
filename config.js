@@ -3,7 +3,7 @@ window.DECK = {
   room: "tobyn-smith-presentations",
   session: "live",
   presenterKey: "example",
-  joinUrl: "https://tobynsmith.me/presentations/",
+  joinUrl: "",
   articleUrl: "",
   articleEmbed: "",
   articleLabel: "Open the reading",

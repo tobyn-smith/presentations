@@ -32,11 +32,11 @@ If someone else might be using this live example at the same time, put a room wo
 
 [Start](https://tobynsmith.me/presentations/start/) is the card page. [Students](https://tobynsmith.me/presentations/) is what phones open. You present from [here](https://tobynsmith.me/presentations/adminpresentation/) (key on the example: `example`). [Slideshow](https://tobynsmith.me/presentations/slideshow/) is the same boards with no phones. [Edit](https://tobynsmith.me/presentations/edit/) is names and slides. [Script](https://tobynsmith.me/presentations/script/) is what you say. [Computer layout](https://tobynsmith.me/presentations/desk/) is the student page, wide.
 
-GitHub also serves the same files at [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/). The QR still points at tobynsmith.me.
+GitHub also serves the same files at [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/). The QR on that copy still sends people to tobynsmith.me.
 
 ## Your own copy
 
-Drop this folder onto a site the same way `/reader` and `/poems` sit on [tobynsmith.me](https://tobynsmith.me/). Then change the student link on Edit so the QR matches that address.
+Drop this folder on GitHub Pages or any static host. The QR follows that site. You do not paste a link unless you have a custom domain, in which case put it on Edit under Different address.
 
 <details>
 <summary>Campus is blocking the room</summary>
