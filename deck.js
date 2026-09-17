@@ -912,6 +912,10 @@
     paintFullScreen();
   }
 
+  document.querySelectorAll(".brand-mark").forEach(function (el) {
+    el.textContent = brand();
+  });
+
   if (!isPres) {
     DeckSync.onPresenting(function (on) {
       if (on && DeckSync.seated()) render(DeckSync.getSlide());
@@ -958,9 +962,6 @@
       joinChip.textContent = href.replace(/^https:\/\//, "");
     }
 
-    document.querySelectorAll(".brand-mark").forEach(function (el) {
-      el.textContent = brand();
-    });
     if (liveBtn) liveBtn.addEventListener("click", function () {
       if (DeckSync.isPresenting()) DeckSync.standDown();
       else if (DeckSync.pushLive) DeckSync.pushLive().then(paintLive);

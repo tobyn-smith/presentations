@@ -2,13 +2,13 @@ window.SLIDES = [
   {
     id: "title",
     type: "title",
-    kicker: "Discussion",
-    title: "Session title",
-    lede: "",
+    kicker: "Live example",
+    title: "Phone check-in, shared boards",
+    lede: "Scan the code, pick a name, wait for Go live. This Pages site is the working copy.",
     agenda: [
-      "First part",
-      "Second part",
-      "Third part"
+      "Check in from a phone",
+      "Look at a board together",
+      "Send one answer"
     ],
     speaker: ""
   },
@@ -16,32 +16,33 @@ window.SLIDES = [
     id: "board-1",
     type: "claims",
     kicker: "1",
-    title: "What I took from it",
+    title: "What this is",
     claims: [
-      { n: "1", title: "First", body: "" },
-      { n: "2", title: "Second", body: "" },
-      { n: "3", title: "Third", body: "" }
+      { n: "1", title: "Students join from a phone", body: "Names on the list, a picture, then Hold until the room starts." },
+      { n: "2", title: "The presenter drives the boards", body: "Same slide on every phone. Hands and answers come back to the room." },
+      { n: "3", title: "Slideshow is the backup", body: "If phones will not join, the same boards still run with no check-in." }
     ]
   },
   {
     id: "q1",
     type: "prompt",
     kicker: "1 · Question",
-    title: "Discussion question",
-    help: "",
+    title: "What would you use a live board for?",
+    help: "A sentence is enough. Names stay with the answer.",
     input: "text",
     viz: "list",
     placeholder: "Enter your response below."
   },
   {
     id: "board-2",
-    type: "claims",
+    type: "points",
     kicker: "2",
-    title: "What else I would want",
-    claims: [
-      { n: "1", title: "First", body: "" },
-      { n: "2", title: "Second", body: "" },
-      { n: "3", title: "Third", body: "" }
+    title: "Try the other pages",
+    lead: "This repo is the site. Each path is a different job.",
+    points: [
+      { title: "Students", body: "Open / on a phone. /desk is the wide layout on a computer." },
+      { title: "Presenter", body: "Open /adminpresentation. The key for this example is example." },
+      { title: "Backup", body: "Open /slideshow if you only want the boards, no phones." }
     ]
   },
   {

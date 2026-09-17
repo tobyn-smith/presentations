@@ -1,14 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="UTF-8" />
-<meta name="robots" content="noindex" />
-<title>Presenter</title>
-<link rel="canonical" href="../adminpresentation.html" />
-<meta http-equiv="refresh" content="0; url=../adminpresentation.html" />
-<script>location.replace("../adminpresentation.html" + location.search + location.hash)</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Discussion</title>
+<meta http-equiv="Cache-Control" content="no-store" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="type.css" />
+<link rel="stylesheet" href="style.css" />
+<script>
+(function () {
+  try {
+    if (matchMedia("(min-width: 960px)").matches) {
+      document.documentElement.classList.add("is-desk");
+    }
+  } catch (e) {}
+})();
+</script>
 </head>
-<body>
-<p><a href="../adminpresentation.html">Open the presenter view</a></p>
+<body class="role-part" data-role="participant">
+<main class="deck">
+  <div class="board">
+    <span class="accent-tab" aria-hidden="true"></span>
+    <header class="chrome">
+      <p class="kicker" id="kicker">Discussion</p>
+      <div class="me" id="me" hidden></div>
+      <div class="chrome-right">
+        <button type="button" class="hand-btn" id="hand" hidden aria-pressed="false">Hand up</button>
+        <p class="counter" id="counter"></p>
+      </div>
+    </header>
+    <section class="stage" id="stage" aria-live="polite"></section>
+    <footer class="brand">
+      <p class="brand-mark">Discussion</p>
+    </footer>
+  </div>
+</main>
+<script src="config.js"></script>
+<script src="roster.js"></script>
+<script src="slides.js"></script>
+<script src="sync.js"></script>
+<script src="deck.js"></script>
 </body>
 </html>

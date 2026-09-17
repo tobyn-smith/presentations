@@ -1,5 +1,12 @@
 (function (global) {
-  var NAMES = [];
+  var NAMES = [
+    "Alex Chen",
+    "Jordan Patel",
+    "Morgan Lee",
+    "Riley Nguyen",
+    "Sam Rivera",
+    "Taylor Brooks"
+  ];
 
   var BGS = ["#004E60", "#ba0c2f", "#554F47", "#00A3AD", "#000000", "#B4BD00", "#9EA2A2", "#004E60", "#ba0c2f", "#554F47", "#00A3AD", "#000000", "#B4BD00", "#9EA2A2", "#004E60", "#ba0c2f"];
   var SKINS = ["#f3d2b3", "#e0ac69", "#c68642", "#8d5524", "#d7a07c", "#ffdbac", "#ae5d29", "#6b3b1f"];
