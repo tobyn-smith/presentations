@@ -100,7 +100,7 @@
   apply(data);
   openChannel();
 
-  if (!data) {
+  if (!data && !preferFiles()) {
     fetch("session.json", { cache: "no-store" }).then(function (r) {
       if (!r.ok) return null;
       return r.json();
