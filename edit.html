@@ -68,7 +68,11 @@
       <div class="sec-head">
         <h2>Boards</h2>
       </div>
-      <p class="hint">A title board first is easiest. Add talking points or a question when you need one.</p>
+      <label class="switch">
+        <input id="use-file-slides" type="checkbox" />
+        Use week files (do not hide generated slides with this computer's saved boards)
+      </label>
+      <p class="hint">On by default. Turn it off only if you want Edit’s saved boards to replace the week files. A title board first is easiest when you write your own set.</p>
       <div id="board-list"></div>
       <div class="add-row">
         <button type="button" id="add-title">Add a title board</button>
@@ -101,6 +105,10 @@
 <script src="roster.js"></script>
 <script src="slides.js"></script>
 <script src="script-content.js"></script>
+<script src="prompts.js"></script>
+<script src="readings/geddes-1990.js"></script>
+<script src="readings/seawright-gerring-2008.js"></script>
+<script src="build-week.js"></script>
 <script src="apply-content.js"></script>
 <script src="edit.js"></script>
 </body>

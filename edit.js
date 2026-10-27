@@ -164,9 +164,10 @@
   function loadState() {
     var saved = window.DeckContent && DeckContent.read();
     var deck = saved && saved.deck ? saved.deck : (window.DECK || {});
-    var slides = saved && saved.slides ? saved.slides : (window.SLIDES || []);
+    var useFiles = window.DeckContent && DeckContent.preferFiles && DeckContent.preferFiles();
+    var slides = (!useFiles && saved && saved.slides) ? saved.slides : (window.SLIDES || []);
     var names = saved && saved.names ? saved.names : ((window.Roster && Roster.names) || []);
-    var script = saved && saved.script ? saved.script : (window.SCRIPT || []);
+    var script = (!useFiles && saved && saved.script) ? saved.script : (window.SCRIPT || []);
     state.deck = {
       title: deck.title || "",
       presenterKey: deck.presenterKey || "",
@@ -276,6 +277,10 @@
   }
 
   function paint() {
+    var fileSwitch = val("use-file-slides");
+    if (fileSwitch) {
+      fileSwitch.checked = !!(window.DeckContent && DeckContent.preferFiles && DeckContent.preferFiles());
+    }
     val("title").value = state.deck.title;
     val("presenterKey").value = state.deck.presenterKey;
     val("room").value = state.deck.room === DEFAULT_ROOM ? "" : state.deck.room;
@@ -422,6 +427,19 @@
       paintScript();
       scheduleSave();
     });
+    var fileSwitch = document.getElementById("use-file-slides");
+    if (fileSwitch) {
+      fileSwitch.addEventListener("change", function () {
+        if (window.DeckContent && DeckContent.setPreferFiles) {
+          DeckContent.setPreferFiles(fileSwitch.checked);
+        }
+        loadState();
+        paint();
+        setStatus(fileSwitch.checked
+          ? "Using week files. Saved boards on this computer stay hidden."
+          : "Using saved boards from this computer, if there are any.");
+      });
+    }
     document.getElementById("save").addEventListener("click", function () {
       clearTimeout(saveTimer);
       saveNow(false);

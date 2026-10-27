@@ -70,6 +70,17 @@ label {
   font-weight: 600;
   margin: 0 0 0.85rem;
 }
+label.switch {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-weight: 500;
+}
+label.switch input {
+  width: auto;
+  margin-top: 0.2rem;
+  flex: none;
+}
 label input, label textarea { font-weight: 400; }
 #names-box { min-height: 10rem; resize: vertical; }
 .add-row {

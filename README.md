@@ -16,6 +16,16 @@ New here? Open **[Start](https://tobynsmith.me/presentations/start/)**. The card
 
 If phones sit on Hold, open Room tools and tap **Push live again**. If that still fails, open the [slideshow](https://tobynsmith.me/presentations/slideshow/) and keep talking. I do that more often than I want to admit.
 
+## Adding a week
+
+Each week is one small file in `readings/`. Copy an existing file. Fill only facts: title, authors, year, pages, and case-type names from the paper. Leave every `grid` answer, `asks` item, and other write-in field empty (`[write here]` shows on the boards).
+
+Then add one script tag for that file next to the other reading files in `index.html`, `desk.html`, `adminpresentation.html`, `slideshow.html`, `edit.html`, and `script.html`. Take out last week’s file if you do not want it in the room.
+
+The shared 12 prompts live in `prompts.js`. `build-week.js` turns the loaded week files into the usual slide types: one compact 12-prompt grid per paper, then a live board for each focus prompt. Closed prompts (choice or scale) become phone votes.
+
+Edit has a switch, **Use week files**. Leave it on so a leftover browser copy does not hide the generated boards.
+
 ## Changing the slides
 
 Open [Edit](https://tobynsmith.me/presentations/edit/). Type in the boxes. It saves on that computer.

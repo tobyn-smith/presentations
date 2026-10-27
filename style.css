@@ -284,7 +284,8 @@ button { cursor: pointer; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: 7.2% 4.4% 2.8%;
 }
 .role-pres .stage.title {
@@ -1042,6 +1043,28 @@ button { cursor: pointer; }
 }
 .points.cols-2 { grid-template-columns: 1fr 1fr; }
 .points.cols-4 { grid-template-columns: 1fr 1fr; }
+.points.cols-compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4rem 0.45rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.points.cols-compact li {
+  padding: 0.5rem 0.55rem 0.55rem;
+}
+.points.cols-compact h2 {
+  font-size: clamp(12px, 1.5vh, 15px);
+  margin-bottom: 0.28em;
+  letter-spacing: -0.015em;
+}
+.points.cols-compact p {
+  font-size: clamp(11px, 1.35vh, 13px);
+  line-height: 1.3;
+}
+.points p.empty {
+  color: var(--ink-faint);
+  font-style: italic;
+}
 .points li {
   background: #f8f9fa;
   border: 1px solid var(--rule);
@@ -2000,6 +2023,7 @@ button { cursor: pointer; }
 .role-part .pair-row { grid-template-columns: 1fr; }
 .role-part .chart-grid { grid-template-columns: 1fr; }
 .role-part .points { grid-template-columns: 1fr; }
+.role-part .points.cols-compact { grid-template-columns: 1fr; }
 
 .choices {
   display: flex;
@@ -2109,6 +2133,7 @@ textarea {
     border-radius: 0;
     padding: 1rem 1rem calc(1.2rem + env(safe-area-inset-bottom, 0px));
   }
+  .points.cols-compact { grid-template-columns: 1fr; }
   .stats-grid,
   .chart-grid,
   .steps,

@@ -135,9 +135,12 @@
     }
     if (s.type === "points") {
       var n = (s.points || []).length;
-      var cols = n === 4 ? 4 : n === 2 ? 2 : 3;
+      var compact = s.layout === "grid" || n >= 10;
+      var cols = compact ? "compact" : (n === 4 ? 4 : n === 2 ? 2 : 3);
       var items = (s.points || []).map(function (pt) {
-        return "<li><h2>" + esc(pt.title) + "</h2><p>" + esc(pt.body) + "</p></li>";
+        var filled = String(pt.body || "").trim();
+        var body = filled || "[write here]";
+        return "<li><h2>" + esc(pt.title) + "</h2><p" + (filled ? "" : " class=\"empty\"") + ">" + esc(body) + "</p></li>";
       }).join("");
       return "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
