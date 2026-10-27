@@ -55,8 +55,9 @@ READINGS.forEach(function (r) {
     } else {
       assert.strictEqual(board.input, "text");
     }
-    assert.strictEqual(board.placeholder, "[write here]");
+    assert.strictEqual(board.placeholder, "Type your answer");
     assert.strictEqual(board.help, "");
+    assert.ok(!board.scaleLabels || !board.scaleLabels.length);
   });
   closedKeys.forEach(function (key) {
     var vote = SLIDES.filter(function (s) { return s.id === r.id + "-" + key; })[0];
@@ -78,6 +79,17 @@ SCRIPT.forEach(function (sec) {
 var types = {};
 SLIDES.forEach(function (s) { types[s.type] = true; });
 assert.ok(types.title && types.points && types.prompt);
+
+assert.deepStrictEqual(SLIDES[0].agenda, READINGS.map(function (r) { return r.short; }));
+assert.ok(!JSON.stringify(SLIDES).includes(" · "));
+assert.ok(!JSON.stringify(SLIDES).includes("about "));
+assert.ok(!JSON.stringify(SLIDES).includes("Not at all"));
+assert.ok(!JSON.stringify(SLIDES).includes("Fully"));
+assert.ok(grids[0].lead.indexOf(", ") > -1);
+var adequate = SLIDES.filter(function (s) { return /-adequate$/.test(s.id); })[0];
+assert.ok(adequate);
+assert.deepStrictEqual(adequate.options, ["1", "2", "3", "4", "5"]);
+assert.ok(!adequate.scaleLabels);
 
 global.DECK = { useFileSlides: true, room: "test-room", title: "Week" };
 store["deck-content"] = JSON.stringify({

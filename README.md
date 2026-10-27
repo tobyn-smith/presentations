@@ -18,13 +18,13 @@ If phones sit on Hold, open Room tools and tap **Push live again**. If that stil
 
 ## Adding a week
 
-Each week is one small file in `readings/`. Copy an existing file. Fill only facts: title, authors, year, pages, and case-type names from the paper. Leave every `grid` answer, `asks` item, and other write-in field empty (`[write here]` shows on the boards).
+Each week is one small file in `readings/`. Copy an existing file. Fill only facts: title, authors, year, pages, and case-type names from the paper. Leave every `grid` answer, `asks` item, and other write-in field empty. Presenter boards and the script show `[write here]`. Phones get an empty box.
 
 Then add one script tag for that file next to the other reading files in `index.html`, `desk.html`, `adminpresentation.html`, `slideshow.html`, `edit.html`, and `script.html`. Take out last week’s file if you do not want it in the room.
 
 The shared 12 prompts live in `prompts.js`. `build-week.js` turns the loaded week files into the usual slide types: one compact 12-prompt grid per paper, then a live board for each focus prompt. Closed prompts (choice or scale) become phone votes.
 
-Edit has a switch, **Use week files**. Leave it on so a leftover browser copy does not hide the generated boards.
+Edit has a switch, **Use week files**. Leave it on so a leftover browser copy does not hide the generated boards. Turn it off before you rely on typed boards, a downloaded backup, or **Open a backup**. Restore will not show while the switch is on.
 
 ## Changing the slides
 
@@ -34,7 +34,7 @@ Do this on the laptop you will present from. Present and the slideshow on that s
 
 The class list is one name per line. Leave it blank if people can type their own names.
 
-Switching computers: **Download a backup** at the bottom of Edit, then **Open a backup** on the other one.
+Switching computers: **Download a backup** at the bottom of Edit, then **Open a backup** on the other one. If **Use week files** is on, turn it off after you restore or those boards stay hidden.
 
 If someone else might be using this live example at the same time, put a room word on Edit (something like `period3`). The student link updates. Give people that link, not the bare homepage.
 

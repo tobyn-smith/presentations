@@ -11,13 +11,13 @@
     var bits = [r.authors, r.year];
     if (r.pages) bits.push("pp. " + r.pages);
     if (r.source) bits.push(r.source);
-    return bits.filter(Boolean).join(" · ");
+    return bits.filter(Boolean).join(", ");
   }
 
   function leadLine(r) {
     var line = cite(r);
     if (r.caseTypes && r.caseTypes.length) {
-      line += (line ? " · " : "") + r.caseTypes.join(", ");
+      line += (line ? " | " : "") + r.caseTypes.join(", ");
     }
     return line;
   }
@@ -28,9 +28,7 @@
     kicker: "Leading a Reading Discussion",
     title: "This week's readings",
     lede: "Scan the code, pick a name, wait for Go live.",
-    agenda: R.map(function (r) {
-      return r.short + (r.minutes ? " · about " + r.minutes + " min" : "");
-    }),
+    agenda: R.map(function (r) { return r.short; }),
     speaker: ""
   }];
 
@@ -60,9 +58,8 @@
         help: "",
         input: closed ? p.input : (p.input || "text"),
         options: p.options,
-        scaleLabels: p.scaleLabels,
         viz: closed ? "bars" : "list",
-        placeholder: EMPTY
+        placeholder: "Type your answer"
       });
     });
 
@@ -71,12 +68,12 @@
       out.push({
         id: r.id + "-ask-" + i,
         type: "prompt",
-        kicker: r.short + " · Question",
+        kicker: r.short + " | Question",
         title: a,
         help: "",
         input: "text",
         viz: "list",
-        placeholder: EMPTY
+        placeholder: "Type your answer"
       });
     });
   });

@@ -329,6 +329,14 @@
     };
   }
 
+  function filesOn() {
+    return !!(window.DeckContent && DeckContent.preferFiles && DeckContent.preferFiles());
+  }
+
+  function weekFilesWarning() {
+    return "Week files are on, so board and script edits will not show. Turn off Use week files to use them.";
+  }
+
   function saveNow(quiet) {
     var data = payload();
     DeckContent.save(data);
@@ -338,7 +346,9 @@
         sessionStorage.setItem(store, data.deck.presenterKey);
       } catch (e) {}
     }
-    if (!quiet) {
+    if (filesOn()) {
+      setStatus(weekFilesWarning());
+    } else if (!quiet) {
       setStatus("Saved on this computer. Open Present or the slideshow to see it.");
     } else {
       setStatus("Saved on this computer.");
@@ -470,7 +480,9 @@
           DeckContent.save(data);
           loadState();
           paint();
-          setStatus("Opened that backup on this computer.");
+          setStatus(filesOn()
+            ? weekFilesWarning()
+            : "Opened that backup on this computer.");
         } catch (err) {
           setStatus("That file is not a session backup.");
         }

@@ -9,7 +9,7 @@ window.PROMPTS = [
   { key: "implications", label: "Observable implications" },
   { key: "tested",    label: "Which implications are tested? Central empirical strategy?" },
   { key: "design",    label: "Qualitative or quantitative? Cross-sectional or time series?", input: "choice", options: ["Qualitative", "Quantitative", "Mixed"] },
-  { key: "adequate",  label: "Does the strategy adequately test the theory?", input: "scale", options: ["1","2","3","4","5"], scaleLabels: ["Not at all","Fully"] },
+  { key: "adequate",  label: "Does the strategy adequately test the theory?", input: "scale", options: ["1","2","3","4","5"] },
   { key: "measures",  label: "Are concepts validly measured?" },
   { key: "cases",     label: "How are cases selected? Fair comparison?" }
 ];

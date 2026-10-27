@@ -451,8 +451,10 @@
       var cols = compact ? "compact" : (n === 4 ? 4 : n === 2 ? 2 : 3);
       var items = (s.points || []).map(function (pt) {
         var filled = String(pt.body || "").trim();
-        var body = filled || "[write here]";
-        return "<li><h2>" + esc(pt.title) + "</h2><p" + (filled ? "" : " class=\"empty\"") + ">" + esc(body) + "</p></li>";
+        var body = filled || (isPres ? "[write here]" : "");
+        return "<li><h2>" + esc(pt.title) + "</h2>"
+          + (body ? "<p" + (filled ? "" : " class=\"empty\"") + ">" + esc(body) + "</p>" : "")
+          + "</li>";
       }).join("");
       return "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
@@ -525,8 +527,8 @@
     if (s.input === "text") {
       return inner
         + '<form class="answer" id="form">'
-        + '<label class="sr" for="ans">' + esc(s.placeholder || "Type your answer") + "</label>"
-        + '<textarea id="ans" required maxlength="800" placeholder="' + esc(s.placeholder || "Type your answer") + '"></textarea>'
+        + '<label class="sr" for="ans">Type your answer</label>'
+        + '<textarea id="ans" required maxlength="800" placeholder="Type your answer"></textarea>'
         + '<button class="send" type="submit">Send</button></form>';
     }
     if (s.input === "choice" || s.input === "scale") {
@@ -547,7 +549,7 @@
         }).join("")
         + "</div>"
         + '<form class="answer" id="form">'
-        + '<textarea id="ans" maxlength="800"' + (s.requireText ? " required" : "") + ' placeholder="' + esc(s.placeholder || "Optional: say why") + '"></textarea>'
+        + '<textarea id="ans" maxlength="800"' + (s.requireText ? " required" : "") + ' placeholder="' + esc((s.placeholder && s.placeholder !== "[write here]") ? s.placeholder : "Optional: say why") + '"></textarea>'
         + '<button class="send" type="submit">Send</button></form>';
     }
     return inner;
