@@ -1,10 +1,8 @@
-/* Turns PROMPTS + READINGS into SLIDES the existing deck already understands.
-   Load after slides.js (and script-content.js on the script page), before apply-content.js. */
+/* Turns PROMPTS + READINGS into SLIDES. Optional PROJECT_SLIDES append after.
+   Load after slides.js and the week files, before apply-content.js. */
 (function () {
   var P = window.PROMPTS || [];
   var R = window.READINGS || [];
-  if (!P.length || !R.length) return;
-
   var EMPTY = "[write here]";
 
   function cite(r) {
@@ -22,68 +20,85 @@
     return line;
   }
 
-  var out = [{
-    id: "title",
-    type: "title",
-    kicker: "Leading a Reading Discussion",
-    title: "This week's readings",
-    lede: "Scan the code, pick a name, wait for Go live.",
-    agenda: R.map(function (r) { return r.short; }),
-    speaker: ""
-  }];
+  function scriptFor(id, fallbackTitle, pack) {
+    var row = pack && pack[id];
+    if (!row && pack) {
+      var key = String(id || "").split("-").pop();
+      row = pack[key];
+    }
+    return {
+      id: id,
+      title: (row && row.title) || fallbackTitle || "",
+      say: row && row.say != null ? row.say : EMPTY,
+      notes: row && row.notes != null ? row.notes : EMPTY
+    };
+  }
 
-  R.forEach(function (r) {
-    out.push({
-      id: r.id + "-grid",
-      type: "points",
-      layout: "grid",
-      kicker: r.short,
-      title: r.title,
-      lead: leadLine(r),
-      points: P.map(function (p) {
-        var filled = r.grid && r.grid[p.key];
-        return { title: p.label, body: filled || "" };
-      })
-    });
-
-    P.forEach(function (p) {
-      var focused = r.focus && r.focus.indexOf(p.key) > -1;
-      var closed = p.input === "choice" || p.input === "scale";
-      if (!focused && !closed) return;
-      out.push({
-        id: r.id + "-" + p.key,
-        type: "prompt",
-        kicker: r.short,
-        title: p.label,
-        help: "",
-        input: closed ? p.input : (p.input || "text"),
-        options: p.options,
-        viz: closed ? "bars" : "list",
-        placeholder: "Type your answer"
-      });
-    });
-
-    (r.asks || []).forEach(function (a, i) {
-      if (!String(a || "").trim()) return;
-      out.push({
-        id: r.id + "-ask-" + i,
-        type: "prompt",
-        kicker: r.short + " | Question",
-        title: a,
-        help: "",
-        input: "text",
-        viz: "list",
-        placeholder: "Type your answer"
-      });
-    });
-  });
-
-  window.SLIDES = out;
-
-  var before = (window.SCRIPT || []).filter(function (sec) {
+  var out = [];
+  var script = (window.SCRIPT || []).filter(function (sec) {
     return sec && sec.id === "before";
   });
-  window.SCRIPT = before.concat(out.map(function (sl) {
-    return { id: sl.id, title: sl.kicker || sl.title || "", say: EMPTY, notes: EMPTY };
-  }));
+
+  if (R.length && P.length) {
+    out.push({
+      id: "title",
+      type: "title",
+      kicker: "Leading a Reading Discussion",
+      title: "This week's readings",
+      lede: "Scan the code, pick a name, wait for Go live.",
+      agenda: R.map(function (r) { return r.short; }),
+      speaker: ""
+    });
+    script.push(scriptFor("title", "Title", {
+      title: {
+        say: "These are the Methods readings. I will wait until names are on the right, then start.",
+        notes: "Let people scan.\nGo live when enough names show."
+      }
+    }));
+
+    R.forEach(function (r) {
+      var pack = r.script || {};
+      out.push({
+        id: r.id + "-grid",
+        type: "points",
+        layout: "grid",
+        kicker: r.short,
+        title: r.title,
+        lead: leadLine(r),
+        points: P.map(function (p) {
+          var filled = r.grid && r.grid[p.key];
+          return { title: p.label, body: filled || "" };
+        })
+      });
+      script.push(scriptFor("grid", r.short, pack));
+
+      (r.focus || []).forEach(function (key) {
+        var p = P.filter(function (x) { return x.key === key; })[0];
+        if (!p) return;
+        var closed = p.input === "choice" || p.input === "scale";
+        out.push({
+          id: r.id + "-" + key,
+          type: "prompt",
+          kicker: r.short,
+          title: p.label,
+          help: "",
+          input: closed ? p.input : "text",
+          options: p.options,
+          viz: closed ? "bars" : "list",
+          placeholder: "Type your answer"
+        });
+        script.push(scriptFor(key, p.label, pack));
+      });
+    });
+  }
+
+  (window.PROJECT_SLIDES || []).forEach(function (sl) {
+    out.push(sl);
+  });
+  (window.PROJECT_SCRIPT || []).forEach(function (sec) {
+    script.push(sec);
+  });
+
+  if (out.length) window.SLIDES = out;
+  if (script.length) window.SCRIPT = script;
 })();

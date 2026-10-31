@@ -1,5 +1,5 @@
 window.DECK = {
-  title: "Leading a Reading Discussion",
+  title: "Methods",
   useFileSlides: true,
   room: "tobyn-smith-presentations",
   session: "live",

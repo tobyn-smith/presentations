@@ -18,11 +18,13 @@ If phones sit on Hold, open Room tools and tap **Push live again**. If that stil
 
 ## Adding a week
 
-Each week is one small file in `readings/`. Copy an existing file. Fill only facts: title, authors, year, pages, and case-type names from the paper. Leave every `grid` answer, `asks` item, and other write-in field empty. Presenter boards and the script show `[write here]`. Phones get an empty box.
+Each week is one small file in `readings/`. Copy an existing file. This Methods week loads Kellstedt and Whitten, Conrad et al. (2021), and Fuhrmann and Kreps (2010). A separate talk lives in `project/methods-accountability.js`.
 
-Then add one script tag for that file next to the other reading files in `index.html`, `desk.html`, `adminpresentation.html`, `slideshow.html`, `edit.html`, and `script.html`. Take out last week’s file if you do not want it in the room.
+Add one script tag for a new week file next to the other reading files in `index.html`, `desk.html`, `adminpresentation.html`, `slideshow.html`, `edit.html`, and `script.html`. Take out last week’s file if you do not want it in the room.
 
-The shared 12 prompts live in `prompts.js`. `build-week.js` turns the loaded week files into the usual slide types: one compact 12-prompt grid per paper, then a live board for each focus prompt. Closed prompts (choice or scale) become phone votes.
+The shared 12 prompts live in `prompts.js`. `build-week.js` makes one compact grid per paper, then one live board per focus prompt. Phone boxes stay empty. Do not put tool lines on the boards (no “Phones:”, tap counts, or bar captions).
+
+The project talk has three lines marked **Tobyn to decide** (inquiry wording, repo public or private, recall question). Leave those open.
 
 Edit has a switch, **Use week files**. Leave it on so a leftover browser copy does not hide the generated boards. Turn it off before you rely on typed boards, a downloaded backup, or **Open a backup**. Restore will not show while the switch is on.
 

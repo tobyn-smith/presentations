@@ -459,6 +459,7 @@
       return "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
         + (items ? '<ul class="points cols-' + cols + '">' + items + "</ul>" : "")
+        + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + quoteHtml(s.quote);
     }
     if (s.type === "claims") {
