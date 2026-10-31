@@ -8,6 +8,8 @@
   var prevBtn = document.getElementById("prev");
   var nextBtn = document.getElementById("next");
   var resetBtn = document.getElementById("reset");
+  var revealBtn = document.getElementById("reveal");
+  var revealed = {};
   var wipeBtn = document.getElementById("wipe");
   var liveBtn = document.getElementById("live");
   var handBtn = document.getElementById("hand");
@@ -268,8 +270,18 @@
     stage.classList.remove("hold");
     document.title = (isPres ? "Presenter · " : "") + (s.title || brand());
     kicker.textContent = s.kicker || brand();
-    if (counter) counter.textContent = isPres ? String(i + 1) : ((i + 1) + " / " + slides().length);
+    if (counter) {
+      var part = (s.kicker || "").replace(/\s+/g, " ").trim();
+      var n = String(i + 1);
+      counter.textContent = isPres
+        ? (part ? part + " · " + n : n)
+        : (n + " / " + slides().length);
+    }
     if (resetBtn) resetBtn.hidden = s.type !== "prompt";
+    if (revealBtn) {
+      revealBtn.hidden = s.type !== "prompt";
+      revealBtn.textContent = revealed[s.id] ? "Hide" : "Reveal";
+    }
     if (prevBtn) prevBtn.disabled = i === 0;
     if (nextBtn) nextBtn.disabled = i === slides().length - 1;
     stage.classList.toggle("prompt", s.type === "prompt");
@@ -290,7 +302,11 @@
     }
     stage.innerHTML = htmlFor(s, i);
     bind(s, i);
-    if (isPres && s.type === "prompt") paintResponses(s, i, DeckSync.getResponses(String(i)));
+    if (isPres && s.type === "prompt") {
+      paintResponses(s, i, DeckSync.getResponses(String(i)));
+      var viz = document.getElementById("viz");
+      if (viz) viz.classList.toggle("is-hidden", !revealed[s.id]);
+    }
     paintMe();
     paintHandBtn();
   }
@@ -368,7 +384,7 @@
       return '<div class="chart-row">'
         + '<span class="chart-lab">' + esc(b.label) + "</span>"
         + '<div class="chart-track"><div class="chart-fill" style="width:' + pct + '%"></div></div>'
-        + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit === "% of agents examined" ? "%" : "") + "</span>"
+        + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit ? esc(chart.unit) : "") + "</span>"
         + "</div>";
     }).join("");
     return '<figure class="chart" data-chart="' + esc(chart.id || "") + '">'
@@ -510,8 +526,7 @@
         return "<li>" + title + body + "</li>";
       }).join("") + "</ul>";
     }
-    var q = '<p class="dq-label">Discussion Question:</p>'
-      + "<h1>" + esc(s.title) + "</h1>"
+    var q = "<h1>" + esc(s.title) + "</h1>"
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + quoteHtml(s.quote)
       + articleHtml(s)
@@ -1083,6 +1098,8 @@
     if (!s || s.type !== "prompt") return;
     if (isPres) {
       paintResponses(s, i, list);
+      var viz = document.getElementById("viz");
+      if (viz) viz.classList.toggle("is-hidden", !revealed[s.id]);
       return;
     }
     if (!DeckSync.isDone(String(i)) && stage.querySelector(".thanks")) render(i);
@@ -1112,6 +1129,14 @@
     if (prevBtn) prevBtn.addEventListener("click", function () { go(DeckSync.getSlide() - 1); });
     if (nextBtn) nextBtn.addEventListener("click", function () { go(DeckSync.getSlide() + 1); });
     if (resetBtn) resetBtn.addEventListener("click", function () { DeckSync.reset(String(DeckSync.getSlide())); });
+    if (revealBtn) revealBtn.addEventListener("click", function () {
+      var s = slides()[DeckSync.getSlide()];
+      if (!s || s.type !== "prompt") return;
+      revealed[s.id] = !revealed[s.id];
+      revealBtn.textContent = revealed[s.id] ? "Hide" : "Reveal";
+      var viz = document.getElementById("viz");
+      if (viz) viz.classList.toggle("is-hidden", !revealed[s.id]);
+    });
     if (wipeBtn) wipeBtn.addEventListener("click", function () {
       if (confirm("Clear every answer from this session?")) DeckSync.wipe();
     });

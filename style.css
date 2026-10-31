@@ -85,12 +85,23 @@ button { cursor: pointer; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.join-chip {
+.join-chip,
+.run-chip {
   margin-top: 0.12rem;
   color: var(--ink);
   font-size: clamp(11px, 1.45vh, 13px);
   font-weight: 600;
 }
+.run-chip {
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+.view-links {
+  margin-top: 0.15rem;
+  font-size: 12px;
+}
+.view-links a { color: inherit; }
+.role-pres .stage.prompt .ask + #viz.is-hidden { display: none; }
 .chrome-right { display: flex; align-items: center; flex-wrap: wrap; gap: 0.45rem 0.75rem; justify-content: flex-end; pointer-events: auto; }
 .live-btn {
   border: 1px solid #000;

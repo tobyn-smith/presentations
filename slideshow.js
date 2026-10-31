@@ -46,7 +46,7 @@
       return '<div class="chart-row">'
         + '<span class="chart-lab">' + esc(b.label) + "</span>"
         + '<div class="chart-track"><div class="chart-fill" style="width:' + pct + '%"></div></div>'
-        + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit === "% of agents examined" ? "%" : "") + "</span>"
+        + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit ? esc(chart.unit) : "") + "</span>"
         + "</div>";
     }).join("");
     return '<figure class="chart" data-chart="' + esc(chart.id || "") + '">'
@@ -169,8 +169,18 @@
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + '<div class="chart-grid">' + figs + "</div>";
     }
-    return '<p class="dq-label">Discussion Question:</p>'
-      + "<h1>" + esc(s.title) + "</h1>"
+    if (s.type === "stats") {
+      var cards = (s.stats || []).map(function (st) {
+        return '<div class="stat"><div class="value">' + esc(st.value) + "</div>"
+          + '<p class="label">' + esc(st.label) + "</p>"
+          + (st.source ? '<p class="source">' + esc(st.source) + "</p>" : "")
+          + "</div>";
+      }).join("");
+      return "<h1>" + esc(s.title) + "</h1>"
+        + '<div class="stats-grid">' + cards + "</div>"
+        + (s.footer ? '<p class="footer-line">' + esc(s.footer) + "</p>" : "");
+    }
+    return "<h1>" + esc(s.title) + "</h1>"
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + quoteHtml(s.quote)
       + articleHtml(s)
@@ -208,6 +218,7 @@
     stage.classList.toggle("title", s.type === "title");
     stage.classList.toggle("compare", s.type === "compare");
     stage.classList.toggle("charts", s.type === "charts");
+    stage.classList.toggle("stats", s.type === "stats");
     stage.classList.toggle("story", s.type === "story");
     stage.classList.toggle("points", s.type === "points");
     stage.classList.toggle("claims", s.type === "claims");

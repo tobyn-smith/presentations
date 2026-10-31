@@ -33,6 +33,7 @@
     <header class="chrome">
       <div class="chrome-left">
         <p class="kicker" id="kicker">Discussion</p>
+        <p class="run-chip" id="run-chip">20 min · two parts</p>
         <p class="join-chip" id="join-chip"></p>
       </div>
       <div class="chrome-right">
@@ -50,7 +51,8 @@
         <div class="foot">
           <div class="nav">
             <button type="button" id="reset" hidden>Clear answers</button>
-            <button type="button" id="wipe">Clear all</button>
+            <button type="button" id="reveal" hidden>Reveal</button>
+            <button type="button" id="wipe" hidden>Clear all</button>
             <button type="button" id="prev">Back</button>
             <button type="button" id="next">Next</button>
           </div>
@@ -66,7 +68,7 @@
       <h2 id="failsafe-title">Room tools</h2>
       <button type="button" class="failsafe-close" id="failsafe-close">Close</button>
     </div>
-    <p class="failsafe-lead">If phones stick on Hold, land on the wrong slide, or someone will not leave, use these from this panel.</p>
+    <p class="failsafe-lead">Only if phones stick or a name will not leave.</p>
     <dl class="failsafe-status" id="failsafe-status"></dl>
     <pre class="failsafe-log" id="failsafe-log" hidden></pre>
     <h3 class="failsafe-h">Presenter key</h3>
@@ -124,9 +126,17 @@
         <strong>Start here</strong>
         <span>The simple map of pages. Change slides, present, or open the slideshow.</span>
       </a>
+      <a class="failsafe-backup" href="script.html">
+        <strong>Script</strong>
+        <span>What you say. Two parts, about twenty minutes.</span>
+      </a>
       <a class="failsafe-backup" href="slideshow.html" target="_blank" rel="noopener">
-        <strong>Open the backup slideshow</strong>
-        <span>Same boards, no phones, no Go live. Use this if the room will not start.</span>
+        <strong>Backup</strong>
+        <span>Plain slides. No phones. Same Geddes boards.</span>
+      </a>
+      <a class="failsafe-backup" href="index.html" target="_blank" rel="noopener">
+        <strong>Audience</strong>
+        <span>The phone page. Check-in, then answers.</span>
       </a>
       <a class="failsafe-backup" href="edit.html">
         <strong>Change slides and names</strong>
@@ -139,10 +149,7 @@
 <script src="roster.js"></script>
 <script src="slides.js"></script>
 <script src="prompts.js"></script>
-<script src="readings/kellstedt-whitten.js"></script>
-<script src="readings/conrad-2021.js"></script>
-<script src="readings/fuhrmann-kreps.js"></script>
-<script src="project/methods-accountability.js"></script>
+<script src="readings/geddes-1990.js"></script>
 <script src="build-week.js"></script>
 <script src="apply-content.js"></script>
 <script>
