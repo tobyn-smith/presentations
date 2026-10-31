@@ -50,10 +50,20 @@
       kicker: "",
       title: "Five fast growers, one shared trait",
       help: "",
-      input: "text",
-      viz: "list",
-      placeholder: "Type your answer",
-      ask: "If those five are all you read, what do you conclude?",
+      input: "place",
+      viz: "bars-list",
+      ask: "What do the five actually give you?",
+      tokens: [
+        "Labour was repressed or coopted",
+        "That caused the growth",
+        "You have not seen the slow cases"
+      ],
+      slots: [
+        { id: "show", label: "What the five show" },
+        { id: "not", label: "What does not follow" }
+      ],
+      placeKey: "That caused the growth",
+      options: ["What the five show", "What does not follow"],
       names: ["Taiwan", "South Korea", "Singapore", "Brazil", "Mexico"],
       claims: [
         { title: "The cases", body: "In the fast years labour was repressed or coopted." },
@@ -152,10 +162,15 @@
       kicker: "",
       title: "Where you stop the story",
       help: "",
-      input: "text",
-      viz: "list",
-      placeholder: "Type your answer",
-      ask: "Which comparison would you trust, and why?",
+      input: "rank",
+      viz: "bars-list",
+      ask: "Which comparison would you trust?",
+      options: [
+        "The five growers",
+        "Her wider Third World set",
+        "Skocpol's three revolutions",
+        "The nine Spanish-American cases"
+      ],
       chart: {
         id: "chile-end",
         title: "Yearly inflation, late years from her Table 2",
@@ -212,8 +227,8 @@
     {
       id: "nics",
       title: "Five growers",
-      say: "Taiwan, South Korea, Singapore, Brazil, Mexico. In the fast years labour was repressed or coopted. Many who wrote on the NICs said that helped growth. If those five are all you have read, what do you conclude?",
-      notes: "The five are named on the NIC page with footnotes 2 to 5. No printed page number is visible there.\nFirst live board. Then say what they wrote."
+      say: "Taiwan, South Korea, Singapore, Brazil, Mexico. In the fast years labour was repressed or coopted. Many who wrote on the NICs said that helped growth. What do the five actually give you?",
+      notes: "The five are named on the NIC page with footnotes 2 to 5.\nFirst live board. People drag the three lines onto the two trays.\nThen Reveal and say what they put."
     },
     {
       id: "regions",
@@ -248,8 +263,8 @@
     {
       id: "chile",
       title: "Chile",
-      say: "Hirschman stops in 1961, when Alessandri seemed to have tamed it. 1955 was 84 percent. 1960 and 1961 are 5 and 10. Which comparison would you trust, and why? The five growers, her bigger set, Skocpol's three, or the nine Spanish-American cases.",
-      notes: "Table 2, printed pp. 22 to 23.\n1957 is 17, as she prints it.\nSecond live board."
+      say: "Hirschman stops in 1961, when Alessandri seemed to have tamed it. 1955 was 84 percent. 1960 and 1961 are 5 and 10. Which comparison would you trust? Put the one you trust first.",
+      notes: "Table 2, printed pp. 22 to 23.\n1957 is 17, as she prints it.\nSecond live board. People drag the four comparisons into an order."
     },
     {
       id: "close",

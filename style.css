@@ -1447,6 +1447,99 @@ button { cursor: pointer; }
   overflow: auto;
 }
 .role-pres .stage.prompt.has-split .ask-panel #viz.is-hidden { display: none; }
+.role-pres .stage.prompt.has-drag .ask-panel {
+  max-height: 44%;
+  min-height: 24%;
+}
+.drag-rank,
+.drag-place {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+.rank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+.rank-list li {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  gap: 0.45rem;
+  align-items: center;
+  border: 1.5px solid #1d1d1d;
+  background: #fff;
+  padding: 0.28rem 0.5rem;
+  cursor: grab;
+  touch-action: none;
+  font-size: clamp(14px, 1.9vh, 18px);
+  line-height: 1.2;
+}
+.rank-list li.is-dragging { opacity: 0.55; cursor: grabbing; }
+.rank-n {
+  font-family: var(--display);
+  color: var(--accent);
+  font-weight: 500;
+}
+.token-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-height: 2.1rem;
+}
+.token {
+  border: 1.5px solid #1d1d1d;
+  background: #fff;
+  color: inherit;
+  padding: 0.28rem 0.5rem;
+  font-size: clamp(13px, 1.75vh, 16px);
+  line-height: 1.2;
+  cursor: grab;
+  touch-action: none;
+}
+.token.is-dragging {
+  opacity: 0.95;
+  cursor: grabbing;
+  box-shadow: 0 8px 18px rgba(29, 29, 29, 0.18);
+}
+.slot-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+.slot {
+  border: 1.5px solid #1d1d1d;
+  background: var(--paper);
+  padding: 0.3rem 0.4rem 0.4rem;
+  min-height: 4.2rem;
+  display: flex;
+  flex-direction: column;
+}
+.slot-lab {
+  font-family: var(--display);
+  font-size: clamp(11px, 1.45vh, 14px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.25rem;
+}
+.slot-well {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-content: flex-start;
+  min-height: 2.2rem;
+}
+.drag-rank .send,
+.drag-place .send { align-self: flex-start; }
 .role-pres .title-copy .claim-bars {
   flex: 1 1 auto;
   margin-top: 0.85rem;
@@ -2176,6 +2269,9 @@ button { cursor: pointer; }
 .role-part .claim-bars li { padding: 0.7rem 0.8rem; }
 .role-part .name-stack li { font-size: 1.7rem; }
 .role-part .ask-panel { max-height: none; min-height: 0; }
+.role-part .slot-row { grid-template-columns: 1fr; }
+.role-part .rank-list li,
+.role-part .token { min-height: 2.4rem; }
 .role-part .stage.title {
   display: flex;
   flex-direction: column;

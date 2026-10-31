@@ -261,10 +261,16 @@
     });
   }
 
-  function render(i) {
+  function render(i, force) {
     var s = slides()[i];
     if (!s) return;
     var changed = i !== lastIndex;
+    var keepBoard = !force && !changed
+      && !document.body.classList.contains("is-waiting")
+      && !document.body.classList.contains("is-hold")
+      && !document.body.classList.contains("is-checkin")
+      && stage
+      && stage.querySelector("#drag-place, #drag-rank, #form, #choices, .thanks");
     lastIndex = i;
     document.body.classList.remove("is-waiting", "is-checkin", "is-checkin-name", "is-checkin-face", "is-hold");
     stage.classList.remove("hold");
@@ -296,10 +302,21 @@
     stage.classList.toggle("points", s.type === "points");
     stage.classList.toggle("claims", s.type === "claims");
     stage.classList.toggle("has-split", !!(s.claims && (s.chart || s.stats || s.names)));
+    stage.classList.toggle("has-drag", s.input === "rank" || s.input === "place");
     if (changed) {
       stage.classList.remove("fade");
       void stage.offsetWidth;
       stage.classList.add("fade");
+    }
+    if (keepBoard) {
+      if (isPres && s.type === "prompt") {
+        paintResponses(s, i, DeckSync.getResponses(String(i)));
+        var keepViz = document.getElementById("viz");
+        if (keepViz) keepViz.classList.toggle("is-hidden", !revealed[s.id]);
+      }
+      paintMe();
+      paintHandBtn();
+      return;
     }
     stage.innerHTML = htmlFor(s, i);
     bind(s, i);
@@ -430,6 +447,42 @@
     if (s.charts && s.charts[0]) return chartHtml(s.charts[0]);
     if (s.stats) return statsStackHtml(s.stats);
     if (s.names) return namesHtml(s.names);
+    return "";
+  }
+
+  function rankHtml(s, withSend) {
+    var opts = s.options || [];
+    return '<div class="drag-rank" id="drag-rank">'
+      + '<ol class="rank-list">'
+      + opts.map(function (o, idx) {
+        return '<li data-opt="' + esc(o) + '"><span class="rank-n">' + (idx + 1) + '</span><span class="rank-lab">' + esc(o) + "</span></li>";
+      }).join("")
+      + "</ol>"
+      + (withSend ? '<button type="button" class="send" id="drag-send">Send</button>' : "")
+      + "</div>";
+  }
+
+  function placeHtml(s, withSend) {
+    var tokens = s.tokens || [];
+    var slots = s.slots || [];
+    return '<div class="drag-place" id="drag-place">'
+      + '<div class="token-tray" data-home="1">'
+      + tokens.map(function (t) {
+        return '<span class="token" data-token="' + esc(t) + '" tabindex="0">' + esc(t) + "</span>";
+      }).join("")
+      + "</div>"
+      + '<div class="slot-row">'
+      + slots.map(function (slot) {
+        return '<div class="slot" data-slot="' + esc(slot.id) + '"><p class="slot-lab">' + esc(slot.label) + '</p><div class="slot-well"></div></div>';
+      }).join("")
+      + "</div>"
+      + (withSend ? '<button type="button" class="send" id="drag-send">Send</button>' : "")
+      + "</div>";
+  }
+
+  function dragHtml(s, withSend) {
+    if (s.input === "rank") return rankHtml(s, withSend);
+    if (s.input === "place") return placeHtml(s, withSend);
     return "";
   }
 
@@ -581,7 +634,7 @@
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "");
     var askLine = s.ask ? '<p class="ask-q">' + esc(s.ask) + "</p>" : "";
     if (isPres) {
-      return '<div class="ask">' + q + '</div><div class="ask-panel">' + askLine + '<div id="viz"></div></div>';
+      return '<div class="ask">' + q + '</div><div class="ask-panel">' + askLine + dragHtml(s, false) + '<div id="viz"></div></div>';
     }
     var inner = q;
     var panel = function (html) {
@@ -621,10 +674,154 @@
         + '<button class="send" type="submit">Send</button></form>'
       );
     }
+    if (s.input === "rank" || s.input === "place") {
+      return panel(dragHtml(s, true));
+    }
     return panel("");
   }
 
+  function numberRanks(list) {
+    var items = list.querySelectorAll("[data-opt]");
+    for (var n = 0; n < items.length; n++) {
+      var mark = items[n].querySelector(".rank-n");
+      if (mark) mark.textContent = String(n + 1);
+    }
+  }
+
+  function bindRank(s, i, canSend) {
+    var list = document.querySelector("#drag-rank .rank-list");
+    if (!list) return;
+    var held = null;
+    function move(e) {
+      if (!held) return;
+      var over = document.elementFromPoint(e.clientX, e.clientY);
+      var li = over && over.closest("[data-opt]");
+      if (!li || li === held || !list.contains(li)) return;
+      var rect = li.getBoundingClientRect();
+      list.insertBefore(held, e.clientY < rect.top + rect.height / 2 ? li : li.nextSibling);
+      numberRanks(list);
+    }
+    function endDrag() {
+      if (!held) return;
+      held.classList.remove("is-dragging");
+      held = null;
+      numberRanks(list);
+    }
+    list.addEventListener("pointerdown", function (e) {
+      var li = e.target.closest("[data-opt]");
+      if (!li) return;
+      held = li;
+      li.classList.add("is-dragging");
+      try { li.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+    });
+    list.addEventListener("pointermove", move);
+    list.addEventListener("pointerup", endDrag);
+    list.addEventListener("pointercancel", endDrag);
+    var send = document.getElementById("drag-send");
+    if (send && canSend) {
+      send.addEventListener("click", function () {
+        var order = [].map.call(list.querySelectorAll("[data-opt]"), function (li) {
+          return li.getAttribute("data-opt");
+        });
+        if (!order.length) return;
+        submit(s, i, { choice: order[0], text: order.join(" > ") });
+      });
+    }
+  }
+
+  function bindPlace(s, i, canSend) {
+    var board = document.getElementById("drag-place");
+    if (!board) return;
+    var held = null;
+    var grabX = 0;
+    var grabY = 0;
+    var lastX = 0;
+    var lastY = 0;
+    function wellAt(x, y) {
+      var el = document.elementFromPoint(x, y);
+      if (!el || !board.contains(el)) return null;
+      var well = el.closest(".slot-well, .token-tray");
+      if (well) return well;
+      var slot = el.closest(".slot");
+      return slot ? slot.querySelector(".slot-well") : null;
+    }
+    function lift(tok, x, y) {
+      var rect = tok.getBoundingClientRect();
+      grabX = x - rect.left;
+      grabY = y - rect.top;
+      tok.classList.add("is-dragging");
+      tok.style.position = "fixed";
+      tok.style.left = rect.left + "px";
+      tok.style.top = rect.top + "px";
+      tok.style.width = rect.width + "px";
+      tok.style.zIndex = "20";
+      tok.style.pointerEvents = "none";
+    }
+    function follow(x, y) {
+      if (!held) return;
+      lastX = x;
+      lastY = y;
+      held.style.left = (x - grabX) + "px";
+      held.style.top = (y - grabY) + "px";
+    }
+    function drop(x, y) {
+      if (!held) return;
+      var well = wellAt(x, y) || wellAt(lastX, lastY);
+      held.classList.remove("is-dragging");
+      held.style.position = "";
+      held.style.left = "";
+      held.style.top = "";
+      held.style.width = "";
+      held.style.zIndex = "";
+      held.style.pointerEvents = "";
+      if (well) well.appendChild(held);
+      held = null;
+    }
+    board.addEventListener("pointerdown", function (e) {
+      var tok = e.target.closest(".token");
+      if (!tok) return;
+      held = tok;
+      lift(tok, e.clientX, e.clientY);
+      try { tok.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+    });
+    function onMove(e) {
+      if (!held) return;
+      follow(e.clientX, e.clientY);
+    }
+    board.addEventListener("pointermove", onMove);
+    board.addEventListener("pointerup", function (e) {
+      drop(e.clientX, e.clientY);
+    });
+    board.addEventListener("pointercancel", function () {
+      if (!held) return;
+      drop(-1, -1);
+    });
+    var send = document.getElementById("drag-send");
+    if (send && canSend) {
+      send.addEventListener("click", function () {
+        var slots = s.slots || [];
+        var rows = [];
+        var keySlot = "";
+        slots.forEach(function (slot) {
+          var well = board.querySelector('.slot[data-slot="' + slot.id + '"] .slot-well');
+          if (!well) return;
+          [].forEach.call(well.querySelectorAll(".token"), function (tok) {
+            var name = tok.getAttribute("data-token") || "";
+            rows.push(name + " → " + slot.label);
+            if (name === s.placeKey) keySlot = slot.label;
+          });
+        });
+        if (rows.length < (s.tokens || []).length) return;
+        submit(s, i, { choice: keySlot || rows[0], text: rows.join("; ") });
+      });
+    }
+  }
+
   function bind(s, i) {
+    bindRank(s, i, !isPres);
+    bindPlace(s, i, !isPres);
     if (isPres) return;
     var form = document.getElementById("form");
     var choice = "";
@@ -694,7 +891,7 @@
     remember(s.id, payload);
     DeckSync.submit(String(i), payload);
     DeckSync.markDone(String(i));
-    render(i);
+    render(i, true);
   }
 
   function wordFreq(list) {

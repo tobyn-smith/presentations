@@ -55,10 +55,14 @@ var prompts = SLIDES.filter(function (s) { return s.type === "prompt"; });
 assert.strictEqual(prompts.length, 2);
 prompts.forEach(function (p) {
   assert.strictEqual(p.help, "");
-  assert.strictEqual(p.placeholder, "Type your answer");
   assert.ok(p.ask);
   assert.ok(p.claims && p.claims.length >= 3);
 });
+assert.strictEqual(SLIDES.filter(function (s) { return s.id === "nics"; })[0].input, "place");
+assert.ok(SLIDES.filter(function (s) { return s.id === "nics"; })[0].tokens.length === 3);
+assert.ok(SLIDES.filter(function (s) { return s.id === "nics"; })[0].slots.length === 2);
+assert.strictEqual(SLIDES.filter(function (s) { return s.id === "chile"; })[0].input, "rank");
+assert.strictEqual(SLIDES.filter(function (s) { return s.id === "chile"; })[0].options.length, 4);
 
 var dump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT);
 [
@@ -104,6 +108,12 @@ assert.ok(admin.indexOf("class=\"brand\"") === -1);
 assert.ok(backup.indexOf("class=\"brand\"") === -1);
 assert.ok(css.indexOf(".claim-bars") !== -1);
 assert.ok(css.indexOf(".split.has-viz") !== -1);
+assert.ok(css.indexOf(".drag-place") !== -1);
+assert.ok(css.indexOf(".drag-rank") !== -1);
+var deckSrc = fs.readFileSync("./deck.js", "utf8");
+assert.ok(deckSrc.indexOf("function bindRank") !== -1);
+assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
+assert.ok(deckSrc.indexOf("id=\"drag-send\"") !== -1);
 assert.ok(user.indexOf("data-role=\"participant\"") !== -1);
 assert.ok(backup.indexOf("slideshow.js") !== -1);
 

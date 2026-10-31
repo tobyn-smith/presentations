@@ -231,7 +231,31 @@
       + articleHtml(s)
       + recapHtml(s)
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "")
-      + (s.ask ? '<div class="ask-panel"><p class="ask-q">' + esc(s.ask) + "</p>" + talkHtml(s) + "</div>" : talkHtml(s));
+      + (s.ask ? '<div class="ask-panel"><p class="ask-q">' + esc(s.ask) + "</p>" + dragTalk(s) + "</div>" : talkHtml(s));
+  }
+
+  function dragTalk(s) {
+    if (s.input === "rank") {
+      return '<ol class="rank-list">'
+        + (s.options || []).map(function (o, idx) {
+          return '<li data-opt="' + esc(o) + '"><span class="rank-n">' + (idx + 1) + '</span><span class="rank-lab">' + esc(o) + "</span></li>";
+        }).join("")
+        + "</ol>";
+    }
+    if (s.input === "place") {
+      return '<div class="drag-place">'
+        + '<div class="token-tray">'
+        + (s.tokens || []).map(function (t) {
+          return '<span class="token">' + esc(t) + "</span>";
+        }).join("")
+        + "</div>"
+        + '<div class="slot-row">'
+        + (s.slots || []).map(function (slot) {
+          return '<div class="slot"><p class="slot-lab">' + esc(slot.label) + '</p><div class="slot-well"></div></div>';
+        }).join("")
+        + "</div></div>";
+    }
+    return talkHtml(s);
   }
 
   var brand = (window.DECK && DECK.title) || "Discussion";
@@ -271,6 +295,7 @@
     stage.classList.toggle("points", s.type === "points");
     stage.classList.toggle("claims", s.type === "claims");
     stage.classList.toggle("has-split", !!(s.claims && (s.chart || s.stats || s.names)));
+    stage.classList.toggle("has-drag", s.input === "rank" || s.input === "place");
     if (changed) {
       stage.classList.remove("fade");
       void stage.offsetWidth;
