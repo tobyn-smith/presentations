@@ -23,7 +23,7 @@
       title: "What she wants to know",
       lead: "",
       points: [
-        { title: "", body: "If you only study the outcome you already care about, do you still get a fair test?" }
+        { title: "", body: "If you pick cases because they already have the outcome, do you still get a fair test?" }
       ]
     },
     {
@@ -42,7 +42,7 @@
       type: "points",
       kicker: "",
       title: "Five fast growers",
-      lead: "Taiwan, South Korea, Singapore, Brazil, Mexico. Labour was held down in the fast years. Writers said that helped growth. Printed p. 5.",
+      lead: "Taiwan, South Korea, Singapore, Brazil, Mexico. In the fast years labour was repressed or coopted. Writers on the NICs said that helped growth.",
       points: []
     },
     {
@@ -60,11 +60,11 @@
       type: "charts",
       kicker: "",
       title: "Growth by region, 1960 to 1982",
-      note: "If you pick East Asia, you have already leaned toward the fast cases. Printed p. 8.",
+      note: "East Asia is unusually fast. Pick that region and you have, in effect, picked on growth. Table 1.",
       charts: [
         {
           id: "table1",
-          title: "Average country growth, GNP per capita",
+          title: "Average country growth rates",
           source: "Her Table 1. World Development Report, 1984 and 1988.",
           max: 6,
           bars: [
@@ -82,12 +82,12 @@
       type: "stats",
       kicker: "",
       title: "How she scored labour",
-      footer: "US human rights reports, 1980 and 1988. Printed pp. 7 to 8. She calls it imperfect.",
+      footer: "Country Reports on Human Rights Practices, 1980 and 1988. She calls the score imperfect.",
       stats: [
-        { value: "1", label: "Free unions. Strikes happen. India, Jamaica, Venezuela." },
-        { value: "2", label: "Unions exist. Strikes rare. Colombia, Zimbabwe, Malaysia." },
-        { value: "3", label: "Tied to the state. South Korea, Brazil, Pakistan." },
-        { value: "4", label: "Banned or very violent. Chile 1973 to 1979, Syria, Benin." }
+        { value: "1", label: "Free unions, own leaders, strikes happen. India, Jamaica, Venezuela." },
+        { value: "2", label: "Unions legal. Strikes rare or squeezed. Colombia, Zimbabwe, Malaysia." },
+        { value: "3", label: "Tied to the government or party. South Korea, Brazil, Pakistan." },
+        { value: "4", label: "Banned, or violence is severe. Chile 1973 to 1979, Syria, Benin." }
       ]
     },
     {
@@ -95,11 +95,11 @@
       type: "stats",
       kicker: "",
       title: "The same claim, three samples",
-      footer: "Printed pp. 8 and 10. This check cannot kill the claim. It does show the five-country picture does not travel.",
+      footer: "Figure 1, printed p. 8. Figure 2, printed p. 10. This simple check cannot disconfirm the claim. It does show the five-country picture does not travel.",
       stats: [
         { value: ".56", label: "East Asia only. Looks like a link." },
-        { value: ".07", label: "A wider set. Almost nothing. Slope slightly down." },
-        { value: ".01", label: "As advanced as South Korea." }
+        { value: ".07", label: "A wider Third World set. Almost nothing. Slope slightly down." },
+        { value: ".01", label: "Countries at least as advanced as South Korea." }
       ]
     },
     {
@@ -107,10 +107,10 @@
       type: "points",
       kicker: "",
       title: "Skocpol",
-      lead: "France, Russia, China, because they had revolutions. Then a few misses.",
+      lead: "She picks France, Russia and China because they had revolutions. Then a few misses.",
       points: [
-        { title: "The chain", body: "A war or invasion, a split in the elite, villages that can move on their own, then revolution." },
-        { title: "Her check", body: "Nine Spanish-American countries that already have that village and class setup. Threat here means a lost war plus invasion or lost land." }
+        { title: "The chain", body: "An outside military threat, reforms the dominant class can block, a split at the top. If villages are solidary and free of the landlord day to day, peasants rebel." },
+        { title: "Her check", body: "Nine Spanish-American countries that already have that village and class setup. She then scores threat as a lost war plus invasion or lost land." }
       ]
     },
     {
@@ -118,11 +118,11 @@
       type: "stats",
       kicker: "",
       title: "What that check found",
-      footer: "Printed p. 20. Not a kill. The set is not random, and threat is crude.",
+      footer: "Figure 5, printed p. 20. Not a definitive disconfirmation. The set is not random, and her threat score is crude.",
       stats: [
-        { value: "7", label: "Hard threats, no revolution." },
+        { value: "7", label: "Extreme military threat, no revolution." },
         { value: "2", label: "Revolutions with no such threat." },
-        { value: "1", label: "Fits. Bolivia, once." }
+        { value: "1", label: "Fits. Bolivia, 1935 then 1952." }
       ]
     },
     {
@@ -130,17 +130,18 @@
       type: "charts",
       kicker: "",
       title: "Where you stop the story",
-      note: "Hirschman on Chile ends in 1961, when it looked tamed. Printed pp. 21 to 23.",
+      note: "Hirschman on Chile ends in 1961, when Alessandri seemed to have tamed it. Table 2, printed pp. 22 to 23.",
       charts: [
         {
           id: "chile-end",
-          title: "Yearly inflation, late years from her table",
+          title: "Yearly inflation, late years from her Table 2",
           source: "Hirschman, p. 160, as she prints it.",
           max: 90,
           unit: "%",
           bars: [
             { label: "1955", n: 84 },
             { label: "1956", n: 38 },
+            { label: "1957", n: 17 },
             { label: "1958", n: 33 },
             { label: "1959", n: 33 },
             { label: "1960", n: 5 },
@@ -164,7 +165,7 @@
       type: "points",
       kicker: "",
       title: "What this paper is for",
-      lead: "Good for a hunch. Not, on its own, a test.",
+      lead: "Good for how a thing happened, and for a hunch. Not, on its own, a test.",
       points: [
         { title: "If you pick cases because they already have the outcome", body: "You will often get the wrong answer. Printed p. 24." }
       ]
@@ -180,8 +181,8 @@
     {
       id: "ask",
       title: "What she wants",
-      say: "Geddes is not asking why Korea grew, or why France had a revolution. She is asking whether a habit, only studying the outcome you like, still gives you a fair test.",
-      notes: "Goal: explanation of a method, not a new theory of growth.\nWorking paper 90-13, 1990."
+      say: "Geddes is not asking why Korea grew, or why France had a revolution. She is asking what happens when we pick cases because they already have the outcome we want to explain.",
+      notes: "Working paper 90-13, 1990.\nOpening: selection on the dependent variable.\nThe lone 1 on that page is a footnote, not a page number."
     },
     {
       id: "habit",
@@ -192,8 +193,8 @@
     {
       id: "nics",
       title: "Five growers",
-      say: "Taiwan, South Korea, Singapore, Brazil, Mexico. In the fast years, labour was held down. Several well-known people said that helped growth.",
-      notes: "Printed p. 5.\nActors: governments and workers. It matters, because the claim is about how states treat labour."
+      say: "Taiwan, South Korea, Singapore, Brazil, Mexico. In the fast years labour was repressed or coopted. Johnson, O'Donnell, Cardoso, Koo, Deyo. Many who wrote on the NICs said that helped growth.",
+      notes: "The five are named on the NIC page with footnotes 2 to 5. No printed page number is visible there.\nShe then says the conclusion does not follow."
     },
     {
       id: "ask-five",
@@ -204,38 +205,38 @@
     {
       id: "regions",
       title: "Regions",
-      say: "Her table. East Asia at 5.2. Africa at 1.0. If you pick East Asia, you have already leaned toward the fast cases.",
-      notes: "Printed p. 8.\nDo not invent a country rate. The five are not given separate growth numbers on the scan."
+      say: "Her Table 1. East Asia at 5.2. Africa at 1.0. Geography is tied to growth, so picking East Asia is, in effect, picking on the thing you want to explain.",
+      notes: "Table 1 sits after the Figure 1 page, which is printed 8. No page number is visible on the table page itself.\nDo not invent a country rate. The five are not given separate growth numbers on the scan."
     },
     {
       id: "scores",
       title: "Labour scores",
-      say: "She scores labour from 1 to 4, from the US human rights reports. South Korea and Brazil sit at 3. She calls the score imperfect.",
-      notes: "Printed pp. 7 to 8.\nMeasures: valid enough for her point, not a perfect labour index."
+      say: "She scores labour from 1 to 4, from the Country Reports on Human Rights Practices, 1980 and 1988. South Korea and Brazil sit at 3. She calls the score imperfect.",
+      notes: "Criteria and examples are on the pages just before Figure 1. No printed page number is visible on those pages.\nShe says it is adequate for a methodological point."
     },
     {
       id: "fits",
       title: "Three samples",
-      say: "East Asia alone, r squared of .56. A wider set, .07, slope slightly down. The more advanced cut, .01. Among the five there was no real link. Slow countries hold labour down too.",
-      notes: "Printed p. 10.\nStrategy: quantitative, cross-section, not a time series.\nShe says this cannot kill the claim on its own."
+      say: "East Asia alone, r squared of .56. A wider Third World set, .07, slope slightly down. Countries at least as advanced as South Korea, .01. Among the five there was no real link. Slow countries repress labour too.",
+      notes: "Figure 1 printed p. 8. Figure 2 printed p. 10.\nShe says this simple bivariate test cannot disconfirm the hypothesis."
     },
     {
       id: "skocpol",
       title: "Skocpol",
-      say: "Same habit, on revolutions. She picks France, Russia and China because they had them. The story is a chain. Geddes holds the village and class setup still, then asks whether war still leads to revolution.",
-      notes: "Raquel.\nPrinted pp. 12 to 13.\nTheory is clear as a chain. Not every link is tested."
+      say: "Same habit, on revolutions. She picks France, Russia and China because they had them. The story is a chain. Geddes holds the village and class setup still in nine Spanish-American countries, then asks whether a lost war still leads to revolution.",
+      notes: "Raquel.\nSkocpol section starts printed p. 12. The nine are Mexico, Guatemala, El Salvador, Honduras, Nicaragua, Ecuador, Peru, Bolivia, Paraguay. Printed p. 17 is visible on that page.\nThreat in her test: lost a war plus invasion or lost land. That is her bar, not Skocpol's original wording."
     },
     {
       id: "figure5",
       title: "Seven, two, one",
-      say: "Seven hard threats, no revolution. Two revolutions with no such threat. One fit, Bolivia. She says this is not a kill.",
-      notes: "Printed p. 20.\nCases: not random. Comparison is wider than three revolutions, still not a full universe."
+      say: "Seven extreme threats, no revolution. Two revolutions with no such threat. One fit, Bolivia, defeated 1935, revolution 1952. She says this is not a definitive disconfirmation.",
+      notes: "Figure 5, printed p. 20.\nThe two without that threat are on her figure: Nicaragua 1979 and Cuba 1959, which she marks as intermediate."
     },
     {
       id: "chile",
       title: "Chile",
-      say: "Hirschman stops in 1961. 1955 was 84 percent. 1960 and 1961 look tamed. If you stop the story on a quiet year, that year can run the conclusion.",
-      notes: "Printed pp. 21 to 23.\nTime series, not a cross section."
+      say: "Hirschman stops in 1961, when Alessandri seemed to have tamed it. 1955 was 84 percent. 1960 and 1961 are 5 and 10. If you stop the story on a quiet year, that year can run the conclusion.",
+      notes: "Table 2, printed pp. 22 to 23.\nSource on the scan: Hirschman, p. 160.\n1957 is 17, as she prints it."
     },
     {
       id: "ask-trust",
@@ -247,7 +248,7 @@
       id: "close",
       title: "Last slide",
       say: "Case studies are good for how a thing happened, and for a hunch. They cannot, on their own, test the theory they just wrote. If you pick cases because they already have the outcome, you will often get the wrong answer.",
-      notes: "Tobyn.\nPrinted pp. 24 to 25.\nDoes the strategy adequately test the theories she re-runs? She says no, not from cases picked on the outcome.\nStop."
+      notes: "Tobyn.\nPrinted pp. 24 to 25.\nHer line: selecting on the dependent variable entails a high probability of getting the wrong answer.\nStop."
     }
   ]
 });
