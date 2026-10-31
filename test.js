@@ -14,49 +14,48 @@ global.localStorage = {
 };
 
 require("./prompts.js");
-require("./readings/kellstedt-whitten.js");
-require("./readings/conrad-2021.js");
-require("./readings/fuhrmann-kreps.js");
-require("./project/methods-accountability.js");
+require("./readings/geddes-1990.js");
 require("./script-content.js");
 require("./build-week.js");
 
 console.log(SLIDES.length + " slides");
-SLIDES.forEach(function (s) { console.log((s.type + "       ").slice(0, 7), s.id); });
+SLIDES.forEach(function (s) { console.log((s.type + "       ").slice(0, 7), s.id, s.title); });
 
-assert.strictEqual(PROMPTS.length, 12);
-assert.strictEqual(READINGS.length, 3);
-assert.ok(PROJECT_SLIDES.length >= 14);
+assert.strictEqual(READINGS.length, 1);
+assert.strictEqual(READINGS[0].id, "geddes-1990");
+assert.ok(READINGS[0].slides.length >= 10);
+assert.strictEqual(SLIDES.length, READINGS[0].slides.length);
 assert.strictEqual(SLIDES[0].type, "title");
+assert.strictEqual(SLIDES[0].id, "open");
+assert.ok(!SLIDES[0].speaker);
+assert.ok(!(SLIDES[0].agenda && SLIDES[0].agenda.length));
+assert.ok(!SLIDES[0].lede);
+assert.ok(String(SLIDES[0].title).indexOf("cases") !== -1);
 
-var grids = SLIDES.filter(function (s) { return s.layout === "grid"; });
-assert.strictEqual(grids.length, READINGS.length);
-grids.forEach(function (g) {
-  assert.strictEqual(g.points.length, 12);
-  var filled = g.points.filter(function (pt) { return String(pt.body || "").trim(); });
-  assert.ok(filled.length >= 10, "grid cells have short notes");
+var parts = SLIDES.filter(function (s) { return s.id === "open" || s.id === "part2"; });
+assert.strictEqual(parts.length, 2);
+
+var prompts = SLIDES.filter(function (s) { return s.type === "prompt"; });
+assert.strictEqual(prompts.length, 2, "two live boards, not a poll march");
+prompts.forEach(function (p) {
+  assert.strictEqual(p.input, "text");
+  assert.strictEqual(p.help, "");
+  assert.strictEqual(p.placeholder, "Type your answer");
 });
 
-READINGS.forEach(function (r) {
-  assert.ok(SLIDES.filter(function (s) { return s.id === r.id + "-grid"; })[0]);
-  (r.focus || []).forEach(function (key) {
-    var board = SLIDES.filter(function (s) { return s.id === r.id + "-" + key; })[0];
-    assert.ok(board, r.id + " " + key);
-    assert.strictEqual(board.help, "");
-    assert.strictEqual(board.placeholder, "Type your answer");
-  });
-  var extras = SLIDES.filter(function (s) {
-    return s.id.indexOf(r.id + "-") === 0 && s.type === "prompt" && (r.focus || []).indexOf(s.id.replace(r.id + "-", "")) === -1;
-  });
-  assert.strictEqual(extras.length, 0, "no extra vote boards");
-});
+assert.ok(SLIDES.some(function (s) { return s.id === "close"; }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "before"; }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "open" && s.say && s.say !== "[write here]"; }));
 
-var dump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT) + JSON.stringify(PROJECT_SLIDES);
+var dump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT);
 [
   "Phones:",
-  "One tap each",
+  "One tap",
   "Bars:",
-  "Reveal her",
+  "Now: Tobyn",
+  "Now: ",
+  "Discussion Question:",
+  "Tobyn Smith",
   "delve",
   "tapestry",
   "furthermore",
@@ -65,19 +64,10 @@ var dump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT) + JSON.stringify(PROJ
   assert.ok(dump.indexOf(bad) === -1, "no " + bad);
 });
 
-var decide = SLIDES.filter(function (s) {
-  return String(s.note || "").indexOf("Tobyn to decide") !== -1;
+SLIDES.forEach(function (s) {
+  var words = String(s.title || "").split(/\s+/).filter(Boolean);
+  assert.ok(words.length <= 16, "short title: " + s.title);
 });
-assert.ok(decide.length >= 3, "open items stay marked");
-assert.ok(SLIDES.filter(function (s) { return s.id === "proj-room"; })[0]);
-assert.strictEqual(SLIDES.filter(function (s) { return s.id === "proj-room"; })[0].placeholder, "Type your answer");
-
-var types = {};
-SLIDES.forEach(function (s) { types[s.type] = (types[s.type] || 0) + 1; });
-assert.ok(types.title >= 2 && types.points && types.claims && types.story && types.compare && types.prompt);
-
-assert.ok(SCRIPT.some(function (s) { return s.id === "before"; }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "proj-title" && s.say && s.say !== "[write here]"; }));
 
 global.DECK = { useFileSlides: true, room: "test-room", title: "Week" };
 store["deck-content"] = JSON.stringify({
