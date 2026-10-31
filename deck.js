@@ -295,6 +295,7 @@
     stage.classList.toggle("story", s.type === "story");
     stage.classList.toggle("points", s.type === "points");
     stage.classList.toggle("claims", s.type === "claims");
+    stage.classList.toggle("has-split", !!(s.claims && (s.chart || s.stats || s.names)));
     if (changed) {
       stage.classList.remove("fade");
       void stage.offsetWidth;
@@ -397,6 +398,51 @@
       + "</figure>";
   }
 
+  function claimBarsHtml(list) {
+    if (!list || !list.length) return "";
+    return '<ul class="claim-bars">' + list.map(function (pt) {
+      return "<li><h2>" + esc(pt.title) + "</h2>"
+        + (pt.body ? "<p>" + esc(pt.body) + "</p>" : "")
+        + (pt.note ? '<p class="fn">' + esc(pt.note) + "</p>" : "")
+        + "</li>";
+    }).join("") + "</ul>";
+  }
+
+  function namesHtml(list) {
+    if (!list || !list.length) return "";
+    return '<ul class="name-stack">' + list.map(function (n) {
+      return "<li>" + esc(n) + "</li>";
+    }).join("") + "</ul>";
+  }
+
+  function statsStackHtml(list) {
+    if (!list || !list.length) return "";
+    return '<div class="stats-stack">' + list.map(function (st) {
+      return '<div class="stat"><div class="value">' + esc(st.value) + "</div>"
+        + '<p class="label">' + esc(st.label) + "</p>"
+        + (st.source ? '<p class="source">' + esc(st.source) + "</p>" : "")
+        + "</div>";
+    }).join("") + "</div>";
+  }
+
+  function vizHtml(s) {
+    if (s.chart) return chartHtml(s.chart);
+    if (s.charts && s.charts[0]) return chartHtml(s.charts[0]);
+    if (s.stats) return statsStackHtml(s.stats);
+    if (s.names) return namesHtml(s.names);
+    return "";
+  }
+
+  function splitHtml(s) {
+    var viz = vizHtml(s);
+    var bars = claimBarsHtml(s.claims);
+    if (!viz && !bars) return "";
+    return '<div class="split' + (viz ? " has-viz" : "") + '">'
+      + (viz ? '<div class="split-viz">' + viz + "</div>" : "")
+      + (bars ? '<div class="split-side">' + bars + "</div>" : "")
+      + "</div>";
+  }
+
   function pairHtml(side, which) {
     if (!side) return "";
     var q = side.quote
@@ -446,6 +492,7 @@
         + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
         + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
         + agendaHtml(s)
+        + claimBarsHtml(s.claims)
         + quoteHtml(s.quote)
         + articleHtml(s)
         + "</div>"
@@ -480,8 +527,7 @@
     if (s.type === "claims") {
       return "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
-        + claimsHtml(s.claims)
-        + (s.chart ? chartHtml(s.chart) : "")
+        + splitHtml(s)
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + quoteHtml(s.quote);
     }
@@ -527,47 +573,55 @@
     }
     var q = "<h1>" + esc(s.title) + "</h1>"
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
+      + splitHtml(s)
       + quoteHtml(s.quote)
       + articleHtml(s)
       + recap
       + youHtml(s)
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "");
+    var askLine = s.ask ? '<p class="ask-q">' + esc(s.ask) + "</p>" : "";
     if (isPres) {
-      return '<div class="ask">' + q + '</div><div id="viz"></div>';
+      return '<div class="ask">' + q + '</div><div class="ask-panel">' + askLine + '<div id="viz"></div></div>';
     }
     var inner = q;
+    var panel = function (html) {
+      return inner + '<div class="ask-panel">' + askLine + html + "</div>";
+    };
     if (DeckSync.isDone(String(i))) {
-      return inner + '<p class="thanks">Sent. Wait for the next slide.</p>';
+      return panel('<p class="thanks">Sent. Wait for the next slide.</p>');
     }
     if (s.input === "text") {
-      return inner
-        + '<form class="answer" id="form">'
+      return panel(
+        '<form class="answer" id="form">'
         + '<label class="sr" for="ans">Type your answer</label>'
         + '<textarea id="ans" required maxlength="800" placeholder="Type your answer"></textarea>'
-        + '<button class="send" type="submit">Send</button></form>';
+        + '<button class="send" type="submit">Send</button></form>'
+      );
     }
     if (s.input === "choice" || s.input === "scale") {
       var labs = s.scaleLabels || [];
-      return inner
-        + '<div class="choices ' + (s.input === "scale" ? "scale" : "") + '" id="choices">'
+      return panel(
+        '<div class="choices ' + (s.input === "scale" ? "scale" : "") + '" id="choices">'
         + (s.options || []).map(function (o) {
           return '<button type="button" data-choice="' + esc(o) + '">' + esc(o) + "</button>";
         }).join("")
         + "</div>"
-        + (labs.length ? '<div class="scale-labels"><span>' + esc(labs[0]) + "</span><span>" + esc(labs[1] || "") + "</span></div>" : "");
+        + (labs.length ? '<div class="scale-labels"><span>' + esc(labs[0]) + "</span><span>" + esc(labs[1] || "") + "</span></div>" : "")
+      );
     }
     if (s.input === "choice-text") {
-      return inner
-        + '<div class="choices" id="choices" tabindex="-1">'
+      return panel(
+        '<div class="choices" id="choices" tabindex="-1">'
         + (s.options || []).map(function (o) {
           return '<button type="button" data-choice="' + esc(o) + '">' + esc(o) + "</button>";
         }).join("")
         + "</div>"
         + '<form class="answer" id="form">'
         + '<textarea id="ans" maxlength="800"' + (s.requireText ? " required" : "") + ' placeholder="' + esc((s.placeholder && s.placeholder !== "[write here]") ? s.placeholder : "Optional: say why") + '"></textarea>'
-        + '<button class="send" type="submit">Send</button></form>';
+        + '<button class="send" type="submit">Send</button></form>'
+      );
     }
-    return inner;
+    return panel("");
   }
 
   function bind(s, i) {

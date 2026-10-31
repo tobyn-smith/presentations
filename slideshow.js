@@ -59,6 +59,51 @@
       + "</figure>";
   }
 
+  function claimBarsHtml(list) {
+    if (!list || !list.length) return "";
+    return '<ul class="claim-bars">' + list.map(function (pt) {
+      return "<li><h2>" + esc(pt.title) + "</h2>"
+        + (pt.body ? "<p>" + esc(pt.body) + "</p>" : "")
+        + (pt.note ? '<p class="fn">' + esc(pt.note) + "</p>" : "")
+        + "</li>";
+    }).join("") + "</ul>";
+  }
+
+  function namesHtml(list) {
+    if (!list || !list.length) return "";
+    return '<ul class="name-stack">' + list.map(function (n) {
+      return "<li>" + esc(n) + "</li>";
+    }).join("") + "</ul>";
+  }
+
+  function statsStackHtml(list) {
+    if (!list || !list.length) return "";
+    return '<div class="stats-stack">' + list.map(function (st) {
+      return '<div class="stat"><div class="value">' + esc(st.value) + "</div>"
+        + '<p class="label">' + esc(st.label) + "</p>"
+        + (st.source ? '<p class="source">' + esc(st.source) + "</p>" : "")
+        + "</div>";
+    }).join("") + "</div>";
+  }
+
+  function vizHtml(s) {
+    if (s.chart) return chartHtml(s.chart);
+    if (s.charts && s.charts[0]) return chartHtml(s.charts[0]);
+    if (s.stats) return statsStackHtml(s.stats);
+    if (s.names) return namesHtml(s.names);
+    return "";
+  }
+
+  function splitHtml(s) {
+    var viz = vizHtml(s);
+    var bars = claimBarsHtml(s.claims);
+    if (!viz && !bars) return "";
+    return '<div class="split' + (viz ? " has-viz" : "") + '">'
+      + (viz ? '<div class="split-viz">' + viz + "</div>" : "")
+      + (bars ? '<div class="split-side">' + bars + "</div>" : "")
+      + "</div>";
+  }
+
   function pairHtml(side, which) {
     if (!side) return "";
     var q = side.quote
@@ -119,6 +164,7 @@
         + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
         + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
         + agendaHtml(s)
+        + claimBarsHtml(s.claims)
         + quoteHtml(s.quote)
         + articleHtml(s)
         + "</div>";
@@ -150,8 +196,7 @@
     if (s.type === "claims") {
       return "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
-        + claimsHtml(s.claims)
-        + (s.chart ? chartHtml(s.chart) : "")
+        + splitHtml(s)
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + quoteHtml(s.quote);
     }
@@ -181,11 +226,12 @@
     }
     return "<h1>" + esc(s.title) + "</h1>"
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
+      + splitHtml(s)
       + quoteHtml(s.quote)
       + articleHtml(s)
       + recapHtml(s)
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "")
-      + talkHtml(s);
+      + (s.ask ? '<div class="ask-panel"><p class="ask-q">' + esc(s.ask) + "</p>" + talkHtml(s) + "</div>" : talkHtml(s));
   }
 
   var brand = (window.DECK && DECK.title) || "Discussion";
@@ -224,6 +270,7 @@
     stage.classList.toggle("story", s.type === "story");
     stage.classList.toggle("points", s.type === "points");
     stage.classList.toggle("claims", s.type === "claims");
+    stage.classList.toggle("has-split", !!(s.claims && (s.chart || s.stats || s.names)));
     if (changed) {
       stage.classList.remove("fade");
       void stage.offsetWidth;
