@@ -1,5 +1,5 @@
-/* Geddes, IGS Working Paper 90-13 (1990). Two parts. Numbers only where
-   the scan shows them. No phone-instruction lines. */
+/* Blend: simple opening and voice, then her numbers in the middle.
+   Pages cited only where the scan shows a printed number. */
 (window.READINGS = window.READINGS || []).push({
   id: "geddes-1990",
   short: "Geddes",
@@ -11,13 +11,10 @@
     {
       id: "open",
       type: "title",
-      kicker: "Part 1",
-      title: "How the cases you choose affect the answers you get",
-      lede: "Geddes, 1990. Selection bias in comparative politics.",
-      agenda: [
-        "Part 1 · the five growers and her numbers",
-        "Part 2 · Skocpol, Hirschman, and the close"
-      ],
+      kicker: "",
+      title: "The cases you pick can change the answer.",
+      lede: "",
+      agenda: [],
       speaker: ""
     },
     {
@@ -25,46 +22,41 @@
       type: "points",
       kicker: "Part 1",
       title: "What she wants to know",
-      lead: "Not a new theory of growth or revolution. A test of a habit.",
+      lead: "",
       points: [
-        { title: "The habit", body: "Study only the outcome you already care about." },
-        { title: "The worry", body: "The causes you then name may be just as common where the outcome never happened." }
+        { title: "", body: "If you only study the outcome you already care about, do you still get a fair test?" }
       ]
     },
     {
       id: "habit",
       type: "points",
       kicker: "Part 1",
-      title: "How the habit works",
+      title: "The habit",
       lead: "Want revolution? Read revolutions. Want growth? Read the fast growers.",
       points: [
-        { title: "What you can see", body: "What those cases share." },
-        { title: "What you cannot", body: "Whether the others share it too." },
-        { title: "Unit", body: "The country, in every example she works through." }
+        { title: "What you see", body: "What those cases share." },
+        { title: "What you miss", body: "Whether the others share it too." }
       ]
     },
     {
       id: "nics",
       type: "points",
       kicker: "Part 1",
-      title: "The five she keeps seeing",
-      lead: "Taiwan, South Korea, Singapore, Brazil, Mexico. Printed p. 5.",
-      points: [
-        { title: "What they share", body: "In the fast years, labour was held down or brought inside the state." },
-        { title: "The claim", body: "Johnson, O'Donnell, Cardoso, Koo, Deyo give different reasons. The shared line is that this helped growth." }
-      ]
+      title: "Five fast growers",
+      lead: "Taiwan, South Korea, Singapore, Brazil, Mexico. Labour was held down in the fast years. Writers said that helped growth. Printed p. 5.",
+      points: []
     },
     {
       id: "regions",
       type: "charts",
       kicker: "Part 1",
       title: "Growth by region, 1960 to 1982",
-      note: "Average country growth in GNP per capita. Printed p. 8, Table 1. East Asia sits far above the rest, so picking East Asia is close to picking on growth.",
+      note: "If you pick East Asia, you have already leaned toward the fast cases. Printed p. 8.",
       charts: [
         {
           id: "table1",
-          title: "World Bank figures she calculates",
-          source: "World Development Report, 1984 and 1988. Printed p. 8.",
+          title: "Average country growth, GNP per capita",
+          source: "Her Table 1. World Development Report, 1984 and 1988.",
           max: 6,
           bars: [
             { label: "East Asia", n: 5.2 },
@@ -80,54 +72,43 @@
       id: "scores",
       type: "stats",
       kicker: "Part 1",
-      title: "Her labour scores, 1 to 4",
-      footer: "From US Country Reports on Human Rights Practices, 1980 and 1988. Printed pp. 7 to 8.",
+      title: "How she scored labour",
+      footer: "US human rights reports, 1980 and 1988. Printed pp. 7 to 8. She calls it imperfect.",
       stats: [
-        { value: "1", label: "Free unions, strikes happen. India, Jamaica, Venezuela." },
-        { value: "2", label: "Unions exist, strikes rare or squeezed. Colombia, Zimbabwe, Malaysia." },
-        { value: "3", label: "Tied to the party or state. South Korea, Brazil, Pakistan." },
-        { value: "4", label: "Illegal, captured, or very violent. Chile 1973 to 1979, Syria, Benin." }
+        { value: "1", label: "Free unions. Strikes happen. India, Jamaica, Venezuela." },
+        { value: "2", label: "Unions exist. Strikes rare. Colombia, Zimbabwe, Malaysia." },
+        { value: "3", label: "Tied to the state. South Korea, Brazil, Pakistan." },
+        { value: "4", label: "Banned or very violent. Chile 1973 to 1979, Syria, Benin." }
       ]
     },
     {
-      id: "ask-score",
+      id: "fits",
+      type: "stats",
+      kicker: "Part 1",
+      title: "The same claim, three samples",
+      footer: "Printed pp. 8 and 10. This simple check cannot kill the claim. It does show the five-country picture does not travel.",
+      stats: [
+        { value: ".56", label: "East Asia only. Looks like a link." },
+        { value: ".07", label: "A wider Third World set. Almost nothing. Slope slightly down." },
+        { value: ".01", label: "Countries at least as advanced as South Korea." }
+      ]
+    },
+    {
+      id: "ask-five",
       type: "prompt",
       kicker: "Part 1",
-      title: "A country has unions, but strikes almost never happen. Where does that sit on her 1 to 4?",
+      title: "If those five are all you read, what do you conclude?",
       help: "",
       input: "text",
       viz: "list",
       placeholder: "Type your answer"
     },
     {
-      id: "fits",
-      type: "stats",
-      kicker: "Part 1",
-      title: "What the scatter plots do",
-      footer: "Printed pp. 8 and 10. She says the simple check cannot kill the labour-and-growth claim. Controls might still save it.",
-      stats: [
-        { value: ".56", label: "r squared, East Asia only. Looks like repression helps." },
-        { value: ".07", label: "r squared, a wider Third World set. The link is gone. Slope slightly down." },
-        { value: ".01", label: "r squared, countries at least as advanced as South Korea." }
-      ]
-    },
-    {
-      id: "wider",
-      type: "points",
-      kicker: "Part 1",
-      title: "The wider set",
-      lead: "Taiwan plus developing countries in the World Bank files, with rich oil states, communist states, long civil wars, and tiny states left out.",
-      points: [
-        { title: "Among the five", body: "No real link between how hard labour was held and how fast they grew." },
-        { title: "In the bigger set", body: "Slow countries hold labour down too. Printed p. 10." }
-      ]
-    },
-    {
       id: "part2",
       type: "title",
-      kicker: "Part 2",
+      kicker: "",
       title: "Same habit. Harder stories.",
-      lede: "Skocpol, then where Hirschman stops the clock.",
+      lede: "",
       agenda: [],
       speaker: ""
     },
@@ -136,34 +117,34 @@
       type: "points",
       kicker: "Part 2",
       title: "Skocpol",
-      lead: "France, Russia, China, because they had revolutions. Then a few misses. Printed pp. 12 to 13.",
+      lead: "France, Russia, China, because they had revolutions. Then a few misses.",
       points: [
-        { title: "The chain", body: "A war or invasion, a fight inside the elite, villages that can move on their own, then revolution." },
-        { title: "What she tests", body: "She takes nine Spanish-American countries that already have that village and class setup. Threat here means a lost war plus invasion or lost land." }
+        { title: "The chain", body: "A war or invasion, a split in the elite, villages that can move on their own, then revolution." },
+        { title: "Her check", body: "Nine Spanish-American countries that already have that village and class setup. Threat here means a lost war plus invasion or lost land." }
       ]
     },
     {
       id: "figure5",
       type: "stats",
       kicker: "Part 2",
-      title: "Defeat in war, and revolution",
-      footer: "Printed p. 20. Not a kill, she says. The set is not random, and threat is crude.",
+      title: "What that check found",
+      footer: "Printed p. 20. Not a kill. The set is not random, and threat is crude.",
       stats: [
         { value: "7", label: "Hard threats, no revolution." },
         { value: "2", label: "Revolutions with no such threat." },
-        { value: "1", label: "Fits the chain. Bolivia, once." }
+        { value: "1", label: "Fits. Bolivia, once." }
       ]
     },
     {
       id: "chile",
       type: "charts",
       kicker: "Part 2",
-      title: "Chilean inflation, late in his story",
-      note: "Hirschman stops in 1961, when it looked tamed. Printed pp. 21 to 23, Table 2.",
+      title: "Where you stop the story",
+      note: "Hirschman on Chile ends in 1961, when it looked tamed. Printed pp. 21 to 23.",
       charts: [
         {
           id: "chile-end",
-          title: "Yearly rate, selected years from her table",
+          title: "Yearly inflation, late years from her table",
           source: "Hirschman, p. 160, as she prints it.",
           max: 90,
           unit: "%",
@@ -193,9 +174,9 @@
       type: "points",
       kicker: "Close",
       title: "What this paper is for",
-      lead: "Good for a hunch. Not, on its own, a test. Printed p. 24.",
+      lead: "Good for a hunch. Not, on its own, a test.",
       points: [
-        { title: "If you pick cases because they already have the outcome", body: "You will often get the wrong answer." }
+        { title: "If you pick cases because they already have the outcome", body: "You will often get the wrong answer. Printed p. 24." }
       ]
     }
   ],
@@ -203,74 +184,68 @@
     {
       id: "open",
       title: "Open",
-      say: "Geddes, 1990. How the cases you choose affect the answers you get. Two parts. Numbers first, then two harder stories.",
-      notes: "Leave the title up.\nGo live when names show."
+      say: "One line, then we sit with it. The cases you pick can change the answer. That is the paper.",
+      notes: "Leave the title up.\nGo live when names show.\nDo not add a second idea here."
     },
     {
       id: "ask",
       title: "What she wants",
-      say: "She is not asking why Korea grew. She is asking whether a habit in comparative work still gives you a fair test.",
-      notes: "Goal: explanation of a method.\nWorking paper 90-13."
+      say: "Geddes is not asking why Korea grew, or why France had a revolution. She is asking whether a habit, only studying the outcome you like, still gives you a fair test.",
+      notes: "Goal: explanation of a method, not a new theory of growth.\nWorking paper 90-13, 1990."
     },
     {
       id: "habit",
       title: "The habit",
-      say: "You want revolution, so you read revolutions. You then see what those cases share. You cannot see whether the others share it too. The unit, all the way through, is the country.",
-      notes: "Opening of the paper.\nThe lone 1 on that page is a footnote, not a page number."
+      say: "You want revolution, so you read revolutions. You then see what those cases share. You cannot see whether the others share it too.",
+      notes: "Unit: the country.\nConcepts: selecting on the thing you want to explain.\nThe lone 1 on the opening page is a footnote, not a page number."
     },
     {
       id: "nics",
       title: "Five growers",
-      say: "Taiwan, South Korea, Singapore, Brazil, Mexico. In the fast years, labour was held down. Several well-known people said that helped growth. Printed page 5.",
-      notes: "Actors: governments and workers. It matters, because the claim is about how states treat labour."
+      say: "Taiwan, South Korea, Singapore, Brazil, Mexico. In the fast years, labour was held down. Several well-known people said that helped growth.",
+      notes: "Printed p. 5.\nActors: governments and workers. It matters, because the claim is about how states treat labour."
     },
     {
       id: "regions",
       title: "Regions",
-      say: "Her Table 1. East Asia at 5.2. Africa at 1.0. If you pick East Asia, you have already leaned toward the fast cases.",
+      say: "Her table. East Asia at 5.2. Africa at 1.0. If you pick East Asia, you have already leaned toward the fast cases.",
       notes: "Printed p. 8.\nDo not invent a country rate. The five are not given separate growth numbers on the scan."
     },
     {
       id: "scores",
       title: "Labour scores",
-      say: "She builds a 1 to 4 from the US human rights reports. South Korea and Brazil sit at 3. Chile under the junta at 4. She calls it imperfect.",
-      notes: "Printed pp. 7 to 8."
-    },
-    {
-      id: "ask-score",
-      title: "Score",
-      say: "A country has unions, but strikes almost never happen. Where does that sit on her 1 to 4? A number is enough.",
-      notes: "She would put that near 2.\nOne board. Do not add another poll."
+      say: "She scores labour from 1 to 4, from the US human rights reports. South Korea and Brazil sit at 3. She calls the score imperfect.",
+      notes: "Printed pp. 7 to 8.\nMeasures: valid enough for her point, not a perfect labour index."
     },
     {
       id: "fits",
-      title: "The fits",
-      say: "East Asia alone, r squared of .56. A wider Third World set, .07, slope slightly down. The more advanced cut, .01. The NIC picture does not travel.",
-      notes: "Printed p. 10.\nShe says this cannot kill the claim on its own."
+      title: "Three samples",
+      say: "East Asia alone, r squared of .56. A wider set, .07, slope slightly down. The more advanced cut, .01. Among the five there was no real link. Slow countries hold labour down too.",
+      notes: "Printed p. 10.\nStrategy: quantitative, cross-section, not a time series.\nShe says this cannot kill the claim on its own."
     },
     {
-      id: "wider",
-      title: "Wider look",
-      say: "Among the five, no real link. In the bigger set, slow countries hold labour down too.",
-      notes: "Printed p. 10."
+      id: "ask-five",
+      title: "If you only read five",
+      say: "If those five are all you have read, what do you conclude? A sentence is enough.",
+      notes: "One live board for part 1.\nThen say what they wrote."
     },
     {
       id: "part2",
       title: "Part 2",
       say: "Same habit. Two harder stories. Then we stop.",
-      notes: "About ten minutes left."
+      notes: "About ten minutes left.\nKeep this board short."
     },
     {
       id: "skocpol",
       title: "Skocpol",
       say: "She picks France, Russia and China because they had revolutions. The story is a chain. Geddes holds the village and class setup still, then asks whether war still leads to revolution.",
-      notes: "Printed pp. 12 to 13."
+      notes: "Printed pp. 12 to 13.\nTheory is clear as a chain. Not every link is tested."
     },
     {
       id: "figure5",
       title: "Seven, two, one",
       say: "Seven hard threats, no revolution. Two revolutions with no such threat. One fit, Bolivia. She says this is not a kill.",
-      notes: "Printed p. 20."
+      notes: "Printed p. 20.\nCases: not random. Comparison is wider than three revolutions, still not a full universe."
     },
     {
       id: "chile",
@@ -288,7 +263,7 @@
       id: "close",
       title: "Close",
       say: "Case studies are good for how a thing happened, and for a hunch. They cannot, on their own, test the theory they just wrote. If you pick cases because they already have the outcome, you will often get the wrong answer.",
-      notes: "Printed pp. 24 to 25.\nStop."
+      notes: "Printed pp. 24 to 25.\nDoes the strategy adequately test the theories she re-runs? She says no, not from cases picked on the outcome.\nStop."
     }
   ]
 });
