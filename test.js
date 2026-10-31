@@ -115,7 +115,14 @@ assert.ok(deckSrc.indexOf("function bindRank") !== -1);
 assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
 assert.ok(deckSrc.indexOf("id=\"drag-send\"") !== -1);
 assert.ok(user.indexOf("data-role=\"participant\"") !== -1);
+assert.ok(user.indexOf("classList.add(\"is-desk\")") === -1);
 assert.ok(backup.indexOf("slideshow.js") !== -1);
+assert.ok(backup.indexOf('id="prev"') !== -1);
+assert.ok(css.indexOf(".ghost-nav") !== -1);
+var talk = fs.readFileSync("./slideshow.js", "utf8");
+assert.ok(talk.indexOf("function bindRank") !== -1);
+assert.ok(talk.indexOf("function bindPlace") !== -1);
+assert.ok(start.indexOf("Phones.") === -1);
 
 global.DECK = { useFileSlides: true, room: "test-room", title: "Week" };
 store["deck-content"] = JSON.stringify({

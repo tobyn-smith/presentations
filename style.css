@@ -130,20 +130,13 @@ button { cursor: pointer; }
   opacity: 1;
 }
 .ghost-nav {
-  position: absolute;
-  right: 1.4%;
-  bottom: 1.8%;
-  z-index: 4;
   display: flex;
   align-items: center;
   gap: 0.35rem;
   opacity: 0;
   transition: opacity .2s ease;
 }
-.role-pres.is-backup .board:hover .ghost-nav,
-.role-pres.is-backup .board:focus-within .ghost-nav {
-  opacity: 0.75;
-}
+.role-pres.is-backup .ghost-nav { display: none; }
 .ghost-nav button {
   border: 1px solid #000;
   background: #fff;
@@ -2482,6 +2475,7 @@ textarea {
     opacity: 1;
   }
   .ghost-nav { opacity: 0.75; }
+  .role-pres.is-backup .ghost-nav { display: none; }
   .accent-tab { left: 1.15rem; width: 1.15rem; height: 2.1rem; }
   .chrome-right {
     width: 100%;

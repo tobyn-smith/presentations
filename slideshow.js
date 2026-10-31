@@ -236,26 +236,137 @@
 
   function dragTalk(s) {
     if (s.input === "rank") {
-      return '<ol class="rank-list">'
+      return '<div class="drag-rank" id="drag-rank"><ol class="rank-list">'
         + (s.options || []).map(function (o, idx) {
           return '<li data-opt="' + esc(o) + '"><span class="rank-n">' + (idx + 1) + '</span><span class="rank-lab">' + esc(o) + "</span></li>";
         }).join("")
-        + "</ol>";
+        + "</ol></div>";
     }
     if (s.input === "place") {
-      return '<div class="drag-place">'
-        + '<div class="token-tray">'
+      return '<div class="drag-place" id="drag-place">'
+        + '<div class="token-tray" data-home="1">'
         + (s.tokens || []).map(function (t) {
-          return '<span class="token">' + esc(t) + "</span>";
+          return '<span class="token" data-token="' + esc(t) + '" tabindex="0">' + esc(t) + "</span>";
         }).join("")
         + "</div>"
         + '<div class="slot-row">'
         + (s.slots || []).map(function (slot) {
-          return '<div class="slot"><p class="slot-lab">' + esc(slot.label) + '</p><div class="slot-well"></div></div>';
+          return '<div class="slot" data-slot="' + esc(slot.id) + '"><p class="slot-lab">' + esc(slot.label) + '</p><div class="slot-well"></div></div>';
         }).join("")
         + "</div></div>";
     }
     return talkHtml(s);
+  }
+
+  function numberRanks(list) {
+    var items = list.querySelectorAll("[data-opt]");
+    for (var n = 0; n < items.length; n++) {
+      var mark = items[n].querySelector(".rank-n");
+      if (mark) mark.textContent = String(n + 1);
+    }
+  }
+
+  function bindRank() {
+    var list = document.querySelector("#drag-rank .rank-list");
+    if (!list) return;
+    var held = null;
+    function move(e) {
+      if (!held) return;
+      var over = document.elementFromPoint(e.clientX, e.clientY);
+      var li = over && over.closest("[data-opt]");
+      if (!li || li === held || !list.contains(li)) return;
+      var rect = li.getBoundingClientRect();
+      list.insertBefore(held, e.clientY < rect.top + rect.height / 2 ? li : li.nextSibling);
+      numberRanks(list);
+    }
+    function endDrag() {
+      if (!held) return;
+      held.classList.remove("is-dragging");
+      held = null;
+      numberRanks(list);
+    }
+    list.addEventListener("pointerdown", function (e) {
+      var li = e.target.closest("[data-opt]");
+      if (!li) return;
+      held = li;
+      li.classList.add("is-dragging");
+      try { li.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    list.addEventListener("pointermove", move);
+    list.addEventListener("pointerup", endDrag);
+    list.addEventListener("pointercancel", endDrag);
+  }
+
+  function bindPlace() {
+    var board = document.getElementById("drag-place");
+    if (!board) return;
+    var held = null;
+    var grabX = 0;
+    var grabY = 0;
+    var lastX = 0;
+    var lastY = 0;
+    function wellAt(x, y) {
+      var el = document.elementFromPoint(x, y);
+      if (!el || !board.contains(el)) return null;
+      var well = el.closest(".slot-well, .token-tray");
+      if (well) return well;
+      var slot = el.closest(".slot");
+      return slot ? slot.querySelector(".slot-well") : null;
+    }
+    function lift(tok, x, y) {
+      var rect = tok.getBoundingClientRect();
+      grabX = x - rect.left;
+      grabY = y - rect.top;
+      tok.classList.add("is-dragging");
+      tok.style.position = "fixed";
+      tok.style.left = rect.left + "px";
+      tok.style.top = rect.top + "px";
+      tok.style.width = rect.width + "px";
+      tok.style.zIndex = "20";
+      tok.style.pointerEvents = "none";
+    }
+    function follow(x, y) {
+      if (!held) return;
+      lastX = x;
+      lastY = y;
+      held.style.left = (x - grabX) + "px";
+      held.style.top = (y - grabY) + "px";
+    }
+    function drop(x, y) {
+      if (!held) return;
+      var well = wellAt(x, y) || wellAt(lastX, lastY);
+      held.classList.remove("is-dragging");
+      held.style.position = "";
+      held.style.left = "";
+      held.style.top = "";
+      held.style.width = "";
+      held.style.zIndex = "";
+      held.style.pointerEvents = "";
+      if (well) well.appendChild(held);
+      held = null;
+    }
+    board.addEventListener("pointerdown", function (e) {
+      var tok = e.target.closest(".token");
+      if (!tok) return;
+      held = tok;
+      lift(tok, e.clientX, e.clientY);
+      try { tok.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    board.addEventListener("pointermove", function (e) {
+      if (!held) return;
+      follow(e.clientX, e.clientY);
+    });
+    board.addEventListener("pointerup", function (e) {
+      drop(e.clientX, e.clientY);
+    });
+    board.addEventListener("pointercancel", function () {
+      if (!held) return;
+      drop(-1, -1);
+    });
   }
 
   var brand = (window.DECK && DECK.title) || "Discussion";
@@ -301,7 +412,11 @@
       void stage.offsetWidth;
       stage.classList.add("fade");
     }
-    stage.innerHTML = htmlFor(s);
+    if (changed || !stage.innerHTML) {
+      stage.innerHTML = htmlFor(s);
+      bindRank();
+      bindPlace();
+    }
     var want = "#" + (i + 1);
     if (push && location.hash !== want) {
       try { history.replaceState(null, "", want); } catch (e) {}
@@ -329,6 +444,7 @@
     }
   });
   stage.addEventListener("click", function (e) {
+    if (stage.classList.contains("has-drag")) return;
     if (e.target.closest("a, .talk, .recap, .quote, .points, .steps, .pair, .chart, .claims, button")) return;
     go(i + 1);
   });
