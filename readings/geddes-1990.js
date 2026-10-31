@@ -15,7 +15,7 @@
       title: "The cases you pick can change the answer.",
       lede: "",
       agenda: [],
-      speaker: ""
+      speaker: "Tobyn and Raquel Beatriz Caldas Laranjeira"
     },
     {
       id: "ask",
@@ -110,7 +110,7 @@
       title: "Same habit. Harder stories.",
       lede: "",
       agenda: [],
-      speaker: ""
+      speaker: "Raquel Beatriz Caldas Laranjeira"
     },
     {
       id: "skocpol",
@@ -183,9 +183,9 @@
   script: [
     {
       id: "open",
-      title: "Open",
-      say: "One line, then we sit with it. The cases you pick can change the answer. That is the paper.",
-      notes: "Leave the title up.\nGo live when names show.\nDo not add a second idea here."
+      title: "Part 1 · Tobyn",
+      say: "One line, then we sit with it. The cases you pick can change the answer. That is the paper. I will take this half. Raquel has Part 2. I come back for the close.",
+      notes: "Leave the title up.\nGo live when names show.\nTo swap who leads, change this title and the Part 2 and Close titles in Edit."
     },
     {
       id: "ask",
@@ -231,9 +231,9 @@
     },
     {
       id: "part2",
-      title: "Part 2",
-      say: "Same habit. Two harder stories. Then we stop.",
-      notes: "About ten minutes left.\nKeep this board short."
+      title: "Part 2 · Raquel Beatriz Caldas Laranjeira",
+      say: "Same habit. Two harder stories. Then Tobyn will close.",
+      notes: "About ten minutes left.\nKeep this board short.\nTo swap who leads, change this title in Edit."
     },
     {
       id: "skocpol",
@@ -261,9 +261,9 @@
     },
     {
       id: "close",
-      title: "Close",
+      title: "Close · Tobyn",
       say: "Case studies are good for how a thing happened, and for a hunch. They cannot, on their own, test the theory they just wrote. If you pick cases because they already have the outcome, you will often get the wrong answer.",
-      notes: "Printed pp. 24 to 25.\nDoes the strategy adequately test the theories she re-runs? She says no, not from cases picked on the outcome.\nStop."
+      notes: "Printed pp. 24 to 25.\nDoes the strategy adequately test the theories she re-runs? She says no, not from cases picked on the outcome.\nTo swap who closes, change this title in Edit.\nStop."
     }
   ]
 });

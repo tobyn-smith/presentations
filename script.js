@@ -23,9 +23,9 @@
     if (jumps) {
       var marks = [
         { id: "before", title: "Before" },
-        { id: "open", title: "Part 1" },
-        { id: "part2", title: "Part 2" },
-        { id: "close", title: "Close" }
+        { id: "open", title: "Part 1 · Tobyn" },
+        { id: "part2", title: "Part 2 · Raquel" },
+        { id: "close", title: "Close · Tobyn" }
       ].filter(function (m) {
         return parts.some(function (sec) { return sec.id === m.id; });
       });
@@ -34,7 +34,7 @@
       }).join("");
     }
     root.innerHTML = "<h1>What you say</h1>"
-      + '<p class="lede">Two parts, about twenty minutes. Mark Here on the bit you are on.</p>'
+      + '<p class="lede">Tobyn opens and closes. Raquel takes Part 2. Change those names in the section titles if you swap. Mark Here on the bit you are on.</p>'
       + parts.map(function (sec) {
         var say = lines(sec.say, "p");
         var notes = lines(sec.notes, "li");
@@ -104,9 +104,7 @@
       var href = jumps[j].getAttribute("href") || "";
       jumps[j].setAttribute("aria-current", href === "#" + id ? "true" : "false");
     }
-    if (now) now.textContent = found
-      ? ((found.querySelector("h2") || {}).textContent || "")
-      : "";
+    if (now) now.textContent = "";
     state.here = id;
     if (store !== false) save(state);
   }

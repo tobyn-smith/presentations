@@ -28,7 +28,9 @@ assert.strictEqual(SLIDES[0].type, "title");
 assert.strictEqual(SLIDES[0].title, "The cases you pick can change the answer.");
 assert.ok(!SLIDES[0].lede);
 assert.ok(!(SLIDES[0].agenda && SLIDES[0].agenda.length));
-assert.ok(!SLIDES[0].speaker);
+assert.ok(String(SLIDES[0].speaker).indexOf("Tobyn") !== -1);
+assert.ok(String(SLIDES[0].speaker).indexOf("Raquel Beatriz Caldas Laranjeira") !== -1);
+assert.ok(String(SLIDES.filter(function (s) { return s.id === "part2"; })[0].speaker).indexOf("Raquel") !== -1);
 assert.ok(SLIDES.some(function (s) { return s.id === "part2"; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "close"; }));
 
@@ -65,6 +67,9 @@ var dump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT);
 });
 
 assert.ok(SCRIPT.some(function (s) { return s.id === "before"; }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "open" && s.title.indexOf("Tobyn") !== -1; }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "part2" && s.title.indexOf("Raquel") !== -1; }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "close" && s.title.indexOf("Tobyn") !== -1; }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && s.say.indexOf(".07") !== -1; }));
 
 var fs = require("fs");

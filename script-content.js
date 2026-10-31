@@ -3,7 +3,7 @@ window.SCRIPT = [
     id: "before",
     title: "Before",
     say: "",
-    notes: "Open Present.\nThe key is example unless you changed it on Edit.\nLeave the title up with the QR.\nIf the room will not start, open the slideshow.\nDo not press Go live until names are showing."
+    notes: "Two people: Tobyn opens and closes. Raquel takes Part 2.\nOpen Present.\nThe key is example unless you changed it on Edit.\nLeave the title up with the QR.\nIf the room will not start, open the slideshow.\nDo not press Go live until names are showing."
   },
   {
     id: "title",
