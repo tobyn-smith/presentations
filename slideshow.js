@@ -169,7 +169,8 @@
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + '<div class="chart-grid">' + figs + "</div>";
     }
-    return "<h1>" + esc(s.title) + "</h1>"
+    return '<p class="dq-label">Discussion Question:</p>'
+      + "<h1>" + esc(s.title) + "</h1>"
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + quoteHtml(s.quote)
       + articleHtml(s)

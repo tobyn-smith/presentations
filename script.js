@@ -97,8 +97,8 @@
       jumps[j].setAttribute("aria-current", href === "#" + id ? "true" : "false");
     }
     if (now) now.textContent = found
-      ? ((found.querySelector("h2") || {}).textContent || "")
-      : "";
+      ? "Now: " + (found.querySelector("h2") || {}).textContent
+      : "Not marked yet. Tap Here on a part.";
     state.here = id;
     if (store !== false) save(state);
   }

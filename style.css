@@ -323,7 +323,7 @@ button { cursor: pointer; }
   padding-top: 0;
 }
 .role-pres .stage.title h1 {
-  max-width: 24ch;
+  max-width: 16ch;
   font-size: clamp(36px, 6.4vh, 64px);
   margin: 0;
   text-wrap: balance;
@@ -1922,7 +1922,7 @@ button { cursor: pointer; }
   text-align: left;
 }
 .role-part .title-copy { width: 100%; }
-.role-part .stage.title h1 { max-width: 24ch; }
+.role-part .stage.title h1 { max-width: 16ch; }
 .role-part .speaker {
   margin-top: 1.2em;
   padding-top: 0.75em;

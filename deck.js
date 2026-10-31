@@ -510,7 +510,8 @@
         return "<li>" + title + body + "</li>";
       }).join("") + "</ul>";
     }
-    var q = "<h1>" + esc(s.title) + "</h1>"
+    var q = '<p class="dq-label">Discussion Question:</p>'
+      + "<h1>" + esc(s.title) + "</h1>"
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + quoteHtml(s.quote)
       + articleHtml(s)

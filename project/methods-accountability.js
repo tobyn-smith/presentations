@@ -8,7 +8,7 @@ window.PROJECT_SLIDES = [
     title: "Who answers when it goes wrong?",
     lede: "A short online game about AI and blame.",
     agenda: [],
-    speaker: ""
+    speaker: "Tobyn Smith"
   },
   {
     id: "proj-question",

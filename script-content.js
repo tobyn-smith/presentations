@@ -3,13 +3,13 @@ window.SCRIPT = [
     id: "before",
     title: "Before",
     say: "",
-    notes: "Open Present.\nThe key is example unless you changed it on Edit.\nLeave the first line up with the QR.\nIf the room will not start, open the slideshow.\nDo not press Go live until names are showing."
+    notes: "Open Present.\nThe key is example unless you changed it on Edit.\nLeave the title up with the QR.\nIf the room will not start, open the slideshow.\nDo not press Go live until names are showing."
   },
   {
     id: "title",
     title: "Title",
-    say: "",
-    notes: ""
+    say: "This is the live Pages copy. Phones join the same room. I will wait until names are on the right, then start.",
+    notes: "Let people scan.\nOnce enough names are on the right: Go live."
   },
   {
     id: "board-1",

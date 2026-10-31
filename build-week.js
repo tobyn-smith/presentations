@@ -1,5 +1,5 @@
-/* Turns week files into SLIDES. A reading with its own slides is used as written.
-   Otherwise PROMPTS + grid + focus boards. Optional PROJECT_SLIDES still append. */
+/* Turns PROMPTS + READINGS into SLIDES. Optional PROJECT_SLIDES append after.
+   Load after slides.js and the week files, before apply-content.js. */
 (function () {
   var P = window.PROMPTS || [];
   var R = window.READINGS || [];
@@ -39,33 +39,19 @@
     return sec && sec.id === "before";
   });
 
-  function useWritten(r) {
-    return r && r.slides && r.slides.length;
-  }
-
-  if (R.some(useWritten)) {
-    R.forEach(function (r) {
-      if (!useWritten(r)) return;
-      (r.slides || []).forEach(function (sl) {
-        out.push(sl);
-      });
-      (r.script || []).forEach(function (sec) {
-        script.push(sec);
-      });
-    });
-  } else if (R.length && P.length) {
+  if (R.length && P.length) {
     out.push({
       id: "title",
       type: "title",
-      kicker: "",
+      kicker: "Leading a Reading Discussion",
       title: "This week's readings",
-      lede: "",
+      lede: "Scan the code, pick a name, wait for Go live.",
       agenda: R.map(function (r) { return r.short; }),
       speaker: ""
     });
     script.push(scriptFor("title", "Title", {
       title: {
-        say: "These are the readings. I will wait until names are on the right, then start.",
+        say: "These are the Methods readings. I will wait until names are on the right, then start.",
         notes: "Let people scan.\nGo live when enough names show."
       }
     }));

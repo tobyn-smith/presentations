@@ -1,5 +1,5 @@
 window.DECK = {
-  title: "Geddes",
+  title: "Methods",
   useFileSlides: true,
   room: "tobyn-smith-presentations",
   session: "live",
