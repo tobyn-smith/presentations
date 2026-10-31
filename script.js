@@ -22,10 +22,7 @@
     if (!root) return;
     if (jumps) {
       var marks = [
-        { id: "before", title: "Before" },
-        { id: "open", title: "Part 1 · Tobyn" },
-        { id: "part2", title: "Part 2 · Raquel" },
-        { id: "close", title: "Close · Tobyn" }
+        { id: "before", title: "Before" }
       ].filter(function (m) {
         return parts.some(function (sec) { return sec.id === m.id; });
       });
@@ -34,7 +31,7 @@
       }).join("");
     }
     root.innerHTML = "<h1>What you say</h1>"
-      + '<p class="lede">Tobyn opens and closes. Raquel takes Part 2. Change those names in the section titles if you swap. Mark Here on the bit you are on.</p>'
+      + '<p class="lede">One deck. Small cues in the notes say who talks. Mark Here on the bit you are on.</p>'
       + parts.map(function (sec) {
         var say = lines(sec.say, "p");
         var notes = lines(sec.notes, "li");

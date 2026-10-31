@@ -1,5 +1,4 @@
-/* Blend: simple opening and voice, then her numbers in the middle.
-   Pages cited only where the scan shows a printed number. */
+/* Geddes (1990). One continuous deck. Numbers only where the scan prints them. */
 (window.READINGS = window.READINGS || []).push({
   id: "geddes-1990",
   short: "Geddes",
@@ -15,12 +14,12 @@
       title: "The cases you pick can change the answer.",
       lede: "",
       agenda: [],
-      speaker: "Tobyn and Raquel Beatriz Caldas Laranjeira"
+      speaker: ""
     },
     {
       id: "ask",
       type: "points",
-      kicker: "Part 1",
+      kicker: "",
       title: "What she wants to know",
       lead: "",
       points: [
@@ -30,7 +29,7 @@
     {
       id: "habit",
       type: "points",
-      kicker: "Part 1",
+      kicker: "",
       title: "The habit",
       lead: "Want revolution? Read revolutions. Want growth? Read the fast growers.",
       points: [
@@ -41,15 +40,25 @@
     {
       id: "nics",
       type: "points",
-      kicker: "Part 1",
+      kicker: "",
       title: "Five fast growers",
       lead: "Taiwan, South Korea, Singapore, Brazil, Mexico. Labour was held down in the fast years. Writers said that helped growth. Printed p. 5.",
       points: []
     },
     {
+      id: "ask-five",
+      type: "prompt",
+      kicker: "",
+      title: "If those five are all you read, what do you conclude?",
+      help: "",
+      input: "text",
+      viz: "list",
+      placeholder: "Type your answer"
+    },
+    {
       id: "regions",
       type: "charts",
-      kicker: "Part 1",
+      kicker: "",
       title: "Growth by region, 1960 to 1982",
       note: "If you pick East Asia, you have already leaned toward the fast cases. Printed p. 8.",
       charts: [
@@ -71,7 +80,7 @@
     {
       id: "scores",
       type: "stats",
-      kicker: "Part 1",
+      kicker: "",
       title: "How she scored labour",
       footer: "US human rights reports, 1980 and 1988. Printed pp. 7 to 8. She calls it imperfect.",
       stats: [
@@ -84,38 +93,19 @@
     {
       id: "fits",
       type: "stats",
-      kicker: "Part 1",
+      kicker: "",
       title: "The same claim, three samples",
-      footer: "Printed pp. 8 and 10. This simple check cannot kill the claim. It does show the five-country picture does not travel.",
+      footer: "Printed pp. 8 and 10. This check cannot kill the claim. It does show the five-country picture does not travel.",
       stats: [
         { value: ".56", label: "East Asia only. Looks like a link." },
-        { value: ".07", label: "A wider Third World set. Almost nothing. Slope slightly down." },
-        { value: ".01", label: "Countries at least as advanced as South Korea." }
+        { value: ".07", label: "A wider set. Almost nothing. Slope slightly down." },
+        { value: ".01", label: "As advanced as South Korea." }
       ]
-    },
-    {
-      id: "ask-five",
-      type: "prompt",
-      kicker: "Part 1",
-      title: "If those five are all you read, what do you conclude?",
-      help: "",
-      input: "text",
-      viz: "list",
-      placeholder: "Type your answer"
-    },
-    {
-      id: "part2",
-      type: "title",
-      kicker: "",
-      title: "Same habit. Harder stories.",
-      lede: "",
-      agenda: [],
-      speaker: "Raquel Beatriz Caldas Laranjeira"
     },
     {
       id: "skocpol",
       type: "points",
-      kicker: "Part 2",
+      kicker: "",
       title: "Skocpol",
       lead: "France, Russia, China, because they had revolutions. Then a few misses.",
       points: [
@@ -126,7 +116,7 @@
     {
       id: "figure5",
       type: "stats",
-      kicker: "Part 2",
+      kicker: "",
       title: "What that check found",
       footer: "Printed p. 20. Not a kill. The set is not random, and threat is crude.",
       stats: [
@@ -138,7 +128,7 @@
     {
       id: "chile",
       type: "charts",
-      kicker: "Part 2",
+      kicker: "",
       title: "Where you stop the story",
       note: "Hirschman on Chile ends in 1961, when it looked tamed. Printed pp. 21 to 23.",
       charts: [
@@ -162,7 +152,7 @@
     {
       id: "ask-trust",
       type: "prompt",
-      kicker: "Part 2",
+      kicker: "",
       title: "Which comparison would you trust, and why?",
       help: "",
       input: "text",
@@ -172,7 +162,7 @@
     {
       id: "close",
       type: "points",
-      kicker: "Close",
+      kicker: "",
       title: "What this paper is for",
       lead: "Good for a hunch. Not, on its own, a test.",
       points: [
@@ -183,9 +173,9 @@
   script: [
     {
       id: "open",
-      title: "Part 1 · Tobyn",
-      say: "One line, then we sit with it. The cases you pick can change the answer. That is the paper. I will take this half. Raquel has Part 2. I come back for the close.",
-      notes: "Leave the title up.\nGo live when names show.\nTo swap who leads, change this title and the Part 2 and Close titles in Edit."
+      title: "Title",
+      say: "One line, then we sit with it. The cases you pick can change the answer. That is the paper.",
+      notes: "Tobyn.\nLeave the title up.\nGo live when names show."
     },
     {
       id: "ask",
@@ -206,6 +196,12 @@
       notes: "Printed p. 5.\nActors: governments and workers. It matters, because the claim is about how states treat labour."
     },
     {
+      id: "ask-five",
+      title: "If you only read five",
+      say: "If those five are all you have read, what do you conclude? A sentence is enough.",
+      notes: "First live board.\nThen say what they wrote."
+    },
+    {
       id: "regions",
       title: "Regions",
       say: "Her table. East Asia at 5.2. Africa at 1.0. If you pick East Asia, you have already leaned toward the fast cases.",
@@ -224,22 +220,10 @@
       notes: "Printed p. 10.\nStrategy: quantitative, cross-section, not a time series.\nShe says this cannot kill the claim on its own."
     },
     {
-      id: "ask-five",
-      title: "If you only read five",
-      say: "If those five are all you have read, what do you conclude? A sentence is enough.",
-      notes: "One live board for part 1.\nThen say what they wrote."
-    },
-    {
-      id: "part2",
-      title: "Part 2 · Raquel Beatriz Caldas Laranjeira",
-      say: "Same habit. Two harder stories. Then Tobyn will close.",
-      notes: "About ten minutes left.\nKeep this board short.\nTo swap who leads, change this title in Edit."
-    },
-    {
       id: "skocpol",
       title: "Skocpol",
-      say: "She picks France, Russia and China because they had revolutions. The story is a chain. Geddes holds the village and class setup still, then asks whether war still leads to revolution.",
-      notes: "Printed pp. 12 to 13.\nTheory is clear as a chain. Not every link is tested."
+      say: "Same habit, on revolutions. She picks France, Russia and China because they had them. The story is a chain. Geddes holds the village and class setup still, then asks whether war still leads to revolution.",
+      notes: "Raquel.\nPrinted pp. 12 to 13.\nTheory is clear as a chain. Not every link is tested."
     },
     {
       id: "figure5",
@@ -257,13 +241,13 @@
       id: "ask-trust",
       title: "Which comparison",
       say: "Which comparison would you trust, and why? The five growers, her bigger set, Skocpol's three, or the nine Spanish-American cases.",
-      notes: "Second and last live board.\nLeave time for the close."
+      notes: "Second and last live board.\nLeave time for the last slide."
     },
     {
       id: "close",
-      title: "Close · Tobyn",
+      title: "Last slide",
       say: "Case studies are good for how a thing happened, and for a hunch. They cannot, on their own, test the theory they just wrote. If you pick cases because they already have the outcome, you will often get the wrong answer.",
-      notes: "Printed pp. 24 to 25.\nDoes the strategy adequately test the theories she re-runs? She says no, not from cases picked on the outcome.\nTo swap who closes, change this title in Edit.\nStop."
+      notes: "Tobyn.\nPrinted pp. 24 to 25.\nDoes the strategy adequately test the theories she re-runs? She says no, not from cases picked on the outcome.\nStop."
     }
   ]
 });

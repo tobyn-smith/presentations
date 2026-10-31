@@ -24,15 +24,21 @@ SLIDES.forEach(function (s) { console.log((s.type + "       ").slice(0, 7), s.id
 assert.strictEqual(READINGS.length, 1);
 assert.strictEqual(READINGS[0].id, "geddes-1990");
 assert.strictEqual(SLIDES.length, READINGS[0].slides.length);
+assert.strictEqual(SLIDES.length, 13);
 assert.strictEqual(SLIDES[0].type, "title");
 assert.strictEqual(SLIDES[0].title, "The cases you pick can change the answer.");
 assert.ok(!SLIDES[0].lede);
 assert.ok(!(SLIDES[0].agenda && SLIDES[0].agenda.length));
-assert.ok(String(SLIDES[0].speaker).indexOf("Tobyn") !== -1);
-assert.ok(String(SLIDES[0].speaker).indexOf("Raquel Beatriz Caldas Laranjeira") !== -1);
-assert.ok(String(SLIDES.filter(function (s) { return s.id === "part2"; })[0].speaker).indexOf("Raquel") !== -1);
-assert.ok(SLIDES.some(function (s) { return s.id === "part2"; }));
+assert.ok(!SLIDES[0].speaker);
+assert.ok(!SLIDES.some(function (s) { return s.id === "part2"; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "close"; }));
+assert.strictEqual(SLIDES[4].id, "ask-five");
+assert.strictEqual(SLIDES[5].id, "regions");
+
+SLIDES.forEach(function (s) {
+  assert.ok(!s.kicker, "no kicker on " + s.id);
+  assert.ok(!s.speaker, "no speaker on " + s.id);
+});
 
 var charts = SLIDES.filter(function (s) { return s.type === "charts"; });
 var stats = SLIDES.filter(function (s) { return s.type === "stats"; });
@@ -57,6 +63,8 @@ var dump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT);
   "Now: ",
   "Discussion Question:",
   "Tobyn Smith",
+  "Part 1",
+  "Part 2",
   "Score three made-up",
   "delve",
   "tapestry",
@@ -66,10 +74,13 @@ var dump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT);
   assert.ok(dump.indexOf(bad) === -1, "no " + bad);
 });
 
+SCRIPT.forEach(function (s) {
+  assert.ok(String(s.title).indexOf("·") === -1, "no labelled jump title " + s.title);
+});
 assert.ok(SCRIPT.some(function (s) { return s.id === "before"; }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "open" && s.title.indexOf("Tobyn") !== -1; }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "part2" && s.title.indexOf("Raquel") !== -1; }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "close" && s.title.indexOf("Tobyn") !== -1; }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "open" && /\bTobyn\./.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "skocpol" && /\bRaquel\./.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /\bTobyn\./.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && s.say.indexOf(".07") !== -1; }));
 
 var fs = require("fs");
@@ -77,13 +88,18 @@ var admin = fs.readFileSync("./adminpresentation.html", "utf8");
 var user = fs.readFileSync("./index.html", "utf8");
 var backup = fs.readFileSync("./slideshow.html", "utf8");
 var start = fs.readFileSync("./start.html", "utf8");
+var css = fs.readFileSync("./style.css", "utf8");
 assert.ok(admin.indexOf("readings/geddes-1990.js") !== -1);
 assert.ok(user.indexOf("readings/geddes-1990.js") !== -1);
 assert.ok(backup.indexOf("readings/geddes-1990.js") !== -1);
 assert.ok(start.indexOf("Admin") !== -1 && start.indexOf("Audience") !== -1 && start.indexOf("Backup") !== -1);
 assert.ok(admin.indexOf('id="reveal"') !== -1);
+assert.ok(admin.indexOf("class=\"brand\"") === -1);
+assert.ok(backup.indexOf("class=\"brand\"") === -1);
+assert.ok(backup.indexOf("ghost-nav") !== -1);
 assert.ok(user.indexOf("data-role=\"participant\"") !== -1);
 assert.ok(backup.indexOf("slideshow.js") !== -1);
+assert.ok(css.indexOf(".role-pres .brand") !== -1);
 
 global.DECK = { useFileSlides: true, room: "test-room", title: "Week" };
 store["deck-content"] = JSON.stringify({

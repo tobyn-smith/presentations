@@ -119,7 +119,6 @@
         + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
         + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
         + agendaHtml(s)
-        + (s.speaker ? '<p class="speaker">' + esc(s.speaker) + "</p>" : "")
         + quoteHtml(s.quote)
         + articleHtml(s)
         + "</div>";
@@ -207,10 +206,13 @@
     i = n;
     var s = slides()[i];
     document.title = "Slideshow · " + (s.title || brand);
-    kicker.textContent = s.kicker || brand;
-    counter.textContent = String(i + 1);
-    prevBtn.disabled = i === 0;
-    nextBtn.disabled = i === slides().length - 1;
+    if (kicker) {
+      kicker.textContent = s.kicker || "";
+      kicker.hidden = !s.kicker;
+    }
+    if (counter) counter.textContent = String(i + 1);
+    if (prevBtn) prevBtn.disabled = i === 0;
+    if (nextBtn) nextBtn.disabled = i === slides().length - 1;
     stage.className = "stage fade";
     stage.classList.toggle("prompt", s.type === "prompt");
     stage.classList.toggle("has-recap", !!(s.recap && s.recap.length));
@@ -236,8 +238,8 @@
 
   function go(n) { show(n, true); }
 
-  prevBtn.addEventListener("click", function () { go(i - 1); });
-  nextBtn.addEventListener("click", function () { go(i + 1); });
+  if (prevBtn) prevBtn.addEventListener("click", function () { go(i - 1); });
+  if (nextBtn) nextBtn.addEventListener("click", function () { go(i + 1); });
   document.addEventListener("keydown", function (e) {
     if (e.target && /input|textarea/i.test(e.target.tagName)) return;
     if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {

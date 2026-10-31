@@ -24,7 +24,7 @@ If phones sit on Hold, open Room tools and tap **Push live again**. If that stil
 
 ## Adding a week
 
-Each week is one small file in `readings/`. This week is Geddes (1990) in `readings/geddes-1990.js`: two parts, about twenty minutes, her numbers and charts, two write-in boards. Methods files stay in the folder and are not loaded.
+Each week is one small file in `readings/`. This week is Geddes (1990) in `readings/geddes-1990.js`: one continuous deck, about twenty minutes, her numbers and charts, two write-in boards. Methods files stay in the folder and are not loaded.
 
 Add one script tag for a new week file in `index.html`, `desk.html`, `adminpresentation.html`, `slideshow.html`, `edit.html`, and `script.html`. Take out last week’s file if you do not want it in the room.
 

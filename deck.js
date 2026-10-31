@@ -269,13 +269,13 @@
     document.body.classList.remove("is-waiting", "is-checkin", "is-checkin-name", "is-checkin-face", "is-hold");
     stage.classList.remove("hold");
     document.title = (isPres ? "Presenter · " : "") + (s.title || brand());
-    kicker.textContent = s.kicker || brand();
+    if (kicker) {
+      kicker.textContent = s.kicker || "";
+      kicker.hidden = !s.kicker;
+    }
     if (counter) {
-      var part = (s.kicker || "").replace(/\s+/g, " ").trim();
       var n = String(i + 1);
-      counter.textContent = isPres
-        ? (part ? part + " · " + n : n)
-        : (n + " / " + slides().length);
+      counter.textContent = isPres ? n : (n + " / " + slides().length);
     }
     if (resetBtn) resetBtn.hidden = s.type !== "prompt";
     if (revealBtn) {
@@ -446,7 +446,6 @@
         + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
         + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
         + agendaHtml(s)
-        + (s.speaker ? '<p class="speaker">' + esc(s.speaker) + "</p>" : "")
         + quoteHtml(s.quote)
         + articleHtml(s)
         + "</div>"
