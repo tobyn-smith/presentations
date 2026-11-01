@@ -123,20 +123,34 @@ button { cursor: pointer; }
 .uga-kicker:empty { display: none; }
 .from-class {
   flex: none;
-  height: var(--from-h);
+  min-height: var(--from-h);
+  height: auto;
   display: flex;
   align-items: center;
-  padding: 0 1.15rem 0 1.35rem;
+  gap: 0.65rem;
+  padding: 0.38rem 1.15rem 0.38rem 1.35rem;
   background: #fff;
   border-bottom: 1px solid #e4ddd0;
-  color: var(--ink-faint);
+  color: var(--ink);
 }
-.from-class-lab {
+.from-class[hidden] { display: none; }
+.from-class-week {
+  flex: none;
+  background: var(--accent);
+  color: #fff;
   font-family: var(--display);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  padding: 0.16rem 0.45rem;
+  line-height: 1.2;
+}
+.from-class-body {
+  min-width: 0;
+  font-size: clamp(13px, 1.55vh, 16px);
+  line-height: 1.35;
+  color: var(--ink);
 }
 .role-pres .slide-kicker { display: none; }
 .role-part .uga-banner,
@@ -1616,6 +1630,14 @@ button { cursor: pointer; }
   .role-pres {
     --banner-h: 38px;
     --from-h: 16px;
+  }
+  .from-class {
+    padding: 0.28rem 1rem 0.28rem 1.15rem;
+    gap: 0.5rem;
+  }
+  .from-class-body {
+    font-size: 12px;
+    line-height: 1.3;
   }
   .uga-arch svg { width: 28px; height: 24px; }
   .role-pres .stage.claims h1,

@@ -41,6 +41,17 @@
   function paintBanner(s) {
     var el = document.getElementById("uga-kicker");
     if (el) el.textContent = (s && s.kicker) || "";
+    var bar = document.getElementById("from-class");
+    if (!bar) return;
+    var fc = s && s.fromClass;
+    if (!fc || !fc.body) {
+      bar.hidden = true;
+      bar.innerHTML = "";
+      return;
+    }
+    bar.hidden = false;
+    bar.innerHTML = (fc.week != null ? '<span class="from-class-week">Week ' + esc(fc.week) + "</span>" : "")
+      + '<span class="from-class-body">' + esc(fc.body) + "</span>";
   }
 
   function titleRuleHtml() {

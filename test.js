@@ -92,6 +92,31 @@ SCRIPT.forEach(function (s) {
 assert.ok(SCRIPT.some(function (s) { return s.id === "open" && /\bTobyn\./.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "skocpol" && /\bRaquel\./.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /\bTobyn\./.test(s.notes); }));
+function fromClass(id) {
+  var s = SLIDES.filter(function (row) { return row.id === id; })[0];
+  return s && s.fromClass;
+}
+assert.strictEqual(fromClass("open").week, 2);
+assert.ok(/mind-sets/.test(fromClass("open").body));
+assert.strictEqual(fromClass("ask").week, 3);
+assert.ok(/Burlacu/.test(fromClass("ask").body));
+assert.strictEqual(fromClass("habit").week, 8);
+assert.ok(/samples on the dependent variable/.test(fromClass("habit").body));
+assert.strictEqual(fromClass("nics").week, 8);
+assert.ok(/dependent variable/.test(fromClass("nics").body));
+assert.strictEqual(fromClass("regions").week, 6);
+assert.ok(/Achen and Snidal/.test(fromClass("regions").body));
+assert.strictEqual(fromClass("scores").week, 10);
+assert.ok(/Bremer and Spiro/.test(fromClass("scores").body));
+assert.strictEqual(fromClass("fits").week, 4);
+assert.ok(/Horn, Johannesson and Mavroidis/.test(fromClass("fits").body));
+assert.strictEqual(fromClass("chile").week, 5);
+assert.ok(/Tomz/.test(fromClass("chile").body));
+assert.strictEqual(fromClass("close").week, 9);
+assert.ok(/Errors and pitfalls/.test(fromClass("close").body));
+assert.ok(!fromClass("skocpol"));
+assert.ok(!fromClass("figure5"));
+assert.ok(!/Week 1|Week 7/.test(slideDump));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && s.say.indexOf(".07") !== -1; }));
 
 var fs = require("fs");
