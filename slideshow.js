@@ -76,36 +76,35 @@
   }
 
   function figSplitHtml() {
-    return '<div class="fig-split" aria-hidden="true">'
-      + '<div class="fig-col wide"><i style="height:100%"></i><em>7</em></div>'
-      + '<div class="fig-col mid"><i style="height:36%"></i><em>2</em></div>'
-      + '<div class="fig-col is-on"><i style="height:18%"></i><em>1</em></div>'
+    return '<div class="fig-pane" aria-hidden="true">'
+      + '<div class="fig-split">'
+      + '<div class="fig-col wide"><span class="fig-track"><i style="height:78%"></i></span><em>7</em></div>'
+      + '<div class="fig-col mid"><span class="fig-track"><i style="height:28%"></i></span><em>2</em></div>'
+      + '<div class="fig-col is-on"><span class="fig-track"><i style="height:16%"></i></span><em>1</em></div>'
+      + "</div></div>";
+  }
+
+  function fitSplitHtml() {
+    return '<div class="fig-pane fit-pane" aria-hidden="true">'
+      + '<div class="fig-split">'
+      + '<div class="fig-col wide"><span class="fig-track"><i style="height:78%"></i></span><em>.56</em></div>'
+      + '<div class="fig-col"><span class="fig-track"><i style="height:14%"></i></span><em>.07</em></div>'
+      + '<div class="fig-col"><span class="fig-track"><i style="height:10%"></i></span><em>.01</em></div>'
+      + "</div></div>";
+  }
+
+  function revoltTilesHtml() {
+    return '<div class="revolt-tiles" aria-hidden="true">'
+      + '<div class="revolt-tile">'
+      + '<svg viewBox="0 0 54 36"><rect width="18" height="36" fill="#16324f"/><rect x="18" width="18" height="36" fill="#fffdf7"/><rect x="36" width="18" height="36" fill="#ba0c2f"/></svg>'
+      + "<b>France</b></div>"
+      + '<div class="revolt-tile">'
+      + '<svg viewBox="0 0 54 36"><rect width="54" height="12" fill="#fffdf7"/><rect y="12" width="54" height="12" fill="#16324f"/><rect y="24" width="54" height="12" fill="#ba0c2f"/></svg>'
+      + "<b>Russia</b></div>"
+      + '<div class="revolt-tile">'
+      + '<svg viewBox="0 0 54 36"><rect width="54" height="36" fill="#ba0c2f"/><polygon points="27,6 30,16 41,16 32,22 35,32 27,26 19,32 22,22 13,16 24,16" fill="#f3d89a"/></svg>'
+      + "<b>China</b></div>"
       + "</div>";
-  }
-
-  function growerMapHtml() {
-    return '<div class="board-map" aria-hidden="true">'
-      + '<svg class="board-map-svg" viewBox="0 0 360 168">'
-      + '<rect width="360" height="168" rx="18" fill="#16324f"/>'
-      + '<path d="M0 78C48 40 92 96 148 62C196 36 236 88 292 58C328 42 350 70 360 64V168H0Z" fill="#c4a574"/>'
-      + '<path d="M0 118C70 96 140 132 210 108C280 86 330 124 360 116V168H0Z" fill="#2a6f6a"/>'
-      + "</svg>"
-      + '<div class="board-map-pills">'
-      + "<span>Taiwan</span><span>South Korea</span><span>Singapore</span><span>Brazil</span><span>Mexico</span>"
-      + "</div></div>";
-  }
-
-  function revoltMapHtml() {
-    return '<div class="board-map board-map-revolt" aria-hidden="true">'
-      + '<svg class="board-map-svg" viewBox="0 0 360 140">'
-      + '<rect width="360" height="140" rx="18" fill="#16324f"/>'
-      + '<ellipse cx="86" cy="64" rx="46" ry="28" fill="#c4a574"/>'
-      + '<ellipse cx="186" cy="52" rx="50" ry="30" fill="#c4a574"/>'
-      + '<ellipse cx="278" cy="70" rx="44" ry="26" fill="#c4a574"/>'
-      + "</svg>"
-      + '<div class="board-map-pills">'
-      + "<span>France</span><span>Russia</span><span>China</span>"
-      + "</div></div>";
   }
 
   function yearChartHtml() {
@@ -118,17 +117,17 @@
 
   function ideaArtHtml() {
     return '<div class="idea-art" aria-hidden="true">'
-      + '<svg viewBox="0 0 320 92">'
-      + '<circle cx="28" cy="46" r="11" fill="#ba0c2f"/>'
-      + '<circle cx="62" cy="46" r="11" fill="#ba0c2f"/>'
-      + '<circle cx="96" cy="46" r="11" fill="#d6d2c4"/>'
-      + '<circle cx="130" cy="46" r="11" fill="#d6d2c4"/>'
-      + '<circle cx="164" cy="46" r="11" fill="#d6d2c4"/>'
-      + '<rect x="14" y="20" width="64" height="52" rx="10" fill="none" stroke="#ba0c2f" stroke-width="3"/>'
-      + '<path d="M186 46H236" stroke="#16324f" stroke-width="3"/>'
-      + '<path d="M226 36l12 10-12 10" fill="none" stroke="#16324f" stroke-width="3"/>'
-      + '<rect x="246" y="24" width="58" height="44" rx="10" fill="#16324f"/>'
-      + '<circle cx="275" cy="46" r="10" fill="#f3d89a"/>'
+      + '<svg viewBox="0 0 420 150">'
+      + '<rect x="14" y="34" width="46" height="62" rx="9" fill="#f3d89a"/>'
+      + '<rect x="68" y="34" width="46" height="62" rx="9" fill="#f3d89a"/>'
+      + '<rect x="132" y="42" width="42" height="46" rx="9" fill="#d6d2c4"/>'
+      + '<rect x="182" y="42" width="42" height="46" rx="9" fill="#d6d2c4"/>'
+      + '<rect x="232" y="42" width="42" height="46" rx="9" fill="#d6d2c4"/>'
+      + '<rect x="8" y="24" width="114" height="82" rx="14" fill="none" stroke="#ba0c2f" stroke-width="5"/>'
+      + '<path d="M128 116H292" stroke="#16324f" stroke-width="4"/>'
+      + '<path d="M276 104l18 12-18 12" fill="none" stroke="#16324f" stroke-width="4"/>'
+      + '<rect x="308" y="38" width="96" height="70" rx="14" fill="#16324f"/>'
+      + '<circle cx="356" cy="73" r="14" fill="#f3d89a"/>'
       + "</svg></div>";
   }
 
@@ -148,17 +147,27 @@
     if (s.id === "habit") {
       return '<div class="art-panel art-habit" aria-hidden="true">'
         + '<svg viewBox="0 0 220 220">'
-        + '<path d="M24 28h172l-36 54H60z" fill="#f3ead4"/>'
-        + '<path d="M60 82h100l-28 52H88z" fill="#d5ddd0"/>'
-        + '<path d="M88 134h44l-14 48h-16z" fill="#f3d89a"/>'
+        + '<circle cx="30" cy="36" r="12" fill="#f3ead4"/><circle cx="64" cy="36" r="12" fill="#f3ead4"/>'
+        + '<circle cx="98" cy="36" r="12" fill="#f3ead4"/><circle cx="132" cy="36" r="12" fill="#f3ead4"/>'
+        + '<circle cx="166" cy="36" r="12" fill="#f3ead4"/><circle cx="190" cy="36" r="12" fill="#f3ead4"/>'
+        + '<rect x="52" y="78" width="116" height="64" rx="14" fill="none" stroke="#ba0c2f" stroke-width="5"/>'
+        + '<circle cx="86" cy="110" r="16" fill="#f3d89a"/><circle cx="134" cy="110" r="16" fill="#f3d89a"/>'
+        + '<circle cx="48" cy="192" r="10" fill="#8b93a0"/><circle cx="86" cy="192" r="10" fill="#8b93a0"/>'
+        + '<circle cx="124" cy="192" r="10" fill="#8b93a0"/><circle cx="162" cy="192" r="10" fill="#8b93a0"/>'
         + "</svg></div>";
     }
     if (s.id === "close") {
       return '<div class="art-panel art-close" aria-hidden="true">'
         + '<svg viewBox="0 0 220 220">'
-        + '<circle cx="70" cy="110" r="46" fill="#f3ead4"/>'
-        + '<circle cx="150" cy="110" r="46" fill="#16324f"/>'
-        + '<rect x="96" y="86" width="28" height="48" fill="#d6d2c4"/>'
+        + '<rect x="12" y="10" width="196" height="60" rx="16" fill="#fffdf7"/>'
+        + '<rect x="12" y="80" width="196" height="60" rx="16" fill="#f3ead4"/>'
+        + '<rect x="12" y="150" width="196" height="60" rx="16" fill="#d5ddd0"/>'
+        + '<circle cx="52" cy="40" r="18" fill="#16324f"/>'
+        + '<circle cx="52" cy="110" r="18" fill="#16324f"/>'
+        + '<circle cx="52" cy="180" r="18" fill="#16324f"/>'
+        + '<path d="M44 40l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
+        + '<path d="M44 110l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
+        + '<path d="M44 180l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
         + "</svg></div>";
     }
     if (s.id === "chile") return yearChartHtml();
@@ -227,21 +236,21 @@
 
   function caseNamesHtml(list, id) {
     if (!list || !list.length) return "";
-    var map = "";
-    if (id === "nics") map = growerMapHtml();
-    if (id === "skocpol") map = revoltMapHtml();
-    return windowHtml("paper", "Cases", map + '<ul class="name-stack">' + list.map(function (n) {
+    if (id === "skocpol") return windowHtml("paper", "Cases", revoltTilesHtml());
+    return windowHtml("paper", "Cases", '<ul class="name-stack' + (id === "nics" ? " is-growers" : "") + '">' + list.map(function (n) {
       return "<li>" + esc(n) + "</li>";
     }).join("") + "</ul>");
   }
 
   function statsStackHtml(list, id) {
     if (!list || !list.length) return "";
-    return windowHtml("paper", "Scores", (id === "figure5" ? figSplitHtml() : "") + '<div class="stats-stack">' + list.map(function (st) {
-      var mark = "";
-      if (id === "scores") mark = scaleMark(st.value);
-      else if (id === "fits") mark = fitMark(st.value);
-      return '<div class="stat">' + mark + '<div class="value">' + esc(st.value) + "</div>"
+    var extra = "";
+    if (id === "figure5") extra = figSplitHtml();
+    if (id === "fits") extra = fitSplitHtml();
+    return windowHtml("paper", "Scores", extra + '<div class="stats-stack">' + list.map(function (st) {
+      var mark = id === "scores" ? scaleMark(st.value) : "";
+      var val = id === "scores" ? "" : '<div class="value">' + esc(st.value) + "</div>";
+      return '<div class="stat' + (id === "scores" ? " is-scale" : "") + '">' + mark + val
         + '<p class="label">' + esc(st.label) + "</p>"
         + (st.source ? '<p class="source">' + esc(st.source) + "</p>" : "")
         + "</div>";
