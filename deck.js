@@ -318,8 +318,7 @@
     if (keepBoard) {
       if (isPres && s.type === "prompt") {
         paintResponses(s, i, DeckSync.getResponses(String(i)));
-        var keepViz = document.getElementById("viz");
-        if (keepViz) keepViz.classList.toggle("is-hidden", !revealed[s.id]);
+        showViz(s);
       }
       paintMe();
       paintHandBtn();
@@ -330,8 +329,7 @@
     bind(s, i);
     if (isPres && s.type === "prompt") {
       paintResponses(s, i, DeckSync.getResponses(String(i)));
-      var viz = document.getElementById("viz");
-      if (viz) viz.classList.toggle("is-hidden", !revealed[s.id]);
+      showViz(s);
     }
     paintMe();
     paintHandBtn();
@@ -1031,6 +1029,16 @@
       }
     }
     viz.innerHTML = html;
+    showViz(s);
+  }
+
+  function showViz(s) {
+    var viz = document.getElementById("viz");
+    if (!viz) return;
+    var show = !!(s && revealed[s.id] && viz.innerHTML.trim());
+    viz.classList.toggle("is-hidden", !show);
+    var win = viz.closest(".ss-win");
+    if (win) win.classList.toggle("has-answers", show);
   }
 
   function paintMe() {
@@ -1405,8 +1413,7 @@
     if (!s || s.type !== "prompt") return;
     if (isPres) {
       paintResponses(s, i, list);
-      var viz = document.getElementById("viz");
-      if (viz) viz.classList.toggle("is-hidden", !revealed[s.id]);
+      showViz(s);
       fitStage();
       return;
     }
@@ -1442,8 +1449,7 @@
       if (!s || s.type !== "prompt") return;
       revealed[s.id] = !revealed[s.id];
       revealBtn.textContent = revealed[s.id] ? "Hide" : "Reveal";
-      var viz = document.getElementById("viz");
-      if (viz) viz.classList.toggle("is-hidden", !revealed[s.id]);
+      showViz(s);
     });
     if (wipeBtn) wipeBtn.addEventListener("click", function () {
       if (confirm("Clear every answer from this session?")) DeckSync.wipe();

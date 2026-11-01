@@ -108,10 +108,23 @@ async function measurePage(page, label, vp) {
       if (!qr.complete || qr.naturalWidth < 8) fails.push("QR did not render");
     }
 
+    if (stage) {
+      const tokens = stage.querySelectorAll(".token-tray .token");
+      const slots = stage.querySelectorAll(".slot");
+      tokens.forEach((tok) => {
+        const tr = tok.getBoundingClientRect();
+        slots.forEach((slot) => {
+          const sr = slot.getBoundingClientRect();
+          const hit = tr.right > sr.left + 1 && tr.left < sr.right - 1 && tr.bottom > sr.top + 1 && tr.top < sr.bottom - 1;
+          if (hit) fails.push("token overlaps well");
+        });
+      });
+    }
+
     let fill = 1;
     if (stage) {
       const box = stage.getBoundingClientRect();
-          const surfaces = stage.querySelectorAll("h1, .slide-kicker, .claim-bars, .claim-bars li, .ss-win, .split, .join, .join-qr, .token, .slot, .name-stack, .stats-stack, .chart, .talk, .talk li, .bar, .choices button, .title-side, .title-copy, p, h2");
+          const surfaces = stage.querySelectorAll("h1, .slide-kicker, .claim-bars, .claim-bars li, .ss-win, .split, .join, .join-qr, .token, .slot, .name-stack, .stats-stack, .chart, .talk, .talk li, .bar, .choices button, .title-side, .title-copy, .ask, .ask-panel, p, h2");
       let hit = 0;
       let total = 0;
       const cols = 16;
@@ -130,7 +143,7 @@ async function measurePage(page, label, vp) {
         }
       }
       fill = total ? hit / total : 1;
-      if (document.body.classList.contains("role-pres") && vp && vp.w >= 1280 && fill < 0.69) {
+      if (document.body.classList.contains("role-pres") && vp && vp.w >= 1280 && fill < 0.85) {
         fails.push("empty stage " + Math.round((1 - fill) * 100) + "% fill=" + fill.toFixed(2));
       }
     }
@@ -167,6 +180,8 @@ async function injectVotes(page) {
     const n = window.DeckSync ? window.DeckSync.getSlide() : 0;
     const s = (window.SLIDES || [])[n] || {};
     viz.classList.remove("is-hidden");
+    const win = viz.closest(".ss-win");
+    if (win) win.classList.add("has-answers");
     if (s.input === "place") {
       viz.innerHTML = '<p class="tally">3 answers</p><ol class="responses">'
         + '<li class="card"><p class="said">Labour was repressed or coopted → What the five show</p></li>'
@@ -309,7 +324,11 @@ server.close();
 
 const failed = results.filter((r) => r.fails && r.fails.length);
 writeFileSync(join(OUT, "audit.json"), JSON.stringify({ failed: failed.length, total: results.length, fills, results }, null, 2));
-console.log("AUDIT", failed.length ? "FAIL" : "PASS", failed.length + "/" + results.length);
+if (failed.length) {
+  console.log("AUDIT FAILED " + failed.length + "/" + results.length + " checks failed");
+} else {
+  console.log("AUDIT PASSED " + results.length + "/" + results.length + " checks passed");
+}
 console.log("FILL");
 fills.filter((f) => f.label.indexOf("1280x720-z1") !== -1 && f.label.indexOf("admin-") === 0).forEach((f) => {
   console.log(" ", f.label, "fill", f.fill, f.title);
