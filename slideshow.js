@@ -58,55 +58,110 @@
     return '<span class="title-rule" aria-hidden="true"></span>';
   }
 
-  function decoHtml(s) {
-    if (!s) return "";
-    var land = '<svg class="deco-svg" viewBox="0 0 360 88" aria-hidden="true">'
-      + '<rect width="360" height="88" rx="16" fill="#16324f"/>'
-      + '<path d="M0 58C40 40 80 70 140 52C180 40 220 62 280 48C320 40 350 58 360 50V88H0Z" fill="#c4a574"/>'
-      + '<path d="M0 70C80 62 160 78 240 66C300 58 340 72 360 68V88H0Z" fill="#2a6f6a"/>'
-      + "</svg>";
-    if (s.id === "nics") {
-      return '<div class="deco deco-map deco-nics" aria-hidden="true">'
-        + land
-        + '<div class="map-pills">'
-        + '<span>Taiwan</span><span>South Korea</span><span>Singapore</span><span>Brazil</span><span>Mexico</span>'
-        + "</div></div>";
+  function scaleMark(n) {
+    var on = Number(n) || 0;
+    var bits = "";
+    var i;
+    for (i = 1; i <= 4; i++) {
+      bits += "<span" + (i <= on ? ' class="is-on"' : "") + ">" + i + "</span>";
     }
-    if (s.id === "scores") {
-      return '<div class="deco deco-map deco-scale" aria-hidden="true">'
-        + "<span>1</span><span>2</span><span>3</span><span class=\"is-on\">4</span>"
-        + "</div>";
+    return '<div class="score-steps" aria-hidden="true">' + bits + "</div>";
+  }
+
+  function fitMark(val) {
+    var n = Math.abs(parseFloat(val));
+    if (!isFinite(n)) n = 0;
+    var pct = Math.max(8, Math.min(100, n <= 1 ? n * 100 : n));
+    return '<div class="fit-meter" aria-hidden="true"><i style="width:' + pct + '%"></i></div>';
+  }
+
+  function figSplitHtml() {
+    return '<div class="fig-split" aria-hidden="true">'
+      + '<div class="fig-col wide"><i style="height:100%"></i><em>7</em></div>'
+      + '<div class="fig-col mid"><i style="height:36%"></i><em>2</em></div>'
+      + '<div class="fig-col is-on"><i style="height:18%"></i><em>1</em></div>'
+      + "</div>";
+  }
+
+  function growerMapHtml() {
+    return '<div class="board-map" aria-hidden="true">'
+      + '<svg class="board-map-svg" viewBox="0 0 360 168">'
+      + '<rect width="360" height="168" rx="18" fill="#16324f"/>'
+      + '<path d="M0 78C48 40 92 96 148 62C196 36 236 88 292 58C328 42 350 70 360 64V168H0Z" fill="#c4a574"/>'
+      + '<path d="M0 118C70 96 140 132 210 108C280 86 330 124 360 116V168H0Z" fill="#2a6f6a"/>'
+      + "</svg>"
+      + '<div class="board-map-pills">'
+      + "<span>Taiwan</span><span>South Korea</span><span>Singapore</span><span>Brazil</span><span>Mexico</span>"
+      + "</div></div>";
+  }
+
+  function revoltMapHtml() {
+    return '<div class="board-map board-map-revolt" aria-hidden="true">'
+      + '<svg class="board-map-svg" viewBox="0 0 360 140">'
+      + '<rect width="360" height="140" rx="18" fill="#16324f"/>'
+      + '<ellipse cx="86" cy="64" rx="46" ry="28" fill="#c4a574"/>'
+      + '<ellipse cx="186" cy="52" rx="50" ry="30" fill="#c4a574"/>'
+      + '<ellipse cx="278" cy="70" rx="44" ry="26" fill="#c4a574"/>'
+      + "</svg>"
+      + '<div class="board-map-pills">'
+      + "<span>France</span><span>Russia</span><span>China</span>"
+      + "</div></div>";
+  }
+
+  function yearChartHtml() {
+    return '<div class="year-chart" aria-hidden="true">'
+      + '<div class="year-col"><b style="height:84%"></b><strong>84</strong><span>1955</span></div>'
+      + '<div class="year-col"><b style="height:8%"></b><strong>5</strong><span>1960</span></div>'
+      + '<div class="year-col is-on"><b style="height:12%"></b><strong>10</strong><span>1961</span></div>'
+      + "</div>";
+  }
+
+  function ideaArtHtml() {
+    return '<div class="idea-art" aria-hidden="true">'
+      + '<svg viewBox="0 0 320 92">'
+      + '<circle cx="28" cy="46" r="11" fill="#ba0c2f"/>'
+      + '<circle cx="62" cy="46" r="11" fill="#ba0c2f"/>'
+      + '<circle cx="96" cy="46" r="11" fill="#d6d2c4"/>'
+      + '<circle cx="130" cy="46" r="11" fill="#d6d2c4"/>'
+      + '<circle cx="164" cy="46" r="11" fill="#d6d2c4"/>'
+      + '<rect x="14" y="20" width="64" height="52" rx="10" fill="none" stroke="#ba0c2f" stroke-width="3"/>'
+      + '<path d="M186 46H236" stroke="#16324f" stroke-width="3"/>'
+      + '<path d="M226 36l12 10-12 10" fill="none" stroke="#16324f" stroke-width="3"/>'
+      + '<rect x="246" y="24" width="58" height="44" rx="10" fill="#16324f"/>'
+      + '<circle cx="275" cy="46" r="10" fill="#f3d89a"/>'
+      + "</svg></div>";
+  }
+
+  function artHtml(s) {
+    if (!s) return "";
+    if (s.id === "ask") {
+      return '<div class="art-panel art-ask" aria-hidden="true">'
+        + '<svg viewBox="0 0 220 220">'
+        + '<rect x="28" y="18" width="130" height="170" rx="14" fill="#fffdf7"/>'
+        + '<rect x="48" y="42" width="90" height="10" rx="5" fill="#d5ddd0"/>'
+        + '<rect x="48" y="64" width="72" height="10" rx="5" fill="#d5ddd0"/>'
+        + '<rect x="48" y="86" width="82" height="10" rx="5" fill="#d5ddd0"/>'
+        + '<circle cx="168" cy="168" r="34" fill="#ba0c2f"/>'
+        + '<text x="168" y="182" text-anchor="middle" fill="#fffdf7" font-size="42" font-family="Oswald, sans-serif">?</text>'
+        + "</svg></div>";
     }
     if (s.id === "habit") {
-      return '<div class="deco deco-map deco-funnel" aria-hidden="true"><i></i><i></i><i></i></div>';
+      return '<div class="art-panel art-habit" aria-hidden="true">'
+        + '<svg viewBox="0 0 220 220">'
+        + '<path d="M24 28h172l-36 54H60z" fill="#f3ead4"/>'
+        + '<path d="M60 82h100l-28 52H88z" fill="#d5ddd0"/>'
+        + '<path d="M88 134h44l-14 48h-16z" fill="#f3d89a"/>'
+        + "</svg></div>";
     }
-    if (s.id === "chile") {
-      return '<div class="deco deco-map deco-years" aria-hidden="true">'
-        + "<span>1955</span><span>1960</span><span class=\"is-on\">1961</span>"
-        + "</div>";
+    if (s.id === "close") {
+      return '<div class="art-panel art-close" aria-hidden="true">'
+        + '<svg viewBox="0 0 220 220">'
+        + '<circle cx="70" cy="110" r="46" fill="#f3ead4"/>'
+        + '<circle cx="150" cy="110" r="46" fill="#16324f"/>'
+        + '<rect x="96" y="86" width="28" height="48" fill="#d6d2c4"/>'
+        + "</svg></div>";
     }
-    if (s.id === "skocpol") {
-      return '<div class="deco deco-map deco-names" aria-hidden="true">'
-        + '<div class="map-pills"><span>France</span><span>Russia</span><span>China</span></div></div>';
-    }
-    if (s.id === "fits") {
-      return '<div class="deco deco-map deco-fits" aria-hidden="true">'
-        + "<span>.56</span><span>.07</span><span class=\"is-on\">.01</span>"
-        + "</div>";
-    }
-    if (s.id === "figure5") {
-      return '<div class="deco deco-map deco-fig5" aria-hidden="true">'
-        + "<span>7</span><span>2</span><span class=\"is-on\">1</span>"
-        + "</div>";
-    }
-    if (s.id === "ask" || s.id === "close") {
-      return '<div class="deco deco-map deco-dots" aria-hidden="true"><i></i><i></i><i></i></div>';
-    }
-    if (s.id === "regions") {
-      return '<div class="deco deco-map deco-nics" aria-hidden="true">'
-        + land
-        + '<div class="map-pills"><span>East Asia</span><span>Africa</span></div></div>';
-    }
+    if (s.id === "chile") return yearChartHtml();
     return "";
   }
 
@@ -117,10 +172,7 @@
       + '<span class="ss-win-dots" aria-hidden="true"><i></i><i></i><i></i></span>'
       + (title ? '<span class="ss-win-title">' + esc(title) + "</span>" : "")
       + "</div>"
-      + '<div class="ss-win-body">'
-      + (title ? '<p class="ss-win-who">' + esc(title) + "</p>" : "")
-      + inner
-      + "</div></div>";
+      + '<div class="ss-win-body">' + inner + "</div></div>";
   }
 
   function fitStage() {
@@ -173,17 +225,23 @@
     }).join("") + "</ul>";
   }
 
-  function caseNamesHtml(list) {
+  function caseNamesHtml(list, id) {
     if (!list || !list.length) return "";
-    return windowHtml("paper", "Cases", '<ul class="name-stack">' + list.map(function (n) {
+    var map = "";
+    if (id === "nics") map = growerMapHtml();
+    if (id === "skocpol") map = revoltMapHtml();
+    return windowHtml("paper", "Cases", map + '<ul class="name-stack">' + list.map(function (n) {
       return "<li>" + esc(n) + "</li>";
     }).join("") + "</ul>");
   }
 
-  function statsStackHtml(list) {
+  function statsStackHtml(list, id) {
     if (!list || !list.length) return "";
-    return windowHtml("paper", "Scores", '<div class="stats-stack">' + list.map(function (st) {
-      return '<div class="stat"><div class="value">' + esc(st.value) + "</div>"
+    return windowHtml("paper", "Scores", (id === "figure5" ? figSplitHtml() : "") + '<div class="stats-stack">' + list.map(function (st) {
+      var mark = "";
+      if (id === "scores") mark = scaleMark(st.value);
+      else if (id === "fits") mark = fitMark(st.value);
+      return '<div class="stat">' + mark + '<div class="value">' + esc(st.value) + "</div>"
         + '<p class="label">' + esc(st.label) + "</p>"
         + (st.source ? '<p class="source">' + esc(st.source) + "</p>" : "")
         + "</div>";
@@ -193,18 +251,20 @@
   function vizHtml(s) {
     if (s.chart) return chartHtml(s.chart);
     if (s.charts && s.charts[0]) return chartHtml(s.charts[0]);
-    if (s.stats) return statsStackHtml(s.stats);
-    if (s.names) return caseNamesHtml(s.names);
+    if (s.stats) return statsStackHtml(s.stats, s.id);
+    if (s.names) return caseNamesHtml(s.names, s.id);
     return "";
   }
 
   function splitHtml(s) {
     var viz = vizHtml(s);
     var bars = claimBarsHtml(s.claims);
-    if (!viz && !bars) return "";
-    return '<div class="split' + (viz ? " has-viz" : "") + '">'
+    var art = !viz ? artHtml(s) : "";
+    if (!viz && !bars && !art) return "";
+    return '<div class="split' + (viz ? " has-viz" : "") + (art ? " has-art" : "") + '">'
       + (viz ? '<div class="split-viz">' + viz + "</div>" : "")
       + (bars ? '<div class="split-side">' + bars + "</div>" : "")
+      + (art ? '<div class="split-art">' + art + "</div>" : "")
       + "</div>";
   }
 
@@ -272,6 +332,7 @@
         + titleRuleHtml()
         + (s.byline ? '<p class="title-byline">' + esc(s.byline) + "</p>" : "")
         + (s.presented ? '<p class="title-presented">' + esc(s.presented) + "</p>" : "")
+        + ideaArtHtml()
         + "</div>"
         + (shown ? '<div class="title-side">'
           + '<div class="title-bento title-bento-navy">'
@@ -306,7 +367,6 @@
     }
     if (s.type === "claims") {
       return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
-        + decoHtml(s)
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
         + splitHtml(s)
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
@@ -338,7 +398,6 @@
     }
     if (s.input === "place" || s.input === "rank") {
       return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
-        + decoHtml(s)
         + '<div class="split has-viz has-drag-main">'
         + '<div class="split-viz">' + vizHtml(s) + "</div>"
         + '<div class="split-side">'
@@ -346,7 +405,6 @@
         + "</div></div>";
     }
     return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
-      + decoHtml(s)
       + '<div class="slide-stack">'
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + splitHtml(s)

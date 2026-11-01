@@ -5,8 +5,8 @@
   --tile-cream: #f3ead4;
   --tile-sage: #d5ddd0;
   --navy: #16324f;
-  --gold: #d9c7a2;
-  --gold-ink: #7a632e;
+  --gold: #f3d89a;
+  --gold-ink: #6a5424;
   --ink: #000000;
   --ink-soft: #222222;
   --ink-faint: #554F47;
@@ -490,7 +490,7 @@ button { cursor: pointer; }
   flex-direction: column;
   justify-content: flex-start;
   overflow: visible;
-  padding: 1.8% 1.6% 1.6%;
+  padding: 1.8% 1.8% 2.4%;
 }
 .slide-kicker {
   margin: 0 0 0.35rem;
@@ -518,17 +518,28 @@ button { cursor: pointer; }
   justify-content: flex-start;
 }
 .role-pres .stage.title .title-copy {
-  justify-content: center;
+  justify-content: flex-start;
   background: #fff;
   border: 0;
   border-radius: var(--radius);
-  padding: 28px 32px;
+  padding: 22px 28px 20px;
 }
 .title-logo {
   display: block;
-  width: min(26rem, 88%);
+  width: min(20rem, 72%);
   height: auto;
-  margin: 0 0 1.2rem;
+  margin: 0 0 0.85rem;
+}
+.idea-art {
+  margin-top: auto;
+  width: 100%;
+  max-width: 22rem;
+  padding-top: 0.85rem;
+}
+.idea-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 .role-pres .title-copy h1,
 .role-pres .title-copy .lede,
@@ -1086,8 +1097,7 @@ button { cursor: pointer; }
   margin-bottom: 20px;
   color: #000;
 }
-.role-pres h1:has(+ .title-rule),
-.role-pres h1:has(+ .deco) { margin-bottom: 10px; }
+.role-pres h1:has(+ .title-rule) { margin-bottom: 10px; }
 .title-rule {
   display: block;
   width: 3.4rem;
@@ -1540,6 +1550,7 @@ button { cursor: pointer; }
 }
 .role-pres .stage .claim-bars li:nth-child(1) h2 {
   color: var(--gold);
+  font-size: clamp(24px, 3.1vh, 32px);
 }
 .role-pres .stage .claim-bars .card-n {
   font-size: clamp(18px, 2.2vh, 22px);
@@ -1625,6 +1636,67 @@ button { cursor: pointer; }
 }
 .split.has-viz {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.split.has-art {
+  grid-template-columns: minmax(0, 1.4fr) minmax(11rem, 0.72fr);
+}
+.split-art {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+.art-panel,
+.year-chart {
+  height: 100%;
+  min-height: 0;
+  border-radius: var(--radius);
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.art-panel svg {
+  width: min(100%, 16rem);
+  height: auto;
+  max-height: 100%;
+}
+.year-chart {
+  align-items: flex-end;
+  justify-content: space-evenly;
+  gap: 0.7rem;
+  padding: 1.1rem 1rem 0.85rem;
+}
+.year-col {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.3rem;
+}
+.year-col b {
+  display: block;
+  width: 100%;
+  max-width: 2.6rem;
+  min-height: 8px;
+  background: #c4a574;
+  border-radius: 8px 8px 2px 2px;
+}
+.year-col.is-on b { background: var(--gold); }
+.year-col strong {
+  font-family: var(--display);
+  font-size: clamp(22px, 3.4vh, 32px);
+  color: var(--gold);
+  line-height: 1;
+}
+.year-col span {
+  font-family: var(--display);
+  font-size: clamp(14px, 1.8vh, 18px);
+  letter-spacing: 0.04em;
+  color: #fffdf7;
 }
 .split.has-viz .claim-bars {
   height: 100%;
@@ -1734,10 +1806,10 @@ button { cursor: pointer; }
   .uga-plate { height: calc(var(--banner-h) - 10px); }
   .uga-logo { max-width: 12.5rem; }
   .title-logo { width: min(16rem, 62%); margin-bottom: 0.65rem; }
-  .deco-nics,
-  .deco-names { min-height: 2.2rem; }
-  .deco-map { padding: 0.28rem 0.5rem; }
-  .deco-svg { opacity: 0.85; }
+  .split.has-art { grid-template-columns: 1fr; }
+  .split-art { display: none; }
+  .board-map { min-height: 5.2rem; margin-bottom: 0.35rem; }
+  .idea-art { max-width: 16rem; padding-top: 0.45rem; }
   .map-pills span,
   .deco-scale span,
   .deco-years span,
@@ -1809,18 +1881,18 @@ button { cursor: pointer; }
 }
 .claim-bars h2 {
   font-family: var(--display);
-  font-size: clamp(22px, 2.7vh, 28px);
+  font-size: clamp(24px, 3.1vh, 32px);
   font-weight: 600;
   letter-spacing: 0;
   text-transform: none;
   color: var(--ink);
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 .claim-bars p {
   margin: 0;
-  font-size: clamp(20px, 1.6vw, 24px);
-  line-height: 1.5;
+  font-size: clamp(20px, 2vh, 23px);
+  line-height: 1.4;
   color: var(--ink);
 }
 .claim-bars .fn {
@@ -1867,17 +1939,7 @@ button { cursor: pointer; }
   text-transform: uppercase;
   color: var(--gold);
 }
-.ss-win-who {
-  margin: 0 0 0.5rem;
-  padding: 0 0 0 0.7rem;
-  border-left: 2px solid var(--gold);
-  color: var(--gold);
-  font-family: var(--display);
-  font-size: clamp(12px, 1.45vh, 14px);
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
+.ss-win-who { display: none; }
 .ss-win-body {
   padding: 0.35rem 0.85rem 0.85rem;
   min-width: 0;
@@ -1944,13 +2006,13 @@ button { cursor: pointer; }
   display: flex;
   align-items: center;
   font-family: var(--display);
-  font-size: clamp(28px, 4.6vh, 44px);
+  font-size: clamp(22px, 3.4vh, 34px);
   font-weight: 500;
   line-height: 1.15;
   border: 0;
   border-radius: 14px;
   background: var(--tile-cream);
-  padding: 0 0.95rem;
+  padding: 0 0.85rem;
 }
 .name-stack li:nth-child(3n) { background: var(--tile-sage); }
 .role-pres .name-stack li:first-child {
@@ -1969,12 +2031,132 @@ button { cursor: pointer; }
 }
 .stats-stack .stat {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.55rem 0.9rem;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: 0.45rem 0.7rem;
   align-items: center;
   border: 0;
   border-radius: 14px;
   padding: 0.45rem 0.7rem;
+}
+.score-steps {
+  display: flex;
+  gap: 0.22rem;
+  grid-column: 1;
+}
+.score-steps span {
+  width: 1.85rem;
+  height: 1.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #e4dfd4;
+  color: var(--navy);
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+}
+.score-steps span.is-on {
+  background: var(--navy);
+  color: var(--gold);
+}
+.fit-meter,
+.fig-bar {
+  width: 5.6rem;
+  height: 18px;
+  background: #e4dfd4;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.fit-meter i,
+.fig-bar i {
+  display: block;
+  height: 100%;
+  background: var(--navy);
+  border-radius: 99px;
+}
+.fig-split {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.45rem;
+  height: 5.4rem;
+  margin: 0 0 0.55rem;
+  padding: 0.35rem 0.2rem 0;
+}
+.fig-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 0;
+  height: 100%;
+  flex: 1;
+}
+.fig-col.wide { flex: 2.4; }
+.fig-col.mid { flex: 1.3; }
+.fig-col i {
+  display: block;
+  width: 100%;
+  flex: none;
+  background: var(--navy);
+  border-radius: 8px 8px 2px 2px;
+  min-height: 10px;
+}
+.fig-col.is-on i { background: var(--accent); }
+.fig-col em {
+  font-family: var(--display);
+  font-size: clamp(20px, 2.8vh, 28px);
+  font-style: normal;
+  line-height: 1;
+  color: var(--navy);
+}
+.role-pres .stats-stack .stat:first-child .score-steps span {
+  background: #2a4a68;
+  color: var(--gold);
+}
+.role-pres .stats-stack .stat:first-child .score-steps span.is-on,
+.role-pres .stats-stack .stat:first-child .fit-meter i,
+.role-pres .stats-stack .stat:first-child .fig-bar i {
+  background: var(--gold);
+  color: var(--navy);
+}
+.role-pres .stats-stack .stat:first-child .fit-meter,
+.role-pres .stats-stack .stat:first-child .fig-bar {
+  background: #2a4a68;
+}
+.board-map {
+  position: relative;
+  flex: 0 0 auto;
+  min-height: 8.5rem;
+  margin: 0 0 0.55rem;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.board-map-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.board-map-pills {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0.4rem;
+  padding: 0.7rem 0.75rem;
+}
+.board-map-pills span {
+  font-family: var(--display);
+  font-size: clamp(14px, 1.9vh, 18px);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  padding: 0.4rem 0.55rem;
+  border-radius: 999px;
+  background: var(--tile-cream);
+  color: var(--navy);
 }
 .role-pres .stats-stack .stat:first-child {
   background: var(--navy);
@@ -2056,7 +2238,7 @@ button { cursor: pointer; }
 .role-pres .stage.prompt.has-split:not(.has-drag) .ask-panel > .ss-win {
   flex: 1 1 auto;
   height: 100%;
-  min-height: 16rem;
+  min-height: 12rem;
 }
 .role-pres .stage.prompt.has-drag .ask-panel {
   max-height: none;
@@ -2106,10 +2288,10 @@ button { cursor: pointer; }
   min-height: 0;
 }
 .token {
-  border: 0;
+  border: 2px solid var(--navy);
   border-left: 6px solid var(--accent);
   background: #fff;
-  color: inherit;
+  color: #000;
   padding: 0.45rem 0.7rem;
   font-size: clamp(20px, 1.6vw, 24px);
   line-height: 1.4;
@@ -2130,23 +2312,23 @@ button { cursor: pointer; }
   flex: 1 1 auto;
 }
 .slot {
-  border: 0;
-  background: var(--tile-sage);
-  padding: 0.55rem 0.65rem 0.7rem;
+  border: 2.5px solid var(--gold);
+  background: #10263c;
+  padding: 0.65rem 0.7rem 0.75rem;
   min-height: 0;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   border-radius: var(--radius);
 }
-.slot:first-child { background: var(--tile-cream); }
+.slot:first-child { background: #10263c; }
 .slot-lab {
   font-family: var(--display);
-  font-size: clamp(18px, 2.2vh, 22px);
-  letter-spacing: 0;
+  font-size: clamp(18px, 2.3vh, 24px);
+  letter-spacing: 0.02em;
   text-transform: none;
-  color: var(--accent);
-  margin: 0 0 0.4rem;
+  color: var(--gold);
+  margin: 0 0 0.45rem;
 }
 .slot-well {
   flex: 1 1 auto;
@@ -2156,7 +2338,10 @@ button { cursor: pointer; }
   align-items: center;
   justify-content: center;
   align-content: center;
-  min-height: 3.2rem;
+  min-height: 3.6rem;
+  border: 1.5px dashed rgba(243, 216, 154, 0.55);
+  border-radius: 12px;
+  padding: 0.45rem;
 }
 .slot-well:has(.token) {
   align-items: flex-start;
@@ -2165,9 +2350,10 @@ button { cursor: pointer; }
 }
 .slot-empty {
   margin: 0;
-  color: var(--ink-faint);
-  font-size: clamp(20px, 1.6vw, 24px);
-  line-height: 1.5;
+  color: var(--gold);
+  font-size: clamp(20px, 1.7vw, 24px);
+  line-height: 1.4;
+  font-weight: 600;
 }
 .slot-well:has(.token) .slot-empty { display: none; }
 .drag-rank .send,
@@ -2964,6 +3150,7 @@ button { cursor: pointer; }
   border-radius: var(--radius);
   padding: 22px 22px 24px;
 }
+.role-part .idea-art { max-width: 18rem; }
 .role-part .title-logo {
   width: min(16rem, 86%);
   margin-bottom: 0.9rem;
@@ -3079,15 +3266,17 @@ button { cursor: pointer; }
   margin-top: 0.85rem;
 }
 .choices button {
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  color: var(--ink);
-  padding: 0.65rem 0.9rem;
-  border-radius: 0;
-  min-height: 2.6rem;
+  background: #fffdf7;
+  border: 2px solid var(--navy);
+  color: #000;
+  padding: 0.7rem 0.95rem;
+  border-radius: 14px;
+  min-height: 2.8rem;
   width: 100%;
   text-align: left;
   white-space: normal;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 .choices button[aria-pressed="true"] {
   background: var(--accent);
@@ -3259,9 +3448,9 @@ textarea {
   flex: 1 1 auto;
   align-content: stretch;
   max-width: none;
-  margin-top: 1.4em;
+  margin-top: 0.7em;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 .role-pres.is-backup .talk li {
   font-size: clamp(20px, 1.6vw, 24px);
@@ -3283,23 +3472,24 @@ textarea {
   height: 100%;
   align-content: stretch;
 }
+.talk:has(> li:nth-child(4)) {
+  grid-template-columns: 1fr 1fr;
+}
 .talk li {
-  background: var(--tile-cream);
-  border: 0;
-  color: var(--ink);
-  padding: 16px 20px;
+  background: #fffdf7;
+  border: 2px solid var(--navy);
+  color: #000;
+  padding: 16px 18px;
   border-radius: 16px;
   font-size: clamp(20px, 1.6vw, 24px);
-  line-height: 1.45;
-  font-weight: 500;
+  line-height: 1.4;
+  font-weight: 600;
   display: flex;
   align-items: center;
 }
-.talk li:nth-child(2) { background: var(--tile-sage); }
-.talk li:nth-child(3) {
-  background: var(--navy);
-  color: var(--gold);
-}
+.talk li:nth-child(2),
+.talk li:nth-child(4) { background: var(--tile-cream); }
+.talk li:nth-child(3) { background: var(--tile-sage); color: #000; }
 .ss-win.ss-term .title-join,
 .ss-win.ss-term .join-url,
 .title-bento-cream .title-join {
