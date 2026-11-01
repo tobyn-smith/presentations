@@ -21,12 +21,17 @@
     var root = document.getElementById("script-root");
     if (!root) return;
     if (jumps) {
-      jumps.innerHTML = parts.map(function (sec) {
-        return '<a href="#' + esc(sec.id) + '">' + esc(sec.title || "Part") + "</a>";
+      var marks = [
+        { id: "before", title: "Before" }
+      ].filter(function (m) {
+        return parts.some(function (sec) { return sec.id === m.id; });
+      });
+      jumps.innerHTML = marks.map(function (m) {
+        return '<a href="#' + esc(m.id) + '">' + esc(m.title) + "</a>";
       }).join("");
     }
-    root.innerHTML = "<h1>Speaker script</h1>"
-      + '<p class="lede">Paragraphs are what you say. Bullets are cues. Do not read the boards. Tap Here on the part you are on.</p>'
+    root.innerHTML = "<h1>What you say</h1>"
+      + '<p class="lede">One deck. Small cues in the notes say who talks. Mark Here on the bit you are on.</p>'
       + parts.map(function (sec) {
         var say = lines(sec.say, "p");
         var notes = lines(sec.notes, "li");
@@ -96,9 +101,7 @@
       var href = jumps[j].getAttribute("href") || "";
       jumps[j].setAttribute("aria-current", href === "#" + id ? "true" : "false");
     }
-    if (now) now.textContent = found
-      ? "Now: " + (found.querySelector("h2") || {}).textContent
-      : "Not marked yet. Tap Here on a part.";
+    if (now) now.textContent = "";
     state.here = id;
     if (store !== false) save(state);
   }

@@ -8,6 +8,8 @@
   var prevBtn = document.getElementById("prev");
   var nextBtn = document.getElementById("next");
   var resetBtn = document.getElementById("reset");
+  var revealBtn = document.getElementById("reveal");
+  var revealed = {};
   var wipeBtn = document.getElementById("wipe");
   var liveBtn = document.getElementById("live");
   var handBtn = document.getElementById("hand");
@@ -28,6 +30,7 @@
     return location.origin + path;
   }
   function qrSrc(url) {
+    if (cfg().joinUrl && String(url) === String(cfg().joinUrl)) return "join-qr.svg";
     return "https://api.qrserver.com/v1/create-qr-code/?size=460x460&ecc=M&margin=8&data="
       + encodeURIComponent(url);
   }
@@ -101,7 +104,7 @@
       + "</div>"
       + '<p class="wait-kicker">You\'re in</p>'
       + "<h1>" + esc(first || "Hold") + "</h1>"
-      + '<p class="lede">Waiting for the room to start...</p>'
+      + '<p class="lede">The room has not started.</p>'
       + '<div class="hold-peers" id="hold-peers">' + holdPeersInner() + "</div>"
       + '<button type="button" class="not-you" id="not-you">Not you?</button>'
       + "</div>";
@@ -172,7 +175,7 @@
         + '<div class="check-you">'
         + '<div class="check-preview" id="preview">' + Roster.faceHtml(preview, draft.name) + "</div>"
         + "<div><p class=\"who-name\">" + esc(Roster.firstName(draft.name)) + "</p>"
-        + '<p class="who-hint">Change it, or tap I\'m here.</p></div>'
+        + '<p class="who-hint">Change the picture if you want, then tap I\'m here.</p></div>'
         + "</div>"
         + '<div class="faces" id="faces">'
         + Roster.faces.map(function (f) {
@@ -189,7 +192,7 @@
         + '<p class="wait-kicker">' + esc(brand()) + "</p>"
         + "<h1>Who are you?</h1>"
         + '<label class="sr" for="find">' + (emptyList ? "Your name" : "Find your name") + "</label>"
-        + '<input class="find" id="find" type="' + (emptyList ? "text" : "search") + '" enterkeyhint="' + (emptyList ? "done" : "search") + '" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="' + (emptyList ? "Type your name" : "Find your name") + '" value="' + esc(emptyList ? (draft.name || "") : draft.q) + '">'
+        + '<input class="find" id="find" type="' + (emptyList ? "text" : "search") + '" enterkeyhint="' + (emptyList ? "done" : "search") + '" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="' + (emptyList ? "Your name" : "Find your name") + '" value="' + esc(emptyList ? (draft.name || "") : draft.q) + '">'
         + '<div class="names" id="names">' + namesHtml() + "</div>"
         + (emptyList ? '<button type="button" class="seat-btn" id="use-typed">Continue</button>' : "");
     }
@@ -259,17 +262,34 @@
     });
   }
 
-  function render(i) {
+  function render(i, force) {
     var s = slides()[i];
     if (!s) return;
     var changed = i !== lastIndex;
+    var keepBoard = !force && !changed
+      && !document.body.classList.contains("is-waiting")
+      && !document.body.classList.contains("is-hold")
+      && !document.body.classList.contains("is-checkin")
+      && stage
+      && stage.querySelector("#drag-place, #drag-rank, #form, #choices, .thanks");
     lastIndex = i;
     document.body.classList.remove("is-waiting", "is-checkin", "is-checkin-name", "is-checkin-face", "is-hold");
     stage.classList.remove("hold");
     document.title = (isPres ? "Presenter · " : "") + (s.title || brand());
-    kicker.textContent = s.kicker || brand();
-    if (counter) counter.textContent = isPres ? String(i + 1) : ((i + 1) + " / " + slides().length);
+    if (kicker) {
+      kicker.textContent = "";
+      kicker.hidden = true;
+    }
+    paintBanner(s);
+    if (counter) {
+      var n = String(i + 1);
+      counter.textContent = isPres ? n : (n + " / " + slides().length);
+    }
     if (resetBtn) resetBtn.hidden = s.type !== "prompt";
+    if (revealBtn) {
+      revealBtn.hidden = s.type !== "prompt";
+      revealBtn.textContent = revealed[s.id] ? "Hide" : "Reveal";
+    }
     if (prevBtn) prevBtn.disabled = i === 0;
     if (nextBtn) nextBtn.disabled = i === slides().length - 1;
     stage.classList.toggle("prompt", s.type === "prompt");
@@ -283,16 +303,38 @@
     stage.classList.toggle("story", s.type === "story");
     stage.classList.toggle("points", s.type === "points");
     stage.classList.toggle("claims", s.type === "claims");
+    stage.classList.toggle("has-split", !!(s.claims || s.chart || s.stats || s.names));
+    stage.classList.toggle("has-drag", s.input === "rank" || s.input === "place");
     if (changed) {
       stage.classList.remove("fade");
       void stage.offsetWidth;
       stage.classList.add("fade");
+      var onFade = function () {
+        stage.classList.remove("fade");
+        stage.removeEventListener("animationend", onFade);
+      };
+      stage.addEventListener("animationend", onFade);
+      setTimeout(onFade, 360);
+    }
+    if (keepBoard) {
+      if (isPres && s.type === "prompt") {
+        paintResponses(s, i, DeckSync.getResponses(String(i)));
+        showViz(s);
+      }
+      paintMe();
+      paintHandBtn();
+      fitStage();
+      return;
     }
     stage.innerHTML = htmlFor(s, i);
     bind(s, i);
-    if (isPres && s.type === "prompt") paintResponses(s, i, DeckSync.getResponses(String(i)));
+    if (isPres && s.type === "prompt") {
+      paintResponses(s, i, DeckSync.getResponses(String(i)));
+      showViz(s);
+    }
     paintMe();
     paintHandBtn();
+    fitStage();
   }
 
   function seatedSig(list) {
@@ -314,6 +356,7 @@
   function seatedHtml() {
     if (!isPres) return "";
     var list = DeckSync.getSeats();
+    if (!list.length) return "";
     var sig = seatedSig(list);
     return '<div class="seated" id="seated">'
       + '<p class="seated-count">' + list.length + (list.length === 1 ? " here" : " here") + "</p>"
@@ -355,6 +398,156 @@
     return Math.abs(n) >= 1000 ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : String(n);
   }
 
+  function kickerHtml(s) {
+    if (!s || !s.kicker) return "";
+    return '<p class="slide-kicker">' + esc(s.kicker) + "</p>";
+  }
+
+  function paintBanner(s) {
+    var el = document.getElementById("uga-kicker");
+    if (el) el.textContent = (s && s.kicker) || "";
+    var bar = document.getElementById("from-class");
+    if (!bar) return;
+    var fc = s && s.fromClass;
+    if (!fc || !fc.body) {
+      bar.hidden = true;
+      bar.innerHTML = "";
+      return;
+    }
+    bar.hidden = false;
+    bar.innerHTML = (fc.week != null ? '<span class="from-class-week">Week ' + esc(fc.week) + "</span>" : "")
+      + '<span class="from-class-body">' + esc(fc.body) + "</span>";
+  }
+
+  function titleRuleHtml() {
+    return '<span class="title-rule" aria-hidden="true"></span>';
+  }
+
+  function scaleMark(n) {
+    var on = Number(n) || 0;
+    var bits = "";
+    var i;
+    for (i = 1; i <= 4; i++) {
+      bits += "<span" + (i <= on ? ' class="is-on"' : "") + ">" + i + "</span>";
+    }
+    return '<div class="score-steps" aria-hidden="true">' + bits + "</div>";
+  }
+
+  function fitMark(val) {
+    var n = Math.abs(parseFloat(val));
+    if (!isFinite(n)) n = 0;
+    var pct = Math.max(8, Math.min(100, n <= 1 ? n * 100 : n));
+    return '<div class="fit-meter" aria-hidden="true"><i style="width:' + pct + '%"></i></div>';
+  }
+
+  function figSplitHtml() {
+    return '<div class="fig-pane" aria-hidden="true">'
+      + '<div class="fig-split">'
+      + '<div class="fig-col wide"><span class="fig-track"><i style="height:78%"></i></span><em>7</em></div>'
+      + '<div class="fig-col mid"><span class="fig-track"><i style="height:28%"></i></span><em>2</em></div>'
+      + '<div class="fig-col is-on"><span class="fig-track"><i style="height:16%"></i></span><em>1</em></div>'
+      + "</div></div>";
+  }
+
+  function fitSplitHtml() {
+    return '<div class="fig-pane fit-pane" aria-hidden="true">'
+      + '<div class="fig-split">'
+      + '<div class="fig-col wide"><span class="fig-track"><i style="height:78%"></i></span><em>.56</em></div>'
+      + '<div class="fig-col"><span class="fig-track"><i style="height:14%"></i></span><em>.07</em></div>'
+      + '<div class="fig-col"><span class="fig-track"><i style="height:10%"></i></span><em>.01</em></div>'
+      + "</div></div>";
+  }
+
+  function revoltTilesHtml() {
+    return '<div class="revolt-tiles" aria-hidden="true">'
+      + '<div class="revolt-tile">'
+      + '<svg viewBox="0 0 54 36"><rect width="18" height="36" fill="#16324f"/><rect x="18" width="18" height="36" fill="#fffdf7"/><rect x="36" width="18" height="36" fill="#ba0c2f"/></svg>'
+      + "<b>France</b></div>"
+      + '<div class="revolt-tile">'
+      + '<svg viewBox="0 0 54 36"><rect width="54" height="12" fill="#fffdf7"/><rect y="12" width="54" height="12" fill="#16324f"/><rect y="24" width="54" height="12" fill="#ba0c2f"/></svg>'
+      + "<b>Russia</b></div>"
+      + '<div class="revolt-tile">'
+      + '<svg viewBox="0 0 54 36"><rect width="54" height="36" fill="#ba0c2f"/><polygon points="27,6 30,16 41,16 32,22 35,32 27,26 19,32 22,22 13,16 24,16" fill="#f3d89a"/></svg>'
+      + "<b>China</b></div>"
+      + "</div>";
+  }
+
+  function yearChartHtml() {
+    return '<div class="year-chart" aria-hidden="true">'
+      + '<div class="year-col"><b style="height:84%"></b><strong>84</strong><span>1955</span></div>'
+      + '<div class="year-col"><b style="height:8%"></b><strong>5</strong><span>1960</span></div>'
+      + '<div class="year-col is-on"><b style="height:12%"></b><strong>10</strong><span>1961</span></div>'
+      + "</div>";
+  }
+
+  function artHtml(s) {
+    if (!s) return "";
+    if (s.id === "ask") {
+      return '<div class="art-panel art-ask" aria-hidden="true">'
+        + '<svg viewBox="0 0 220 220">'
+        + '<rect x="28" y="18" width="130" height="170" rx="14" fill="#fffdf7"/>'
+        + '<rect x="48" y="42" width="90" height="10" rx="5" fill="#d5ddd0"/>'
+        + '<rect x="48" y="64" width="72" height="10" rx="5" fill="#d5ddd0"/>'
+        + '<rect x="48" y="86" width="82" height="10" rx="5" fill="#d5ddd0"/>'
+        + '<circle cx="168" cy="168" r="34" fill="#ba0c2f"/>'
+        + '<text x="168" y="182" text-anchor="middle" fill="#fffdf7" font-size="42" font-family="Oswald, sans-serif">?</text>'
+        + "</svg></div>";
+    }
+    if (s.id === "habit") {
+      return '<div class="art-panel art-habit" aria-hidden="true">'
+        + '<svg viewBox="0 0 220 220">'
+        + '<circle cx="28" cy="36" r="12" fill="#f3ead4"/><circle cx="62" cy="36" r="12" fill="#f3ead4"/>'
+        + '<circle cx="96" cy="36" r="12" fill="#f3ead4"/><circle cx="130" cy="36" r="12" fill="#f3ead4"/>'
+        + '<circle cx="164" cy="36" r="12" fill="#f3ead4"/><circle cx="198" cy="36" r="12" fill="#f3ead4"/>'
+        + '<rect x="46" y="78" width="128" height="64" rx="14" fill="none" stroke="#ba0c2f" stroke-width="5"/>'
+        + '<circle cx="82" cy="110" r="16" fill="#f3d89a"/><circle cx="138" cy="110" r="16" fill="#f3d89a"/>'
+        + '<circle cx="48" cy="192" r="10" fill="#8b93a0"/><circle cx="86" cy="192" r="10" fill="#8b93a0"/>'
+        + '<circle cx="124" cy="192" r="10" fill="#8b93a0"/><circle cx="162" cy="192" r="10" fill="#8b93a0"/>'
+        + "</svg></div>";
+    }
+    if (s.id === "close") {
+      return '<div class="art-panel art-close" aria-hidden="true">'
+        + '<svg viewBox="0 0 220 220">'
+        + '<rect x="12" y="10" width="196" height="60" rx="16" fill="#fffdf7"/>'
+        + '<rect x="12" y="80" width="196" height="60" rx="16" fill="#f3ead4"/>'
+        + '<rect x="12" y="150" width="196" height="60" rx="16" fill="#d5ddd0"/>'
+        + '<circle cx="52" cy="40" r="18" fill="#16324f"/>'
+        + '<circle cx="52" cy="110" r="18" fill="#16324f"/>'
+        + '<circle cx="52" cy="180" r="18" fill="#16324f"/>'
+        + '<path d="M44 40l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
+        + '<path d="M44 110l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
+        + '<path d="M44 180l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
+        + '<text x="82" y="48" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Labour</text>'
+        + '<text x="82" y="118" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Skocpol</text>'
+        + '<text x="82" y="188" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Chile</text>'
+        + "</svg></div>";
+    }
+    if (s.id === "chile") return yearChartHtml();
+    return "";
+  }
+
+  function windowHtml(kind, title, inner) {
+    if (!inner) return "";
+    return '<div class="ss-win ss-' + kind + '">'
+      + '<div class="ss-win-bar">'
+      + '<span class="ss-win-dots" aria-hidden="true"><i></i><i></i><i></i></span>'
+      + (title ? '<span class="ss-win-title">' + esc(title) + "</span>" : "")
+      + "</div>"
+      + '<div class="ss-win-body">' + inner + "</div></div>";
+  }
+
+  function fitStage() {
+    if (!stage) return;
+    stage.style.transform = "";
+    var room = stage.clientHeight;
+    var need = stage.scrollHeight;
+    if (room > 0 && need > room + 2) {
+      var scale = Math.max(0.68, room / need);
+      stage.style.transformOrigin = "top center";
+      stage.style.transform = "scale(" + scale + ")";
+    }
+  }
+
   function chartHtml(chart) {
     var bars = chart.bars || [];
     var max = Number(chart.max);
@@ -368,17 +561,108 @@
       return '<div class="chart-row">'
         + '<span class="chart-lab">' + esc(b.label) + "</span>"
         + '<div class="chart-track"><div class="chart-fill" style="width:' + pct + '%"></div></div>'
-        + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit === "% of agents examined" ? "%" : "") + "</span>"
+        + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit ? esc(chart.unit) : "") + "</span>"
         + "</div>";
     }).join("");
-    return '<figure class="chart" data-chart="' + esc(chart.id || "") + '">'
-      + "<figcaption>"
-      + '<p class="chart-title">' + esc(chart.title) + "</p>"
-      + (chart.source ? '<p class="chart-source">' + esc(chart.source) + "</p>" : "")
-      + (chart.note ? '<p class="chart-note">' + esc(chart.note) + "</p>" : "")
-      + "</figcaption>"
+    var fig = '<figure class="chart" data-chart="' + esc(chart.id || "") + '">'
+      + (chart.source || chart.note ? "<figcaption>"
+        + (chart.source ? '<p class="chart-source">' + esc(chart.source) + "</p>" : "")
+        + (chart.note ? '<p class="chart-note">' + esc(chart.note) + "</p>" : "")
+        + "</figcaption>" : "")
       + '<div class="chart-bars" role="img" aria-label="' + esc(chart.title) + '">' + rows + "</div>"
       + "</figure>";
+    return windowHtml("paper", chart.title || "Table", fig);
+  }
+
+  function claimBarsHtml(list) {
+    if (!list || !list.length) return "";
+    return '<ul class="claim-bars">' + list.map(function (pt) {
+      return "<li>"
+        + (pt.n ? '<p class="card-n"><span>' + esc(pt.n) + "</span></p>" : "")
+        + "<h2>" + esc(pt.title) + "</h2>"
+        + (pt.body ? "<p>" + esc(pt.body) + "</p>" : "")
+        + (pt.note ? '<p class="fn">' + esc(pt.note) + "</p>" : "")
+        + "</li>";
+    }).join("") + "</ul>";
+  }
+
+  function caseNamesHtml(list, id) {
+    if (!list || !list.length) return "";
+    if (id === "skocpol") return windowHtml("paper", "Cases", revoltTilesHtml());
+    return windowHtml("paper", "Cases", '<ul class="name-stack' + (id === "nics" ? " is-growers" : "") + '">' + list.map(function (n) {
+      return "<li>" + esc(n) + "</li>";
+    }).join("") + "</ul>");
+  }
+
+  function statsStackHtml(list, id) {
+    if (!list || !list.length) return "";
+    var extra = "";
+    if (id === "figure5") extra = figSplitHtml();
+    if (id === "fits") extra = fitSplitHtml();
+    return windowHtml("paper", "Scores", extra + '<div class="stats-stack">' + list.map(function (st) {
+      var mark = id === "scores" ? scaleMark(st.value) : "";
+      var val = id === "scores" ? "" : '<div class="value">' + esc(st.value) + "</div>";
+      return '<div class="stat' + (id === "scores" ? " is-scale" : "") + '">' + mark + val
+        + '<p class="label">' + esc(st.label) + "</p>"
+        + (st.source ? '<p class="source">' + esc(st.source) + "</p>" : "")
+        + "</div>";
+    }).join("") + "</div>");
+  }
+
+  function vizHtml(s) {
+    if (s.chart) return chartHtml(s.chart);
+    if (s.charts && s.charts[0]) return chartHtml(s.charts[0]);
+    if (s.stats) return statsStackHtml(s.stats, s.id);
+    if (s.names) return caseNamesHtml(s.names, s.id);
+    return "";
+  }
+
+  function rankHtml(s, withSend) {
+    var opts = s.options || [];
+    return '<div class="drag-rank" id="drag-rank">'
+      + '<ol class="rank-list">'
+      + opts.map(function (o, idx) {
+        return '<li data-opt="' + esc(o) + '"><span class="rank-n">' + (idx + 1) + '</span><span class="rank-lab">' + esc(o) + "</span></li>";
+      }).join("")
+      + "</ol>"
+      + (withSend ? '<button type="button" class="send" id="drag-send">Send</button>' : "")
+      + "</div>";
+  }
+
+  function placeHtml(s, withSend) {
+    var tokens = s.tokens || [];
+    var slots = s.slots || [];
+    return '<div class="drag-place" id="drag-place">'
+      + '<div class="token-tray" data-home="1">'
+      + tokens.map(function (t) {
+        return '<span class="token" data-token="' + esc(t) + '" tabindex="0">' + esc(t) + "</span>";
+      }).join("")
+      + "</div>"
+      + '<div class="slot-row">'
+      + slots.map(function (slot) {
+        return '<div class="slot" data-slot="' + esc(slot.id) + '"><p class="slot-lab">' + esc(slot.label) + '</p><div class="slot-well"><p class="slot-empty">Nothing here yet</p></div></div>';
+      }).join("")
+      + "</div>"
+      + (withSend ? '<button type="button" class="send" id="drag-send">Send</button>' : "")
+      + "</div>";
+  }
+
+  function dragHtml(s, withSend) {
+    if (s.input === "rank") return rankHtml(s, withSend);
+    if (s.input === "place") return placeHtml(s, withSend);
+    return "";
+  }
+
+  function splitHtml(s) {
+    var viz = vizHtml(s);
+    var bars = claimBarsHtml(s.claims);
+    var art = !viz ? artHtml(s) : "";
+    if (!viz && !bars && !art) return "";
+    return '<div class="split' + (viz ? " has-viz" : "") + (art ? " has-art" : "") + '">'
+      + (viz ? '<div class="split-viz">' + viz + "</div>" : "")
+      + (bars ? '<div class="split-side">' + bars + "</div>" : "")
+      + (art ? '<div class="split-art">' + art + "</div>" : "")
+      + "</div>";
   }
 
   function pairHtml(side, which) {
@@ -418,54 +702,62 @@
     if (s.type === "title") {
       var href = joinHref();
       var shown = href.replace(/^https:\/\//, "");
+      var seats = seatedHtml();
       var join = isPres
-        ? '<div class="join">'
+        ? '<div class="title-join-block">'
           + '<img class="join-qr" src="' + qrSrc(href) + '" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
-          + '<p class="join-url">' + esc(shown) + "</p>"
+          + '<p class="title-scan">Scan to join</p>'
+          + '<p class="title-join">' + esc(shown) + "</p>"
+          + (seats || "")
           + "</div>"
         : "";
-      var seated = isPres ? seatedHtml() : "";
-      return '<div class="title-copy">'
+      return '<div class="title-card">'
+        + '<div class="title-copy">'
+        + '<img class="uga-logo title-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158">'
+        + kickerHtml(s)
         + "<h1>" + esc(s.title) + "</h1>"
-        + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
-        + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
-        + agendaHtml(s)
-        + (s.speaker ? '<p class="speaker">' + esc(s.speaker) + "</p>" : "")
-        + quoteHtml(s.quote)
-        + articleHtml(s)
+        + titleRuleHtml()
+        + (s.byline ? '<p class="title-byline">' + esc(s.byline) + "</p>" : "")
+        + (s.presented ? '<p class="title-presented">' + esc(s.presented) + "</p>" : "")
         + "</div>"
-        + (isPres ? '<div class="title-side">' + join + seated + "</div>" : "");
+        + join
+        + "</div>";
     }
     if (s.type === "story") {
       var steps = (s.steps || []).map(function (st) {
         return '<li><span class="step-n">' + esc(st.n) + "</span>"
           + "<div><h2>" + esc(st.title) + "</h2><p>" + esc(st.body) + "</p></div></li>";
       }).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (steps ? '<ol class="steps">' + steps + "</ol>" : "")
         + quoteHtml(s.quote);
     }
     if (s.type === "points") {
       var n = (s.points || []).length;
-      var cols = n === 4 ? 4 : n === 2 ? 2 : 3;
+      var compact = s.layout === "grid" || n >= 10;
+      var cols = compact ? "compact" : (n === 4 ? 4 : n === 2 ? 2 : 3);
       var items = (s.points || []).map(function (pt) {
-        return "<li><h2>" + esc(pt.title) + "</h2><p>" + esc(pt.body) + "</p></li>";
+        var filled = String(pt.body || "").trim();
+        var body = filled || (isPres ? "[write here]" : "");
+        return "<li><h2>" + esc(pt.title) + "</h2>"
+          + (body ? "<p" + (filled ? "" : " class=\"empty\"") + ">" + esc(body) + "</p>" : "")
+          + "</li>";
       }).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
         + (items ? '<ul class="points cols-' + cols + '">' + items + "</ul>" : "")
+        + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + quoteHtml(s.quote);
     }
     if (s.type === "claims") {
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
-        + claimsHtml(s.claims)
-        + (s.chart ? chartHtml(s.chart) : "")
+        + splitHtml(s)
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + quoteHtml(s.quote);
     }
     if (s.type === "compare") {
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
         + '<div class="pair-row">' + pairHtml(s.left, "left") + pairHtml(s.right, "right") + "</div>"
         + (s.callout ? '<p class="callout">' + esc(s.callout) + "</p>" : "")
@@ -473,7 +765,7 @@
     }
     if (s.type === "charts") {
       var figs = (s.charts || []).map(chartHtml).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + '<div class="chart-grid">' + figs + "</div>";
     }
@@ -484,13 +776,13 @@
           + (st.source ? '<p class="source">' + esc(st.source) + "</p>" : "")
           + "</div>";
       }).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + '<div class="stats-grid">' + cards + "</div>"
         + (s.footer ? '<p class="footer-line">' + esc(s.footer) + "</p>" : "");
     }
     if (s.type === "content") {
       var body = (s.body || []).map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (body ? '<div class="body">' + body + "</div>" : "")
         + (s.callout ? '<p class="callout">' + esc(s.callout) + "</p>" : "")
         + quoteHtml(s.quote);
@@ -504,53 +796,219 @@
         return "<li>" + title + body + "</li>";
       }).join("") + "</ul>";
     }
-    var q = '<p class="dq-label">Discussion Question:</p>'
-      + "<h1>" + esc(s.title) + "</h1>"
+    var q = kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
+      + splitHtml(s)
       + quoteHtml(s.quote)
       + articleHtml(s)
       + recap
       + youHtml(s)
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "");
+    var askLine = s.ask ? '<p class="ask-q">' + esc(s.ask) + "</p>" : "";
+    var optPreview = (s.options && s.options.length && s.input !== "rank" && s.input !== "place")
+      ? '<ul class="talk opt-preview">' + s.options.map(function (o) {
+        return "<li>" + esc(o) + "</li>";
+      }).join("") + "</ul>"
+      : "";
+    if (isPres && (s.input === "place" || s.input === "rank")) {
+      return '<div class="ask">' + kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>" + "</div>"
+        + '<div class="split has-viz has-drag-main">'
+        + '<div class="split-viz">' + vizHtml(s) + "</div>"
+        + '<div class="split-side">'
+        + windowHtml("term", "The trays", dragHtml(s, false) + '<div id="viz"></div>')
+        + "</div></div>";
+    }
     if (isPres) {
-      return '<div class="ask">' + q + '</div><div id="viz"></div>';
+      return '<div class="ask">' + q + '</div><div class="ask-panel">'
+        + windowHtml("term", "Room", askLine + optPreview + '<div id="viz"></div>')
+        + "</div>";
     }
     var inner = q;
+    var panel = function (html) {
+      return inner + '<div class="ask-panel">' + askLine + html + "</div>";
+    };
     if (DeckSync.isDone(String(i))) {
-      return inner + '<p class="thanks">Sent. Wait for the next slide.</p>';
+      return panel('<p class="thanks">Sent. Wait for the next slide.</p>');
     }
     if (s.input === "text") {
-      return inner
-        + '<form class="answer" id="form">'
-        + '<label class="sr" for="ans">' + esc(s.placeholder || "Type your answer") + "</label>"
-        + '<textarea id="ans" required maxlength="800" placeholder="' + esc(s.placeholder || "Type your answer") + '"></textarea>'
-        + '<button class="send" type="submit">Send</button></form>';
+      return panel(
+        '<form class="answer" id="form">'
+        + '<label class="sr" for="ans">Your answer</label>'
+        + '<textarea id="ans" required maxlength="800" placeholder="Your answer"></textarea>'
+        + '<button class="send" type="submit">Send</button></form>'
+      );
     }
     if (s.input === "choice" || s.input === "scale") {
       var labs = s.scaleLabels || [];
-      return inner
-        + '<div class="choices ' + (s.input === "scale" ? "scale" : "") + '" id="choices">'
+      return panel(
+        '<div class="choices ' + (s.input === "scale" ? "scale" : "") + '" id="choices">'
         + (s.options || []).map(function (o) {
           return '<button type="button" data-choice="' + esc(o) + '">' + esc(o) + "</button>";
         }).join("")
         + "</div>"
-        + (labs.length ? '<div class="scale-labels"><span>' + esc(labs[0]) + "</span><span>" + esc(labs[1] || "") + "</span></div>" : "");
+        + (labs.length ? '<div class="scale-labels"><span>' + esc(labs[0]) + "</span><span>" + esc(labs[1] || "") + "</span></div>" : "")
+      );
     }
     if (s.input === "choice-text") {
-      return inner
-        + '<div class="choices" id="choices" tabindex="-1">'
+      return panel(
+        '<div class="choices" id="choices" tabindex="-1">'
         + (s.options || []).map(function (o) {
           return '<button type="button" data-choice="' + esc(o) + '">' + esc(o) + "</button>";
         }).join("")
         + "</div>"
         + '<form class="answer" id="form">'
-        + '<textarea id="ans" maxlength="800"' + (s.requireText ? " required" : "") + ' placeholder="' + esc(s.placeholder || "Optional: say why") + '"></textarea>'
-        + '<button class="send" type="submit">Send</button></form>';
+        + '<textarea id="ans" maxlength="800"' + (s.requireText ? " required" : "") + ' placeholder="' + esc((s.placeholder && s.placeholder !== "[write here]") ? s.placeholder : "Say why if you want") + '"></textarea>'
+        + '<button class="send" type="submit">Send</button></form>'
+      );
     }
-    return inner;
+    if (s.input === "rank" || s.input === "place") {
+      return panel(dragHtml(s, true));
+    }
+    return panel("");
+  }
+
+  function numberRanks(list) {
+    var items = list.querySelectorAll("[data-opt]");
+    for (var n = 0; n < items.length; n++) {
+      var mark = items[n].querySelector(".rank-n");
+      if (mark) mark.textContent = String(n + 1);
+    }
+  }
+
+  function bindRank(s, i, canSend) {
+    var list = document.querySelector("#drag-rank .rank-list");
+    if (!list) return;
+    var held = null;
+    function move(e) {
+      if (!held) return;
+      var over = document.elementFromPoint(e.clientX, e.clientY);
+      var li = over && over.closest("[data-opt]");
+      if (!li || li === held || !list.contains(li)) return;
+      var rect = li.getBoundingClientRect();
+      list.insertBefore(held, e.clientY < rect.top + rect.height / 2 ? li : li.nextSibling);
+      numberRanks(list);
+    }
+    function endDrag() {
+      if (!held) return;
+      held.classList.remove("is-dragging");
+      held = null;
+      numberRanks(list);
+    }
+    list.addEventListener("pointerdown", function (e) {
+      var li = e.target.closest("[data-opt]");
+      if (!li) return;
+      held = li;
+      li.classList.add("is-dragging");
+      try { li.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+    });
+    list.addEventListener("pointermove", move);
+    list.addEventListener("pointerup", endDrag);
+    list.addEventListener("pointercancel", endDrag);
+    var send = document.getElementById("drag-send");
+    if (send && canSend) {
+      send.addEventListener("click", function () {
+        var order = [].map.call(list.querySelectorAll("[data-opt]"), function (li) {
+          return li.getAttribute("data-opt");
+        });
+        if (!order.length) return;
+        submit(s, i, { choice: order[0], text: order.join(" > ") });
+      });
+    }
+  }
+
+  function bindPlace(s, i, canSend) {
+    var board = document.getElementById("drag-place");
+    if (!board) return;
+    var held = null;
+    var grabX = 0;
+    var grabY = 0;
+    var lastX = 0;
+    var lastY = 0;
+    function wellAt(x, y) {
+      var el = document.elementFromPoint(x, y);
+      if (!el || !board.contains(el)) return null;
+      var well = el.closest(".slot-well, .token-tray");
+      if (well) return well;
+      var slot = el.closest(".slot");
+      return slot ? slot.querySelector(".slot-well") : null;
+    }
+    function lift(tok, x, y) {
+      var rect = tok.getBoundingClientRect();
+      grabX = x - rect.left;
+      grabY = y - rect.top;
+      tok.classList.add("is-dragging");
+      tok.style.position = "fixed";
+      tok.style.left = rect.left + "px";
+      tok.style.top = rect.top + "px";
+      tok.style.width = rect.width + "px";
+      tok.style.zIndex = "20";
+      tok.style.pointerEvents = "none";
+    }
+    function follow(x, y) {
+      if (!held) return;
+      lastX = x;
+      lastY = y;
+      held.style.left = (x - grabX) + "px";
+      held.style.top = (y - grabY) + "px";
+    }
+    function drop(x, y) {
+      if (!held) return;
+      var well = wellAt(x, y) || wellAt(lastX, lastY);
+      held.classList.remove("is-dragging");
+      held.style.position = "";
+      held.style.left = "";
+      held.style.top = "";
+      held.style.width = "";
+      held.style.zIndex = "";
+      held.style.pointerEvents = "";
+      if (well) well.appendChild(held);
+      held = null;
+    }
+    board.addEventListener("pointerdown", function (e) {
+      var tok = e.target.closest(".token");
+      if (!tok) return;
+      held = tok;
+      lift(tok, e.clientX, e.clientY);
+      try { tok.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+    });
+    function onMove(e) {
+      if (!held) return;
+      follow(e.clientX, e.clientY);
+    }
+    board.addEventListener("pointermove", onMove);
+    board.addEventListener("pointerup", function (e) {
+      drop(e.clientX, e.clientY);
+    });
+    board.addEventListener("pointercancel", function () {
+      if (!held) return;
+      drop(-1, -1);
+    });
+    var send = document.getElementById("drag-send");
+    if (send && canSend) {
+      send.addEventListener("click", function () {
+        var slots = s.slots || [];
+        var rows = [];
+        var keySlot = "";
+        slots.forEach(function (slot) {
+          var well = board.querySelector('.slot[data-slot="' + slot.id + '"] .slot-well');
+          if (!well) return;
+          [].forEach.call(well.querySelectorAll(".token"), function (tok) {
+            var name = tok.getAttribute("data-token") || "";
+            rows.push(name + " → " + slot.label);
+            if (name === s.placeKey) keySlot = slot.label;
+          });
+        });
+        if (rows.length < (s.tokens || []).length) return;
+        submit(s, i, { choice: keySlot || rows[0], text: rows.join("; ") });
+      });
+    }
   }
 
   function bind(s, i) {
+    bindRank(s, i, !isPres);
+    bindPlace(s, i, !isPres);
     if (isPres) return;
     var form = document.getElementById("form");
     var choice = "";
@@ -620,7 +1078,7 @@
     remember(s.id, payload);
     DeckSync.submit(String(i), payload);
     DeckSync.markDone(String(i));
-    render(i);
+    render(i, true);
   }
 
   function wordFreq(list) {
@@ -648,17 +1106,17 @@
       list.forEach(function (r) { if (r.choice && counts[r.choice] != null) counts[r.choice]++; });
       var total = list.length;
       var max = Math.max(1, total);
-      html += '<p class="tally">' + (total ? total + (total === 1 ? " answer" : " answers") : "Waiting for votes") + "</p>";
+      if (total) {
+      html += '<p class="tally">' + (total ? total + (total === 1 ? " answer" : " answers") : "") + "</p>";
       html += '<div class="bars">';
       opts.forEach(function (o) {
         var n = counts[o] || 0;
-        var pct = total ? Math.round(n / total * 100) : 0;
-        var lead = n && n === Math.max.apply(null, opts.map(function (x) { return counts[x]; }));
-        html += '<div class="bar' + (lead && total ? " lead" : "") + '"><div class="bar-top"><span class="lab">' + esc(o) + '</span><span class="pct">' + pct + "%</span></div>"
+        html += '<div class="bar"><div class="bar-top"><span class="lab">' + esc(o) + "</span></div>"
           + '<div class="track"><div class="fill" style="width:' + (n / max * 100) + '%"></div></div>'
           + '<span class="n">' + n + "</span></div>";
       });
       html += "</div>";
+      }
     }
     if (s.viz === "words") {
       var freq = wordFreq(list);
@@ -675,7 +1133,7 @@
       if (!list.length) {
         if (s.viz !== "bars-list") {
           if (s.starters && s.starters.length) {
-            html += '<p class="tally">Waiting for answers</p>';
+            html += '<p class="tally"></p>';
             html += '<ul class="starters">' + s.starters.map(function (t) {
               return "<li>" + esc(t) + "</li>";
             }).join("") + "</ul>";
@@ -704,6 +1162,16 @@
       }
     }
     viz.innerHTML = html;
+    showViz(s);
+  }
+
+  function showViz(s) {
+    var viz = document.getElementById("viz");
+    if (!viz) return;
+    var show = !!(s && revealed[s.id] && viz.innerHTML.trim());
+    viz.classList.toggle("is-hidden", !show);
+    var win = viz.closest(".ss-win");
+    if (win) win.classList.toggle("has-answers", show);
   }
 
   function paintMe() {
@@ -898,7 +1366,7 @@
         paintFullScreen();
         return;
       }
-      var board = document.querySelector(".role-pres .board") || document.documentElement;
+      var board = document.getElementById("app") || document.documentElement;
       Promise.resolve(enterFullScreen(board)).then(paintFullScreen).catch(function () {
         return Promise.resolve(enterFullScreen(document.documentElement)).then(paintFullScreen).catch(function () {
           document.body.classList.add("is-fs", "is-fs-fallback");
@@ -959,7 +1427,8 @@
     var joinChip = document.getElementById("join-chip");
     if (joinChip) {
       var href = joinHref();
-      joinChip.textContent = href.replace(/^https:\/\//, "");
+      joinChip.textContent = "Join";
+      joinChip.title = href.replace(/^https:\/\//, "");
     }
 
     if (liveBtn) liveBtn.addEventListener("click", function () {
@@ -1077,6 +1546,8 @@
     if (!s || s.type !== "prompt") return;
     if (isPres) {
       paintResponses(s, i, list);
+      showViz(s);
+      fitStage();
       return;
     }
     if (!DeckSync.isDone(String(i)) && stage.querySelector(".thanks")) render(i);
@@ -1106,6 +1577,13 @@
     if (prevBtn) prevBtn.addEventListener("click", function () { go(DeckSync.getSlide() - 1); });
     if (nextBtn) nextBtn.addEventListener("click", function () { go(DeckSync.getSlide() + 1); });
     if (resetBtn) resetBtn.addEventListener("click", function () { DeckSync.reset(String(DeckSync.getSlide())); });
+    if (revealBtn) revealBtn.addEventListener("click", function () {
+      var s = slides()[DeckSync.getSlide()];
+      if (!s || s.type !== "prompt") return;
+      revealed[s.id] = !revealed[s.id];
+      revealBtn.textContent = revealed[s.id] ? "Hide" : "Reveal";
+      showViz(s);
+    });
     if (wipeBtn) wipeBtn.addEventListener("click", function () {
       if (confirm("Clear every answer from this session?")) DeckSync.wipe();
     });
@@ -1178,6 +1656,7 @@
     }
   }
   bindReading();
+  window.addEventListener("resize", fitStage);
   document.addEventListener("deck-content", function () {
     if (!unlocked()) return;
     var n = DeckSync.getSlide();

@@ -4,6 +4,21 @@
   var KEY = "deck-content";
   var ch = null;
 
+  var PREFER_KEY = "deck-use-file-slides";
+
+  function preferFiles() {
+    try {
+      var v = localStorage.getItem(PREFER_KEY);
+      if (v === "0") return false;
+      if (v === "1") return true;
+    } catch (e) {}
+    return !(global.DECK && DECK.useFileSlides === false);
+  }
+
+  function setPreferFiles(on) {
+    try { localStorage.setItem(PREFER_KEY, on ? "1" : "0"); } catch (e) {}
+  }
+
   function queryRoom() {
     try {
       var q = new URLSearchParams(location.search).get("room");
@@ -31,8 +46,10 @@
     }
     var qRoom = queryRoom();
     if (qRoom && global.DECK) global.DECK.room = qRoom;
-    if (data.slides && data.slides.length) global.SLIDES = data.slides;
-    if (data.script && data.script.length) global.SCRIPT = data.script;
+    if (!preferFiles()) {
+      if (data.slides && data.slides.length) global.SLIDES = data.slides;
+      if (data.script && data.script.length) global.SCRIPT = data.script;
+    }
     if (data.names && global.Roster && Roster.setNames) Roster.setNames(data.names);
     ping();
   }
@@ -49,6 +66,8 @@
   }
 
   function openChannel() {
+    if (typeof BroadcastChannel !== "function") return;
+    if (typeof process !== "undefined" && process.versions && process.versions.node) return;
     var room = String((global.DECK && DECK.room) || "session").replace(/[^a-zA-Z0-9_-]/g, "");
     try {
       ch = new BroadcastChannel("deck-" + room);
@@ -81,7 +100,7 @@
   apply(data);
   openChannel();
 
-  if (!data) {
+  if (!data && !preferFiles()) {
     fetch("session.json", { cache: "no-store" }).then(function (r) {
       if (!r.ok) return null;
       return r.json();
@@ -93,6 +112,9 @@
 
   global.DeckContent = {
     key: KEY,
+    preferKey: PREFER_KEY,
+    preferFiles: preferFiles,
+    setPreferFiles: setPreferFiles,
     read: read,
     apply: apply,
     save: function (next) {
