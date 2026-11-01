@@ -515,39 +515,20 @@ button { cursor: pointer; }
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
 }
 .role-pres .stage.title .title-copy {
-  justify-content: flex-start;
+  justify-content: center;
   background: #fff;
   border: 0;
   border-radius: var(--radius);
-  padding: 26px 32px 22px;
+  padding: 38px 40px;
 }
 .title-logo {
   display: block;
-  width: min(20rem, 72%);
+  width: min(22rem, 78%);
   height: auto;
-  margin: 0 0 0.85rem;
-}
-.idea-art {
-  margin-top: auto;
-  flex: 1 1 auto;
-  width: 100%;
-  max-width: none;
-  min-height: 7.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--tile-cream);
-  border-radius: 16px;
-  padding: 0.85rem 1rem;
-}
-.idea-art svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 9.5rem;
+  margin: 0 0 1.15rem;
 }
 .role-pres .title-copy h1,
 .role-pres .title-copy .lede,
@@ -591,15 +572,15 @@ button { cursor: pointer; }
 .title-bento-cream { background: var(--tile-cream); color: var(--ink); }
 .title-bento-sage { background: var(--tile-sage); color: var(--ink); }
 .role-pres .stage.title h1 {
-  max-width: 15ch;
-  font-size: clamp(38px, 6.2vh, 60px);
-  margin: 0 0 18px;
+  max-width: 14ch;
+  font-size: clamp(44px, 7.4vh, 72px);
+  margin: 0 0 22px;
   text-wrap: balance;
-  line-height: 1.06;
+  line-height: 1.04;
 }
 .title-byline {
-  margin: 0 0 1.1rem;
-  font-size: clamp(20px, 2.3vh, 24px);
+  margin: 0 0 1.35rem;
+  font-size: clamp(21px, 2.5vh, 26px);
   line-height: 1.4;
   color: var(--ink);
   max-width: 36ch;
@@ -1822,7 +1803,6 @@ button { cursor: pointer; }
   .split-art { display: none; }
   .grower-dots { padding-bottom: 0.3rem; }
   .fig-split { height: 6.2rem; }
-  .idea-art { min-height: 5.4rem; padding: 0.55rem 0.7rem; }
   .map-pills span,
   .deco-scale span,
   .deco-years span,
@@ -2111,17 +2091,17 @@ button { cursor: pointer; }
   display: flex;
   align-items: stretch;
   gap: 0.7rem;
-  height: 8.4rem;
+  height: 8.8rem;
   margin: 0;
-  padding: 0;
-  border-bottom: 2px solid var(--navy);
+  padding: 0 0 0.15rem;
+  border-bottom: 0;
 }
 .fig-col {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.55rem;
   min-width: 0;
   height: 100%;
   flex: 1;
@@ -2134,6 +2114,8 @@ button { cursor: pointer; }
   width: 100%;
   display: flex;
   align-items: flex-end;
+  border-bottom: 2px solid var(--navy);
+  padding-bottom: 2px;
 }
 .fig-col i {
   display: block;
@@ -3210,7 +3192,6 @@ button { cursor: pointer; }
   border-radius: var(--radius);
   padding: 22px 22px 24px;
 }
-.role-part .idea-art { max-width: 18rem; }
 .role-part .title-logo {
   width: min(16rem, 86%);
   margin-bottom: 0.9rem;

@@ -480,22 +480,6 @@
       + "</div>";
   }
 
-  function ideaArtHtml() {
-    return '<div class="idea-art" aria-hidden="true">'
-      + '<svg viewBox="0 0 420 150">'
-      + '<rect x="14" y="34" width="46" height="62" rx="9" fill="#f3d89a"/>'
-      + '<rect x="68" y="34" width="46" height="62" rx="9" fill="#f3d89a"/>'
-      + '<rect x="132" y="42" width="42" height="46" rx="9" fill="#d6d2c4"/>'
-      + '<rect x="182" y="42" width="42" height="46" rx="9" fill="#d6d2c4"/>'
-      + '<rect x="232" y="42" width="42" height="46" rx="9" fill="#d6d2c4"/>'
-      + '<rect x="8" y="24" width="114" height="82" rx="14" fill="none" stroke="#ba0c2f" stroke-width="5"/>'
-      + '<path d="M128 116H292" stroke="#16324f" stroke-width="4"/>'
-      + '<path d="M276 104l18 12-18 12" fill="none" stroke="#16324f" stroke-width="4"/>'
-      + '<rect x="308" y="38" width="96" height="70" rx="14" fill="#16324f"/>'
-      + '<circle cx="356" cy="73" r="14" fill="#f3d89a"/>'
-      + "</svg></div>";
-  }
-
   function artHtml(s) {
     if (!s) return "";
     if (s.id === "ask") {
@@ -512,11 +496,11 @@
     if (s.id === "habit") {
       return '<div class="art-panel art-habit" aria-hidden="true">'
         + '<svg viewBox="0 0 220 220">'
-        + '<circle cx="30" cy="36" r="12" fill="#f3ead4"/><circle cx="64" cy="36" r="12" fill="#f3ead4"/>'
-        + '<circle cx="98" cy="36" r="12" fill="#f3ead4"/><circle cx="132" cy="36" r="12" fill="#f3ead4"/>'
-        + '<circle cx="166" cy="36" r="12" fill="#f3ead4"/><circle cx="190" cy="36" r="12" fill="#f3ead4"/>'
-        + '<rect x="52" y="78" width="116" height="64" rx="14" fill="none" stroke="#ba0c2f" stroke-width="5"/>'
-        + '<circle cx="86" cy="110" r="16" fill="#f3d89a"/><circle cx="134" cy="110" r="16" fill="#f3d89a"/>'
+        + '<circle cx="28" cy="36" r="12" fill="#f3ead4"/><circle cx="62" cy="36" r="12" fill="#f3ead4"/>'
+        + '<circle cx="96" cy="36" r="12" fill="#f3ead4"/><circle cx="130" cy="36" r="12" fill="#f3ead4"/>'
+        + '<circle cx="164" cy="36" r="12" fill="#f3ead4"/><circle cx="198" cy="36" r="12" fill="#f3ead4"/>'
+        + '<rect x="46" y="78" width="128" height="64" rx="14" fill="none" stroke="#ba0c2f" stroke-width="5"/>'
+        + '<circle cx="82" cy="110" r="16" fill="#f3d89a"/><circle cx="138" cy="110" r="16" fill="#f3d89a"/>'
         + '<circle cx="48" cy="192" r="10" fill="#8b93a0"/><circle cx="86" cy="192" r="10" fill="#8b93a0"/>'
         + '<circle cx="124" cy="192" r="10" fill="#8b93a0"/><circle cx="162" cy="192" r="10" fill="#8b93a0"/>'
         + "</svg></div>";
@@ -533,6 +517,9 @@
         + '<path d="M44 40l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
         + '<path d="M44 110l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
         + '<path d="M44 180l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
+        + '<text x="82" y="48" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Labour</text>'
+        + '<text x="82" y="118" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Skocpol</text>'
+        + '<text x="82" y="188" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Chile</text>'
         + "</svg></div>";
     }
     if (s.id === "chile") return yearChartHtml();
@@ -733,7 +720,6 @@
         + titleRuleHtml()
         + (s.byline ? '<p class="title-byline">' + esc(s.byline) + "</p>" : "")
         + (s.presented ? '<p class="title-presented">' + esc(s.presented) + "</p>" : "")
-        + ideaArtHtml()
         + "</div>"
         + (isPres ? '<div class="title-side">' + join + "</div>" : "");
     }
