@@ -42,7 +42,6 @@
     if (!inner) return "";
     return '<div class="ss-win ss-' + kind + '">'
       + '<div class="ss-win-bar">'
-      + '<span class="ss-win-lights" aria-hidden="true"><i></i><i></i><i></i></span>'
       + (title ? '<span class="ss-win-title">' + esc(title) + "</span>" : "")
       + "</div>"
       + '<div class="ss-win-body">' + inner + "</div>"
@@ -195,9 +194,9 @@
         + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
         + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
         + agendaHtml(s)
-        + claimBarsHtml(s.claims)
         + quoteHtml(s.quote)
         + articleHtml(s)
+        + claimBarsHtml(s.claims)
         + "</div>";
     }
     if (s.type === "story") {
@@ -255,6 +254,14 @@
         + '<div class="stats-grid">' + cards + "</div>"
         + (s.footer ? '<p class="footer-line">' + esc(s.footer) + "</p>" : "");
     }
+    if (s.input === "place" || s.input === "rank") {
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
+        + '<div class="split has-viz has-drag-main">'
+        + '<div class="split-viz">' + vizHtml(s) + "</div>"
+        + '<div class="split-side">'
+        + windowHtml("term", "What do the five give you", dragTalk(s))
+        + "</div></div>";
+    }
     return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + splitHtml(s)
@@ -282,7 +289,7 @@
         + "</div>"
         + '<div class="slot-row">'
         + (s.slots || []).map(function (slot) {
-          return '<div class="slot" data-slot="' + esc(slot.id) + '"><p class="slot-lab">' + esc(slot.label) + '</p><div class="slot-well"></div></div>';
+          return '<div class="slot" data-slot="' + esc(slot.id) + '"><p class="slot-lab">' + esc(slot.label) + '</p><div class="slot-well"><p class="slot-empty">Nothing here yet</p></div></div>';
         }).join("")
         + "</div></div>";
     }
@@ -425,7 +432,7 @@
     if (counter) counter.textContent = String(i + 1);
     if (prevBtn) prevBtn.disabled = i === 0;
     if (nextBtn) nextBtn.disabled = i === slides().length - 1;
-    stage.className = "stage fade";
+    stage.className = "stage";
     stage.classList.toggle("prompt", s.type === "prompt");
     stage.classList.toggle("has-recap", !!(s.recap && s.recap.length));
     stage.classList.toggle("has-close", s.type === "prompt" && !!s.quote);
@@ -442,6 +449,12 @@
       stage.classList.remove("fade");
       void stage.offsetWidth;
       stage.classList.add("fade");
+      var onFade = function () {
+        stage.classList.remove("fade");
+        stage.removeEventListener("animationend", onFade);
+      };
+      stage.addEventListener("animationend", onFade);
+      setTimeout(onFade, 360);
     }
     if (changed || !stage.innerHTML) {
       stage.innerHTML = htmlFor(s);

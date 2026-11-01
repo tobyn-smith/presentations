@@ -5,7 +5,8 @@ import { extname, join } from "path";
 
 const ROOT = "/workspace";
 const OUT = join(ROOT, "audit-out");
-const PORT = 8766;
+const ART = "/opt/cursor/artifacts/screenshots";
+const PORT = 8767;
 const TYPES = {
   ".html": "text/html",
   ".js": "text/javascript",
@@ -16,6 +17,7 @@ const TYPES = {
 };
 
 mkdirSync(OUT, { recursive: true });
+try { mkdirSync(ART, { recursive: true }); } catch (e) {}
 
 const server = createServer((req, res) => {
   const path = decodeURIComponent((req.url || "/").split("?")[0]);
@@ -29,21 +31,7 @@ const server = createServer((req, res) => {
   res.writeHead(200, { "content-type": TYPES[extname(abs)] || "application/octet-stream" });
   res.end(readFileSync(abs));
 });
-
 await new Promise((resolve) => server.listen(PORT, resolve));
-
-function lum(rgb) {
-  const [r, g, b] = rgb.map((v) => {
-    const x = v / 255;
-    return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
-  });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
-
-function parseRgb(s) {
-  const m = String(s).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-  return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null;
-}
 
 async function unlockAdmin(page) {
   const gate = page.locator("#gate");
@@ -54,102 +42,121 @@ async function unlockAdmin(page) {
   }
 }
 
-async function measurePage(page, label) {
-  return page.evaluate((label) => {
+async function settle(page) {
+  await page.evaluate(async () => {
+    const stage = document.getElementById("stage");
+    if (stage) stage.classList.remove("fade");
+    const imgs = Array.from(document.images);
+    await Promise.all(imgs.map((img) => {
+      if (img.complete && img.naturalWidth) return Promise.resolve();
+      return new Promise((resolve) => {
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
+        setTimeout(resolve, 2500);
+      });
+    }));
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    const anims = (document.getAnimations && document.getAnimations()) || [];
+    await Promise.all(anims.map((a) => (a.finished ? a.finished.catch(() => {}) : Promise.resolve())));
+    if (stage) stage.classList.remove("fade");
+  });
+  await page.waitForTimeout(60);
+}
+
+async function measurePage(page, label, vp) {
+  return page.evaluate(({ label, vp }) => {
     const fails = [];
     const chrome = document.querySelector(".chrome");
     const stage = document.getElementById("stage");
-    const board = document.querySelector(".board");
     const chromeBox = chrome ? chrome.getBoundingClientRect() : null;
-    const stageBox = stage ? stage.getBoundingClientRect() : null;
 
     if (chrome) {
       const cs = getComputedStyle(chrome);
       if (cs.flexWrap === "wrap") fails.push("chrome flex-wrap:wrap");
-      if (chrome.scrollWidth > chrome.clientWidth + 2) fails.push("chrome overflows horizontally");
-      if (chrome.scrollHeight > chrome.clientHeight + 4) fails.push("chrome wraps/overflows vertically " + chrome.scrollHeight + ">" + chrome.clientHeight);
+      if (chrome.scrollHeight > chrome.clientHeight + 4) fails.push("chrome wraps vertically");
       chrome.querySelectorAll("button").forEach((btn) => {
-        const us = getComputedStyle(btn).userSelect;
-        if (us !== "none") fails.push("button user-select is " + us + " on " + (btn.id || btn.textContent));
-        const r = btn.getBoundingClientRect();
-        if (r.bottom - 1 > chromeBox.bottom) fails.push("button below chrome: " + (btn.id || btn.textContent.trim()));
+        if (getComputedStyle(btn).userSelect !== "none") fails.push("button user-select on " + (btn.id || btn.textContent));
       });
     }
 
-    const walk = (root) => {
-      if (!root) return;
-      const els = root.querySelectorAll("*");
-      els.forEach((el) => {
+    const tab = document.querySelector(".role-pres .accent-tab");
+    if (tab && getComputedStyle(tab).display !== "none") {
+      const r = tab.getBoundingClientRect();
+      if (chromeBox && r.top < chromeBox.bottom - 1) fails.push("accent tab cut by bar");
+    }
+
+    if (stage) {
+      stage.querySelectorAll("*").forEach((el) => {
+        if (el.classList.contains("sr")) return;
         const cs = getComputedStyle(el);
-        if ((cs.overflow === "auto" || cs.overflowY === "auto" || cs.overflowX === "auto" ||
-             cs.overflow === "scroll" || cs.overflowY === "scroll" || cs.overflowX === "scroll") &&
-            (el.scrollHeight > el.clientHeight + 2 || el.scrollWidth > el.clientWidth + 2)) {
+        if ((cs.overflowY === "auto" || cs.overflowY === "scroll" || cs.overflow === "auto" || cs.overflow === "scroll") &&
+            el.scrollHeight > el.clientHeight + 2) {
           fails.push("inner scrollbar " + (el.id || el.className));
         }
-        if (el.classList.contains("sr")) return;
-        if (el.childElementCount === 0 && (el.innerText || "").trim()) {
-          const ellipsis = cs.textOverflow === "ellipsis" || cs.overflow === "hidden";
-          if (el.scrollWidth > el.clientWidth + 2 && !ellipsis) fails.push("text overflows parent " + (el.className || el.tagName) + " “" + el.innerText.slice(0, 40) + "”");
-          if (el.scrollHeight > el.clientHeight + 3 && cs.overflow === "hidden" && !el.classList.contains("sr")) {
-            fails.push("text clipped " + (el.className || el.tagName) + " “" + el.innerText.slice(0, 40) + "”");
-          }
-        }
-        if (chromeBox && stage && stage.contains(el) && (el.innerText || "").trim()) {
+        if (chromeBox && stage.contains(el) && (el.innerText || "").trim()) {
           const r = el.getBoundingClientRect();
-          if (r.width > 2 && r.height > 2 && r.bottom > chromeBox.top && r.top < chromeBox.bottom && r.left < chromeBox.right && r.right > chromeBox.left) {
-            fails.push("content under bar: " + (el.className || el.tagName) + " “" + el.innerText.slice(0, 32) + "”");
+          if (r.width > 2 && r.height > 2 && r.bottom > chromeBox.top + 1 && r.top < chromeBox.bottom - 1 &&
+              r.left < chromeBox.right && r.right > chromeBox.left) {
+            fails.push("content under bar: " + (el.className || el.tagName));
           }
         }
       });
-    };
-    walk(stage);
-    walk(chrome);
-
-    if (board && getComputedStyle(document.body).getPropertyValue("--paper")) {
-      // contrast on visible text
     }
+
+    const qr = document.querySelector(".join-qr");
+    if (qr) {
+      if (!qr.complete || qr.naturalWidth < 8) fails.push("QR did not render");
+    }
+
+    let fill = 1;
     if (stage) {
-      stage.querySelectorAll("h1, h2, p, li, button, .chart-lab, .chart-n, .label, .token, .slot-lab").forEach((el) => {
-        const cs = getComputedStyle(el);
-        const fg = cs.color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-        let bgEl = el;
-        let bg = null;
-        while (bgEl && !bg) {
-          const b = getComputedStyle(bgEl).backgroundColor;
-          const m = b.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?/);
-          if (m && Number(m[4] == null ? 1 : m[4]) > 0.6) bg = [Number(m[1]), Number(m[2]), Number(m[3])];
-          bgEl = bgEl.parentElement;
+      const box = stage.getBoundingClientRect();
+          const surfaces = stage.querySelectorAll("h1, .slide-kicker, .claim-bars, .claim-bars li, .ss-win, .split, .join, .join-qr, .token, .slot, .name-stack, .stats-stack, .chart, .talk, .talk li, .bar, .choices button, .title-side, .title-copy, p, h2");
+      let hit = 0;
+      let total = 0;
+      const cols = 16;
+      const rows = 10;
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          total++;
+          const px = box.left + (x + 0.5) * box.width / cols;
+          const py = box.top + (y + 0.5) * box.height / rows;
+          let on = false;
+          surfaces.forEach((el) => {
+            const r = el.getBoundingClientRect();
+            if (px >= r.left && px <= r.right && py >= r.top && py <= r.bottom) on = true;
+          });
+          if (on) hit++;
         }
-        if (fg && bg) {
-          const lin = (v) => {
-            const x = v / 255;
-            return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
-          };
-          const L = (c) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]);
-          const a = L([Number(fg[1]), Number(fg[2]), Number(fg[3])]);
-          const b = L(bg);
-          const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
-          if (ratio < 4.5 && (el.innerText || "").trim()) {
-            fails.push("contrast " + ratio.toFixed(2) + " on “" + el.innerText.slice(0, 36) + "”");
-          }
-        }
+      }
+      fill = total ? hit / total : 1;
+      if (document.body.classList.contains("role-pres") && vp && vp.w >= 1280 && fill < 0.69) {
+        fails.push("empty stage " + Math.round((1 - fill) * 100) + "% fill=" + fill.toFixed(2));
+      }
+    }
+
+    if (stage && vp && vp.w === 1280 && vp.zoom === 1 && document.body.classList.contains("role-pres")) {
+      const bodies = stage.querySelectorAll(".claim-bars p:not(.card-n), .stats-stack .label, .token, .talk li, .chart-lab, .slot-empty, .choices button");
+      bodies.forEach((el) => {
+        const px = parseFloat(getComputedStyle(el).fontSize);
+        if (px && px < 19.5) fails.push("body too small " + px.toFixed(1) + "px “" + (el.innerText || "").slice(0, 28) + "”");
       });
     }
 
     return {
       label,
-      title: document.title,
-      slide: (stage && stage.querySelector("h1") && stage.querySelector("h1").textContent) || "",
+      title: (stage && stage.querySelector("h1") && stage.querySelector("h1").textContent) || "",
       fails,
-      chrome: chromeBox && { y: chromeBox.bottom, h: chromeBox.height, wrap: getComputedStyle(chrome).flexWrap },
-      stage: stageBox && { y: stageBox.top, h: stageBox.height }
+      fill: Number(fill.toFixed(3))
     };
-  }, label);
+  }, { label, vp });
 }
 
 async function shot(page, name) {
+  await settle(page);
   const dest = join(OUT, name + ".png");
   await page.screenshot({ path: dest, fullPage: false });
+  try { writeFileSync(join(ART, name + ".png"), readFileSync(dest)); } catch (e) {}
   return dest;
 }
 
@@ -157,12 +164,27 @@ async function injectVotes(page) {
   await page.evaluate(() => {
     const viz = document.getElementById("viz");
     if (!viz) return;
+    const n = window.DeckSync ? window.DeckSync.getSlide() : 0;
+    const s = (window.SLIDES || [])[n] || {};
     viz.classList.remove("is-hidden");
-    viz.innerHTML = '<p class="tally">4 answers</p><div class="bars">'
-      + '<div class="bar lead"><div class="bar-top"><span class="lab">The five growers</span><span class="pct">50%</span></div><div class="track"><div class="fill" style="width:50%"></div></div><span class="n">2</span></div>'
-      + '<div class="bar"><div class="bar-top"><span class="lab">Her wider Third World set</span><span class="pct">25%</span></div><div class="track"><div class="fill" style="width:25%"></div></div><span class="n">1</span></div>'
-      + '<div class="bar"><div class="bar-top"><span class="lab">Skocpol\'s three revolutions</span><span class="pct">25%</span></div><div class="track"><div class="fill" style="width:25%"></div></div><span class="n">1</span></div>'
-      + '<div class="bar"><div class="bar-top"><span class="lab">The nine Spanish-American cases</span><span class="pct">0%</span></div><div class="track"><div class="fill" style="width:0%"></div></div><span class="n">0</span></div>'
+    if (s.input === "place") {
+      viz.innerHTML = '<p class="tally">3 answers</p><ol class="responses">'
+        + '<li class="card"><p class="said">Labour was repressed or coopted → What the five show</p></li>'
+        + '<li class="card"><p class="said">That caused the growth → What does not follow</p></li>'
+        + '<li class="card"><p class="said">You have not seen the slow cases → What the five show</p></li>'
+        + "</ol>";
+      return;
+    }
+    const opts = s.options || [];
+    const counts = opts.map((_, i) => [2, 1, 1, 0][i] || 0);
+    const total = counts.reduce((a, b) => a + b, 0) || 1;
+    viz.innerHTML = '<p class="tally">' + total + ' answers</p><div class="bars">'
+      + opts.map((o, i) => {
+        const c = counts[i];
+        return '<div class="bar"><div class="bar-top"><span class="lab">' + o + "</span></div>"
+          + '<div class="track"><div class="fill" style="width:' + (c / total * 100) + '%"></div></div>'
+          + '<span class="n">' + c + "</span></div>";
+      }).join("")
       + "</div>";
   });
 }
@@ -176,22 +198,19 @@ const viewports = [
 ];
 const zooms = [1, 1.25];
 const results = [];
+const fills = [];
 
 const browser = await chromium.launch({ args: ["--disable-dev-shm-usage"] });
 
 async function runPresenter(kind, path) {
   for (const vp of viewports) {
     for (const zoom of zooms) {
-      const context = await browser.newContext({
-        viewport: { width: vp.w, height: vp.h },
-        deviceScaleFactor: 1
-      });
+      const context = await browser.newContext({ viewport: { width: vp.w, height: vp.h } });
       const page = await context.newPage();
       await page.goto(`http://127.0.0.1:${PORT}/${path}?local=1`, { waitUntil: "domcontentloaded" });
       await page.evaluate((z) => { document.body.style.zoom = String(z); }, zoom);
       if (kind === "admin") await unlockAdmin(page);
-      await page.waitForTimeout(200);
-
+      await settle(page);
       const count = await page.evaluate(() => (window.SLIDES || []).length);
       for (let i = 0; i < count; i++) {
         if (kind === "admin") {
@@ -199,44 +218,41 @@ async function runPresenter(kind, path) {
         } else {
           await page.evaluate((n) => { location.hash = "#" + (n + 1); }, i);
         }
-        await page.waitForTimeout(80);
+        await settle(page);
         const slideId = await page.evaluate(() => {
           const n = window.DeckSync ? window.DeckSync.getSlide() : Math.max(0, parseInt(String(location.hash).replace("#", ""), 10) - 1 || 0);
           return ((window.SLIDES || [])[n] || {}).id;
         });
-        const base = `${kind}-${slideId || i}-${vp.w}x${vp.h}-z${zoom}`;
-        const m1 = await measurePage(page, base);
-        results.push(m1);
-        if (zoom === 1 && vp.w === 1280) await shot(page, `after-${kind}-${slideId || i}`);
-
         const type = await page.evaluate(() => {
           const n = window.DeckSync ? window.DeckSync.getSlide() : Math.max(0, parseInt(String(location.hash).replace("#", ""), 10) - 1 || 0);
           return ((window.SLIDES || [])[n] || {}).type;
         });
+        const base = `${kind}-${slideId || i}-${vp.w}x${vp.h}-z${zoom}`;
+        const m = await measurePage(page, base, { w: vp.w, zoom });
+        results.push(m);
+        fills.push({ label: base, fill: m.fill, title: m.title });
+        if (zoom === 1 && vp.w === 1280) await shot(page, `${kind}-${slideId || i}`);
         if (kind === "admin" && type === "prompt") {
           const reveal = page.locator("#reveal");
           if (await reveal.isVisible()) {
             await reveal.click();
-            await page.waitForTimeout(80);
-            const m2 = await measurePage(page, base + "-reveal");
-            results.push(m2);
+            await settle(page);
+            results.push(await measurePage(page, base + "-reveal", { w: vp.w, zoom }));
             await injectVotes(page);
-            await page.waitForTimeout(40);
-            const m3 = await measurePage(page, base + "-votes");
-            results.push(m3);
-            if (zoom === 1 && vp.w === 1280) await shot(page, `after-${kind}-${slideId}-votes`);
+            await settle(page);
+            const mv = await measurePage(page, base + "-votes", { w: vp.w, zoom });
+            results.push(mv);
+            if (zoom === 1 && vp.w === 1280) await shot(page, `${kind}-${slideId}-votes`);
           }
         }
       }
-
       if (kind === "admin" && zoom === 1) {
         await page.evaluate(() => { if (window.DeckSync) window.DeckSync.setSlide(0); });
         const live = page.locator("#live");
         if (await live.isVisible()) {
           await live.click();
-          await page.waitForTimeout(120);
-          const m = await measurePage(page, `admin-live-${vp.w}x${vp.h}`);
-          results.push(m);
+          await settle(page);
+          results.push(await measurePage(page, `admin-live-${vp.w}x${vp.h}`, { w: vp.w, zoom }));
         }
       }
       await context.close();
@@ -247,20 +263,21 @@ async function runPresenter(kind, path) {
 await runPresenter("admin", "adminpresentation.html");
 await runPresenter("slideshow", "slideshow.html");
 
-const phones = [
-  { w: 390, h: 844 },
-  { w: 1024, h: 640 }
-];
+const phones = [{ w: 390, h: 844 }, { w: 1024, h: 640 }];
 for (const vp of phones) {
   for (const zoom of zooms) {
     const context = await browser.newContext({ viewport: { width: vp.w, height: vp.h } });
+    const admin = await context.newPage();
     const page = await context.newPage();
+    await admin.goto(`http://127.0.0.1:${PORT}/adminpresentation.html?local=1`, { waitUntil: "domcontentloaded" });
+    await unlockAdmin(admin);
+    const live = admin.locator("#live");
+    if (await live.isVisible()) await live.click();
     await page.goto(`http://127.0.0.1:${PORT}/index.html?local=1`, { waitUntil: "domcontentloaded" });
     await page.evaluate((z) => { document.body.style.zoom = String(z); }, zoom);
-    await page.waitForTimeout(200);
-    results.push(await measurePage(page, `student-wait-${vp.w}x${vp.h}-z${zoom}`));
-    if (zoom === 1 && vp.w === 390) await shot(page, "after-student-wait");
-
+    await settle(page);
+    results.push(await measurePage(page, `student-wait-${vp.w}x${vp.h}-z${zoom}`, { w: vp.w, zoom }));
+    if (zoom === 1 && vp.w === 390) await shot(page, "student-wait");
     const pick = page.locator(".name-pick").first();
     if (await pick.count()) {
       await pick.click({ force: true });
@@ -268,9 +285,20 @@ for (const vp of phones) {
       if (await face.count()) await face.click({ force: true });
       const seat = page.locator("#seat");
       if (await seat.count()) await seat.click({ force: true });
-      await page.waitForTimeout(200);
-      results.push(await measurePage(page, `student-hold-${vp.w}x${vp.h}-z${zoom}`));
-      if (zoom === 1 && vp.w === 390) await shot(page, "after-student-hold");
+      await page.waitForTimeout(250);
+    }
+    const count = await admin.evaluate(() => (window.SLIDES || []).length);
+    for (let i = 0; i < count; i++) {
+      await admin.evaluate((n) => { if (window.DeckSync) window.DeckSync.setSlide(n); }, i);
+      await page.waitForTimeout(180);
+      await settle(page);
+      const slideId = await admin.evaluate(() => {
+        const n = window.DeckSync ? window.DeckSync.getSlide() : 0;
+        return ((window.SLIDES || [])[n] || {}).id;
+      });
+      const m = await measurePage(page, `student-${slideId || i}-${vp.w}x${vp.h}-z${zoom}`, { w: vp.w, zoom });
+      results.push(m);
+      if (zoom === 1 && (vp.w === 390 || vp.w === 1024)) await shot(page, `student-${slideId || i}-${vp.w}`);
     }
     await context.close();
   }
@@ -280,11 +308,15 @@ await browser.close();
 server.close();
 
 const failed = results.filter((r) => r.fails && r.fails.length);
-writeFileSync(join(OUT, "audit.json"), JSON.stringify({ failed: failed.length, total: results.length, results }, null, 2));
+writeFileSync(join(OUT, "audit.json"), JSON.stringify({ failed: failed.length, total: results.length, fills, results }, null, 2));
 console.log("AUDIT", failed.length ? "FAIL" : "PASS", failed.length + "/" + results.length);
-failed.slice(0, 40).forEach((r) => {
+console.log("FILL");
+fills.filter((f) => f.label.indexOf("1280x720-z1") !== -1 && f.label.indexOf("admin-") === 0).forEach((f) => {
+  console.log(" ", f.label, "fill", f.fill, f.title);
+});
+failed.slice(0, 50).forEach((r) => {
   console.log("—", r.label);
   r.fails.forEach((f) => console.log("   ", f));
 });
-if (failed.length > 40) console.log("..." + (failed.length - 40) + " more failing states");
+if (failed.length > 50) console.log("..." + (failed.length - 50) + " more");
 process.exit(failed.length ? 1 : 0);

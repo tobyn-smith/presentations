@@ -113,6 +113,7 @@ assert.ok(css.indexOf(".claim-bars") !== -1);
 assert.ok(css.indexOf(".split.has-viz") !== -1);
 assert.ok(css.indexOf(".drag-place") !== -1);
 assert.ok(css.indexOf(".ss-win") !== -1);
+assert.ok(fs.existsSync("./join-qr.svg"));
 assert.ok(css.indexOf("user-select: none") !== -1);
 assert.ok(css.indexOf("flex-wrap: nowrap") !== -1);
 var deckSrc = fs.readFileSync("./deck.js", "utf8");

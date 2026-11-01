@@ -30,6 +30,7 @@
     return location.origin + path;
   }
   function qrSrc(url) {
+    if (cfg().joinUrl && String(url) === String(cfg().joinUrl)) return "join-qr.svg";
     return "https://api.qrserver.com/v1/create-qr-code/?size=460x460&ecc=M&margin=8&data="
       + encodeURIComponent(url);
   }
@@ -307,6 +308,12 @@
       stage.classList.remove("fade");
       void stage.offsetWidth;
       stage.classList.add("fade");
+      var onFade = function () {
+        stage.classList.remove("fade");
+        stage.removeEventListener("animationend", onFade);
+      };
+      stage.addEventListener("animationend", onFade);
+      setTimeout(onFade, 360);
     }
     if (keepBoard) {
       if (isPres && s.type === "prompt") {
@@ -350,6 +357,7 @@
   function seatedHtml() {
     if (!isPres) return "";
     var list = DeckSync.getSeats();
+    if (!list.length) return "";
     var sig = seatedSig(list);
     return '<div class="seated" id="seated">'
       + '<p class="seated-count">' + list.length + (list.length === 1 ? " here" : " here") + "</p>"
@@ -400,7 +408,6 @@
     if (!inner) return "";
     return '<div class="ss-win ss-' + kind + '">'
       + '<div class="ss-win-bar">'
-      + '<span class="ss-win-lights" aria-hidden="true"><i></i><i></i><i></i></span>'
       + (title ? '<span class="ss-win-title">' + esc(title) + "</span>" : "")
       + "</div>"
       + '<div class="ss-win-body">' + inner + "</div>"
@@ -505,7 +512,7 @@
       + "</div>"
       + '<div class="slot-row">'
       + slots.map(function (slot) {
-        return '<div class="slot" data-slot="' + esc(slot.id) + '"><p class="slot-lab">' + esc(slot.label) + '</p><div class="slot-well"></div></div>';
+        return '<div class="slot" data-slot="' + esc(slot.id) + '"><p class="slot-lab">' + esc(slot.label) + '</p><div class="slot-well"><p class="slot-empty">Nothing here yet</p></div></div>';
       }).join("")
       + "</div>"
       + (withSend ? '<button type="button" class="send" id="drag-send">Send</button>' : "")
@@ -566,23 +573,24 @@
       var href = joinHref();
       var shown = href.replace(/^https:\/\//, "");
       var join = isPres
-        ? '<div class="join">'
-          + '<img class="join-qr" src="' + qrSrc(href) + '" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
-          + '<p class="join-url">' + esc(shown) + "</p>"
-          + "</div>"
+        ? windowHtml("paper", "Join",
+            '<div class="join">'
+            + '<img class="join-qr" src="' + qrSrc(href) + '" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
+            + '<p class="join-url">' + esc(shown) + "</p>"
+            + "</div>"
+            + seatedHtml())
         : "";
-      var seated = isPres ? seatedHtml() : "";
       return '<div class="title-copy">'
         + kickerHtml(s)
         + "<h1>" + esc(s.title) + "</h1>"
         + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
         + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
         + agendaHtml(s)
-        + claimBarsHtml(s.claims)
         + quoteHtml(s.quote)
         + articleHtml(s)
+        + claimBarsHtml(s.claims)
         + "</div>"
-        + (isPres ? '<div class="title-side">' + join + seated + "</div>" : "");
+        + (isPres ? '<div class="title-side">' + join + "</div>" : "");
     }
     if (s.type === "story") {
       var steps = (s.steps || []).map(function (st) {
@@ -671,9 +679,17 @@
         return "<li>" + esc(o) + "</li>";
       }).join("") + "</ul>"
       : "";
+    if (isPres && (s.input === "place" || s.input === "rank")) {
+      return '<div class="ask">' + kickerHtml(s) + "<h1>" + esc(s.title) + "</h1></div>"
+        + '<div class="split has-viz has-drag-main">'
+        + '<div class="split-viz">' + vizHtml(s) + "</div>"
+        + '<div class="split-side">'
+        + windowHtml("term", "What do the five give you", dragHtml(s, false) + '<div id="viz"></div>')
+        + "</div></div>";
+    }
     if (isPres) {
       return '<div class="ask">' + q + '</div><div class="ask-panel">'
-        + windowHtml("term", "Room", askLine + dragHtml(s, false) + optPreview + '<div id="viz"></div>')
+        + windowHtml("term", "Room", askLine + optPreview + '<div id="viz"></div>')
         + "</div>";
     }
     var inner = q;
@@ -959,17 +975,17 @@
       list.forEach(function (r) { if (r.choice && counts[r.choice] != null) counts[r.choice]++; });
       var total = list.length;
       var max = Math.max(1, total);
+      if (total) {
       html += '<p class="tally">' + (total ? total + (total === 1 ? " answer" : " answers") : "") + "</p>";
       html += '<div class="bars">';
       opts.forEach(function (o) {
         var n = counts[o] || 0;
-        var pct = total ? Math.round(n / total * 100) : 0;
-        var lead = n && n === Math.max.apply(null, opts.map(function (x) { return counts[x]; }));
-        html += '<div class="bar' + (lead && total ? " lead" : "") + '"><div class="bar-top"><span class="lab">' + esc(o) + '</span><span class="pct">' + pct + "%</span></div>"
+        html += '<div class="bar"><div class="bar-top"><span class="lab">' + esc(o) + "</span></div>"
           + '<div class="track"><div class="fill" style="width:' + (n / max * 100) + '%"></div></div>'
           + '<span class="n">' + n + "</span></div>";
       });
       html += "</div>";
+      }
     }
     if (s.viz === "words") {
       var freq = wordFreq(list);
