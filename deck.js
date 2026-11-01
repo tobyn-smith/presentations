@@ -104,7 +104,7 @@
       + "</div>"
       + '<p class="wait-kicker">You\'re in</p>'
       + "<h1>" + esc(first || "Hold") + "</h1>"
-      + '<p class="lede">Waiting for the room to start...</p>'
+      + '<p class="lede">The room has not started.</p>'
       + '<div class="hold-peers" id="hold-peers">' + holdPeersInner() + "</div>"
       + '<button type="button" class="not-you" id="not-you">Not you?</button>'
       + "</div>";
@@ -175,7 +175,7 @@
         + '<div class="check-you">'
         + '<div class="check-preview" id="preview">' + Roster.faceHtml(preview, draft.name) + "</div>"
         + "<div><p class=\"who-name\">" + esc(Roster.firstName(draft.name)) + "</p>"
-        + '<p class="who-hint">Change it, or tap I\'m here.</p></div>'
+        + '<p class="who-hint">Change the picture if you want, then tap I\'m here.</p></div>'
         + "</div>"
         + '<div class="faces" id="faces">'
         + Roster.faces.map(function (f) {
@@ -192,7 +192,7 @@
         + '<p class="wait-kicker">' + esc(brand()) + "</p>"
         + "<h1>Who are you?</h1>"
         + '<label class="sr" for="find">' + (emptyList ? "Your name" : "Find your name") + "</label>"
-        + '<input class="find" id="find" type="' + (emptyList ? "text" : "search") + '" enterkeyhint="' + (emptyList ? "done" : "search") + '" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="' + (emptyList ? "Type your name" : "Find your name") + '" value="' + esc(emptyList ? (draft.name || "") : draft.q) + '">'
+        + '<input class="find" id="find" type="' + (emptyList ? "text" : "search") + '" enterkeyhint="' + (emptyList ? "done" : "search") + '" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="' + (emptyList ? "Your name" : "Find your name") + '" value="' + esc(emptyList ? (draft.name || "") : draft.q) + '">'
         + '<div class="names" id="names">' + namesHtml() + "</div>"
         + (emptyList ? '<button type="button" class="seat-btn" id="use-typed">Continue</button>' : "");
     }
@@ -765,7 +765,7 @@
         + '<div class="split has-viz has-drag-main">'
         + '<div class="split-viz">' + vizHtml(s) + "</div>"
         + '<div class="split-side">'
-        + windowHtml("term", "What do the five give you", dragHtml(s, false) + '<div id="viz"></div>')
+        + windowHtml("term", "The trays", dragHtml(s, false) + '<div id="viz"></div>')
         + "</div></div>";
     }
     if (isPres) {
@@ -783,8 +783,8 @@
     if (s.input === "text") {
       return panel(
         '<form class="answer" id="form">'
-        + '<label class="sr" for="ans">Type your answer</label>'
-        + '<textarea id="ans" required maxlength="800" placeholder="Type your answer"></textarea>'
+        + '<label class="sr" for="ans">Your answer</label>'
+        + '<textarea id="ans" required maxlength="800" placeholder="Your answer"></textarea>'
         + '<button class="send" type="submit">Send</button></form>'
       );
     }
@@ -807,7 +807,7 @@
         }).join("")
         + "</div>"
         + '<form class="answer" id="form">'
-        + '<textarea id="ans" maxlength="800"' + (s.requireText ? " required" : "") + ' placeholder="' + esc((s.placeholder && s.placeholder !== "[write here]") ? s.placeholder : "Optional: say why") + '"></textarea>'
+        + '<textarea id="ans" maxlength="800"' + (s.requireText ? " required" : "") + ' placeholder="' + esc((s.placeholder && s.placeholder !== "[write here]") ? s.placeholder : "Say why if you want") + '"></textarea>'
         + '<button class="send" type="submit">Send</button></form>'
       );
     }

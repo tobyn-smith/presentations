@@ -22,23 +22,23 @@
     {
       id: "ask",
       type: "claims",
-      kicker: "1 · The paper",
+      kicker: "The paper",
       title: "What is she actually asking?",
       claims: [
         { n: "1", title: "Not a new theory", body: "She is not offering a new account of why Korea grew, or why France had a revolution." },
-        { n: "2", title: "A test of a habit", body: "I think the paper tests what happens when we pick cases because they already have the outcome." },
-        { n: "3", title: "The unit", body: "The unit, all the way through, is the country. Working paper 90-13, 1990." }
+        { n: "2", title: "She is testing a habit", body: "I think she wants to know what happens when we pick cases because they already have the outcome." },
+        { n: "3", title: "The unit is the country", body: "All the way through. Working paper 90-13, 1990." }
       ]
     },
     {
       id: "habit",
       type: "claims",
-      kicker: "1 · The habit",
+      kicker: "The habit",
       title: "What do you see if you only read winners?",
       claims: [
-        { n: "1", title: "What you do", body: "Want revolution? Read revolutions. Want growth? Read the fast growers." },
-        { n: "2", title: "What you see", body: "You then see what those cases share." },
-        { n: "3", title: "What you miss", body: "You cannot see whether the others share it too." }
+        { n: "1", title: "Read the winners", body: "Want revolution? Read revolutions. Want growth? Read the fast growers." },
+        { n: "2", title: "Then the shared bits", body: "You then see what those cases share." },
+        { n: "3", title: "The rest stay hidden", body: "You cannot see whether the others share it too." }
       ],
       fromClass: {
         week: 8,
@@ -48,7 +48,7 @@
     {
       id: "nics",
       type: "prompt",
-      kicker: "1 · Discussion",
+      kicker: "The five",
       title: "What do the five actually give you?",
       help: "",
       input: "place",
@@ -74,11 +74,11 @@
     {
       id: "regions",
       type: "claims",
-      kicker: "2 · Regions",
+      kicker: "Regions",
       title: "What happens if you pick East Asia?",
       chart: {
         id: "table1",
-        title: "Table 1 · Average country growth",
+        title: "Table 1. Average country growth",
         source: "World Development Report, 1984 and 1988.",
         max: 6,
         bars: [
@@ -90,8 +90,8 @@
         ]
       },
       claims: [
-        { n: "1", title: "The rates", body: "East Asia 5.2. Africa 1.0. Average country growth, GNP per capita, 1960 to 1982." },
-        { n: "2", title: "The problem", body: "Geography is tied to growth. Pick East Asia and you have, in effect, picked on growth." }
+        { n: "1", title: "East Asia 5.2, Africa 1.0", body: "Average country growth, GNP per capita, 1960 to 1982." },
+        { n: "2", title: "Picking East Asia picks growth", body: "Geography is tied to growth. Pick East Asia and you have, in effect, picked on growth." }
       ],
       fromClass: {
         week: 6,
@@ -101,7 +101,7 @@
     {
       id: "scores",
       type: "claims",
-      kicker: "2 · Labour",
+      kicker: "Labour",
       title: "How did she score the unions?",
       stats: [
         { value: "1", label: "Free unions, own leaders, strikes happen. India, Jamaica, Venezuela." },
@@ -110,8 +110,8 @@
         { value: "4", label: "Banned, or violence is severe. Chile 1973 to 1979, Syria, Benin." }
       ],
       claims: [
-        { n: "1", title: "The source", body: "Country Reports on Human Rights Practices, 1980 and 1988. She calls the score imperfect." },
-        { n: "2", title: "Good enough here", body: "South Korea and Brazil sit at 3. Adequate for a methodological point. Not a perfect labour index." }
+        { n: "1", title: "Country Reports, 1980 and 1988", body: "She calls the score imperfect." },
+        { n: "2", title: "South Korea and Brazil sit at 3", body: "Fine for a methodological point. Not a perfect labour index." }
       ],
       fromClass: {
         week: 10,
@@ -121,7 +121,7 @@
     {
       id: "fits",
       type: "claims",
-      kicker: "2 · Samples",
+      kicker: "Samples",
       title: "Does the claim travel?",
       stats: [
         { value: ".56", label: "East Asia only. Looks like a link. Figure 1, printed p. 8." },
@@ -129,41 +129,41 @@
         { value: ".01", label: "Countries at least as advanced as South Korea." }
       ],
       claims: [
-        { n: "1", title: "Among the five", body: "There was no real link. Slow countries repress labour too." },
-        { n: "2", title: "The limit", body: "This simple check cannot disconfirm the claim. The five-country picture does not travel." }
+        { n: "1", title: "No real link among the five", body: "Slow countries repress labour too." },
+        { n: "2", title: "That picture does not travel", body: "This simple check cannot disconfirm the claim." }
       ]
     },
     {
       id: "skocpol",
       type: "claims",
-      kicker: "3 · Revolutions",
+      kicker: "Revolutions",
       title: "Same habit, different outcome?",
       names: ["France", "Russia", "China"],
       claims: [
-        { n: "1", title: "The cases", body: "She picks the three because they had revolutions. Then a few misses. Printed p. 12." },
-        { n: "2", title: "The chain", body: "An outside military threat, reforms the dominant class can block, a split at the top. Solidary villages rebel." },
-        { n: "3", title: "The gap", body: "She does not test every link. Geddes holds village and class still in nine Spanish-American countries." }
+        { n: "1", title: "France, Russia and China", body: "She picks the three because they had revolutions. Then a few misses. Printed p. 12." },
+        { n: "2", title: "Threat, blocked reform, a split", body: "An outside military threat, reforms the dominant class can block, a split at the top. Solidary villages rebel." },
+        { n: "3", title: "Nine Spanish-American countries", body: "Geddes holds village and class still. She does not test every link." }
       ]
     },
     {
       id: "figure5",
       type: "claims",
-      kicker: "3 · The check",
+      kicker: "The check",
       title: "What did the nine countries show?",
       stats: [
         { value: "7", label: "Extreme military threat, no revolution." },
         { value: "2", label: "Revolutions with no such threat." },
-        { value: "1", label: "Fits. Bolivia, defeated 1935, revolution 1952." }
+        { value: "1", label: "Bolivia only. Defeated 1935, revolution 1952." }
       ],
       claims: [
-        { n: "1", title: "The count", body: "Figure 5, printed p. 20. Threat: a lost war plus invasion or lost land." },
-        { n: "2", title: "Her caution", body: "Not a definitive disconfirmation. The set is not random, and her threat score is crude." }
+        { n: "1", title: "Figure 5, printed p. 20", body: "Threat: a lost war plus invasion or lost land." },
+        { n: "2", title: "Not a definitive disconfirmation", body: "The set is not random, and her threat score is crude." }
       ]
     },
     {
       id: "chile",
       type: "prompt",
-      kicker: "3 · Discussion",
+      kicker: "Chile",
       title: "Which comparison would you trust?",
       help: "",
       input: "choice-text",
@@ -178,18 +178,18 @@
         "The nine Spanish-American cases"
       ],
       claims: [
-        { n: "1", title: "A quiet year", body: "Hirschman on Chile ends in 1961. 1955 was 84 per cent. 1960 and 1961 are 5 and 10. Printed pp. 22 to 23." }
+        { n: "1", title: "Hirschman stops in 1961", body: "1955 was 84 per cent. 1960 and 1961 are 5 and 10. Printed pp. 22 to 23." }
       ]
     },
     {
       id: "close",
       type: "claims",
-      kicker: "4 · Close",
+      kicker: "Close",
       title: "What is this paper for?",
       claims: [
-        { n: "1", title: "What she re-ran", body: "Labour and growth, Skocpol, and Hirschman on Chile." },
-        { n: "2", title: "What cases are good for", body: "Good for how a thing happened, and for a hunch. Not, on their own, a test." },
-        { n: "3", title: "The risk", body: "If you pick cases because they already have the outcome, you will often get the wrong answer. Printed p. 24." }
+        { n: "1", title: "She re-ran three checks", body: "Labour and growth, Skocpol, and Hirschman on Chile." },
+        { n: "2", title: "Good for a hunch", body: "Good for how a thing happened. Not, on their own, a test." },
+        { n: "3", title: "The wrong answer, often", body: "If you pick cases because they already have the outcome. Printed p. 24." }
       ]
     }
   ],
@@ -197,7 +197,7 @@
     {
       id: "open",
       title: "Title",
-      say: "One line, then we sit with it. Do the cases you pick change the answer. That is the paper.",
+      say: "The paper is in the title. Do the cases you pick change the answer.",
       notes: "Tobyn.\nPart 1.\nLeave the title up.\nGo live when names show."
     },
     {

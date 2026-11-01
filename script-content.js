@@ -3,18 +3,18 @@ window.SCRIPT = [
     id: "before",
     title: "Before",
     say: "",
-    notes: "Tobyn and Raquel together. Cues in the notes say who talks. Nothing of that on the boards.\nOpen Present.\nThe key is example unless you changed it on Edit.\nLeave the title up with the QR.\nIf the room will not start, open the slideshow.\nDo not press Go live until names are showing."
+    notes: "Tobyn and Raquel.\nWho talks is only in these notes.\nOpen Present.\nThe key is example unless you changed it on Edit.\nLeave the title up with the QR.\nIf the room will not start, open the slideshow.\nGo live when names show."
   },
   {
     id: "title",
     title: "Title",
-    say: "This is the live Pages copy. Phones join the same room. I will wait until names are on the right, then start.",
-    notes: "Let people scan.\nOnce enough names are on the right: Go live."
+    say: "Phones join the same room. Wait until names are on the right, then start.",
+    notes: "Let people scan.\nGo live once enough names are on the right."
   },
   {
     id: "board-1",
     title: "1",
-    say: "Three jobs: phones check in, I drive the boards, slideshow is the backup if campus blocks the room.\nThen the question: what would you use a live board for? Give people a minute to type.",
+    say: "Phones check in. I drive the boards. Slideshow if campus blocks the room.\nWhat would you use a live board for? Give people a minute.",
     notes: ""
   },
   {
@@ -26,7 +26,7 @@ window.SCRIPT = [
   {
     id: "board-2",
     title: "2",
-    say: "Point at the other pages if someone is following along on a computer. Student view, presenter, slideshow.\nLast question: what would you still want to know?",
+    say: "If someone is on a computer: student view, presenter, slideshow.\nWhat would you still want to know?",
     notes: ""
   },
   {

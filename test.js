@@ -71,6 +71,7 @@ assert.strictEqual(SLIDES.filter(function (s) { return s.id === "chile"; })[0].i
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "chile"; })[0].options.length, 4);
 
 var slideDump = JSON.stringify(SLIDES);
+var voiceDump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT);
 [
   "Phones:",
   "One tap",
@@ -89,6 +90,21 @@ var slideDump = JSON.stringify(SLIDES);
 ].forEach(function (bad) {
   assert.ok(slideDump.indexOf(bad) === -1, "no " + bad + " on slides");
 });
+[
+  "delve",
+  "tapestry",
+  "testament",
+  "furthermore",
+  "moreover",
+  "it is important to note",
+  "pivotal",
+  "landscape",
+  "—",
+  "–"
+].forEach(function (bad) {
+  assert.ok(voiceDump.toLowerCase().indexOf(bad.toLowerCase()) === -1, "no " + bad + " in slides or script");
+});
+assert.ok(!/\brich\b/i.test(voiceDump));
 
 SCRIPT.forEach(function (s) {
   assert.ok(String(s.title).indexOf("·") === -1, "no labelled jump title " + s.title);

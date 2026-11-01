@@ -342,7 +342,7 @@
         + '<div class="split has-viz has-drag-main">'
         + '<div class="split-viz">' + vizHtml(s) + "</div>"
         + '<div class="split-side">'
-        + windowHtml("term", "What do the five give you", dragTalk(s))
+        + windowHtml("term", "The trays", dragTalk(s))
         + "</div></div>";
     }
     return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
