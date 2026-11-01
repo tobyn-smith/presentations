@@ -704,16 +704,15 @@
       var shown = href.replace(/^https:\/\//, "");
       var seats = seatedHtml();
       var join = isPres
-        ? '<div class="title-bento title-bento-navy">'
-          + windowHtml("term", "Join",
-            '<div class="join">'
-            + '<img class="join-qr" src="' + qrSrc(href) + '" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
-            + "</div>")
+        ? '<div class="title-join-block">'
+          + '<img class="join-qr" src="' + qrSrc(href) + '" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
+          + '<p class="title-scan">Scan to join</p>'
+          + '<p class="title-join">' + esc(shown) + "</p>"
+          + (seats || "")
           + "</div>"
-          + '<div class="title-bento title-bento-cream"><p class="title-join">' + esc(shown) + "</p></div>"
-          + (seats ? '<div class="title-bento title-bento-sage">' + seats + "</div>" : "")
         : "";
-      return '<div class="title-copy">'
+      return '<div class="title-card">'
+        + '<div class="title-copy">'
         + '<img class="uga-logo title-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158">'
         + kickerHtml(s)
         + "<h1>" + esc(s.title) + "</h1>"
@@ -721,7 +720,8 @@
         + (s.byline ? '<p class="title-byline">' + esc(s.byline) + "</p>" : "")
         + (s.presented ? '<p class="title-presented">' + esc(s.presented) + "</p>" : "")
         + "</div>"
-        + (isPres ? '<div class="title-side">' + join + "</div>" : "");
+        + join
+        + "</div>";
     }
     if (s.type === "story") {
       var steps = (s.steps || []).map(function (st) {

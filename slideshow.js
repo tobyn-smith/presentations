@@ -321,7 +321,8 @@
     if (s.type === "title") {
       var href = (window.DECK && DECK.joinUrl) || "";
       var shown = String(href).replace(/^https:\/\//, "");
-      return '<div class="title-copy">'
+      return '<div class="title-card">'
+        + '<div class="title-copy">'
         + '<img class="uga-logo title-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158">'
         + kickerHtml(s)
         + "<h1>" + esc(s.title) + "</h1>"
@@ -329,12 +330,12 @@
         + (s.byline ? '<p class="title-byline">' + esc(s.byline) + "</p>" : "")
         + (s.presented ? '<p class="title-presented">' + esc(s.presented) + "</p>" : "")
         + "</div>"
-        + (shown ? '<div class="title-side">'
-          + '<div class="title-bento title-bento-navy">'
-          + windowHtml("term", "Join", '<p class="title-join">' + esc(shown) + "</p>")
-          + "</div>"
-          + '<div class="title-bento title-bento-cream"><p class="title-join">' + esc(shown) + "</p></div>"
-          + "</div>" : "");
+        + (shown ? '<div class="title-join-block">'
+          + '<img class="join-qr" src="join-qr.svg" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
+          + '<p class="title-scan">Scan to join</p>'
+          + '<p class="title-join">' + esc(shown) + "</p>"
+          + "</div>" : "")
+        + "</div>";
     }
     if (s.type === "story") {
       var steps = (s.steps || []).map(function (st) {
