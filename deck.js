@@ -423,37 +423,73 @@
     return '<span class="title-rule" aria-hidden="true"></span>';
   }
 
-  function decoHtml(s) {
-    if (!isPres || !s) return "";
+  function decoMarkup(s) {
+    var land = '<svg class="deco-svg" viewBox="0 0 360 88" aria-hidden="true">'
+      + '<rect width="360" height="88" rx="16" fill="#16324f"/>'
+      + '<path d="M0 58C40 40 80 70 140 52C180 40 220 62 280 48C320 40 350 58 360 50V88H0Z" fill="#c4a574"/>'
+      + '<path d="M0 70C80 62 160 78 240 66C300 58 340 72 360 68V88H0Z" fill="#2a6f6a"/>'
+      + "</svg>";
     if (s.id === "nics") {
-      return '<div class="deco deco-nics" aria-hidden="true">'
-        + '<span class="deco-lab">Cases</span><div class="deco-col"><i></i><i></i><i></i><i></i><i></i></div>'
-        + '<span class="deco-rule"></span>'
-        + '<span class="deco-lab">Outcome</span><div class="deco-col deco-out"><b></b></div>'
-        + "</div>";
+      return '<div class="deco deco-map deco-nics" aria-hidden="true">'
+        + land
+        + '<div class="map-pills">'
+        + '<span>Taiwan</span><span>South Korea</span><span>Singapore</span><span>Brazil</span><span>Mexico</span>'
+        + "</div></div>";
     }
     if (s.id === "scores") {
-      return '<div class="deco deco-scale" aria-hidden="true">'
+      return '<div class="deco deco-map deco-scale" aria-hidden="true">'
         + "<span>1</span><span>2</span><span>3</span><span class=\"is-on\">4</span>"
         + "</div>";
     }
     if (s.id === "habit") {
-      return '<div class="deco deco-funnel" aria-hidden="true"><i></i><i></i><i></i></div>';
+      return '<div class="deco deco-map deco-funnel" aria-hidden="true"><i></i><i></i><i></i></div>';
     }
     if (s.id === "chile") {
-      return '<div class="deco deco-years" aria-hidden="true"><i></i><i class="is-on"></i><i></i><i></i></div>';
+      return '<div class="deco deco-map deco-years" aria-hidden="true">'
+        + "<span>1955</span><span>1960</span><span class=\"is-on\">1961</span>"
+        + "</div>";
+    }
+    if (s.id === "skocpol") {
+      return '<div class="deco deco-map deco-names" aria-hidden="true">'
+        + '<div class="map-pills"><span>France</span><span>Russia</span><span>China</span></div></div>';
+    }
+    if (s.id === "fits") {
+      return '<div class="deco deco-map deco-fits" aria-hidden="true">'
+        + "<span>.56</span><span>.07</span><span class=\"is-on\">.01</span>"
+        + "</div>";
+    }
+    if (s.id === "figure5") {
+      return '<div class="deco deco-map deco-fig5" aria-hidden="true">'
+        + "<span>7</span><span>2</span><span class=\"is-on\">1</span>"
+        + "</div>";
+    }
+    if (s.id === "ask" || s.id === "close") {
+      return '<div class="deco deco-map deco-dots" aria-hidden="true"><i></i><i></i><i></i></div>';
+    }
+    if (s.id === "regions") {
+      return '<div class="deco deco-map deco-nics" aria-hidden="true">'
+        + land
+        + '<div class="map-pills"><span>East Asia</span><span>Africa</span></div></div>';
     }
     return "";
+  }
+
+  function decoHtml(s) {
+    if (!isPres || !s) return "";
+    return decoMarkup(s);
   }
 
   function windowHtml(kind, title, inner) {
     if (!inner) return "";
     return '<div class="ss-win ss-' + kind + '">'
       + '<div class="ss-win-bar">'
+      + '<span class="ss-win-dots" aria-hidden="true"><i></i><i></i><i></i></span>'
       + (title ? '<span class="ss-win-title">' + esc(title) + "</span>" : "")
       + "</div>"
-      + '<div class="ss-win-body">' + inner + "</div>"
-      + "</div>";
+      + '<div class="ss-win-body">'
+      + (title ? '<p class="ss-win-who">' + esc(title) + "</p>" : "")
+      + inner
+      + "</div></div>";
   }
 
   function fitStage() {
@@ -614,15 +650,19 @@
     if (s.type === "title") {
       var href = joinHref();
       var shown = href.replace(/^https:\/\//, "");
+      var seats = seatedHtml();
       var join = isPres
-        ? windowHtml("paper", "Join",
+        ? '<div class="title-bento title-bento-navy">'
+          + windowHtml("term", "Join",
             '<div class="join">'
             + '<img class="join-qr" src="' + qrSrc(href) + '" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
-            + '<p class="join-url">' + esc(shown) + "</p>"
-            + "</div>"
-            + seatedHtml())
+            + "</div>")
+          + "</div>"
+          + '<div class="title-bento title-bento-cream"><p class="title-join">' + esc(shown) + "</p></div>"
+          + (seats ? '<div class="title-bento title-bento-sage">' + seats + "</div>" : "")
         : "";
       return '<div class="title-copy">'
+        + '<img class="uga-logo title-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158">'
         + kickerHtml(s)
         + "<h1>" + esc(s.title) + "</h1>"
         + titleRuleHtml()
