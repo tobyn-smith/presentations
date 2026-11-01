@@ -148,6 +148,22 @@ async function measurePage(page, label, vp) {
       }
     }
 
+    if (stage && document.body.classList.contains("role-pres")) {
+      stage.querySelectorAll(".claim-bars li").forEach((card) => {
+        const cr = card.getBoundingClientRect();
+        if (cr.width < 8 || cr.height < 8) return;
+        card.querySelectorAll(".card-n, h2, p").forEach((el) => {
+          if (!(el.innerText || "").trim()) return;
+          const r = el.getBoundingClientRect();
+          const label = (el.className || el.tagName) + " “" + (el.innerText || "").slice(0, 22) + "”";
+          if (r.left < cr.left + 16 - 0.6) fails.push("card pad left " + label);
+          if (r.top < cr.top + 16 - 0.6) fails.push("card pad top " + label);
+          if (r.right > cr.right - 16 + 0.6) fails.push("card pad right " + label);
+          if (r.bottom > cr.bottom - 16 + 0.6) fails.push("card pad bottom " + label);
+        });
+      });
+    }
+
     if (stage && vp && vp.w === 1280 && vp.zoom === 1 && document.body.classList.contains("role-pres")) {
       const bodies = stage.querySelectorAll(".claim-bars p:not(.card-n), .stats-stack .label, .token, .talk li, .chart-lab, .slot-empty, .choices button");
       bodies.forEach((el) => {

@@ -1298,6 +1298,11 @@ button { cursor: pointer; }
   font-size: clamp(18px, 2.2vh, 22px);
   line-height: 1.2;
 }
+.role-pres .stage .claim-bars li {
+  padding: 20px;
+  gap: 0.45rem;
+  justify-content: center;
+}
 .role-pres .claims .fn {
   font-size: clamp(13px, 1.6vh, 16px);
 }
@@ -1433,18 +1438,33 @@ button { cursor: pointer; }
   min-height: auto;
   border: 1.5px solid #1d1d1d;
   background: #fff;
-  padding: 18px 20px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: flex-start;
-  gap: 0.2rem;
+  justify-content: center;
+  gap: 0.45rem;
   overflow: visible;
   text-align: left;
 }
 .split.has-viz .claim-bars li {
   flex: 1 1 auto;
-  justify-content: flex-start;
+  justify-content: center;
+  padding: 20px;
+  min-height: min-content;
+}
+@media (max-height: 700px) {
+  .role-pres .split.has-viz .claim-bars:has(> li:nth-child(3)) li {
+    padding: 16px 20px;
+    gap: 0.3rem;
+  }
+  .role-pres .split.has-viz .claim-bars:has(> li:nth-child(3)) h2 {
+    font-size: clamp(18px, 2.2vh, 22px);
+  }
+  .role-pres .split.has-viz .claim-bars:has(> li:nth-child(3)) p {
+    font-size: clamp(16px, 1.5vw, 20px);
+    line-height: 1.4;
+  }
 }
 .claim-bars .card-n,
 .claim-bars h2,
@@ -1794,9 +1814,10 @@ button { cursor: pointer; }
   flex: 1 1 0;
   border: 0;
   border-bottom: 1px solid #1d1d1d;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: stretch;
   text-align: left;
+  padding: 20px;
 }
 .role-pres .title-copy .claim-bars li:last-child,
 .role-pres .stage.claims .split:not(.has-viz) .claim-bars li:last-child {
