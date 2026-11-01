@@ -28,30 +28,32 @@
   </form>
 </div>
 <main class="deck" id="app" hidden>
-  <div class="board">
-    <span class="accent-tab" aria-hidden="true"></span>
-    <header class="chrome">
-      <div class="chrome-left">
-        <p class="kicker" id="kicker" hidden></p>
-        <p class="join-chip" id="join-chip"></p>
+  <header class="chrome">
+    <div class="chrome-left">
+      <p class="kicker" id="kicker" hidden></p>
+      <p class="join-chip" id="join-chip"></p>
+    </div>
+    <div class="chrome-right">
+      <div class="hands" id="hands" hidden></div>
+      <p class="live-status" id="live-status"></p>
+      <div class="admin-nav">
+        <button type="button" id="reset" hidden>Clear answers</button>
+        <button type="button" id="reveal" hidden>Reveal</button>
+        <button type="button" id="wipe" hidden>Clear all</button>
+        <button type="button" id="prev">Back</button>
+        <button type="button" id="next">Next</button>
+        <p class="slide-num" id="counter"></p>
       </div>
-      <div class="chrome-right">
-        <div class="hands" id="hands" hidden></div>
-        <p class="live-status" id="live-status"></p>
-        <div class="admin-nav">
-          <button type="button" id="reset" hidden>Clear answers</button>
-          <button type="button" id="reveal" hidden>Reveal</button>
-          <button type="button" id="wipe" hidden>Clear all</button>
-          <button type="button" id="prev">Back</button>
-          <button type="button" id="next">Next</button>
-          <p class="slide-num" id="counter"></p>
-        </div>
-        <button type="button" class="live-btn" id="live" aria-pressed="false">Go live</button>
-        <button type="button" class="fs-btn" id="fs-btn" aria-pressed="false">Full screen</button>
-        <button type="button" class="failsafe-btn" id="failsafe-open">Room tools</button>
-      </div>
-    </header>
-    <section class="stage" id="stage" aria-live="polite"></section>
+      <button type="button" class="live-btn" id="live" aria-pressed="false">Go live</button>
+      <button type="button" class="fs-btn" id="fs-btn" aria-pressed="false">Full screen</button>
+      <button type="button" class="failsafe-btn" id="failsafe-open">Room tools</button>
+    </div>
+  </header>
+  <div class="stage-wrap">
+    <div class="board">
+      <span class="accent-tab" aria-hidden="true"></span>
+      <section class="stage" id="stage" aria-live="polite"></section>
+    </div>
   </div>
 </main>
 <div class="failsafe" id="failsafe" hidden>

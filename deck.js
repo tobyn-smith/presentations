@@ -276,8 +276,8 @@
     stage.classList.remove("hold");
     document.title = (isPres ? "Presenter · " : "") + (s.title || brand());
     if (kicker) {
-      kicker.textContent = s.kicker || "";
-      kicker.hidden = !s.kicker;
+      kicker.textContent = "";
+      kicker.hidden = true;
     }
     if (counter) {
       var n = String(i + 1);
@@ -301,7 +301,7 @@
     stage.classList.toggle("story", s.type === "story");
     stage.classList.toggle("points", s.type === "points");
     stage.classList.toggle("claims", s.type === "claims");
-    stage.classList.toggle("has-split", !!(s.claims && (s.chart || s.stats || s.names)));
+    stage.classList.toggle("has-split", !!(s.claims || s.chart || s.stats || s.names));
     stage.classList.toggle("has-drag", s.input === "rank" || s.input === "place");
     if (changed) {
       stage.classList.remove("fade");
@@ -316,6 +316,7 @@
       }
       paintMe();
       paintHandBtn();
+      fitStage();
       return;
     }
     stage.innerHTML = htmlFor(s, i);
@@ -327,6 +328,7 @@
     }
     paintMe();
     paintHandBtn();
+    fitStage();
   }
 
   function seatedSig(list) {
@@ -389,6 +391,34 @@
     return Math.abs(n) >= 1000 ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : String(n);
   }
 
+  function kickerHtml(s) {
+    if (!s || !s.kicker) return "";
+    return '<p class="slide-kicker">' + esc(s.kicker) + "</p>";
+  }
+
+  function windowHtml(kind, title, inner) {
+    if (!inner) return "";
+    return '<div class="ss-win ss-' + kind + '">'
+      + '<div class="ss-win-bar">'
+      + '<span class="ss-win-lights" aria-hidden="true"><i></i><i></i><i></i></span>'
+      + (title ? '<span class="ss-win-title">' + esc(title) + "</span>" : "")
+      + "</div>"
+      + '<div class="ss-win-body">' + inner + "</div>"
+      + "</div>";
+  }
+
+  function fitStage() {
+    if (!stage) return;
+    stage.style.transform = "";
+    var room = stage.clientHeight;
+    var need = stage.scrollHeight;
+    if (room > 0 && need > room + 2) {
+      var scale = Math.max(0.68, room / need);
+      stage.style.transformOrigin = "top center";
+      stage.style.transform = "scale(" + scale + ")";
+    }
+  }
+
   function chartHtml(chart) {
     var bars = chart.bars || [];
     var max = Number(chart.max);
@@ -405,48 +435,50 @@
         + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit ? esc(chart.unit) : "") + "</span>"
         + "</div>";
     }).join("");
-    return '<figure class="chart" data-chart="' + esc(chart.id || "") + '">'
-      + "<figcaption>"
-      + '<p class="chart-title">' + esc(chart.title) + "</p>"
-      + (chart.source ? '<p class="chart-source">' + esc(chart.source) + "</p>" : "")
-      + (chart.note ? '<p class="chart-note">' + esc(chart.note) + "</p>" : "")
-      + "</figcaption>"
+    var fig = '<figure class="chart" data-chart="' + esc(chart.id || "") + '">'
+      + (chart.source || chart.note ? "<figcaption>"
+        + (chart.source ? '<p class="chart-source">' + esc(chart.source) + "</p>" : "")
+        + (chart.note ? '<p class="chart-note">' + esc(chart.note) + "</p>" : "")
+        + "</figcaption>" : "")
       + '<div class="chart-bars" role="img" aria-label="' + esc(chart.title) + '">' + rows + "</div>"
       + "</figure>";
+    return windowHtml("paper", chart.title || "Table", fig);
   }
 
   function claimBarsHtml(list) {
     if (!list || !list.length) return "";
     return '<ul class="claim-bars">' + list.map(function (pt) {
-      return "<li><h2>" + esc(pt.title) + "</h2>"
+      return "<li>"
+        + (pt.n ? '<p class="card-n">' + esc(pt.n) + "</p>" : "")
+        + "<h2>" + esc(pt.title) + "</h2>"
         + (pt.body ? "<p>" + esc(pt.body) + "</p>" : "")
         + (pt.note ? '<p class="fn">' + esc(pt.note) + "</p>" : "")
         + "</li>";
     }).join("") + "</ul>";
   }
 
-  function namesHtml(list) {
+  function caseNamesHtml(list) {
     if (!list || !list.length) return "";
-    return '<ul class="name-stack">' + list.map(function (n) {
+    return windowHtml("paper", "Cases", '<ul class="name-stack">' + list.map(function (n) {
       return "<li>" + esc(n) + "</li>";
-    }).join("") + "</ul>";
+    }).join("") + "</ul>");
   }
 
   function statsStackHtml(list) {
     if (!list || !list.length) return "";
-    return '<div class="stats-stack">' + list.map(function (st) {
+    return windowHtml("paper", "Scores", '<div class="stats-stack">' + list.map(function (st) {
       return '<div class="stat"><div class="value">' + esc(st.value) + "</div>"
         + '<p class="label">' + esc(st.label) + "</p>"
         + (st.source ? '<p class="source">' + esc(st.source) + "</p>" : "")
         + "</div>";
-    }).join("") + "</div>";
+    }).join("") + "</div>");
   }
 
   function vizHtml(s) {
     if (s.chart) return chartHtml(s.chart);
     if (s.charts && s.charts[0]) return chartHtml(s.charts[0]);
     if (s.stats) return statsStackHtml(s.stats);
-    if (s.names) return namesHtml(s.names);
+    if (s.names) return caseNamesHtml(s.names);
     return "";
   }
 
@@ -541,6 +573,7 @@
         : "";
       var seated = isPres ? seatedHtml() : "";
       return '<div class="title-copy">'
+        + kickerHtml(s)
         + "<h1>" + esc(s.title) + "</h1>"
         + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
         + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
@@ -556,7 +589,7 @@
         return '<li><span class="step-n">' + esc(st.n) + "</span>"
           + "<div><h2>" + esc(st.title) + "</h2><p>" + esc(st.body) + "</p></div></li>";
       }).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (steps ? '<ol class="steps">' + steps + "</ol>" : "")
         + quoteHtml(s.quote);
     }
@@ -571,21 +604,21 @@
           + (body ? "<p" + (filled ? "" : " class=\"empty\"") + ">" + esc(body) + "</p>" : "")
           + "</li>";
       }).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
         + (items ? '<ul class="points cols-' + cols + '">' + items + "</ul>" : "")
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + quoteHtml(s.quote);
     }
     if (s.type === "claims") {
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
         + splitHtml(s)
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + quoteHtml(s.quote);
     }
     if (s.type === "compare") {
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
         + '<div class="pair-row">' + pairHtml(s.left, "left") + pairHtml(s.right, "right") + "</div>"
         + (s.callout ? '<p class="callout">' + esc(s.callout) + "</p>" : "")
@@ -593,7 +626,7 @@
     }
     if (s.type === "charts") {
       var figs = (s.charts || []).map(chartHtml).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
         + '<div class="chart-grid">' + figs + "</div>";
     }
@@ -604,13 +637,13 @@
           + (st.source ? '<p class="source">' + esc(st.source) + "</p>" : "")
           + "</div>";
       }).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + '<div class="stats-grid">' + cards + "</div>"
         + (s.footer ? '<p class="footer-line">' + esc(s.footer) + "</p>" : "");
     }
     if (s.type === "content") {
       var body = (s.body || []).map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("");
-      return "<h1>" + esc(s.title) + "</h1>"
+      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
         + (body ? '<div class="body">' + body + "</div>" : "")
         + (s.callout ? '<p class="callout">' + esc(s.callout) + "</p>" : "")
         + quoteHtml(s.quote);
@@ -624,7 +657,7 @@
         return "<li>" + title + body + "</li>";
       }).join("") + "</ul>";
     }
-    var q = "<h1>" + esc(s.title) + "</h1>"
+    var q = kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + splitHtml(s)
       + quoteHtml(s.quote)
@@ -633,8 +666,15 @@
       + youHtml(s)
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "");
     var askLine = s.ask ? '<p class="ask-q">' + esc(s.ask) + "</p>" : "";
+    var optPreview = (s.options && s.options.length && s.input !== "rank" && s.input !== "place")
+      ? '<ul class="talk opt-preview">' + s.options.map(function (o) {
+        return "<li>" + esc(o) + "</li>";
+      }).join("") + "</ul>"
+      : "";
     if (isPres) {
-      return '<div class="ask">' + q + '</div><div class="ask-panel">' + askLine + dragHtml(s, false) + '<div id="viz"></div></div>';
+      return '<div class="ask">' + q + '</div><div class="ask-panel">'
+        + windowHtml("term", "Room", askLine + dragHtml(s, false) + optPreview + '<div id="viz"></div>')
+        + "</div>";
     }
     var inner = q;
     var panel = function (html) {
@@ -919,7 +959,7 @@
       list.forEach(function (r) { if (r.choice && counts[r.choice] != null) counts[r.choice]++; });
       var total = list.length;
       var max = Math.max(1, total);
-      html += '<p class="tally">' + (total ? total + (total === 1 ? " answer" : " answers") : "Waiting for votes") + "</p>";
+      html += '<p class="tally">' + (total ? total + (total === 1 ? " answer" : " answers") : "") + "</p>";
       html += '<div class="bars">';
       opts.forEach(function (o) {
         var n = counts[o] || 0;
@@ -946,7 +986,7 @@
       if (!list.length) {
         if (s.viz !== "bars-list") {
           if (s.starters && s.starters.length) {
-            html += '<p class="tally">Waiting for answers</p>';
+            html += '<p class="tally"></p>';
             html += '<ul class="starters">' + s.starters.map(function (t) {
               return "<li>" + esc(t) + "</li>";
             }).join("") + "</ul>";
@@ -1169,7 +1209,7 @@
         paintFullScreen();
         return;
       }
-      var board = document.querySelector(".role-pres .board") || document.documentElement;
+      var board = document.getElementById("app") || document.documentElement;
       Promise.resolve(enterFullScreen(board)).then(paintFullScreen).catch(function () {
         return Promise.resolve(enterFullScreen(document.documentElement)).then(paintFullScreen).catch(function () {
           document.body.classList.add("is-fs", "is-fs-fallback");
@@ -1230,7 +1270,8 @@
     var joinChip = document.getElementById("join-chip");
     if (joinChip) {
       var href = joinHref();
-      joinChip.textContent = href.replace(/^https:\/\//, "");
+      joinChip.textContent = "Join";
+      joinChip.title = href.replace(/^https:\/\//, "");
     }
 
     if (liveBtn) liveBtn.addEventListener("click", function () {
@@ -1350,6 +1391,7 @@
       paintResponses(s, i, list);
       var viz = document.getElementById("viz");
       if (viz) viz.classList.toggle("is-hidden", !revealed[s.id]);
+      fitStage();
       return;
     }
     if (!DeckSync.isDone(String(i)) && stage.querySelector(".thanks")) render(i);
@@ -1459,6 +1501,7 @@
     }
   }
   bindReading();
+  window.addEventListener("resize", fitStage);
   document.addEventListener("deck-content", function () {
     if (!unlocked()) return;
     var n = DeckSync.getSlide();
