@@ -38,6 +38,38 @@
     return '<p class="slide-kicker">' + esc(s.kicker) + "</p>";
   }
 
+  function paintBanner(s) {
+    var el = document.getElementById("uga-kicker");
+    if (el) el.textContent = (s && s.kicker) || "";
+  }
+
+  function titleRuleHtml() {
+    return '<span class="title-rule" aria-hidden="true"></span>';
+  }
+
+  function decoHtml(s) {
+    if (!s) return "";
+    if (s.id === "nics") {
+      return '<div class="deco deco-nics" aria-hidden="true">'
+        + '<span class="deco-lab">Cases</span><div class="deco-col"><i></i><i></i><i></i><i></i><i></i></div>'
+        + '<span class="deco-rule"></span>'
+        + '<span class="deco-lab">Outcome</span><div class="deco-col deco-out"><b></b></div>'
+        + "</div>";
+    }
+    if (s.id === "scores") {
+      return '<div class="deco deco-scale" aria-hidden="true">'
+        + "<span>1</span><span>2</span><span>3</span><span class=\"is-on\">4</span>"
+        + "</div>";
+    }
+    if (s.id === "habit") {
+      return '<div class="deco deco-funnel" aria-hidden="true"><i></i><i></i><i></i></div>';
+    }
+    if (s.id === "chile") {
+      return '<div class="deco deco-years" aria-hidden="true"><i></i><i class="is-on"></i><i></i><i></i></div>';
+    }
+    return "";
+  }
+
   function windowHtml(kind, title, inner) {
     if (!inner) return "";
     return '<div class="ss-win ss-' + kind + '">'
@@ -90,7 +122,7 @@
     if (!list || !list.length) return "";
     return '<ul class="claim-bars">' + list.map(function (pt) {
       return "<li>"
-        + (pt.n ? '<p class="card-n">' + esc(pt.n) + "</p>" : "")
+        + (pt.n ? '<p class="card-n"><span>' + esc(pt.n) + "</span></p>" : "")
         + "<h2>" + esc(pt.title) + "</h2>"
         + (pt.body ? "<p>" + esc(pt.body) + "</p>" : "")
         + (pt.note ? '<p class="fn">' + esc(pt.note) + "</p>" : "")
@@ -191,6 +223,7 @@
       return '<div class="title-copy">'
         + kickerHtml(s)
         + "<h1>" + esc(s.title) + "</h1>"
+        + titleRuleHtml()
         + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
         + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
         + agendaHtml(s)
@@ -225,6 +258,7 @@
     }
     if (s.type === "claims") {
       return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
+        + decoHtml(s)
         + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
         + splitHtml(s)
         + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "")
@@ -256,6 +290,7 @@
     }
     if (s.input === "place" || s.input === "rank") {
       return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
+        + decoHtml(s)
         + '<div class="split has-viz has-drag-main">'
         + '<div class="split-viz">' + vizHtml(s) + "</div>"
         + '<div class="split-side">'
@@ -263,6 +298,7 @@
         + "</div></div>";
     }
     return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
+      + decoHtml(s)
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + splitHtml(s)
       + quoteHtml(s.quote)
@@ -429,6 +465,7 @@
       kicker.textContent = "";
       kicker.hidden = true;
     }
+    paintBanner(s);
     if (counter) counter.textContent = String(i + 1);
     if (prevBtn) prevBtn.disabled = i === 0;
     if (nextBtn) nextBtn.disabled = i === slides().length - 1;

@@ -124,7 +124,7 @@ async function measurePage(page, label, vp) {
     let fill = 1;
     if (stage) {
       const box = stage.getBoundingClientRect();
-          const surfaces = stage.querySelectorAll("h1, .slide-kicker, .claim-bars, .claim-bars li, .ss-win, .split, .join, .join-qr, .token, .slot, .name-stack, .stats-stack, .chart, .talk, .talk li, .bar, .choices button, .title-side, .title-copy, .ask, .ask-panel, p, h2");
+          const surfaces = stage.querySelectorAll("h1, .slide-kicker, .title-rule, .deco, .claim-bars, .claim-bars li, .ss-win, .split, .join, .join-qr, .token, .slot, .name-stack, .stats-stack, .chart, .talk, .talk li, .bar, .choices button, .title-side, .title-copy, .ask, .ask-panel, p, h2");
       let hit = 0;
       let total = 0;
       const cols = 16;

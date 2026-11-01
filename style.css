@@ -30,6 +30,8 @@ button { cursor: pointer; }
 .role-pres {
   overflow: hidden;
   --chrome-h: 40px;
+  --banner-h: 48px;
+  --from-h: 22px;
 }
 .role-pres .deck {
   height: 100%;
@@ -68,7 +70,77 @@ button { cursor: pointer; }
   border-radius: 0 0 999px 999px;
   pointer-events: none;
 }
-.role-pres .accent-tab { display: none; }
+.role-pres .accent-tab {
+  display: block;
+  top: var(--banner-h);
+  height: 28px;
+}
+.uga-banner {
+  flex: none;
+  height: var(--banner-h);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 1.15rem 0 1.05rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.uga-arch {
+  display: flex;
+  align-items: center;
+  color: var(--accent-ink);
+  flex: none;
+}
+.uga-arch svg { display: block; }
+.uga-word {
+  font-family: var(--display);
+  font-size: clamp(20px, 2.6vh, 26px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.uga-deck {
+  font-family: var(--display);
+  font-size: clamp(13px, 1.7vh, 16px);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.88;
+  padding-left: 0.7rem;
+  border-left: 1px solid rgba(255,255,255,0.45);
+  line-height: 1;
+}
+.uga-kicker {
+  margin-left: auto;
+  font-family: var(--display);
+  font-size: clamp(13px, 1.7vh, 16px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.uga-kicker:empty { display: none; }
+.from-class {
+  flex: none;
+  height: var(--from-h);
+  display: flex;
+  align-items: center;
+  padding: 0 1.15rem 0 1.35rem;
+  background: #fff;
+  border-bottom: 1px solid #e4ddd0;
+  color: var(--ink-faint);
+}
+.from-class-lab {
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.role-pres .slide-kicker { display: none; }
+.role-part .uga-banner,
+.role-part .from-class { display: none; }
 .role-pres .chrome {
   position: relative;
   top: auto;
@@ -435,7 +507,9 @@ button { cursor: pointer; }
 .role-pres .title-copy .lede,
 .role-pres .title-copy .frame,
 .role-pres .title-copy .speaker,
-.role-pres .title-copy .source-link {
+.role-pres .title-copy .source-link,
+.role-pres .title-copy .title-rule,
+.role-pres .title-copy .deco {
   flex: none;
 }
 .title-side {
@@ -931,13 +1005,97 @@ button { cursor: pointer; }
 .role-pres .prompt h1 {
   font-family: var(--display);
   font-size: clamp(32px, 5.4vh, 56px);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.12;
   max-width: 22ch;
   margin-bottom: 20px;
   color: #000;
 }
+.role-pres h1:has(+ .title-rule),
+.role-pres h1:has(+ .deco) { margin-bottom: 10px; }
+.title-rule {
+  display: block;
+  width: 3.4rem;
+  height: 4px;
+  background: var(--accent);
+  margin: 0 0 14px;
+  flex: none;
+}
+.deco {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex: none;
+  margin: 0 0 12px;
+  min-height: 2rem;
+}
+.deco-nics .deco-col {
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+}
+.deco-nics i {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 999px;
+  background: var(--accent);
+  display: block;
+}
+.deco-nics .deco-lab {
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-right: 0.15rem;
+}
+.deco-nics .deco-rule {
+  width: 1.6rem;
+  height: 3px;
+  background: var(--accent);
+}
+.deco-nics .deco-out b {
+  display: block;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid var(--accent);
+  background: #fff;
+}
+.deco-scale span {
+  font-family: var(--display);
+  font-size: clamp(16px, 2.1vh, 20px);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #1d1d1d;
+  background: #fff;
+}
+.deco-scale span.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.deco-funnel i {
+  display: block;
+  height: 14px;
+  background: var(--accent);
+}
+.deco-funnel i:nth-child(1) { width: 6.2rem; opacity: 1; }
+.deco-funnel i:nth-child(2) { width: 4.2rem; opacity: 0.7; }
+.deco-funnel i:nth-child(3) { width: 2.2rem; opacity: 0.45; }
+.deco-funnel { gap: 0.28rem; }
+.deco-years i {
+  width: 0.7rem;
+  height: 1.35rem;
+  background: #d8d2c6;
+  display: block;
+}
+.deco-years i.is-on { background: var(--accent); height: 1.7rem; }
 .role-pres .prompt h1,
 .role-pres .stats h1,
 .role-pres .charts h1,
@@ -1039,8 +1197,8 @@ button { cursor: pointer; }
 }
 .role-pres .quote {
   margin-top: 1em;
-  padding-left: 0.75em;
-  border-left: 3px solid var(--accent);
+  padding-left: 0.85em;
+  border-left: 6px solid var(--accent);
   flex: none;
 }
 .role-pres .quote p {
@@ -1436,7 +1594,8 @@ button { cursor: pointer; }
 .claim-bars li {
   flex: 0 0 auto;
   min-height: auto;
-  border: 1.5px solid #1d1d1d;
+  border: 0;
+  border-left: 6px solid var(--accent);
   background: #fff;
   padding: 20px;
   display: flex;
@@ -1454,6 +1613,30 @@ button { cursor: pointer; }
   min-height: min-content;
 }
 @media (max-height: 700px) {
+  .role-pres {
+    --banner-h: 38px;
+    --from-h: 16px;
+  }
+  .uga-arch svg { width: 28px; height: 24px; }
+  .role-pres .stage.claims h1,
+  .role-pres .stage.prompt.has-split h1,
+  .role-pres .stage.prompt.has-drag h1 {
+    margin-bottom: 12px;
+  }
+  .role-pres .title-copy .claim-bars:has(> li:nth-child(3)) li,
+  .role-pres .stage.claims .split:not(.has-viz) .claim-bars:has(> li:nth-child(3)) li {
+    padding: 16px 20px;
+    gap: 0.28rem;
+  }
+  .role-pres .title-copy .claim-bars:has(> li:nth-child(3)) h2,
+  .role-pres .stage.claims .split:not(.has-viz) .claim-bars:has(> li:nth-child(3)) h2 {
+    font-size: clamp(18px, 2.2vh, 22px);
+  }
+  .role-pres .title-copy .claim-bars:has(> li:nth-child(3)) p,
+  .role-pres .stage.claims .split:not(.has-viz) .claim-bars:has(> li:nth-child(3)) p {
+    font-size: clamp(16px, 1.5vw, 20px);
+    line-height: 1.4;
+  }
   .role-pres .split.has-viz .claim-bars:has(> li:nth-child(3)) li {
     padding: 16px 20px;
     gap: 0.3rem;
@@ -1474,20 +1657,31 @@ button { cursor: pointer; }
   text-align: left;
 }
 .claim-bars .card-n {
-  font-family: var(--display);
-  font-size: clamp(22px, 2.8vh, 28px);
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
-  font-variant-numeric: tabular-nums;
-  color: var(--accent);
+  width: auto;
+  align-self: flex-start;
+  display: flex;
   margin: 0;
-  line-height: 1.1;
+  line-height: 1;
+}
+.claim-bars .card-n span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 0.32rem;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--display);
+  font-size: clamp(16px, 2vh, 20px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
 }
 .claim-bars h2 {
   font-family: var(--display);
   font-size: clamp(22px, 2.7vh, 28px);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0;
   text-transform: none;
   color: var(--ink);
@@ -1521,16 +1715,16 @@ button { cursor: pointer; }
   gap: 0.55rem;
   min-height: 2rem;
   padding: 0.35rem 0.85rem;
-  background: var(--wash);
-  border-bottom: 1px solid #1d1d1d;
+  background: var(--accent);
+  border-bottom: 0;
   flex: none;
 }
 .ss-win-title {
   font-family: var(--display);
   font-size: clamp(15px, 1.8vh, 18px);
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--ink);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
 }
 .ss-win-body {
   padding: 0.7rem 0.85rem 0.8rem;
@@ -1540,7 +1734,7 @@ button { cursor: pointer; }
   display: flex;
   flex-direction: column;
 }
-.ss-win.ss-term .ss-win-bar { background: #ece6d8; }
+.ss-win.ss-term .ss-win-bar { background: var(--accent); }
 .ss-win.ss-term .ss-win-body { font-family: var(--sans); }
 .split-viz .ss-win .chart,
 .split-viz .ss-win .name-stack,
@@ -1597,6 +1791,10 @@ button { cursor: pointer; }
   padding: 0 0.95rem;
 }
 .name-stack li:last-child { border-bottom: 0; }
+.role-pres .name-stack li:first-child {
+  background: var(--accent);
+  color: #fff;
+}
 .stats-stack {
   height: 100%;
   display: flex;
@@ -1616,6 +1814,17 @@ button { cursor: pointer; }
   padding: 0.35rem 0;
 }
 .stats-stack .stat:last-child { border-bottom: 0; }
+.role-pres .stats-stack .stat:first-child {
+  background: var(--accent);
+  color: #fff;
+  margin: 0 -0.85rem;
+  padding: 0.55rem 0.85rem;
+}
+.role-pres .stats-stack .stat:first-child .value,
+.role-pres .stats-stack .stat:first-child .label,
+.role-pres .stats-stack .stat:first-child .source {
+  color: #fff;
+}
 .stats-stack .value {
   font-family: var(--display);
   font-size: clamp(36px, 5.6vh, 56px);
@@ -1732,7 +1941,8 @@ button { cursor: pointer; }
   min-height: 0;
 }
 .token {
-  border: 1.5px solid #1d1d1d;
+  border: 0;
+  border-left: 6px solid var(--accent);
   background: #fff;
   color: inherit;
   padding: 0.45rem 0.7rem;
@@ -1807,13 +2017,14 @@ button { cursor: pointer; }
   height: 100%;
   min-height: 0;
   background: #fff;
-  border: 1.5px solid #1d1d1d;
+  border: 0;
+  border-left: 6px solid var(--accent);
 }
 .role-pres .title-copy .claim-bars li,
 .role-pres .stage.claims .split:not(.has-viz) .claim-bars li {
   flex: 1 1 0;
   border: 0;
-  border-bottom: 1px solid #1d1d1d;
+  border-bottom: 1px solid #e6e0d4;
   justify-content: center;
   align-items: stretch;
   text-align: left;
@@ -1822,6 +2033,30 @@ button { cursor: pointer; }
 .role-pres .title-copy .claim-bars li:last-child,
 .role-pres .stage.claims .split:not(.has-viz) .claim-bars li:last-child {
   border-bottom: 0;
+}
+.role-pres .title-copy .claim-bars li:first-child,
+.role-pres .stage.claims .split:not(.has-viz) .claim-bars li:first-child,
+.role-pres .stage.prompt .claim-bars li:first-child,
+.role-pres .split.has-viz .claim-bars li:first-child {
+  background: var(--accent);
+  color: #fff;
+}
+.role-pres .title-copy .claim-bars li:first-child h2,
+.role-pres .title-copy .claim-bars li:first-child p,
+.role-pres .stage.claims .split:not(.has-viz) .claim-bars li:first-child h2,
+.role-pres .stage.claims .split:not(.has-viz) .claim-bars li:first-child p,
+.role-pres .stage.prompt .claim-bars li:first-child h2,
+.role-pres .stage.prompt .claim-bars li:first-child p,
+.role-pres .split.has-viz .claim-bars li:first-child h2,
+.role-pres .split.has-viz .claim-bars li:first-child p {
+  color: #fff;
+}
+.role-pres .title-copy .claim-bars li:first-child .card-n span,
+.role-pres .stage.claims .split:not(.has-viz) .claim-bars li:first-child .card-n span,
+.role-pres .stage.prompt .claim-bars li:first-child .card-n span,
+.role-pres .split.has-viz .claim-bars li:first-child .card-n span {
+  background: #fff;
+  color: var(--accent);
 }
 .role-pres .stage.claims h1,
 .role-pres .stage.prompt.has-split h1,
@@ -2851,11 +3086,11 @@ textarea {
 }
 .role-pres.is-backup .stage.prompt .talk {
   flex: 1 1 auto;
-  align-content: center;
+  align-content: stretch;
   max-width: none;
   margin-top: 1.4em;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  grid-template-columns: 1fr;
 }
 .role-pres.is-backup .talk li {
   font-size: clamp(20px, 1.6vw, 24px);
@@ -2869,8 +3104,8 @@ textarea {
 .talk {
   list-style: none;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.65rem;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
   margin-top: 0.35em;
   max-width: none;
   flex: 1 1 auto;
@@ -2878,8 +3113,9 @@ textarea {
   align-content: stretch;
 }
 .talk li {
-  background: var(--paper);
-  border: 1.5px solid #1d1d1d;
+  background: #fff;
+  border: 0;
+  border-left: 6px solid var(--accent);
   color: var(--ink);
   padding: 16px 20px;
   border-radius: 0;
