@@ -231,16 +231,15 @@
 
   function htmlFor(s) {
     if (s.type === "title") {
+      var href = (window.DECK && DECK.joinUrl) || "";
+      var shown = String(href).replace(/^https:\/\//, "");
       return '<div class="title-copy">'
         + kickerHtml(s)
         + "<h1>" + esc(s.title) + "</h1>"
         + titleRuleHtml()
-        + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
-        + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
-        + agendaHtml(s)
-        + quoteHtml(s.quote)
-        + articleHtml(s)
-        + claimBarsHtml(s.claims)
+        + (s.byline ? '<p class="title-byline">' + esc(s.byline) + "</p>" : "")
+        + (s.presented ? '<p class="title-presented">' + esc(s.presented) + "</p>" : "")
+        + (shown ? '<p class="title-join">' + esc(shown) + "</p>" : "")
         + "</div>";
     }
     if (s.type === "story") {
@@ -310,13 +309,15 @@
     }
     return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
       + decoHtml(s)
+      + '<div class="slide-stack">'
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + splitHtml(s)
       + quoteHtml(s.quote)
       + articleHtml(s)
       + recapHtml(s)
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "")
-      + (s.ask ? '<div class="ask-panel">' + windowHtml("term", "Room", '<p class="ask-q">' + esc(s.ask) + "</p>" + dragTalk(s)) + "</div>" : windowHtml("term", "Talk", talkHtml(s)));
+      + (s.ask ? '<div class="ask-panel">' + windowHtml("term", "Room", '<p class="ask-q">' + esc(s.ask) + "</p>" + dragTalk(s)) + "</div>" : windowHtml("term", "Talk", talkHtml(s)))
+      + "</div>";
   }
 
   function dragTalk(s) {

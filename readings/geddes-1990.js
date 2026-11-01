@@ -10,20 +10,14 @@
     {
       id: "open",
       type: "title",
-      kicker: "",
-      title: "Do the cases you pick change the answer?",
+      kicker: "Geddes",
+      title: "How the Cases You Choose Affect the Answers You Get",
+      byline: "Barbara Geddes. IGS Working Paper 90-13, 1990.",
+      presented: "Presented by Tobyn and Raquel",
       lede: "",
       agenda: [],
       speaker: "",
-      claims: [
-        { n: "1", title: "The paper", body: "How the cases you choose affect the answers you get. Selection bias in comparative politics." },
-        { n: "2", title: "The habit", body: "Study only the outcome you already care about." },
-        { n: "3", title: "The cost", body: "The causes you then name may be just as common where the outcome never happened." }
-      ],
-      fromClass: {
-        week: 2,
-        body: "Experts carry mind-sets that filter what they see. A method should catch the habit of picking only the cases you notice."
-      }
+      claims: []
     },
     {
       id: "ask",
@@ -34,11 +28,7 @@
         { n: "1", title: "Not a new theory", body: "She is not offering a new account of why Korea grew, or why France had a revolution." },
         { n: "2", title: "A test of a habit", body: "I think the paper tests what happens when we pick cases because they already have the outcome." },
         { n: "3", title: "The unit", body: "The unit, all the way through, is the country. Working paper 90-13, 1990." }
-      ],
-      fromClass: {
-        week: 3,
-        body: "Burlacu on corruption and voting: if corruption changes who turns out, studying only voters can mislead."
-      }
+      ]
     },
     {
       id: "habit",
@@ -52,7 +42,7 @@
       ],
       fromClass: {
         week: 8,
-        body: "Pape studied only suicide attacks, so he cannot say what causes them. Ashworth, Clinton, Meirowitz and Ramsay say he samples on the dependent variable."
+        body: "Class called this sampling on the dependent variable. That is the habit she is testing."
       }
     },
     {
@@ -105,7 +95,7 @@
       ],
       fromClass: {
         week: 6,
-        body: "Achen and Snidal: well-known crises skew the result. A few famous cases cannot test a theory that says this usually happens."
+        body: "A few famous cases cannot test a theory that says this usually happens. Pick East Asia and you have picked on growth."
       }
     },
     {
@@ -125,7 +115,7 @@
       ],
       fromClass: {
         week: 10,
-        body: "Bremer and Spiro: how you define democracy, and which cases you count, can change the answer."
+        body: "How you define the score, and which cases you count, can change the answer. She calls the labour score imperfect."
       }
     },
     {
@@ -141,11 +131,7 @@
       claims: [
         { n: "1", title: "Among the five", body: "There was no real link. Slow countries repress labour too." },
         { n: "2", title: "The limit", body: "This simple check cannot disconfirm the claim. The five-country picture does not travel." }
-      ],
-      fromClass: {
-        week: 4,
-        body: "Horn, Johannesson and Mavroidis: a high WTO win rate may just mean states only file cases they expect to win."
-      }
+      ]
     },
     {
       id: "skocpol",
@@ -193,11 +179,7 @@
       ],
       claims: [
         { n: "1", title: "A quiet year", body: "Hirschman on Chile ends in 1961. 1955 was 84 per cent. 1960 and 1961 are 5 and 10. Printed pp. 22 to 23." }
-      ],
-      fromClass: {
-        week: 5,
-        body: "Tomz used an experiment because history only shows the leaders who chose to back down."
-      }
+      ]
     },
     {
       id: "close",
@@ -208,11 +190,7 @@
         { n: "1", title: "What she re-ran", body: "Labour and growth, Skocpol, and Hirschman on Chile." },
         { n: "2", title: "What cases are good for", body: "Good for how a thing happened, and for a hunch. Not, on their own, a test." },
         { n: "3", title: "The risk", body: "If you pick cases because they already have the outcome, you will often get the wrong answer. Printed p. 24." }
-      ],
-      fromClass: {
-        week: 9,
-        body: "Errors and pitfalls in inference. That is the class topic. This paper is one way into it."
-      }
+      ]
     }
   ],
   script: [
@@ -220,19 +198,19 @@
       id: "open",
       title: "Title",
       say: "One line, then we sit with it. Do the cases you pick change the answer. That is the paper.",
-      notes: "Tobyn.\nPart 1.\nLeave the title up.\nGo live when names show.\nWeek 2: science is a cycle. Correlation is not cause. Ice cream and murder both rise in summer. Clark et al ch.1; Heuer ch.1."
+      notes: "Tobyn.\nPart 1.\nLeave the title up.\nGo live when names show."
     },
     {
       id: "ask",
       title: "What she wants",
       say: "I don't think she is asking why Korea grew. She is asking what happens when we pick cases because they already have the outcome.",
-      notes: "Working paper 90-13, 1990.\nThe lone 1 on the opening page is a footnote, not a page number.\nWeek 3: Burlacu. Corruption may change who votes. X causes Y. Question, theory, hypothesis, then data."
+      notes: "Working paper 90-13, 1990.\nThe lone 1 on the opening page is a footnote, not a page number."
     },
     {
       id: "habit",
       title: "The habit",
       say: "You want revolution, so you read revolutions. You then see what those cases share. You cannot see whether the others share it too.",
-      notes: "Unit: the country.\nWeek 8: Pape 2003 studied only suicide attacks. Ashworth, Clinton, Meirowitz and Ramsay 2008: samples on the dependent variable."
+      notes: "Unit: the country.\nWeek 8: class called this sampling on the dependent variable. That is her habit."
     },
     {
       id: "nics",
@@ -244,19 +222,19 @@
       id: "regions",
       title: "Regions",
       say: "Table 1. East Asia at 5.2. Africa at 1.0. Pick East Asia and you have, in effect, picked on the thing you want to explain.",
-      notes: "Table 1 sits after the Figure 1 page, printed 8. No page number is visible on the table page itself.\nWeek 6: Achen and Snidal 1989. Well-known crises skew results. Random assignment makes groups alike."
+      notes: "Table 1 sits after the Figure 1 page, printed 8. No page number is visible on the table page itself.\nWeek 6: a few famous cases cannot test a usually claim. That is the East Asia pick."
     },
     {
       id: "scores",
       title: "Labour scores",
       say: "She scores labour from 1 to 4. South Korea and Brazil sit at 3. She calls the score imperfect.",
-      notes: "Criteria sit on the pages just before Figure 1.\nWeek 10: Bremer 1992 and Spiro 1994. How you define democracy and which cases count can change the answer. Zero wars may be chance because democracies were rare."
+      notes: "Criteria sit on the pages just before Figure 1.\nWeek 10: how you define the score, and which cases you count, can change her answer."
     },
     {
       id: "fits",
       title: "Three samples",
       say: "East Asia alone, r squared of .56. A wider set, .07. As advanced as South Korea, .01. Among the five there was no real link.",
-      notes: "Figure 1 printed p. 8. Figure 2 printed p. 10.\nWeek 4: Horn, Johannesson and Mavroidis 2011. Look at the data before claiming cause. High WTO win rate may be case selection."
+      notes: "Figure 1 printed p. 8. Figure 2 printed p. 10."
     },
     {
       id: "skocpol",
@@ -274,13 +252,13 @@
       id: "chile",
       title: "Which comparison",
       say: "Hirschman stops in 1961. 1955 was 84 per cent. 1960 and 1961 are 5 and 10. Which comparison would you trust, and why?",
-      notes: "Table 2, printed pp. 22 to 23.\n1957 is 17, as she prints it.\nLeave it up. Give them a minute.\nAsk one person from two different picks.\nWeek 5: four hurdles. Mechanism, no reverse cause, X and Y move together, no hidden Z. Tomz 2007."
+      notes: "Table 2, printed pp. 22 to 23.\n1957 is 17, as she prints it.\nLeave it up. Give them a minute.\nAsk one person from two different picks."
     },
     {
       id: "close",
       title: "Last slide",
       say: "Case studies are good for how a thing happened, and for a hunch. They cannot, on their own, test the theory they just wrote.",
-      notes: "Tobyn.\nClose.\nPrinted pp. 24 to 25.\nStop.\nWeek 9: errors and pitfalls in inference. Topic only. No authors on the board."
+      notes: "Tobyn.\nClose.\nPrinted pp. 24 to 25.\nStop."
     }
   ]
 });

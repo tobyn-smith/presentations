@@ -626,12 +626,8 @@
         + kickerHtml(s)
         + "<h1>" + esc(s.title) + "</h1>"
         + titleRuleHtml()
-        + (s.lede ? '<p class="lede">' + esc(s.lede) + "</p>" : "")
-        + (s.frame ? '<p class="frame">' + esc(s.frame) + "</p>" : "")
-        + agendaHtml(s)
-        + quoteHtml(s.quote)
-        + articleHtml(s)
-        + claimBarsHtml(s.claims)
+        + (s.byline ? '<p class="title-byline">' + esc(s.byline) + "</p>" : "")
+        + (s.presented ? '<p class="title-presented">' + esc(s.presented) + "</p>" : "")
         + "</div>"
         + (isPres ? '<div class="title-side">' + join + "</div>" : "");
     }

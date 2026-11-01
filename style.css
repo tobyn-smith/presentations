@@ -517,13 +517,22 @@ button { cursor: pointer; }
   flex-direction: column;
   justify-content: flex-start;
 }
+.role-pres .stage.title .title-copy {
+  justify-content: center;
+  background: #fff;
+  border-left: 6px solid var(--accent);
+  padding: 28px 32px;
+}
 .role-pres .title-copy h1,
 .role-pres .title-copy .lede,
 .role-pres .title-copy .frame,
 .role-pres .title-copy .speaker,
 .role-pres .title-copy .source-link,
 .role-pres .title-copy .title-rule,
-.role-pres .title-copy .deco {
+.role-pres .title-copy .deco,
+.role-pres .title-copy .title-byline,
+.role-pres .title-copy .title-presented,
+.role-pres .title-copy .title-join {
   flex: none;
 }
 .title-side {
@@ -539,11 +548,37 @@ button { cursor: pointer; }
 }
 .title-side .ss-win { height: 100%; }
 .role-pres .stage.title h1 {
-  max-width: 18ch;
-  font-size: clamp(36px, 5.8vh, 58px);
+  max-width: 16ch;
+  font-size: clamp(34px, 5.4vh, 54px);
   margin: 0 0 20px;
   text-wrap: balance;
   line-height: 1.08;
+}
+.title-byline {
+  margin: 0 0 1.1rem;
+  font-size: clamp(20px, 2.3vh, 24px);
+  line-height: 1.4;
+  color: var(--ink);
+  max-width: 36ch;
+}
+.title-presented {
+  display: inline-block;
+  width: fit-content;
+  margin: 0;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--display);
+  font-size: clamp(18px, 2.2vh, 22px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.5rem 0.8rem;
+  line-height: 1.25;
+}
+.title-join {
+  margin: 1rem 0 0;
+  font-family: var(--display);
+  font-size: clamp(16px, 2vh, 20px);
+  color: var(--ink-faint);
 }
 .role-pres .stage.title .lede {
   max-width: 46ch;
@@ -3100,8 +3135,29 @@ textarea {
   align-items: stretch;
   grid-template-columns: none;
 }
+.role-pres.is-backup .stage.prompt.has-split:not(.has-drag) {
+  height: 100%;
+}
+.role-pres.is-backup .slide-stack {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  background: #fff;
+  border-left: 6px solid var(--accent);
+  padding: 18px 20px;
+}
+.role-pres.is-backup .slide-stack .ss-win {
+  flex: 1 1 auto;
+  min-height: 0;
+}
 .role-pres.is-backup .stage.prompt h1 {
-  max-width: 28ch;
+  max-width: none;
+  width: 100%;
+}
+.role-pres.is-backup .stage.prompt .deco {
+  width: 100%;
 }
 .role-pres.is-backup .stage.prompt .help {
   margin-top: 0.7em;
