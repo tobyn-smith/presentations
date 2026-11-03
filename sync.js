@@ -14,6 +14,10 @@
   var backupResponses = {};
   try { backupResponses = JSON.parse(localStorage.getItem(backupResponseKey) || "{}") || {}; } catch (e) {}
   var slide = 0;
+  try {
+    var savedSlide = Number(sessionStorage.getItem("deck-slide-" + room));
+    if (Number.isInteger(savedSlide) && savedSlide >= 0) slide = savedSlide;
+  } catch (e) {}
   var responses = {};
   var slideFns = [];
   var respFns = [];
@@ -56,6 +60,7 @@
   var localOnly = /[?&]local=1\b/.test(location.search);
   var forceFirebase = /[?&]firebase=1\b/.test(location.search);
   var ntfySource = null;
+  var ntfyPollTimer = null;
   var fbSource = null;
   var usingFirebase = false;
   var fbReachable = false;
@@ -203,6 +208,7 @@
       n = Math.max(0, Math.min((global.SLIDES || []).length - 1, n));
       if (n === slide && via !== "init") return;
       slide = n;
+      try { sessionStorage.setItem("deck-slide-" + room, String(slide)); } catch (e) {}
       dropHands();
       emitSlide();
       return;
@@ -869,6 +875,13 @@
       }
       return r.json().then(function (data) {
         if (data && typeof data === "object") takeRoom(data);
+        /* Keep the last locally selected presenter slide when the REST room
+           snapshot is empty or stale. Only a room snapshot with an explicit
+           slide field is authoritative on startup. */
+        if (wantLive) {
+          slide = Math.max(0, Math.min((global.SLIDES || []).length - 1, slide));
+          try { sessionStorage.setItem("deck-slide-" + room, String(slide)); } catch (e) {}
+        }
         markFirebaseLive();
         flushBackupResponses();
         openFbStream();
@@ -926,32 +939,42 @@
         apply(typeof payload === "string" ? JSON.parse(payload) : payload, "ntfy");
       } catch (e) {}
     }
-    fetch(url + "/json?poll=1&since=12h").then(function (r) {
-      if (!r.ok) throw new Error(String(r.status));
-      return r.text();
-    }).then(function (text) {
-      var lastLive = null;
-      var lastSlide = null;
-      var lastPack = null;
-      text.split("\n").forEach(function (line) {
-        if (!line.trim()) return;
-        try {
-          var ev = JSON.parse(line);
-          if (ev && ev.event && ev.event !== "message") return;
-          var payload = ev && ev.message != null ? ev.message : line;
-          var msg = typeof payload === "string" ? JSON.parse(payload) : payload;
-          if (!msg || !msg.t) return;
-          if (msg.t === "here" || msg.t === "gone") lastLive = msg;
-          else if (msg.t === "slide") lastSlide = msg;
-          else if (msg.t === "pack") lastPack = msg;
-          else apply(msg, "ntfy");
-        } catch (e) {}
-      });
-      if (lastPack) apply(lastPack, "ntfy");
-      if (lastSlide) apply(lastSlide, "ntfy");
-      if (lastLive) apply(lastLive, "ntfy");
-      if (!usingFirebase) setSyncLine("backup", "Live sync: backup, Firebase locked", true);
-    }).catch(function () {});
+    function pollBackupHistory(initial) {
+      return fetch(url + "/json?poll=1&since=12h&cache=" + Date.now(), { cache: "no-store" }).then(function (r) {
+        if (!r.ok) throw new Error(String(r.status));
+        return r.text();
+      }).then(function (history) {
+        var lastLive = null;
+        var lastSlide = null;
+        var lastPack = null;
+        history.split("\n").forEach(function (line) {
+          if (!line.trim()) return;
+          try {
+            var ev = JSON.parse(line);
+            if (ev && ev.event && ev.event !== "message") return;
+            var payload = ev && ev.message != null ? ev.message : line;
+            var msg = typeof payload === "string" ? JSON.parse(payload) : payload;
+            if (!msg || !msg.t || (msg.session && msg.session !== session)) return;
+            if (msg.t === "resp") {
+              /* SSE is the fast path; this history poll recovers dropped events.
+                 Response IDs make replay safe. */
+              apply(msg, "ntfy");
+            } else if (initial && (msg.t === "here" || msg.t === "gone")) lastLive = msg;
+            else if (initial && msg.t === "slide") lastSlide = msg;
+            else if (initial && msg.t === "pack") lastPack = msg;
+            else if (initial) apply(msg, "ntfy");
+          } catch (e) {}
+        });
+        if (initial && lastPack) apply(lastPack, "ntfy");
+        if (initial && lastSlide) apply(lastSlide, "ntfy");
+        if (initial && lastLive) apply(lastLive, "ntfy");
+        if (!usingFirebase) setSyncLine("backup", "Live sync: backup, Firebase locked", true);
+      }).catch(function () {});
+    }
+    pollBackupHistory(true);
+    if (!ntfyPollTimer) ntfyPollTimer = setInterval(function () {
+      if (backupOn && !usingFirebase) pollBackupHistory(false);
+    }, 1000);
     try {
       var es = new EventSource(url + "/sse");
       ntfySource = es;
@@ -959,6 +982,16 @@
       es.onerror = function () {};
       es.onopen = function () {
         sseOpen = true;
+        /* Re-read recent room history whenever the stream reconnects. This
+           recovers submissions sent while the SSE connection was down. */
+        pollBackupHistory(false);
+        /* When the backup stream returns, only the active presenter should
+           republish the current slide and live heartbeat. Otherwise a seated
+           student tab that is still on slide 1 can overwrite the room slide. */
+        if (wantLive) {
+          shout({ t: "slide", n: slide });
+          shout({ t: "here", at: Math.max(Date.now(), lastGoneAt + 1) });
+        }
         if (!usingFirebase) setSyncLine("backup", "Live sync: backup, Firebase locked", true);
       };
     } catch (e) {}
@@ -987,7 +1020,11 @@
     sessionId: sid,
     getSlide: function () { return slide; },
     onSlide: function (fn) { slideFns.push(fn); fn(slide); },
-    setSlide: function (n) { shout({ t: "slide", n: n }); },
+    setSlide: function (n) {
+      n = Math.max(0, Math.min((global.SLIDES || []).length - 1, +n || 0));
+      try { sessionStorage.setItem("deck-slide-" + room, String(n)); } catch (e) {}
+      shout({ t: "slide", n: n });
+    },
     submit: function (slideId, payload) {
       var row = {
         t: "resp",

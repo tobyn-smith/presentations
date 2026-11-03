@@ -1088,3 +1088,273 @@ body.role-pres .stage[data-slide-id="close"] .claim-bars p {
   font-size: clamp(19px, 2.3vh, 26px) !important;
   line-height: 1.45;
 }
+
+
+/* Treat the source figures as the slide artwork, not a screenshot in a second card. */
+body.role-part .stage .figure-embed,
+body.role-pres .stage .figure-embed {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+body.role-part .stage .figure-embed > figure.chart,
+body.role-pres .stage .figure-embed > figure.chart {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+body.role-part .stage .figure-embed > figure.chart figcaption,
+body.role-pres .stage .figure-embed > figure.chart figcaption {
+  display: none !important;
+}
+body.role-part .stage .figure-embed > figure.chart::after,
+body.role-pres .stage .figure-embed > figure.chart::after {
+  width: 100%;
+  margin: 0;
+  background-position: center;
+  background-size: contain;
+  border-radius: 12px;
+}
+body.role-part .stage .figure-expand,
+body.role-pres .stage .figure-expand {
+  position: absolute;
+  z-index: 3;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 999px;
+  color: #fffdf8;
+  background: rgba(16,43,67,.92);
+  font: 600 13px/1 var(--body, Arial, sans-serif);
+  cursor: pointer;
+  opacity: .88;
+}
+body.role-part .stage .figure-expand:hover,
+body.role-pres .stage .figure-expand:hover,
+body.role-part .stage .figure-expand:focus-visible,
+body.role-pres .stage .figure-expand:focus-visible {
+  opacity: 1;
+  outline: 3px solid #ba0c2f;
+  outline-offset: 3px;
+}
+.figure-viewer[hidden] { display: none !important; }
+.figure-viewer {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 3vw, 40px);
+}
+.figure-viewer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5,18,30,.94);
+}
+.figure-viewer-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(96vw, 1800px);
+  max-height: 94vh;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 18px;
+  background: #102b43;
+}
+.figure-viewer-close {
+  align-self: flex-end;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 999px;
+  color: #fffdf8;
+  background: transparent;
+  font: 600 14px/1 var(--body, Arial, sans-serif);
+  cursor: pointer;
+}
+.figure-viewer-image {
+  display: block;
+  width: 100%;
+  max-height: calc(94vh - 110px);
+  object-fit: contain;
+}
+.figure-viewer-caption {
+  margin: 0;
+  color: #f0d48a;
+  font-size: 13px;
+  text-align: center;
+}
+body.figure-viewer-open { overflow: hidden; }
+@media (max-width: 900px) {
+  body.role-part .stage .figure-expand,
+  body.role-pres .stage .figure-expand {
+    right: 8px;
+    bottom: 8px;
+    min-height: 32px;
+    font-size: 12px;
+  }
+}
+
+
+/* Figures 4 and 5 are the visual centre of their slides. Match the board
+   colour to the SVG artwork so the graphic reads as part of the slide,
+   rather than a poster sitting inside a separate white card. */
+body.role-part .stage[data-chart="geddes-fig4"],
+body.role-pres .stage[data-chart="geddes-fig4"] {
+  background: #102b43 !important;
+  color: #fffdf8;
+  border-radius: 22px;
+  padding: clamp(18px, 2.5vw, 36px);
+}
+body.role-part .stage[data-chart="geddes-fig5"],
+body.role-pres .stage[data-chart="geddes-fig5"] {
+  background: #16324f !important;
+  color: #fffdf8;
+  border-radius: 22px;
+  padding: clamp(18px, 2.5vw, 36px);
+}
+body.role-part .stage[data-chart="geddes-fig4"] h1,
+body.role-pres .stage[data-chart="geddes-fig4"] h1,
+body.role-part .stage[data-chart="geddes-fig5"] h1,
+body.role-pres .stage[data-chart="geddes-fig5"] h1 {
+  color: #fffdf8;
+}
+body.role-part .stage[data-chart="geddes-fig4"] .slide-kicker,
+body.role-pres .stage[data-chart="geddes-fig4"] .slide-kicker,
+body.role-part .stage[data-chart="geddes-fig5"] .slide-kicker,
+body.role-pres .stage[data-chart="geddes-fig5"] .slide-kicker {
+  color: #f0d48a;
+}
+body.role-part .stage[data-chart="geddes-fig4"] .figure-embed,
+body.role-pres .stage[data-chart="geddes-fig4"] .figure-embed,
+body.role-part .stage[data-chart="geddes-fig5"] .figure-embed,
+body.role-pres .stage[data-chart="geddes-fig5"] .figure-embed {
+  margin-top: 8px;
+}
+body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
+body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
+body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
+body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
+  height: clamp(430px, 65vh, 720px) !important;
+  border-radius: 0;
+}
+body.role-part .stage[data-chart="geddes-fig4"] .figure-expand,
+body.role-pres .stage[data-chart="geddes-fig4"] .figure-expand,
+body.role-part .stage[data-chart="geddes-fig5"] .figure-expand,
+body.role-pres .stage[data-chart="geddes-fig5"] .figure-expand {
+  border-color: rgba(255,255,255,.5);
+  background: rgba(4,17,29,.82);
+}
+
+
+/* Five live answers use an explicit response-count class, not structural selectors. */
+body.role-pres .stage.prompt.has-notes #viz.five-responses .responses.many {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  align-content: stretch;
+  align-items: stretch;
+  min-width: 0;
+  min-height: 0;
+  gap: clamp(8px, 1vw, 14px);
+}
+body.role-pres .stage.prompt.has-notes #viz.five-responses .responses .card {
+  min-width: 0;
+  min-height: 0;
+  overflow-wrap: anywhere;
+}
+body.role-pres .stage.prompt.has-notes #viz.five-responses .responses .said {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 900px) {
+  body.role-pres .stage.prompt.has-notes #viz.five-responses .responses.many {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* The plot slides use the same warm-white surface as the SVG artwork. */
+body.role-part .stage[data-chart="geddes-fig1"],
+body.role-pres .stage[data-chart="geddes-fig1"],
+body.role-part .stage[data-chart="geddes-fig2"],
+body.role-pres .stage[data-chart="geddes-fig2"],
+body.role-part .stage[data-chart="geddes-fig3"],
+body.role-pres .stage[data-chart="geddes-fig3"],
+body.role-part .stage[data-chart="geddes-fig6"],
+body.role-pres .stage[data-chart="geddes-fig6"] {
+  background: #fffdf8 !important;
+  border: 1px solid #ded7c9;
+  border-radius: 22px;
+  padding: clamp(16px, 2.2vw, 30px);
+}
+
+/* Fit the two full-board comparison figures on compact classroom displays.
+   The SVG remains expandable for students who need to inspect its labels. */
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-part .stage[data-chart="geddes-fig4"],
+  body.role-pres .stage[data-chart="geddes-fig4"],
+  body.role-part .stage[data-chart="geddes-fig5"],
+  body.role-pres .stage[data-chart="geddes-fig5"] {
+    padding: 12px 18px !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
+    height: clamp(250px, 39vh, 300px) !important;
+  }
+}
+@media (max-height: 650px) and (min-width: 800px) {
+  body.role-part .stage[data-chart="geddes-fig4"],
+  body.role-pres .stage[data-chart="geddes-fig4"],
+  body.role-part .stage[data-chart="geddes-fig5"],
+  body.role-pres .stage[data-chart="geddes-fig5"] {
+    padding: 8px 12px !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
+    height: clamp(255px, 45vh, 285px) !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig4"] h1,
+  body.role-pres .stage[data-chart="geddes-fig4"] h1,
+  body.role-part .stage[data-chart="geddes-fig5"] h1,
+  body.role-pres .stage[data-chart="geddes-fig5"] h1 {
+    font-size: clamp(23px, 3.8vh, 29px) !important;
+    margin: 0 0 4px !important;
+  }
+}
+@media (max-height: 800px) and (min-width: 801px) {
+  body.role-part .stage[data-chart="geddes-fig3"] .ask-panel form.answer textarea {
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+  }
+}
+@media (max-height: 650px) and (min-width: 800px) {
+  body.role-part .stage[data-chart="geddes-fig3"] .ask-panel form.answer textarea {
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+  }
+}

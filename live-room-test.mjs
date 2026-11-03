@@ -107,8 +107,8 @@ function check(ok,label){(ok?checks:failures).push(label);}
 async function waitForStoredResponse() {
   const until=Date.now()+12000;
   while(Date.now()<until) {
-    const rows=(roomData.places && roomData.places["2"]) || (roomData.votes && roomData.votes["2"]);
-    if(rows && Object.keys(rows).length===1) return true;
+    const rows=Object.assign({},(roomData.places && roomData.places["2"]) || {},(roomData.votes && roomData.votes["2"]) || {});
+    if(Object.keys(rows).length===5) return true;
     await new Promise(resolve=>setTimeout(resolve,100));
   }
   return false;
@@ -134,6 +134,14 @@ try {
   await presenter.click("#next");
   await presenter.waitForFunction(()=>document.querySelector("#counter")?.textContent.trim()==="3");
   await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").startsWith("3"));
+  const initialSlideState = await presenter.evaluate(()=>({
+    slide:DeckSync.getSlide(),
+    saved:sessionStorage.getItem("deck-slide-geddes-qa")
+  }));
+  check(initialSlideState.slide===2 && initialSlideState.saved==="2","presenter slide position is persisted before transport failure");
+  const slideWriteDeadline=Date.now()+6000;
+  while(roomData.slide!==2 && Date.now()<slideWriteDeadline) await new Promise(resolve=>setTimeout(resolve,100));
+  check(roomData.slide===2,"Firebase has acknowledged the presenter's current slide before failover");
   await student.waitForSelector("#drag-place");
   const firstPlace=student.locator('select[data-token-place="Labour was repressed or coopted"]');
   const secondPlace=student.locator('select[data-token-place="That produced fast growth"]');
@@ -173,26 +181,68 @@ try {
   await student.waitForSelector(".thanks",{state:"visible",timeout:10000});
   await presenter.waitForSelector(".responses li",{state:"visible",timeout:10000});
   check(responsePosts===1,"rapid duplicate activation produces one response post");
-  check(await presenter.locator(".responses li").count()===1,"presenter sees one response row");
+  check(await presenter.locator(".responses li").count()===1,"presenter sees the first response row");
+
+  /* Four additional browser sessions submit under distinct student IDs.
+     This isolates response transport/aggregation from the slide-navigation UI. */
+  const extraStudents=[];
+  for(let n=0;n<4;n++) {
+    const peer=await studentContext.newPage();
+    peer.on("pageerror",e=>failures.push("additional student browser error: "+e.message));
+    await peer.goto("http://127.0.0.1:4174/index.html?room=geddes-qa",{waitUntil:"domcontentloaded"});
+    await peer.waitForFunction(()=>typeof DeckSync!=="undefined"&&DeckSync.getStatus().mode==="backup",null,{timeout:10000});
+    const delivered=await peer.evaluate(async n=>{
+      sessionStorage.setItem("deck-sid","geddes-qa-student-"+n);
+      return DeckSync.submit("2",{text:"Additional student "+n+" response",choice:"shown",kind:"place",bin:"place"});
+    },n);
+    check(delivered,"additional student "+(n+1)+" response reaches the backup room");
+    extraStudents.push(peer);
+  }
+  await presenter.waitForFunction(()=>DeckSync.getResponses("2").length===5,null,{timeout:15000});
+  await presenter.waitForFunction(()=>document.querySelectorAll(".responses li").length===5,null,{timeout:10000});
+  check(responsePosts===5,"five students produce five distinct response posts");
+  check(await presenter.locator(".responses li").count()===5,"presenter renders all five responses");
+  await presenter.screenshot({path:path.join(out,"five-responses.png"),animations:"disabled"});
   await presenter.screenshot({path:path.join(out,"backup-response.png"),animations:"disabled"});
 
+  const beforeBackupRefresh = await presenter.evaluate(()=>({
+    slide:DeckSync.getSlide(),
+    counter:document.querySelector("#counter")?.textContent||"",
+    saved:sessionStorage.getItem("deck-slide-geddes-qa")
+  }));
+  console.log("Before backup presenter refresh: "+JSON.stringify(beforeBackupRefresh));
   await presenter.reload({waitUntil:"domcontentloaded"});
   await presenter.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000});
   await presenter.waitForFunction(()=>DeckSync.isPresenting(),null,{timeout:8000});
-  await presenter.waitForSelector(".responses li",{state:"visible",timeout:10000});
-  check(await presenter.locator(".responses li").count()===1,"presenter refresh restores response from backup history");
+  const backupRefreshState = await presenter.evaluate(()=>({
+    slide:DeckSync.getSlide(),
+    counter:document.querySelector("#counter")?.textContent||"",
+    saved:sessionStorage.getItem("deck-slide-geddes-qa"),
+    presenting:DeckSync.isPresenting()
+  }));
+  console.log("Backup presenter refresh state: "+JSON.stringify(backupRefreshState));
+  await presenter.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").trim()==="3",null,{timeout:15000});
+  await presenter.waitForFunction(()=>DeckSync.getResponses("2").length===5,null,{timeout:15000});
+  await presenter.waitForFunction(()=>document.querySelectorAll(".responses li").length===5,null,{timeout:10000});
+  check(await presenter.locator(".responses li").count()===5,"presenter refresh restores all five responses from backup history");
   check(await presenter.evaluate(()=>DeckSync.isPresenting()),"presenter refresh restores the live room state");
   await presenter.screenshot({path:path.join(out,"refresh-from-backup.png"),animations:"disabled"});
 
   firebaseOnline=true;
+  /* The last student tab has the complete local response queue. Reloading it
+     forces an immediate Firebase bootstrap and verifies the whole queue flush. */
+  await extraStudents[3].reload({waitUntil:"domcontentloaded"});
+  await extraStudents[3].waitForFunction(()=>DeckSync.getStatus().mode==="firebase",null,{timeout:15000});
   await presenter.waitForFunction(()=>DeckSync.getStatus().mode==="firebase",null,{timeout:30000});
   await student.waitForFunction(()=>DeckSync.getStatus().mode==="firebase",null,{timeout:30000});
   await presenter.waitForFunction(()=>DeckSync.isPresenting(),null,{timeout:10000});
-  check(await waitForStoredResponse(),"Firebase reconnection persists the queued backup response");
+  check(await waitForStoredResponse(),"Firebase reconnection persists all five queued responses");
 
   await presenter.reload({waitUntil:"domcontentloaded"});
-  await presenter.waitForSelector(".responses li",{state:"visible",timeout:10000});
-  check(await presenter.locator(".responses li").count()===1,"normal presenter refresh restores response from Firebase");
+  await presenter.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").trim()==="3",null,{timeout:15000});
+  await presenter.waitForFunction(()=>DeckSync.getResponses("2").length===5,null,{timeout:15000});
+  await presenter.waitForFunction(()=>document.querySelectorAll(".responses li").length===5,null,{timeout:10000});
+  check(await presenter.locator(".responses li").count()===5,"normal presenter refresh restores all five responses from Firebase");
   await presenter.screenshot({path:path.join(out,"refresh-from-firebase.png"),animations:"disabled"});
 
   console.log("Live-room checks: "+checks.length);

@@ -13,8 +13,8 @@ node live-room-test.mjs
 ```
 
 - `test.js` checks the slide content, teaching assignments, accessible controls, figure assets and room-status wiring.
-- `visual-test.mjs` captures all 13 slides in the real presenter and audience routes at 1920×1080, 1600×900, 1366×768, 1280×720, 1024×768 and the minimum supported 800×600. It checks stage overflow, page overflow, nested clipping, figure metadata, interaction bounds and the room-status dialog. The 800×600 layout may use a small amount of internal slide scrolling; larger displays should not.
-- `live-room-test.mjs` uses mocked Firebase and ntfy transports. It tests a failed send when both transports are unavailable, a successful retry, rapid duplicate activation, presenter refresh while in backup mode, automatic restoration of the live room, Firebase reconnection, and persistence of the queued response after a normal refresh. It also uses the keyboard-operable placement selects rather than drag-and-drop.
+- `visual-test.mjs` captures all 13 slides in the real presenter and audience routes at 2560×1440, 1920×1080, 1600×900, 1366×768, 1280×720, 1024×768 and the minimum supported 800×600. It checks stage overflow, page overflow, nested clipping, figure metadata, click-to-expand and close behaviour, interaction bounds and the room-status dialog. The 800×600 layout may use a small amount of internal slide scrolling; larger displays should not.
+- `live-room-test.mjs` uses mocked Firebase and ntfy transports. It tests a failed send when both transports are unavailable, a successful retry, rapid duplicate activation, presenter refresh while in backup mode, automatic restoration of the live room, Firebase reconnection, and persistence of the queued response after a normal refresh. It also uses the keyboard-operable placement selects rather than drag-and-drop, checks that five distinct student responses all appear on the presenter board, and verifies that all five survive backup-mode refresh and Firebase recovery.
 
 The tests do not contact the production Firebase room or clear real student check-ins. Screenshots and JSON reports are written under `artifacts/geddes-visual/` and `artifacts/geddes-live-room/`.
 
@@ -43,7 +43,7 @@ The tests do not contact the production Firebase room or clear real student chec
 5. Restore Firebase. The client retries the connection; confirm Room status returns to Firebase.
 6. Confirm the queued backup response is written to Firebase, so it survives a later presenter refresh.
 
-Backup delivery is temporary. Responses received over the backup transport are retained locally and replayed into Firebase when the connection returns. Room status warns the presenter when the room is using the temporary transport.
+Backup delivery is temporary. Responses received over the backup transport are retained locally and replayed into Firebase when the connection returns. When the backup stream reconnects, the presenter republishes its current slide and live heartbeat; the active slide is also retained across a presenter refresh. Room status warns the presenter when the room is using the temporary transport.
 
 ## 4. Presenter refresh
 

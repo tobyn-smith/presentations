@@ -21,11 +21,11 @@
 
   <rect x="930" y="250" width="600" height="210" rx="16" fill="#fffdf7"/>
   <rect x="930" y="250" width="12" height="210" rx="6" fill="#ba0c2f"/>
-  <text x="985" y="355" fill="#ba0c2f" font-family="Arial, sans-serif" font-size="82" font-weight="700">7</text>
-  <text x="1090" y="315" fill="#16324f" font-family="Arial, sans-serif" font-size="29" font-weight="700">DEFEAT, NO REVOLUTION</text>
-  <text x="980" y="358" fill="#263c4d" font-family="Arial, sans-serif" font-size="22">Peru, 1839 · Bolivia, 1839 · Mexico, 1848</text>
-  <text x="980" y="391" fill="#263c4d" font-family="Arial, sans-serif" font-size="22">Paraguay, 1869 · Peru, 1883</text>
-  <text x="980" y="424" fill="#263c4d" font-family="Arial, sans-serif" font-size="22">Bolivia, 1883 · Bolivia, 1903</text>
+  <text x="970" y="355" fill="#ba0c2f" font-family="Arial, sans-serif" font-size="82" font-weight="700">7</text>
+  <text x="1110" y="315" fill="#16324f" font-family="Arial, sans-serif" font-size="27" font-weight="700">DEFEAT, NO REVOLUTION</text>
+  <text x="1110" y="358" fill="#263c4d" font-family="Arial, sans-serif" font-size="20">Peru, 1839 · Bolivia, 1839 · Mexico, 1848</text>
+  <text x="1110" y="391" fill="#263c4d" font-family="Arial, sans-serif" font-size="20">Paraguay, 1869 · Peru, 1883</text>
+  <text x="1110" y="424" fill="#263c4d" font-family="Arial, sans-serif" font-size="20">Bolivia, 1883 · Bolivia, 1903</text>
 
   <rect x="70" y="480" width="300" height="210" rx="16" fill="#203f5a" stroke="#6d8295" stroke-width="2"/>
   <text x="220" y="565" fill="#fffdf7" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">NOT</text>

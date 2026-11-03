@@ -154,6 +154,12 @@ var user = fs.readFileSync("./index.html", "utf8");
 var backup = fs.readFileSync("./slideshow.html", "utf8");
 var start = fs.readFileSync("./start.html", "utf8");
 var css = fs.readFileSync("./style.css", "utf8");
+var deckSource = fs.readFileSync("./deck.js", "utf8");
+var figureCss = fs.readFileSync("./geddes-layout-fix.css", "utf8");
+assert.ok(/figure-embed/.test(deckSource), "Geddes figures render as slide artwork, not nested paper cards");
+assert.ok(/data-expand-figure/.test(deckSource) && /ensureFigureViewer/.test(deckSource), "figures have an accessible expand viewer");
+assert.ok(/figure-viewer/.test(figureCss), "expanded figures have a styled, closable viewer");
+
 var audienceCss = fs.readFileSync("./audience.css", "utf8");
 var cfg = fs.readFileSync("./config.js", "utf8");
 assert.ok(admin.indexOf("readings/geddes-1990.js") !== -1);
@@ -273,7 +279,7 @@ assert.ok(deckSrc.indexOf("function bindRank") !== -1);
 assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
 assert.ok(deckSrc.indexOf('data-move="up"') !== -1 && deckSrc.indexOf('data-move="down"') !== -1, "rank task has keyboard-operable move controls");
 assert.ok(deckSrc.indexOf('data-token-place') !== -1 && deckSrc.indexOf('board.addEventListener("change"') !== -1, "placement task has a keyboard-operable select alternative");
-assert.ok(deckSrc.indexOf('role="img" aria-label="\' + esc(accessible)') !== -1, "figure redraws expose an accessible description");
+assert.ok(deckSrc.indexOf('role="group" aria-label="\' + esc(accessible)') !== -1, "figure redraws expose an accessible description");
 
 assert.ok(deckSrc.indexOf("if (!canSend || isPres) return;") !== -1, "presenter cannot drag or submit student input");
 assert.ok(deckSrc.indexOf("if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return Promise.resolve(false);") !== -1, "only a seated live student can submit");
