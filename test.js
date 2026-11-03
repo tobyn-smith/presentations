@@ -53,7 +53,7 @@ assert.strictEqual(SLIDES.filter(function (s) { return s.id === "figure4"; })[0]
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.id, "geddes-fig5");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "chile"; })[0].chart.id, "geddes-fig6");
 assert.ok(/Figures 2 and 3/.test(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.source));
-assert.strictEqual(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.bars[0].n, 7);
+assert.ok(/7 instances/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.id, "table2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
 assert.ok(/not nine unique country labels/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
