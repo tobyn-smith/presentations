@@ -171,6 +171,8 @@ try {
   const comparisonAnswer = await presenter.locator("#viz .responses li").innerText();
   check(comparisonAnswer.includes("Countries with slower growth"),"slide 4 selected comparison appears on the presenter screen");
   check(comparisonAnswer.includes("outcome varies"),"slide 4 written explanation appears on the presenter screen");
+  check((await student.locator(".you").innerText()).includes("Countries with slower growth"),"slide 4 participant sees their submitted choice");
+  check((await student.locator(".you").innerText()).includes("outcome varies"),"slide 4 participant sees their written reason");
   await presenter.screenshot({path:path.join(out,"slide4-room-response.png"),animations:"disabled"});
   await presenter.click("#prev");
   await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="3",null,{timeout:10000});
