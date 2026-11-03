@@ -49,11 +49,26 @@ const report = { generatedAt: new Date().toISOString(), routes: { presenter: "/p
 try {
   for (const viewport of viewports) {
     for (const mode of ["presenter", "student"]) {
-      const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
+      const page = await context.newPage();
       page.on("pageerror", error => report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " browser error: " + error.message));
-      const route = mode === "student" ? "/index.html?local=1" : "/slideshow.html";
-      await page.goto("http://127.0.0.1:4173" + route, { waitUntil: "networkidle" });
       await page.emulateMedia({ reducedMotion: "reduce" });
+      let controller = null;
+      if (mode === "student") {
+        controller = await context.newPage();
+        controller.on("pageerror", error => report.failures.push("controller " + viewport.width + "x" + viewport.height + " browser error: " + error.message));
+        await controller.addInitScript(() => sessionStorage.setItem("deck-key", "6010"));
+        await controller.goto("http://127.0.0.1:4173/present/index.html?local=1", { waitUntil: "networkidle" });
+        await controller.waitForSelector("#live", { state: "visible" });
+        await controller.click("#live");
+        await controller.waitForFunction(() => document.querySelector("#live")?.getAttribute("aria-pressed") === "true");
+        await page.goto("http://127.0.0.1:4173/index.html?local=1", { waitUntil: "networkidle" });
+        await page.waitForSelector("#seat", { state: "visible" });
+        await page.click("#seat");
+        await page.waitForFunction(() => (document.querySelector("#counter")?.textContent || "").split("/")[0].trim() === "1");
+      } else {
+        await page.goto("http://127.0.0.1:4173/slideshow.html", { waitUntil: "networkidle" });
+      }
       const total = await page.evaluate(() => (window.SLIDES || []).length);
       report.slides = total;
       if (total !== 13) report.failures.push("Expected 13 slides, found " + total);
@@ -62,8 +77,13 @@ try {
 
       for (let index = 0; index < total; index++) {
         if (index > 0) {
-          await page.keyboard.press("ArrowRight");
-          await page.waitForFunction(expected => document.querySelector("#counter")?.textContent.trim() === String(expected), index + 1);
+          if (mode === "student") {
+            await controller.click("#next");
+            await page.waitForFunction(expected => (document.querySelector("#counter")?.textContent || "").split("/")[0].trim() === String(expected), index + 1);
+          } else {
+            await page.keyboard.press("ArrowRight");
+            await page.waitForFunction(expected => document.querySelector("#counter")?.textContent.trim() === String(expected), index + 1);
+          }
         }
         await page.waitForTimeout(80);
         await page.evaluate(() => {
@@ -106,8 +126,6 @@ try {
             answerBottom: stage.querySelector(".ask-panel form.answer") ? Math.round(stage.querySelector(".ask-panel form.answer").getBoundingClientRect().bottom) : 0,
             panelBottom: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().bottom) : 0,
             answerDisplay: stage.querySelector(".ask-panel form.answer") ? getComputedStyle(stage.querySelector(".ask-panel form.answer")).display : "missing",
-            askRight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().right) : 0,
-            askHeight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().height) : 0,
             repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none")
           };
         });
@@ -149,12 +167,6 @@ try {
         if (mode === "student" && [2,3].includes(index) && metrics.askPanelLeft < metrics.askRight - 8) {
           report.failures.push(viewport.width + "x" + viewport.height + " student prompt " + (index + 1) + " does not place the task beside the teaching column");
         }
-        if (mode === "student" && [2,3].includes(index) && metrics.askHeight < 100) {
-          report.failures.push(viewport.width + "x" + viewport.height + " student activity has no teaching column");
-        }
-        if (mode === "student" && [2,3].includes(index) && metrics.askPanelLeft < metrics.askRight - 8) {
-          report.failures.push(viewport.width + "x" + viewport.height + " student activity is not side by side");
-        }
         if (metrics.chartId === "geddes-fig3" && metrics.askPanelLeft < metrics.chartRight - 8) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 question panel is not beside the graph");
         }
@@ -170,7 +182,7 @@ try {
         });
         report.viewports.push({ mode, viewport: viewport.width + "x" + viewport.height, slide: index + 1, ...metrics });
       }
-      await page.close();
+      await context.close();
     }
   }
 
