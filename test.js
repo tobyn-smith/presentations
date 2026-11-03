@@ -24,7 +24,7 @@ SLIDES.forEach(function (s) { console.log((s.type + "       ").slice(0, 7), s.id
 assert.strictEqual(READINGS.length, 1);
 assert.strictEqual(READINGS[0].id, "geddes-1990");
 assert.strictEqual(SLIDES.length, READINGS[0].slides.length);
-assert.strictEqual(SLIDES.length, 11);
+assert.strictEqual(SLIDES.length, 18);
 assert.strictEqual(SLIDES[0].type, "title");
 assert.strictEqual(SLIDES[0].title, "How the Cases You Choose Affect the Answers You Get");
 assert.strictEqual(SLIDES[0].kicker, "Geddes");
@@ -37,11 +37,20 @@ assert.ok(!(SLIDES[0].claims && SLIDES[0].claims.length));
 assert.ok(!SLIDES[0].fromClass);
 assert.ok(!SLIDES.some(function (s) { return s.id === "part2"; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "close"; }));
-assert.strictEqual(SLIDES[3].id, "nics");
-assert.strictEqual(SLIDES[3].input, "place");
-assert.ok(SLIDES[3].tokens.length === 3);
-assert.ok(SLIDES[3].slots.length === 2);
-assert.ok(SLIDES[3].names && SLIDES[3].names.length === 5);
+var nics = SLIDES.filter(function (s) { return s.id === "nics"; })[0];
+assert.ok(nics);
+assert.strictEqual(nics.input, "place");
+assert.ok(nics.tokens.length === 3);
+assert.ok(nics.slots.length === 2);
+assert.ok(nics.names && nics.names.length === 5);
+assert.ok(SLIDES.some(function (s) { return s.id === "quote-universe" && s.quote && /universe of cases/.test(s.quote.text); }));
+assert.ok(SLIDES.some(function (s) { return s.id === "quote-sample" && s.quote && /small samples selected on the dependent variable/.test(s.quote.text); }));
+assert.ok(SLIDES.some(function (s) { return s.id === "skocpol" && s.claims.length === 3; }));
+assert.ok(SLIDES.some(function (s) { return s.id === "contrast" && /Prussia and Japan/.test(JSON.stringify(s)); }));
+assert.ok(SLIDES.some(function (s) { return s.id === "figure4" && s.type === "compare"; }));
+assert.ok(SLIDES.some(function (s) { return s.id === "hirschman" && s.chart && s.chart.id === "figure6"; }));
+assert.ok(SLIDES.some(function (s) { return s.id === "discuss" && s.claims.length === 3; }));
+assert.ok(SLIDES.some(function (s) { return s.id === "pairs"; }));
 
 SLIDES.forEach(function (s) {
   assert.ok(!s.speaker, "no speaker on " + s.id);
@@ -58,12 +67,13 @@ SLIDES.forEach(function (s) {
 
 var withChart = SLIDES.filter(function (s) { return s.chart || (s.charts && s.charts.length); });
 var withStats = SLIDES.filter(function (s) { return s.stats && s.stats.length; });
-assert.ok(withChart.length >= 4, "Table 1, r squared, Figure 5, Table 2");
+assert.ok(withChart.length >= 4, "Table 1, r squared, Figure 5, Figure 6");
 assert.ok(withStats.length >= 1, "labour scores");
 assert.ok(SLIDES.some(function (s) { return s.id === "regions" && s.chart && s.chart.bars.length === 5; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "fits" && s.chart && s.chart.bars.length === 3; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "figure5" && s.chart && s.chart.bars[0].n === 7; }));
-assert.ok(SLIDES.some(function (s) { return s.id === "chile" && s.chart && s.chart.bars.length === 4; }));
+assert.ok(SLIDES.some(function (s) { return s.id === "hirschman" && s.chart && s.chart.bars.length === 5; }));
+assert.ok(!SLIDES.filter(function (s) { return s.id === "chile"; })[0].chart);
 
 var prompts = SLIDES.filter(function (s) { return s.type === "prompt"; });
 assert.strictEqual(prompts.length, 2);
@@ -114,6 +124,7 @@ SCRIPT.forEach(function (s) {
 });
 assert.ok(SCRIPT.some(function (s) { return s.id === "open" && /\bTobyn\./.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "skocpol" && /\bRaquel\./.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "hirschman" && /\bTobyn\./.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /\bTobyn\./.test(s.notes); }));
 function fromClass(id) {
   var s = SLIDES.filter(function (row) { return row.id === id; })[0];
@@ -134,6 +145,9 @@ assert.ok(!fromClass("chile"));
 assert.ok(!fromClass("close"));
 assert.ok(!fromClass("skocpol"));
 assert.ok(!fromClass("figure5"));
+assert.ok(!fromClass("hirschman"));
+assert.ok(!fromClass("discuss"));
+assert.ok(!fromClass("pairs"));
 assert.ok(!/Burlacu|Tomz|Horn, Johannesson|Bremer and Spiro|Achen and Snidal|Pape studied/.test(slideDump));
 assert.ok(!/Week 1|Week 7/.test(slideDump));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && s.say.indexOf(".07") !== -1; }));
@@ -201,6 +215,25 @@ assert.ok(talk.indexOf("ss-win-dots") === -1);
 assert.ok(deckSrc.indexOf("ss-win-label") !== -1);
 assert.ok(talk.indexOf("ss-win-label") !== -1);
 assert.ok(start.indexOf("Phones.") === -1);
+["deck.js", "sync.js", "slideshow.js", "style.css", "readings/geddes-1990.js"].forEach(function (name) {
+  var src = fs.readFileSync("./" + name, "utf8");
+  assert.ok(src.toLowerCase().indexOf("rehear") === -1, "old local-only wording left in " + name);
+});
+assert.ok(deckSrc.indexOf("var keepBoard = !force && !changed && onBoard()") !== -1);
+assert.ok(deckSrc.indexOf("if (isPres || DeckSync.isPresenting()) render(n);") !== -1);
+assert.ok(deckSrc.indexOf("if (!isPres && (!DeckSync.isPresenting() || !DeckSync.seated())) return;") !== -1);
+assert.ok(!/deck-content[\s\S]{0,500}sharePack/.test(deckSrc));
+var syncSrc = fs.readFileSync("./sync.js", "utf8");
+assert.ok(syncSrc.indexOf("if (lastHere && lastHere > t) return;") !== -1);
+assert.ok(syncSrc.indexOf("localStorage.setItem(\"deck-me\"") !== -1);
+assert.ok(syncSrc.indexOf("function clearMe()") !== -1);
+assert.ok(user.indexOf('aria-live="off"') !== -1);
+assert.ok(admin.indexOf('aria-live="off"') !== -1);
+assert.ok(fs.existsSync("./docs/split.md"));
+assert.ok(fs.existsSync("./docs/me-sync.md"));
+assert.ok(/geddes\/docs/.test(fs.readFileSync("./docs/me-sync.md", "utf8")));
+assert.ok(!/utilit/i.test(slideDump));
+assert.ok(!/utilit/i.test(fs.readFileSync("./docs/split.md", "utf8")));
 
 global.DECK = { useFileSlides: true, room: "test-room", title: "Week" };
 store["deck-content"] = JSON.stringify({

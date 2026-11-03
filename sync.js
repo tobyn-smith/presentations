@@ -21,6 +21,9 @@
   var seats = {};
   var hands = {};
   var lastSeatSig = "";
+  var lastHandSig = "";
+  var lastStatusSig = "";
+  var lastRespSig = {};
   var lastHere = 0;
   var lastGoneAt = 0;
   var wantLive = false;
@@ -69,7 +72,12 @@
     }
   }
 
-  function emitStatus() { statusFns.forEach(function (fn) { fn(status); }); }
+  function emitStatus() {
+    var sig = [status.live, status.mode, status.detail, status.phones].join("|");
+    if (sig === lastStatusSig) return;
+    lastStatusSig = sig;
+    statusFns.forEach(function (fn) { fn(status); });
+  }
   function emitSlide() { slideFns.forEach(function (fn) { fn(slide); }); }
   function setPresenting(on) {
     on = !!on;
@@ -85,7 +93,13 @@
     setPresenting(true);
   }
   function noteGone(at) {
-    lastGoneAt = Math.max(lastGoneAt, +at || Date.now());
+    var t = +at || 0;
+    if (!t) {
+      if (lastHere && Date.now() - lastHere < HERE_MS) return;
+      t = Date.now();
+    }
+    if (lastHere && lastHere > t) return;
+    lastGoneAt = Math.max(lastGoneAt, t);
     lastHere = 0;
     setPresenting(false);
   }
@@ -99,6 +113,11 @@
   function emitResp(id) {
     var list = Object.keys(responses[id] || {}).map(function (k) { return responses[id][k]; });
     list.sort(function (a, b) { return (a.at || 0) - (b.at || 0); });
+    var sig = list.map(function (r) {
+      return [r.sid, r.choice, r.text, r.at].join(":");
+    }).join("|");
+    if (lastRespSig[id] === sig) return;
+    lastRespSig[id] = sig;
     respFns.forEach(function (fn) { fn(id, list); });
   }
   function pruneSeats() {
@@ -127,28 +146,43 @@
   }
   function emitHands() {
     var list = handList();
+    var sig = list.map(function (h) { return h.sid + ":" + h.slide + ":" + (h.at || 0); }).join("|");
+    if (sig === lastHandSig) return;
+    lastHandSig = sig;
     handFns.forEach(function (fn) { fn(list); });
   }
   function dropHands() {
     hands = {};
     emitHands();
   }
-  function loadMe() {
-    if (me) return me;
-    try {
-      var raw = sessionStorage.getItem("deck-me");
-      if (!raw) return null;
-      var parsed = JSON.parse(raw);
-      if (!parsed || !(parsed.in || parsed.name)) return null;
-      me = { in: true };
-      return me;
-    } catch (e) {
-      return null;
+  function readStoredMe() {
+    var keys = ["sessionStorage", "localStorage"];
+    var i;
+    for (i = 0; i < keys.length; i++) {
+      try {
+        var raw = (keys[i] === "sessionStorage" ? sessionStorage : localStorage).getItem("deck-me");
+        if (!raw) continue;
+        var parsed = JSON.parse(raw);
+        if (parsed && (parsed.in || parsed.name)) return { in: true };
+      } catch (e) {}
     }
+    return null;
+  }
+  function loadMe() {
+    if (me && (me.in || me.name)) return me;
+    me = readStoredMe();
+    return me;
   }
   function saveMe(row) {
-    me = row;
-    try { sessionStorage.setItem("deck-me", JSON.stringify(row)); } catch (e) {}
+    me = { in: true };
+    var raw = JSON.stringify(me);
+    try { sessionStorage.setItem("deck-me", raw); } catch (e) {}
+    try { localStorage.setItem("deck-me", raw); } catch (e) {}
+  }
+  function clearMe() {
+    me = null;
+    try { sessionStorage.removeItem("deck-me"); } catch (e) {}
+    try { localStorage.removeItem("deck-me"); } catch (e) {}
   }
   setInterval(emitSeats, 2500);
 
@@ -302,7 +336,7 @@
 
   function takeHere(v, force) {
     if (v == null || v === false) {
-      if (!force && lastHere && lastHere > lastGoneAt && Date.now() - lastHere < 2500) return;
+      if (!force && lastHere && lastHere > lastGoneAt && Date.now() - lastHere < 10000) return;
       lastHere = 0;
       setPresenting(false);
       return;
@@ -320,11 +354,8 @@
     emitHands();
     if (kickedSid !== sid()) return;
     if (sitBeat) { clearInterval(sitBeat); sitBeat = null; }
-    me = null;
-    try {
-      sessionStorage.removeItem("deck-me");
-      sessionStorage.removeItem("deck-sid");
-    } catch (e) {}
+    clearMe();
+    try { sessionStorage.removeItem("deck-sid"); } catch (e) {}
     kickFns.forEach(function (fn) { fn({ sid: kickedSid, name: name || "" }); });
   }
 
@@ -339,13 +370,18 @@
     if (n != null) apply({ t: "slide", n: n }, "fb");
   }
 
-  function takePack(data) {
-    if (!data || typeof data !== "object") return;
-    var sig = JSON.stringify({
+  function packSig(data) {
+    if (!data || typeof data !== "object") return "";
+    return JSON.stringify({
       slides: data.slides || [],
       names: data.names || [],
       title: data.deck && data.deck.title
     });
+  }
+
+  function takePack(data) {
+    if (!data || typeof data !== "object") return;
+    var sig = packSig(data);
     if (sig === lastPackSig) return;
     lastPackSig = sig;
     var safe = {
@@ -386,11 +422,7 @@
 
   function sharePack() {
     var data = packData();
-    lastPackSig = JSON.stringify({
-      slides: data.slides || [],
-      names: data.names || [],
-      title: data.deck && data.deck.title
-    });
+    lastPackSig = packSig(data);
     var msg = { t: "pack", session: session, data: data };
     try { if (bc) bc.postMessage(msg); } catch (e) {}
     if (firebaseConfigured()) fbWrite("pack", data);
@@ -614,6 +646,8 @@
       return r.text();
     }).then(function (text) {
       var lastLive = null;
+      var lastSlide = null;
+      var lastPack = null;
       text.split("\n").forEach(function (line) {
         if (!line.trim()) return;
         try {
@@ -623,9 +657,13 @@
           var msg = typeof payload === "string" ? JSON.parse(payload) : payload;
           if (!msg || !msg.t) return;
           if (msg.t === "here" || msg.t === "gone") lastLive = msg;
+          else if (msg.t === "slide") lastSlide = msg;
+          else if (msg.t === "pack") lastPack = msg;
           else apply(msg, "ntfy");
         } catch (e) {}
       });
+      if (lastPack) apply(lastPack, "ntfy");
+      if (lastSlide) apply(lastSlide, "ntfy");
       if (lastLive) apply(lastLive, "ntfy");
       status.live = true;
       status.mode = "ntfy";
@@ -650,7 +688,7 @@
 
   function startLive() {
     if (localOnly) {
-      status = { live: false, mode: "local", detail: "Rehearsal · this computer only", phones: false };
+      status = { live: false, mode: "local", detail: "This computer only", phones: false };
       emitStatus();
       return;
     }
@@ -733,6 +771,9 @@
       return out;
     },
     sit: function () {
+      if (kicks[sid()]) {
+        try { sessionStorage.removeItem("deck-sid"); } catch (e) {}
+      }
       if (kicks[sid()]) return false;
       saveMe({ in: true });
       function beat() {
@@ -752,8 +793,7 @@
       if (sitBeat) { clearInterval(sitBeat); sitBeat = null; }
       shout({ t: "hand", sid: sid(), up: false });
       shout({ t: "leave", sid: sid() });
-      me = null;
-      try { sessionStorage.removeItem("deck-me"); } catch (e) {}
+      clearMe();
     },
     resumeSeat: function () {
       if (loadMe()) this.sit();
@@ -850,7 +890,7 @@
     },
     pushLive: function () {
       if (localOnly) {
-        lastError = "Rehearsal mode (?local=1), so phones cannot see Go live";
+        lastError = "?local=1 is on, so phones cannot see Go live";
         this.present();
         return Promise.resolve({ ok: false, wrote: false, read: null, error: lastError });
       }

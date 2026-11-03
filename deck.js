@@ -55,6 +55,17 @@
   }
 
   function waitScreen() {
+    if (DeckSync.seated()) {
+      if (onBoard()) return;
+      if (document.body.classList.contains("is-hold")) {
+        paintHoldPeers();
+        return;
+      }
+      holdRoom();
+      paintMe();
+      paintHandBtn();
+      return;
+    }
     document.body.classList.add("is-waiting");
     document.body.classList.remove("is-hold", "is-checkin", "is-checkin-name", "is-checkin-face");
     document.title = brand();
@@ -63,8 +74,7 @@
     stage.classList.remove("prompt", "stats", "title", "hold", "compare", "charts", "story", "points");
     stage.classList.add("waiting");
     lastIndex = -1;
-    if (DeckSync.seated()) holdRoom();
-    else checkIn();
+    checkIn();
     paintMe();
     paintHandBtn();
   }
@@ -113,22 +123,24 @@
   function bindCheckIn() {
     var seat = document.getElementById("seat");
     if (seat) seat.addEventListener("click", function () {
-      DeckSync.sit();
+      if (!DeckSync.sit()) return;
       if (DeckSync.isPresenting()) render(DeckSync.getSlide());
       else holdRoom();
     });
+  }
+
+  function onBoard() {
+    return !!(stage && stage.innerHTML
+      && !document.body.classList.contains("is-waiting")
+      && !document.body.classList.contains("is-hold")
+      && !document.body.classList.contains("is-checkin"));
   }
 
   function render(i, force) {
     var s = slides()[i];
     if (!s) return;
     var changed = i !== lastIndex;
-    var keepBoard = !force && !changed
-      && !document.body.classList.contains("is-waiting")
-      && !document.body.classList.contains("is-hold")
-      && !document.body.classList.contains("is-checkin")
-      && stage
-      && stage.querySelector("#drag-place, #drag-rank, #form, #choices, .thanks");
+    var keepBoard = !force && !changed && onBoard();
     lastIndex = i;
     document.body.classList.remove("is-waiting", "is-checkin", "is-checkin-name", "is-checkin-face", "is-hold");
     stage.classList.remove("hold");
@@ -180,7 +192,6 @@
       }
       paintMe();
       paintHandBtn();
-      fitStage();
       return;
     }
     stage.innerHTML = htmlFor(s, i);
@@ -1038,7 +1049,7 @@
   }
 
   DeckSync.onSlide(function (n) {
-    if (!isPres && !DeckSync.isPresenting()) return;
+    if (!isPres && (!DeckSync.isPresenting() || !DeckSync.seated())) return;
     render(n);
   });
   function failsafeLog(text) {
@@ -1060,7 +1071,7 @@
     if (!host || !DeckSync.snapshot) return;
     var snap = DeckSync.snapshot();
     var rows = [
-      ["Room", snap.localOnly ? "Rehearsal · this computer only" : snap.room],
+      ["Room", snap.localOnly ? "This computer only" : snap.room],
       ["Session", snap.session],
       ["Go live", snap.presenting ? "On · last push " + failsafeAge(snap.hereAgeMs) : "Off · phones on Hold"],
       ["Phones", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Firebase path is open" : "Not confirmed yet")],
@@ -1103,8 +1114,8 @@
     if (note) {
       var local = DeckSync.isLocalOnly && DeckSync.isLocalOnly();
       if (local) {
-        note.textContent = on ? "This computer only" : "Rehearsal";
-        note.className = "live-status warn";
+        note.textContent = on ? "This computer only" : "";
+        note.className = "live-status";
       } else if (on && !st.phones) {
         note.textContent = "Phones may still be on Hold";
         note.className = "live-status warn";
@@ -1193,8 +1204,18 @@
 
   if (!isPres) {
     DeckSync.onPresenting(function (on) {
-      if (on && DeckSync.seated()) render(DeckSync.getSlide());
-      else if (!on) waitScreen();
+      if (on && DeckSync.seated()) {
+        var n = DeckSync.getSlide();
+        if (lastIndex === n && onBoard()) return;
+        render(n);
+        return;
+      }
+      if (DeckSync.seated()) {
+        if (onBoard()) return;
+        if (!document.body.classList.contains("is-hold")) holdRoom();
+        return;
+      }
+      if (!document.body.classList.contains("is-checkin")) checkIn();
     });
     DeckSync.resumeSeat();
     if (DeckSync.isPresenting() && DeckSync.seated()) render(DeckSync.getSlide());
@@ -1203,15 +1224,19 @@
       waitScreen();
     });
     setInterval(function () {
-      if (DeckSync.isPresenting() && DeckSync.seated()) {
-        var n = DeckSync.getSlide();
-        if (document.body.classList.contains("is-hold") || document.body.classList.contains("is-waiting") || document.body.classList.contains("is-checkin") || lastIndex !== n) {
-          render(n);
+      if (DeckSync.seated()) {
+        if (DeckSync.isPresenting()) {
+          var n = DeckSync.getSlide();
+          if (document.body.classList.contains("is-hold") || document.body.classList.contains("is-waiting") || document.body.classList.contains("is-checkin") || lastIndex !== n) {
+            render(n);
+          }
+          return;
         }
+        if (onBoard() || document.body.classList.contains("is-hold")) return;
+        holdRoom();
         return;
       }
-      if (!DeckSync.isPresenting() && DeckSync.seated() && !document.body.classList.contains("is-hold")) waitScreen();
-      else if (!DeckSync.seated() && !document.body.classList.contains("is-checkin")) waitScreen();
+      if (!document.body.classList.contains("is-checkin")) checkIn();
     }, 700);
     if (handBtn) handBtn.addEventListener("click", function () {
       DeckSync.raise(!DeckSync.handUp());
@@ -1280,9 +1305,9 @@
         var lines = [
           "Firebase write: " + (fb.write ? "ok" : "failed"),
           "Firebase read: " + (fb.read ? "ok" : "failed"),
-          "ntfy: " + (nt.skipped ? "skipped (rehearsal)" : (nt.ok ? "ok" : "blocked")),
+          "ntfy: " + (nt.skipped ? "skipped (this computer only)" : (nt.ok ? "ok" : "blocked")),
           fb.error ? "Firebase error: " + fb.error : "",
-          res.snap && res.snap.localOnly ? "Rehearsal ?local=1 is on, so remove it for class." : ""
+          res.snap && res.snap.localOnly ? "?local=1 is on, so remove it for class." : ""
         ].filter(Boolean);
         failsafeLog(lines.join("\n"));
       });
@@ -1459,11 +1484,6 @@
     if (!unlocked()) return;
     var n = DeckSync.getSlide();
     n = Math.max(0, Math.min(slides().length - 1, n));
-    if (isPres) {
-      render(n);
-      if (DeckSync.isPresenting() && DeckSync.sharePack) DeckSync.sharePack();
-    } else if (DeckSync.isPresenting()) {
-      render(n);
-    }
+    if (isPres || DeckSync.isPresenting()) render(n);
   });
 })();
