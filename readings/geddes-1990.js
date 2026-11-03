@@ -1,406 +1,53 @@
-/* Geddes (1990). One continuous deck. Cream and red. Script holds the handover. */
+/* Geddes (1990). Fifteen-minute seminar discussion. Two live interactions. */
 (window.READINGS = window.READINGS || []).push({
-  id: "geddes-1990",
-  short: "Geddes",
-  title: "How the Cases You Choose Affect the Answers You Get",
-  authors: "Barbara Geddes",
-  year: 1990,
-  source: "IGS Working Paper 90-13",
-  slides: [
-    {
-      id: "open",
-      type: "title",
-      kicker: "Geddes",
-      title: "How the Cases You Choose Affect the Answers You Get",
-      byline: "Barbara Geddes. IGS Working Paper 90-13, 1990.",
-      presented: "Presented by Tobyn and Raquel",
-      lede: "",
-      agenda: [],
-      speaker: "",
-      claims: []
-    },
-    {
-      id: "ask",
-      type: "claims",
-      kicker: "The paper",
-      title: "What is she asking?",
-      claims: [
-        { n: "1", title: "Korea and France", body: "This is not a paper about why Korea grew, or why France had a revolution." },
-        { n: "2", title: "Picking on the outcome", body: "She looks at what happens when we only study countries that already have the result." }
-      ]
-    },
-    {
-      id: "habit",
-      type: "claims",
-      kicker: "The habit",
-      title: "Reading only winners",
-      claims: [
-        { n: "1", title: "France, Russia, China", body: "Want revolution, you read those. Want growth, you read Taiwan, Korea, Singapore, Brazil, Mexico." },
-        { n: "2", title: "Slow cases stay off the desk", body: "You never check whether Africa or Bolivia share the same traits." }
-      ],
-      fromClass: {
-        week: 8,
-        body: "Class called this sampling on the dependent variable. That is the habit she is testing."
-      }
-    },
-    {
-      id: "quote-universe",
-      type: "claims",
-      kicker: "From the paper",
-      title: "How do you pick?",
-      quote: {
-        text: "The two tasks crucial to testing any hypothesis are to identify the universe of cases to which the hypothesis should apply and to find or develop measures of the variables. If the universe is too large to make examining every case feasible, cases should be selected from it at random.",
-        cite: "Geddes, IGS Working Paper 90-13, 1990."
-      }
-    },
-    {
-      id: "nics",
-      type: "prompt",
-      kicker: "Case 1. Labour and growth",
-      title: "The five growers",
-      help: "",
-      input: "place",
-      viz: "bars-list",
-      ask: "",
-      tokens: [
-        "Labour was repressed or coopted",
-        "That caused the growth",
-        "You have not seen the slow cases"
-      ],
-      slots: [
-        { id: "show", label: "What the five show" },
-        { id: "not", label: "What does not follow" }
-      ],
-      placeKey: "That caused the growth",
-      options: ["What the five show", "What does not follow"],
-      names: ["Taiwan", "South Korea", "Singapore", "Brazil", "Mexico"],
-      fromClass: {
-        week: 8,
-        body: "Same trap as the five fast growers. That is a sample on the dependent variable."
-      }
-    },
-    {
-      id: "regions",
-      type: "claims",
-      kicker: "Case 1. Labour and growth",
-      title: "East Asia, 5.2",
-      chart: {
-        id: "table1",
-        title: "Table 1. Average country growth",
-        source: "World Development Report, 1984 and 1988.",
-        note: "I redrew the 1960 to 1982 column. East Asia is 5.2. Africa is 1.0.",
-        max: 6,
-        bars: [
-          { label: "East Asia", n: 5.2 },
-          { label: "Middle East and North Africa", n: 4.7 },
-          { label: "Latin America", n: 2.2 },
-          { label: "South Asia", n: 1.4 },
-          { label: "Africa", n: 1.0 }
-        ]
-      },
-      claims: [
-        { n: "1", title: "Table 1, 1960 to 1982", body: "Average GNP per capita growth. East Asia 5.2. Africa 1.0." },
-        { n: "2", title: "You already picked growth", body: "Choose East Asia and the high-growth countries are in the bag." }
-      ],
-      fromClass: {
-        week: 6,
-        body: "A few famous cases cannot test a theory that says this usually happens. Pick East Asia and you have picked on growth."
-      }
-    },
-    {
-      id: "scores",
-      type: "claims",
-      kicker: "Case 1. Labour and growth",
-      title: "Labour scored 1 to 4",
-      stats: [
-        { value: "1", label: "Free unions, own leaders, strikes happen. India, Jamaica, Venezuela." },
-        { value: "2", label: "Unions legal. Strikes rare or squeezed. Colombia, Zimbabwe, Malaysia." },
-        { value: "3", label: "Tied to the government or party. South Korea, Brazil, Pakistan." },
-        { value: "4", label: "Banned, or violence is severe. Chile 1973 to 1979, Syria, Benin." }
-      ],
-      claims: [
-        { n: "1", title: "Country Reports", body: "1980 and 1988. She says the coding is imperfect." },
-        { n: "2", title: "The five are all a 3", body: "Taiwan, Korea, Singapore, Brazil, Mexico. None of them is a slow grower, so the score does not move." }
-      ],
-      fromClass: {
-        week: 10,
-        body: "How you define the score, and which cases you count, can change the answer. She calls the labour score imperfect."
-      }
-    },
-    {
-      id: "fits",
-      type: "claims",
-      kicker: "Case 1. Labour and growth",
-      title: "Three samples, three r squareds",
-      chart: {
-        id: "r2",
-        title: "r squared from Figures 1, 2 and 3",
-        note: "I redrew the r squared values she prints. Figure 1, printed p. 8. Figure 2, printed p. 10. Figure 3 is the more advanced set.",
-        max: 0.6,
-        bars: [
-          { label: "East Asia, Figure 1", n: 0.56 },
-          { label: "Third World, Figure 2", n: 0.07 },
-          { label: "As advanced as South Korea, Figure 3", n: 0.01 }
-        ]
-      },
-      claims: [
-        { n: "1", title: "Figure 1, East Asia", body: "r squared 0.56. Growth highest at labour score 3." },
-        { n: "2", title: "Figure 2 is 0.07", body: "Figure 3, the more advanced set, is 0.01. In a wider sample the link is gone. She is not calling that a disproof." }
-      ]
-    },
-    {
-      id: "quote-sample",
-      type: "claims",
-      kicker: "From the paper",
-      title: "What can a small sample claim?",
-      quote: {
-        text: "One should not make inferences based on small samples selected on the dependent variable. This is not to say that a relationship found within the sample will never characterize the population, but only that one cannot assume that it does.",
-        cite: "Geddes, IGS Working Paper 90-13, 1990."
-      }
-    },
-    {
-      id: "skocpol",
-      type: "claims",
-      kicker: "Case 2. Skocpol on revolutions",
-      title: "France, Russia, China",
-      names: ["France", "Russia", "China"],
-      claims: [
-        { n: "1", title: "War, then reform", body: "A foreign military threat is what gets the state to try." },
-        { n: "2", title: "The landed class can split", body: "If they have their own base and already share power, reform can peel them off the state." },
-        { n: "3", title: "Villages on their own", body: "A split at the top is not enough. Revolution only if villages are autonomous. Page 12." }
-      ]
-    },
-    {
-      id: "contrast",
-      type: "claims",
-      kicker: "Case 2. Skocpol on revolutions",
-      title: "No revolution",
-      claims: [
-        { n: "1", title: "Prussia and Japan", body: "The threat was as bad as France. The dominant class had no independent base, so no split." },
-        { n: "2", title: "Britain, 1640 to 1660", body: "The elite did split. Villages were not autonomous." },
-        { n: "3", title: "Prussia, 1848", body: "Split at the top again. Villages still not free." }
-      ]
-    },
-    {
-      id: "figure4",
-      type: "compare",
-      kicker: "Case 2. Skocpol on revolutions",
-      title: "Figure 4, page 14",
-      lead: "Two tables she printed. I did not add counts.",
-      left: {
-        label: "After a military threat",
-        title: "Who stays together",
-        body: "Independent class that shares power: France. China after the Taiping Rebellion. Dependent class kept from power: Prussia, Japan, Russia before the First World War, China before the Taiping Rebellion."
-      },
-      right: {
-        label: "After an elite split",
-        title: "Who gets a revolution",
-        body: "Villages autonomous: Russia, France, Communist areas of China. Villages not autonomous: Britain 1640 to 1660, Germany 1848, China before the Communists."
-      }
-    },
-    {
-      id: "figure5",
-      type: "claims",
-      kicker: "Case 2. Skocpol on revolutions",
-      title: "Figure 5, nine countries",
-      chart: {
-        id: "figure5",
-        title: "Figure 5. Defeat in war and revolution",
-        note: "I counted the cells she printed. Printed p. 20. Nine Spanish American countries. Lost war plus invasion or lost land. Up to 20 years to revolution.",
-        max: 7,
-        bars: [
-          { label: "Defeat, no revolution", n: 7 },
-          { label: "Revolution, no such defeat", n: 2 },
-          { label: "Both. Bolivia 1935 and 1952", n: 1 }
-        ]
-      },
-      claims: [
-        { n: "1", title: "Mexico and Nicaragua", body: "Seven lost a war and had no revolution. Mexico 1910 and Nicaragua 1979 had a revolution with no such defeat." },
-        { n: "2", title: "Bolivia, 1935 and 1952", body: "That is the one match. She says treat the whole set as doubt. The threat score is crude." }
-      ]
-    },
-    {
-      id: "hirschman",
-      type: "claims",
-      kicker: "Case 3. Hirschman on Chile",
-      title: "Hirschman stops in 1961",
-      chart: {
-        id: "figure6",
-        title: "Figure 6, from Table 2",
-        note: "Printed years from Table 2, pp. 22 to 23. Hirschman ends in 1961. Figure 6 continues to 1972. I did not plot years she did not print as numbers.",
-        max: 84,
-        unit: "%",
-        bars: [
-          { label: "1955", n: 84 },
-          { label: "1956", n: 38 },
-          { label: "1957", n: 17 },
-          { label: "1960", n: 5 },
-          { label: "1961", n: 10 }
-        ]
-      },
-      claims: [
-        { n: "1", title: "84, then 5 and 10", body: "Chile inflation, 1930 to 1961. 84 per cent in 1955. 5 in 1960. 10 in 1961." },
-        { n: "2", title: "Figure 6 to 1972", body: "She writes that it no longer looks solved. Later the series goes past 100 per cent." }
-      ]
-    },
-    {
-      id: "chile",
-      type: "prompt",
-      kicker: "Case 3. Hirschman on Chile",
-      title: "Which comparison?",
-      help: "",
-      input: "choice-text",
-      requireText: true,
-      viz: "bars-list",
-      ask: "",
-      placeholder: "Say why",
-      options: [
-        "The five growers",
-        "Her wider Third World set",
-        "Skocpol's three revolutions",
-        "The nine Spanish American cases"
-      ]
-    },
-    {
-      id: "close",
-      type: "claims",
-      kicker: "Close",
-      title: "Studying only the cases where something happened can inspire a new theory, but only cases where it did not happen as well can test it.",
-      claims: [
-        { n: "1", title: "France can start an idea", body: "So can the five NICs. That is fine. It is not a test." },
-        { n: "2", title: "Put the misses in", body: "Countries where revolution or growth did not happen still belong in the sample. So do the later years." }
-      ]
-    },
-    {
-      id: "discuss",
-      type: "claims",
-      kicker: "Discussion",
-      title: "Questions",
-      claims: [
-        { n: "1", title: "Only France, Russia, China", body: "What happens if those are the only revolutions you keep?" },
-        { n: "2", title: "Table 1 is huge", body: "You cannot read every country. How would you pick?" },
-        { n: "3", title: "Hirschman ended in 1961", body: "Would you stop there, or keep going to 1972?" }
-      ]
-    },
-    {
-      id: "pairs",
-      type: "claims",
-      kicker: "Five minutes",
-      title: "Five minutes",
-      claims: [
-        { n: "1", title: "Research Design assignment", body: "How are you picking countries for your own work?" },
-        { n: "2", title: "A case where it never happens", body: "Is that case still in your set?" }
-      ]
-    }
-  ],
-  script: [
-    {
-      id: "open",
-      title: "Title",
-      say: "The paper is in the title. Do the cases you pick change the answer.",
-      notes: "Tobyn.\nPart 1.\nLeave the title up.\nGo live when names show."
-    },
-    {
-      id: "ask",
-      title: "What she wants",
-      say: "I don't think she is asking why Korea grew. She is asking what happens when we pick cases because they already have the outcome.",
-      notes: "Working paper 90-13, 1990.\nThe lone 1 on the opening page is a footnote, not a page number."
-    },
-    {
-      id: "habit",
-      title: "The habit",
-      say: "You want revolution, so you read revolutions. You then see what those cases share. You cannot see whether the others share it too.",
-      notes: "Unit: the country.\nWeek 8: class called this sampling on the dependent variable. That is her habit."
-    },
-    {
-      id: "quote-universe",
-      title: "Universe quote",
-      say: "She says the two tasks are to name the universe the claim should cover, and to measure the variables. If you cannot read every case, pick at random.",
-      notes: "Exact lines from the labour section. Checked against the IGS PDF."
-    },
-    {
-      id: "nics",
-      title: "Five growers",
-      say: "Taiwan, South Korea, Singapore, Brazil, Mexico. Labour was repressed or coopted. What do the five give you?",
-      notes: "The five are named with footnotes 2 to 5.\nFirst live board. People drag the three lines onto the two trays.\nThen Reveal and read two or three.\nWeek 8: same trap. Sample on the dependent variable."
-    },
-    {
-      id: "regions",
-      title: "Regions",
-      say: "Table 1. East Asia at 5.2. Africa at 1.0. Pick East Asia and you have, in effect, picked on the thing you want to explain.",
-      notes: "Table 1 sits after the Figure 1 page, printed 8. No page number is visible on the table page itself.\nWeek 6: a few famous cases cannot test a usually claim. That is the East Asia pick."
-    },
-    {
-      id: "scores",
-      title: "Labour scores",
-      say: "She scores labour from 1 to 4. The five famous growers all sit at 3. Repression does not vary in that set.",
-      notes: "Criteria sit on the pages just before Figure 1.\nWeek 10: how you define the score, and which cases you count, can change her answer."
-    },
-    {
-      id: "fits",
-      title: "Three samples",
-      say: "East Asia alone, r squared of .56. A wider set, .07. As advanced as South Korea, .01. The link vanishes. That is not a disproof.",
-      notes: "Figure 1 printed p. 8. Figure 2 printed p. 10. Figure 3 is the more advanced set.\nLast labour board. Then the second quote, then Raquel."
-    },
-    {
-      id: "quote-sample",
-      title: "Sample quote",
-      say: "A link inside a small selected sample might be true in the population. You cannot assume that it is.",
-      notes: "Exact lines from the paper. Checked against the IGS PDF."
-    },
-    {
-      id: "skocpol",
-      title: "Three links",
-      say: "Same habit, on revolutions. Threat, then reform, then a split where the dominant class has its own base, then revolution only if villages are autonomous.",
-      notes: "Raquel.\nPart 2.\nSkocpol section starts printed p. 12."
-    },
-    {
-      id: "contrast",
-      title: "Where it breaks",
-      say: "Prussia and Japan: threat, no split. Britain 1640 to 1660 and Prussia 1848: split, villages not free. No revolution.",
-      notes: "Printed with Figure 4 on p. 14."
-    },
-    {
-      id: "figure4",
-      title: "Figure 4",
-      say: "Two small tables. I redrew what she printed. No extra numbers.",
-      notes: "Figure 4, printed p. 14."
-    },
-    {
-      id: "figure5",
-      title: "Seven, two, one",
-      say: "Nine Spanish American countries. Seven defeats, no revolution. Mexico 1910 and Nicaragua 1979 with no such defeat. Bolivia fits. Doubt, not disproof.",
-      notes: "Figure 5, printed p. 20."
-    },
-    {
-      id: "hirschman",
-      title: "Hirschman",
-      say: "He stops in 1961 on a low. 1955 was 84 per cent. Figure 6 runs to 1972. The end of the series shapes the story.",
-      notes: "Tobyn.\nCase 3.\nTable 2, printed pp. 22 to 23.\nFigure 6 follows the table. I did not invent yearly bars after 1961."
-    },
-    {
-      id: "chile",
-      title: "Which comparison",
-      say: "Which comparison would you trust, and why?",
-      notes: "Leave it up. Give them a minute.\nAsk one person from two different picks."
-    },
-    {
-      id: "close",
-      title: "Last claim",
-      say: "Cases where it happened can start a theory. Cases where it did not have to be in the test. Same rule on our papers.",
-      notes: "Tobyn.\nClose.\nPrinted pp. 24 to 25."
-    },
-    {
-      id: "discuss",
-      title: "Discussion",
-      say: "Three questions. Friendly cases. Too many cases. Where a series ends.",
-      notes: "Tobyn.\nStay on this if the room is talking."
-    },
-    {
-      id: "pairs",
-      title: "Pairs",
-      say: "Five minutes. How are you picking cases, and would you include cases where the outcome did not happen?",
-      notes: "Tobyn.\nOptional. Research Design assignment.\nSkip if time is gone."
-    }
-  ]
+ id:"geddes-1990", short:"Geddes", title:"How the Cases You Choose Affect the Answers You Get",
+ authors:"Barbara Geddes", year:1990, source:"IGS Working Paper 90-13",
+ slides:[
+ {id:"open",type:"title",kicker:"INTL 6010 · Research Methods",title:"How the Cases You Choose Affect the Answers You Get",byline:"Barbara Geddes · 1990",presented:"Presented by Tobyn and Raquel",lede:"A 15-minute discussion about what case selection lets us claim.",agenda:[],speaker:"",claims:[]},
+ {id:"ask",type:"claims",kicker:"The question",title:"When does a comparison mislead us?",claims:[
+  {n:"01",title:"Start with the outcome",body:"Choose countries because they grew quickly, or because they had a revolution."},
+  {n:"02",title:"Then look for a cause",body:"The cases may share a feature. But would countries without the outcome share it too?"},
+  {n:"03",title:"That is Geddes's problem",body:"A pattern inside a selected group is not automatically a pattern across the wider population."}]},
+ {id:"nics",type:"prompt",kicker:"Act I · Tobyn · 01:30-03:30",title:"What do five fast growers let us claim?",help:"Place each statement where it belongs. Then look at what the sample leaves out.",input:"place",viz:"bars-list",ask:"Which claim is not supported by these five cases alone?",tokens:["Labour was repressed or coopted","That caused rapid economic growth","Slower-growing countries are missing"],slots:[{id:"shown",label:"Visible in this sample"},{id:"not",label:"Not established by this sample"}],placeKey:"That caused rapid economic growth",options:["Visible in this sample","Not established by this sample"],names:["Taiwan","South Korea","Singapore","Brazil","Mexico"]},
+ {id:"regions",type:"claims",kicker:"Act I · The cases we leave out",title:"The regional picture is wider",chart:{id:"table1",title:"Average GNP per capita growth, 1960-1982",source:"Geddes, Table 1 · World Development Report data",note:"East Asia grows fastest in this comparison. The table is context, not evidence that labour repression caused growth.",max:6,bars:[{label:"East Asia",n:5.2},{label:"Middle East and North Africa",n:4.7},{label:"Latin America",n:2.2},{label:"South Asia",n:1.4},{label:"Africa",n:1.0}]},claims:[
+  {n:"01",title:"The five are not the universe",body:"Taiwan, South Korea, Singapore, Brazil and Mexico were selected as fast growers."},
+  {n:"02",title:"Labour is coded 1 to 4",body:"From independent unions to banned unions or severe violence. Geddes says the coding is imperfect."},
+  {n:"03",title:"The comparison changes",body:"Once slower-growing countries enter the picture, the relationship looks much less straightforward."}]},
+ {id:"fits",type:"claims",kicker:"Act I · Does the relationship travel?",title:"The pattern weakens across samples",chart:{id:"r2",title:"Reported r² values across three samples",source:"Geddes, Figures 1-3",note:"Redrawn from values reported in the paper. These are bivariate fits, not a complete causal test.",max:0.6,bars:[{label:"East Asia · Figure 1",n:0.56},{label:"Third World · Figure 2",n:0.07},{label:"More advanced cases · Figure 3",n:0.01}]},claims:[
+  {n:"01",title:"A strong result in one group",body:"The East Asian sample produces the clearest relationship."},
+  {n:"02",title:"Not a simple disproof",body:"Geddes notes that a few East Asian cases may drive it, and that a curved relationship is possible."}]},
+ {id:"quote-sample",type:"claims",kicker:"The warning",title:"What can a selected sample tell us?",quote:{text:"One should not make inferences based on small samples selected on the dependent variable.",cite:"Geddes, 1990, IGS Working Paper 90-13."},claims:[
+  {n:"GENERATE",title:"Useful for developing ideas",body:"Selected cases can help us notice a pattern and develop an explanation."},
+  {n:"TEST",title:"Not enough to test it",body:"To test the explanation, we need cases that were not chosen because they already had the outcome."}]},
+ {id:"skocpol",type:"claims",kicker:"Act II · Raquel · 05:40-06:50",title:"Skocpol: a sequence, not just three revolutions",claims:[
+  {n:"01",title:"External pressure",body:"Military threats put pressure on the state and push officials towards reform."},
+  {n:"02",title:"Elite conflict",body:"A landed class with an independent economic base can resist reform and split the ruling elite."},
+  {n:"03",title:"Peasant mobilisation",body:"Rebellion is more likely where villages have autonomy from everyday landlord control."}],names:["France","Russia","China"]},
+ {id:"figure4",type:"compare",kicker:"Act II · Raquel",title:"Why compare cases that did not revolt?",lead:"Geddes follows the stages of Skocpol's explanation and looks for cases where the sequence stops.",left:{label:"After military pressure",title:"Does the elite split?",body:"France and China after the Taiping Rebellion are set against cases where the landed class was more dependent on the state, including Prussia and Japan."},right:{label:"After an elite split",title:"Can peasants organise?",body:"France, Russia and Communist areas of China are contrasted with cases where village life remained under landlord control, including Britain and China before the Communists."}},
+ {id:"figure5",type:"claims",kicker:"Act II · A harder test",title:"Does external defeat predict revolution?",chart:{id:"figure5",title:"Cases in Geddes's Figure 5",source:"Geddes, Figure 5 · Spanish American cases",note:"Seven instances of defeat without revolution; two revolutions without the specified defeat; one instance of both. not nine separate country labels.",max:7,bars:[{label:"Defeat, no revolution",n:7},{label:"Revolution, no such defeat",n:2},{label:"Both",n:1}]},claims:[
+  {n:"01",title:"The measure matters",body:"Defeat means losing a war with invasion and/or loss of territory. Revolution is tracked over the next 20 years."},
+  {n:"02",title:"A challenge, not a verdict",body:"The cases are not random and the threat measure is imperfect. Geddes raises doubt rather than claiming a definitive refutation."}]},
+ {id:"hirschman",type:"claims",kicker:"Act III · Tobyn · 09:00-11:00",title:"Chile: where does the story end?",chart:{id:"table2",title:"Chilean inflation · selected years",source:"Geddes, Table 2",note:"Selected values from Table 2. Figure 6 is a separate series that continues through 1972.",max:84,unit:"%",bars:[{label:"1955",n:84},{label:"1956",n:38},{label:"1957",n:17},{label:"1960",n:5},{label:"1961",n:10}]},claims:[
+  {n:"01",title:"Stop in 1961",body:"The fall in inflation makes stabilisation look like a success."},
+  {n:"02",title:"Carry the series to 1972",body:"The later years change the picture. Geddes suggests earlier progress may reflect orthodox stabilisation under Alessandri."}]},
+ {id:"chile",type:"prompt",kicker:"Act III · Bring the cases together · 11:00-13:15",title:"Which choice most changes the inference?",help:"Choose one, then give us the reason. There is no single automatic answer.",input:"choice-text",requireText:true,viz:"bars-list",ask:"Which design decision would you challenge first?",placeholder:"What would you include, compare or measure differently?",options:["Selecting only successful growers","Studying only revolutionary cases","Using a narrow measure of external threat","Ending the Chile series in 1961"]},
+ {id:"close",type:"claims",kicker:"Finish · 13:15-15:00",title:"Case selection sets the limits of the answer",claims:[
+  {n:"01",title:"For theory building",body:"Cases with the outcome can help us notice patterns and develop explanations."},
+  {n:"02",title:"For testing",body:"We need cases where the outcome did not happen, selected from the wider universe."},
+  {n:"03",title:"For historical analysis",body:"We also need to justify where the comparison starts and where the timeline ends."}]}
+ ],
+ script:[
+ {id:"open",title:"Opening: 0:00-0:30",say:"We are looking at one deceptively simple question: do the cases we choose change the answers we get? Geddes's argument is that they can, and that this matters when we try to test explanations.",notes:"TOBYN · 0:00-0:30\nKeep this brisk. No biography or long introduction. Move straight to the research problem."},
+ {id:"ask",title:"The research problem: 0:30-1:30",say:"Imagine I want to explain economic growth, so I start with countries that grew quickly. I find they share a feature, then suggest that feature explains growth. But I have not asked whether countries that did not grow share it too. That is the problem Geddes wants us to notice.",notes:"TOBYN · 0:30-1:30\nUniverse: the countries the claim is meant to cover. Unit of analysis: countries. Goal: a methodological critique of inference and case selection, not a full theory of growth. The implied observable claim is that labour repression should be associated with higher growth beyond the selected five."},
+ {id:"nics",title:"Interaction 1: The five growers: 1:30-3:30",say:"These are the five cases often used to make the argument: Taiwan, South Korea, Singapore, Brazil and Mexico. They share repressed or coopted labour. Have a go at sorting the three statements. The important distinction is between what we observe in these cases and what we can infer from them.",notes:"TOBYN · 1:30-3:30\nINTERACTION 1 OF 2. Give the room 30-40 seconds to place the statements. Reveal. Ask one person why the causal claim does not follow.\nExpected: the cases show a shared feature, but selection on high growth leaves no comparison with slower-growing countries.\nDo not say all five have the same labour score. The measure is imperfect and the selected cases do not establish causation."},
+ {id:"regions",title:"The wider comparison: 3:30-4:20",say:"Table 1 puts those cases back into a wider regional picture. East Asia has the highest average growth in this table, while Africa is much lower. But that is exactly why we need to be careful: choosing the high-growth region and then looking for its common features makes the result look stronger than it may be.",notes:"TOBYN · 3:30-4:20\nTable 1 reports average regional GNP per capita growth, 1960-1982. Labour is coded from 1 (independent unions and strikes) to 4 (banned unions or severe violence). Geddes says this measure is imperfect. The table is context, not a causal test."},
+ {id:"fits",title:"Does it travel: 4:20-5:10",say:"The reported fit is 0.56 in East Asia, 0.07 in the wider Third World sample and 0.01 in the more advanced cases. Geddes does not treat that as a clean disproof. She notes the possibility of a curved relationship and that a small number of cases may be doing much of the work.",notes:"TOBYN · 4:20-5:10\nThis is a quantitative, cross-sectional comparison using a simple bivariate fit. Explain r-squared as how closely the relationship fits these observations; it does not identify causation. Geddes notes the possible curved relationship and the influence of a few cases. Transition to Skocpol."},
+ {id:"quote-sample",title:"Handover: 5:10-5:40",say:"So the warning is not that case studies are useless. A small group selected because the outcome happened cannot, by itself, tell us whether the explanation holds more broadly. Raquel will take that question into Skocpol's work on revolutions.",notes:"TOBYN → RAQUEL · 5:10-5:40\nRaquel takes the next three boards, about 3 minutes 20 seconds. Read the quotation once, then hand over."},
+ {id:"skocpol",title:"Skocpol's explanation: 5:40-6:50",say:"Skocpol is not simply comparing three famous revolutions. She is making a sequence argument. External pressure pushes states towards reform; a landed class with an independent base can resist and split the elite; and peasant rebellion depends partly on whether villages have autonomy from landlords.",notes:"RAQUEL · 5:40-6:50\nGoal: assess a structural explanation of social revolution. Key actors: states, landed elites and peasants. This is qualitative comparative-historical work; the observable implications are different outcomes at each stage of the sequence."},
+ {id:"figure4",title:"Strategic contrasts: 6:50-7:50",say:"The comparison becomes more useful when we include cases where revolution did not happen. Geddes describes how Skocpol uses contrasts at different stages: did the elite split, and where it did, could peasants organise independently? The cases probe the sequence, rather than just collecting revolutions.",notes:"RAQUEL · 6:50-7:50\nPoint to the left and right columns as two different stages in the explanation. Do not claim every case is a perfect match. The value is in the strategic contrast."},
+ {id:"figure5",title:"The wider check: 7:50-9:00",say:"Geddes then examines the claim that external military defeat can help explain revolution. The pattern is awkward for a simple version of that argument: there are several defeats without revolution and revolutions without the specified defeat. But the cases are not random, and the threat measure is limited, so this raises doubt rather than settling the question.",notes:"RAQUEL · 7:50-9:00\nBars count instances in the comparison, not nine unique country labels. Defeat is operationalised as losing a war accompanied by invasion and/or loss of territory; the window is 20 years. Hand back at 9:00."},
+ {id:"hirschman",title:"Chile and the endpoint: 9:00-11:00",say:"The last example is about time rather than countries. Hirschman's account of Chilean inflation ends in 1961, after a sharp fall. If we stop there, stabilisation looks successful. Geddes extends the series to 1972, and the later years change the picture. She suggests that the earlier fall may reflect orthodox stabilisation under Alessandri rather than a lasting solution.",notes:"TOBYN · 9:00-11:00\nBars are selected values from Table 2, not the full Figure 6 series. Figure 6 continues to 1972. Do not overstate this as proof that the earlier policy had no effect."},
+ {id:"chile",title:"Interaction 2: Which choice matters most? 11:00-13:15",say:"We have seen four versions of the same problem. Which design decision would you challenge first? Pick one and give a reason. Think about what has been left out, how the concept is measured, or where the researcher stops looking.",notes:"TOBYN · 11:00-13:15\nINTERACTION 2 OF 2. Give 30 seconds to vote and type a reason. Reveal. Take one or two answers, preferably from different options. If quiet, ask which choice would most change the conclusion."},
+ {id:"close",title:"Conclusion: 13:15-15:00",say:"For me, the useful distinction in Geddes is between building a theory and testing one. Cases where the outcome happened can help us develop an explanation. But if we want to test it, we need to look beyond those cases and include where the outcome did not happen. And, as Chile shows, we need to justify where our timeline ends. What have we left out, and how might that change the answer?",notes:"TOBYN · 13:15-15:00\nFinish by 15:00. Do not launch the old five-minute pairs activity. Final question: what case or time period would you need to include to make your own research claim more convincing?"}
+ ]
 });
