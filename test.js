@@ -310,7 +310,7 @@ assert.ok(start.indexOf("Phones.") === -1);
 });
 assert.ok(deckSrc.indexOf("var keepBoard = !force && !changed && onBoard()") !== -1);
 assert.ok(deckSrc.indexOf("if (isPres || DeckSync.isPresenting()) render(n);") !== -1);
-assert.ok(deckSrc.indexOf("if (!isPres && (!DeckSync.isPresenting() || !DeckSync.seated())) return;") !== -1);
+assert.ok(deckSrc.indexOf("if (!DeckSync.isPresenting() || !DeckSync.seated()) return;") !== -1, "student view renders only for a seated live participant");
 assert.ok(!/deck-content[\s\S]{0,500}sharePack/.test(deckSrc));
 var syncSrc = fs.readFileSync("./sync.js", "utf8");
 assert.ok(syncSrc.indexOf("if (lastHere && lastHere > t) return;") !== -1);
