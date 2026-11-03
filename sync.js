@@ -14,6 +14,10 @@
   var backupResponses = {};
   try { backupResponses = JSON.parse(localStorage.getItem(backupResponseKey) || "{}") || {}; } catch (e) {}
   var slide = 0;
+  try {
+    var savedSlide = Number(sessionStorage.getItem("deck-slide-" + room));
+    if (Number.isInteger(savedSlide) && savedSlide >= 0) slide = savedSlide;
+  } catch (e) {}
   var responses = {};
   var slideFns = [];
   var respFns = [];
@@ -204,6 +208,7 @@
       n = Math.max(0, Math.min((global.SLIDES || []).length - 1, n));
       if (n === slide && via !== "init") return;
       slide = n;
+      try { sessionStorage.setItem("deck-slide-" + room, String(slide)); } catch (e) {}
       dropHands();
       emitSlide();
       return;
