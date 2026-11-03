@@ -602,3 +602,52 @@ body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-stack,
 body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-stack {
   display: contents !important;
 }
+
+
+/* Compact 4:3 laptop fit for Figure 2's single-column graph. */
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after,
+  body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after {
+    height: clamp(300px, 40vh, 340px) !important;
+    min-height: 300px !important;
+  }
+}
+
+/* Presenter answer preview should be a compact list, not three stretched tiles. */
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview {
+  align-content: start;
+  grid-auto-rows: min-content;
+}
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview li {
+  min-height: 0 !important;
+  height: auto !important;
+  align-self: start;
+}
+
+/* Footer destinations are quiet secondary surfaces, not default blue links. */
+.failsafe-footer .failsafe-backup {
+  display: block;
+  min-width: 0;
+  padding: .7rem .8rem;
+  border: 1px solid rgba(255,253,248,.18);
+  border-radius: 10px;
+  background: #183a57;
+  color: #fffdf8;
+  text-decoration: none;
+}
+.failsafe-footer .failsafe-backup:hover {
+  border-color: #f0d48a;
+  background: #214766;
+}
+.failsafe-footer .failsafe-backup strong {
+  display: block;
+  margin-bottom: .2rem;
+  color: #f0d48a;
+  font: 700 1rem/1.15 var(--display);
+}
+.failsafe-footer .failsafe-backup span {
+  display: block;
+  color: #d9e0e4;
+  font-size: .82rem;
+  line-height: 1.3;
+}
