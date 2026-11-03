@@ -91,6 +91,7 @@
   r.slides = order.map(function (id) { return slide(id); });
 
   function script(id) { return r.script.filter(function (x) { return x.id === id; })[0]; }
+  r.script = order.map(function (id) { return script(id); });
   var q = script("quote-sample");
   q.title = "Interaction 2: choosing the sample: 4:20–5:10";
   q.say = "What would you add to these cases? Geddes is not saying the five countries tell us nothing. The problem is that they cannot test the claim on their own. Choose what you would want to see alongside them.";
