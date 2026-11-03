@@ -668,3 +668,303 @@ body.role-pres .chrome-right > * { min-width: 0; }
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+
+/* The banner already carries the section and speaker label. Do not repeat it
+   immediately above every student slide title. */
+body.role-part .stage .slide-kicker { display: none !important; }
+
+/* NICS placement activity: three compact, keyboard-friendly choices above
+   two visible destinations. The slots stay visible because bindPlace moves
+   each token into its selected destination. */
+body.role-part .stage[data-slide-id="nics"] .ask-panel {
+  flex: 0 0 auto;
+  min-height: 0;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding: 10px;
+  margin-top: 0;
+}
+body.role-part .stage[data-slide-id="nics"] .ask-q {
+  font-size: clamp(15px, 2.1vh, 18px);
+  line-height: 1.12;
+  margin: 0 0 6px;
+}
+body.role-part .stage[data-slide-id="nics"] .drag-place {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 6px;
+  min-height: 0;
+}
+body.role-part .stage[data-slide-id="nics"] .token-tray {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  min-height: 0;
+}
+body.role-part .stage[data-slide-id="nics"] .token-choice {
+  display: grid;
+  grid-template-rows: minmax(42px, auto) 30px;
+  gap: 4px;
+  min-width: 0;
+}
+body.role-part .stage[data-slide-id="nics"] .token {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 5px;
+  border-width: 1px;
+  border-left-width: 4px;
+  border-radius: 8px;
+  font-size: clamp(11px, 1.35vh, 13px);
+  line-height: 1.1;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+body.role-part .stage[data-slide-id="nics"] .token-place {
+  width: 100%;
+  max-width: none;
+  min-height: 30px;
+  height: 30px;
+  padding: 3px 5px;
+  border-radius: 7px;
+  font-size: 11px;
+}
+body.role-part .stage[data-slide-id="nics"] .slot-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  min-height: 0;
+  flex: 0 0 auto;
+}
+body.role-part .stage[data-slide-id="nics"] .slot {
+  min-height: 0;
+  padding: 6px;
+  border-width: 1.5px;
+  border-radius: 10px;
+}
+body.role-part .stage[data-slide-id="nics"] .slot-lab {
+  margin: 0 0 4px;
+  font-size: 11px;
+  line-height: 1.1;
+}
+body.role-part .stage[data-slide-id="nics"] .slot-well {
+  min-height: 44px;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 8px;
+}
+body.role-part .stage[data-slide-id="nics"] .slot-empty {
+  font-size: 10px;
+  line-height: 1.1;
+}
+body.role-part .stage[data-slide-id="nics"] .slot-well .token {
+  min-height: 28px;
+  padding: 3px 4px;
+  font-size: 10px;
+}
+body.role-part .stage[data-slide-id="nics"] #drag-send {
+  width: 100%;
+  min-height: 36px;
+  padding: 5px 8px;
+  font-size: 13px;
+}
+body.role-part .stage[data-slide-id="nics"] .split-viz .ss-win-body {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* The second interaction makes the sampling problem visible before students
+   choose which comparison to add. Keep the answer controls compact. */
+body.role-part .stage[data-slide-id="quote-sample"] .split,
+body.role-pres .stage[data-slide-id="quote-sample"] .split {
+  display: block !important;
+  width: 100%;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .split-side,
+body.role-pres .stage[data-slide-id="quote-sample"] .split-side {
+  width: 100%;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .claim-bars,
+body.role-pres .stage[data-slide-id="quote-sample"] .claim-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  height: auto;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .claim-bars li,
+body.role-pres .stage[data-slide-id="quote-sample"] .claim-bars li {
+  min-height: 0;
+  padding: 9px 11px;
+  gap: 3px;
+  border-radius: 10px;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .claim-bars .card-n span,
+body.role-pres .stage[data-slide-id="quote-sample"] .claim-bars .card-n span {
+  min-width: 1.4rem;
+  height: 1.4rem;
+  font-size: 12px;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .claim-bars h2,
+body.role-pres .stage[data-slide-id="quote-sample"] .claim-bars h2 {
+  font-size: clamp(15px, 2vh, 18px);
+  line-height: 1.1;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .claim-bars p,
+body.role-pres .stage[data-slide-id="quote-sample"] .claim-bars p {
+  font-size: clamp(13px, 1.6vh, 15px);
+  line-height: 1.2;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .ask-panel,
+body.role-pres .stage[data-slide-id="quote-sample"] .ask-panel {
+  flex: 0 0 auto;
+  min-height: 0;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding: 10px;
+  margin-top: 0;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .ask-q,
+body.role-pres .stage[data-slide-id="quote-sample"] .ask-q {
+  font-size: clamp(15px, 2.1vh, 18px);
+  line-height: 1.12;
+  margin: 0 0 6px;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .choices {
+  gap: 6px;
+  margin-top: 6px;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .choices button {
+  min-height: 36px;
+  padding: 7px 9px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.15;
+}
+body.role-part .stage[data-slide-id="quote-sample"] form.answer {
+  margin-top: 8px;
+}
+body.role-part .stage[data-slide-id="quote-sample"] textarea {
+  min-height: 64px;
+  height: 64px;
+  max-height: 64px;
+  padding: 8px;
+  font-size: 13px;
+}
+body.role-part .stage[data-slide-id="quote-sample"] .send {
+  min-height: 36px;
+  margin-top: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+body.role-pres .stage[data-slide-id="quote-sample"] .opt-preview {
+  gap: 6px;
+  margin: 6px 0;
+}
+body.role-pres .stage[data-slide-id="quote-sample"] .opt-preview li {
+  min-height: 36px;
+  padding: 7px 10px;
+  font-size: 13px;
+  line-height: 1.15;
+}
+body.role-pres .stage[data-slide-id="quote-sample"] .ss-win-body {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Figure 2 deserves a proper focal statistic, not a tiny label floating in a
+   dark empty column. */
+body.role-part .stage[data-chart="geddes-fig2"] .claim-bars li,
+body.role-pres .stage[data-chart="geddes-fig2"] .claim-bars li {
+  min-height: 100%;
+  height: 100%;
+  padding: clamp(18px, 2.2vw, 30px);
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  background: var(--tile-cream) !important;
+  color: var(--navy) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+}
+body.role-part .stage[data-chart="geddes-fig2"] .claim-bars h2,
+body.role-pres .stage[data-chart="geddes-fig2"] .claim-bars h2 {
+  color: var(--navy) !important;
+  font-size: clamp(64px, 9vh, 104px);
+  line-height: .9;
+}
+body.role-part .stage[data-chart="geddes-fig2"] .claim-bars p,
+body.role-pres .stage[data-chart="geddes-fig2"] .claim-bars p {
+  color: var(--navy) !important;
+  font-size: clamp(18px, 2.3vh, 24px);
+  line-height: 1.25;
+}
+body.role-part .stage[data-chart="geddes-fig2"] .claim-bars .card-n span,
+body.role-pres .stage[data-chart="geddes-fig2"] .claim-bars .card-n span {
+  min-width: 2.2rem;
+  height: 2.2rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 18px;
+}
+
+/* Figures 4 and 5 carry their own figure titles inside the artwork. Remove
+   the duplicate HTML caption above them. */
+body.role-part .stage[data-chart="geddes-fig4"] figure.chart figcaption,
+body.role-pres .stage[data-chart="geddes-fig4"] figure.chart figcaption,
+body.role-part .stage[data-chart="geddes-fig5"] figure.chart figcaption,
+body.role-pres .stage[data-chart="geddes-fig5"] figure.chart figcaption {
+  display: none !important;
+}
+
+/* Compact the three-card explanations and the five-year bar chart on smaller
+   presenter boards. */
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-pres .stage[data-slide-id="ask"] .claim-bars li,
+  body.role-pres .stage[data-slide-id="skocpol"] .claim-bars li,
+  body.role-pres .stage[data-slide-id="hirschman"] .claim-bars li {
+    min-height: 0;
+    padding: 10px 12px;
+    gap: 4px;
+    border-radius: 10px;
+  }
+  body.role-pres .stage[data-slide-id="ask"] .claim-bars h2,
+  body.role-pres .stage[data-slide-id="skocpol"] .claim-bars h2,
+  body.role-pres .stage[data-slide-id="hirschman"] .claim-bars h2 {
+    font-size: clamp(18px, 2.3vh, 22px) !important;
+    line-height: 1.1;
+  }
+  body.role-pres .stage[data-slide-id="ask"] .claim-bars p,
+  body.role-pres .stage[data-slide-id="skocpol"] .claim-bars p,
+  body.role-pres .stage[data-slide-id="hirschman"] .claim-bars p {
+    font-size: clamp(14px, 1.8vh, 17px) !important;
+    line-height: 1.25;
+  }
+  body.role-pres .stage[data-slide-id="ask"] .chart::after {
+    height: clamp(220px, 34vh, 260px) !important;
+  }
+  body.role-pres .stage[data-slide-id="hirschman"] .chart {
+    padding: 6px 8px;
+    overflow: visible !important;
+  }
+  body.role-pres .stage[data-slide-id="hirschman"] .chart-bars {
+    gap: .25em;
+    justify-content: space-between;
+  }
+  body.role-pres .stage[data-slide-id="hirschman"] .chart-track { height: 18px; }
+  body.role-pres .stage[data-slide-id="hirschman"] .chart-n {
+    font-size: clamp(18px, 2.6vh, 24px);
+  }
+  body.role-pres .stage[data-slide-id="hirschman"] .chart-lab {
+    font-size: clamp(14px, 1.4vw, 16px);
+  }
+  body.role-pres .stage[data-slide-id="hirschman"] .chart-source,
+  body.role-pres .stage[data-slide-id="hirschman"] .chart-note {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+}
