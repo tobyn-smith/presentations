@@ -893,6 +893,7 @@
         if (data && typeof data === "object") takeRoom(data);
         markFirebaseLive();
         flushBackupResponses();
+        if (wantLive && global.DeckSync) global.DeckSync.present();
         closeFbStream();
         openFbStream();
         startFbPoll();
