@@ -201,6 +201,10 @@ assert.ok(talk.indexOf("ss-win-dots") === -1);
 assert.ok(deckSrc.indexOf("ss-win-label") !== -1);
 assert.ok(talk.indexOf("ss-win-label") !== -1);
 assert.ok(start.indexOf("Phones.") === -1);
+["deck.js", "sync.js", "slideshow.js", "style.css", "readings/geddes-1990.js"].forEach(function (name) {
+  var src = fs.readFileSync("./" + name, "utf8");
+  assert.ok(src.toLowerCase().indexOf("rehear") === -1, "old local-only wording left in " + name);
+});
 
 global.DECK = { useFileSlides: true, room: "test-room", title: "Week" };
 store["deck-content"] = JSON.stringify({

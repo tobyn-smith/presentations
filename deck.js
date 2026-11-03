@@ -1060,7 +1060,7 @@
     if (!host || !DeckSync.snapshot) return;
     var snap = DeckSync.snapshot();
     var rows = [
-      ["Room", snap.localOnly ? "Rehearsal · this computer only" : snap.room],
+      ["Room", snap.localOnly ? "This computer only" : snap.room],
       ["Session", snap.session],
       ["Go live", snap.presenting ? "On · last push " + failsafeAge(snap.hereAgeMs) : "Off · phones on Hold"],
       ["Phones", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Firebase path is open" : "Not confirmed yet")],
@@ -1103,8 +1103,8 @@
     if (note) {
       var local = DeckSync.isLocalOnly && DeckSync.isLocalOnly();
       if (local) {
-        note.textContent = on ? "This computer only" : "Rehearsal";
-        note.className = "live-status warn";
+        note.textContent = on ? "This computer only" : "";
+        note.className = "live-status";
       } else if (on && !st.phones) {
         note.textContent = "Phones may still be on Hold";
         note.className = "live-status warn";
@@ -1280,9 +1280,9 @@
         var lines = [
           "Firebase write: " + (fb.write ? "ok" : "failed"),
           "Firebase read: " + (fb.read ? "ok" : "failed"),
-          "ntfy: " + (nt.skipped ? "skipped (rehearsal)" : (nt.ok ? "ok" : "blocked")),
+          "ntfy: " + (nt.skipped ? "skipped (this computer only)" : (nt.ok ? "ok" : "blocked")),
           fb.error ? "Firebase error: " + fb.error : "",
-          res.snap && res.snap.localOnly ? "Rehearsal ?local=1 is on, so remove it for class." : ""
+          res.snap && res.snap.localOnly ? "?local=1 is on, so remove it for class." : ""
         ].filter(Boolean);
         failsafeLog(lines.join("\n"));
       });

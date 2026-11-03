@@ -650,7 +650,7 @@
 
   function startLive() {
     if (localOnly) {
-      status = { live: false, mode: "local", detail: "Rehearsal · this computer only", phones: false };
+      status = { live: false, mode: "local", detail: "This computer only", phones: false };
       emitStatus();
       return;
     }
@@ -850,7 +850,7 @@
     },
     pushLive: function () {
       if (localOnly) {
-        lastError = "Rehearsal mode (?local=1), so phones cannot see Go live";
+        lastError = "?local=1 is on, so phones cannot see Go live";
         this.present();
         return Promise.resolve({ ok: false, wrote: false, read: null, error: lastError });
       }
