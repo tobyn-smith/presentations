@@ -1068,8 +1068,8 @@
     var rows = [
       ["Room", snap.localOnly ? "This computer only" : snap.room],
       ["Session", snap.session],
-      ["Go live", snap.presenting ? "On · last push " + failsafeAge(snap.hereAgeMs) : "Off · phones on Hold"],
-      ["Phones", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Can join" : "Not confirmed yet")],
+      ["Go live", snap.presenting ? "On · last push " + failsafeAge(snap.hereAgeMs) : "Off · audience on Hold"],
+      ["Audience", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Can join" : "Not confirmed yet")],
       ["Live sync", snap.localOnly ? "This computer only" : (snap.status.detail || snap.status.mode)],
       ["Firebase HTTP", snap.firebaseHttp ? String(snap.firebaseHttp) : "none"],
       ["Checked in", String(snap.seats.length)],
@@ -1291,7 +1291,7 @@
         paintLive();
         paintFailsafeStatus();
         failsafeLog(res.ok
-          ? "Firebase has Go live. Phones should leave Hold within a second."
+          ? "Firebase has Go live. Audience screens should leave Hold within a second."
           : ("Push failed. " + (res.error || "Try Test phone paths.")));
       });
     });
@@ -1309,7 +1309,7 @@
     });
     var fsProbe = document.getElementById("fs-probe");
     if (fsProbe) fsProbe.addEventListener("click", function () {
-      failsafeLog("Testing Firebase and ntfy…");
+      failsafeLog("Testing the audience connection…");
       DeckSync.probe().then(function (res) {
         paintFailsafeStatus();
         var fb = res.firebase || {};
@@ -1348,7 +1348,7 @@
       DeckSync.standDown();
       paintLive();
       paintFailsafeStatus();
-      failsafeLog("Room ended. Phones should return to Hold.");
+      failsafeLog("Room ended. Audience screens should return to Hold.");
     });
     var fsCopy = document.getElementById("fs-copy");
     if (fsCopy) fsCopy.addEventListener("click", function () {
