@@ -1110,6 +1110,7 @@
 
   DeckSync.onSlide(function (n) {
     if (isPres) {
+      render(n);
       var panel = document.getElementById("failsafe");
       if (panel && !panel.hidden) paintFailsafeStatus();
       return;
