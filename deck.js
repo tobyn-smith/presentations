@@ -637,7 +637,7 @@
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "");
     var askLine = s.ask ? '<p class="ask-q">' + esc(s.ask) + "</p>" : "";
     var optPreview = (s.options && s.options.length && s.input !== "rank" && s.input !== "place")
-      ? '<ul class="talk opt-preview">' + s.options.map(function (o) {
+      ? '<ul class="talk opt-preview presenter-choice-preview">' + s.options.map(function (o) {
         return "<li>" + esc(o) + "</li>";
       }).join("") + "</ul>"
       : "";
