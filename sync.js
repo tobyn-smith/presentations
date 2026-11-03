@@ -295,6 +295,14 @@
   function shout(msg) {
     msg.session = session;
     apply(msg, "local");
+    if (msg.t === "resp") {
+      return publishLive(msg).then(function (ok) {
+        if (ok && (backupOn || localOnly || !usingFirebase)) {
+          try { if (bc) bc.postMessage(msg); } catch (e) {}
+        }
+        return ok;
+      });
+    }
     if (backupOn || localOnly || !usingFirebase) {
       try { if (bc) bc.postMessage(msg); } catch (e) {}
     }
