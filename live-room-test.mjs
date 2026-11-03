@@ -174,6 +174,9 @@ try {
   const comparisonAnswer = await presenter.locator("#viz .responses li").innerText();
   check(comparisonAnswer.includes("Countries with slower growth"),"slide 4 selected comparison appears on the presenter screen");
   check(comparisonAnswer.includes("outcome varies"),"slide 4 written explanation appears on the presenter screen");
+  check(await presenter.locator("#slide-live-results").isVisible(),"slide 4 has a visible on-slide response area");
+  check((await presenter.locator("#slide-live-results").innerText()).includes("Countries with slower growth"),"slide 4 itself displays the selected answer");
+  check((await presenter.locator("#slide-live-results").innerText()).includes("outcome varies"),"slide 4 itself displays the written reason");
   check((await student.locator(".submission-receipt").innerText()).includes("Countries with slower growth"),"slide 4 participant sees their submitted choice in the receipt");
   check((await student.locator(".submission-receipt").innerText()).includes("outcome varies"),"slide 4 participant sees their written reason in the receipt");
   await presenter.screenshot({path:path.join(out,"slide4-room-response.png"),animations:"disabled"});
@@ -289,6 +292,8 @@ try {
   await presenter.waitForFunction(()=>document.querySelectorAll("#viz .responses li").length===1,null,{timeout:10000});
   check(await presenter.locator("#viz .responses li").count()===1,"Figure 3 student choice reaches the presenter response panel");
   check((await presenter.locator("#viz .responses li").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 presenter displays the selected interpretation");
+  check(await presenter.locator("#slide-live-results").isVisible(),"slide 7 has a visible on-slide response area");
+  check((await presenter.locator("#slide-live-results").innerText()).includes("A curve, or a few NICs drive it"),"slide 7 itself displays the selected interpretation");
   check((await student.locator(".you").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 participant sees their submitted interpretation");
   check(await presenter.locator(".presenter-choice-preview").isVisible(),"Figure 3 choices remain visible alongside incoming responses");
   await presenter.screenshot({path:path.join(out,"figure3-presenter-response.png"),animations:"disabled"});
