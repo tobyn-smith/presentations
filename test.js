@@ -207,7 +207,7 @@ assert.ok(audienceCss.indexOf("grid-template-columns: repeat(3, minmax(0, 1fr))"
 assert.ok(deckSrc.indexOf("data-response-count") !== -1);
 assert.ok(deckSrc.indexOf("var join = isPres ?") !== -1, "title link is presenter-only");
 assert.ok(deckSrc.indexOf("class=\"join-qr\"") === -1);
-assert.ok(!/tobynsmith\\.me\\/geddes/.test(user), "student HTML has no title URL");
+assert.ok(user.indexOf("tobynsmith.me/geddes") === -1, "student HTML has no title URL");
 assert.ok(deckSrc.indexOf("if (document.body.classList.contains(\"is-hold\"))") !== -1);
 assert.ok(deckSrc.indexOf("revealBtn") === -1);
 assert.ok(backup.indexOf("slideshow.js") !== -1);
