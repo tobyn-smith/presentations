@@ -8,7 +8,7 @@
 <text x="1115" y="100" text-anchor="middle">East Asia</text>
 </g>
 <g stroke="#26394a" stroke-width="3" fill="none">
-<path d="M130 390V135H700"/><path d="M830 390V135H1400"/>
+<path d="M150 390V135H706"/><path d="M838 390V135H1394"/>
 </g>
 <g stroke="#d9ddd9" stroke-width="1.5">
 <path d="M130 326H700M130 262H700M130 198H700"/>
@@ -17,23 +17,23 @@
 <g fill="#142536" font-family="Arial,sans-serif" font-size="18">
 <text x="95" y="395" text-anchor="end">0</text><text x="95" y="331" text-anchor="end">2</text><text x="95" y="267" text-anchor="end">4</text><text x="95" y="203" text-anchor="end">6</text><text x="95" y="141" text-anchor="end">8</text>
 <text x="50" y="265" transform="rotate(-90 50 265)" text-anchor="middle">Growth in GNP per capita</text>
-<text x="130" y="418" text-anchor="middle">1</text><text x="320" y="418" text-anchor="middle">2</text><text x="510" y="418" text-anchor="middle">3</text><text x="700" y="418" text-anchor="middle">4</text>
-<text x="830" y="418" text-anchor="middle">1</text><text x="1020" y="418" text-anchor="middle">2</text><text x="1210" y="418" text-anchor="middle">3</text><text x="1400" y="418" text-anchor="middle">4</text>
+<text x="150" y="418" text-anchor="middle">1</text><text x="334" y="418" text-anchor="middle">2</text><text x="519" y="418" text-anchor="middle">3</text><text x="694" y="418" text-anchor="middle">4</text>
+<text x="838" y="418" text-anchor="middle">1</text><text x="1021" y="418" text-anchor="middle">2</text><text x="1206" y="418" text-anchor="middle">3</text><text x="1394" y="418" text-anchor="middle">4</text>
 <text x="415" y="450" text-anchor="middle" font-weight="700">Level of labour repression</text>
 <text x="1115" y="450" text-anchor="middle" font-weight="700">Level of labour repression</text>
 </g>
 <g fill="#ba0c2f" stroke="#ba0c2f">
-<circle cx="510" cy="170" r="8"/><circle cx="510" cy="190" r="8"/><circle cx="510" cy="210" r="8"/><circle cx="510" cy="280" r="8"/><circle cx="510" cy="320" r="8"/>
+<circle cx="519" cy="163" r="8"/><circle cx="519" cy="177" r="8"/><circle cx="519" cy="188" r="8"/><circle cx="519" cy="244" r="8"/><circle cx="519" cy="282" r="8"/>
 </g>
 <g fill="#102b43" font-family="Arial,sans-serif" font-size="18" font-weight="700">
-<text x="530" y="175">Singapore</text><text x="530" y="195">South Korea</text><text x="530" y="215">Taiwan</text><text x="530" y="285">Brazil</text><text x="530" y="325">Mexico</text>
+<text x="539" y="168">Singapore</text><text x="539" y="182">South Korea</text><text x="539" y="193">Taiwan</text><text x="539" y="249">Brazil</text><text x="539" y="287">Mexico</text>
 </g>
-<path d="M830 350L1400 145" stroke="#16324f" stroke-width="5" fill="none"/>
+<path d="M838 345L1394 142" stroke="#16324f" stroke-width="5" fill="none"/>
 <g fill="#ba0c2f">
-<circle cx="980" cy="335" r="8"/><circle cx="1015" cy="300" r="8"/><circle cx="1030" cy="280" r="8"/><circle cx="1190" cy="220" r="8"/><circle cx="1220" cy="210" r="8"/><circle cx="1280" cy="170" r="8"/><circle cx="1350" cy="300" r="8"/>
+<circle cx="981" cy="321" r="8"/><circle cx="1019" cy="293" r="8"/><circle cx="1031" cy="279" r="8"/><circle cx="1200" cy="202" r="8"/><circle cx="1225" cy="191" r="8"/><circle cx="1238" cy="167" r="8"/><circle cx="1288" cy="272" r="8"/>
 </g>
 <g fill="#102b43" font-family="Arial,sans-serif" font-size="17">
-<text x="950" y="360">Philippines</text><text x="1025" y="290">Malaysia</text><text x="1040" y="270">Thailand</text><text x="1160" y="200">South Korea</text><text x="1225" y="235">Taiwan</text><text x="1290" y="165">Singapore</text><text x="1360" y="320">Indonesia</text>
+<text x="951" y="346">Philippines</text><text x="1029" y="283">Malaysia</text><text x="1041" y="272">Thailand</text><text x="1170" y="182">South Korea</text><text x="1230" y="216">Taiwan</text><text x="1248" y="162">Singapore</text><text x="1298" y="292">Indonesia</text>
 </g>
 <text x="1360" y="385" text-anchor="end" fill="#ba0c2f" font-family="Arial,sans-serif" font-size="23" font-weight="700">r² = .56</text>
 <rect x="250" y="475" width="1000" height="50" rx="16" fill="#102b43"/>
