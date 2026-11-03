@@ -405,8 +405,8 @@ body.role-pres .stage[data-chart="geddes-fig6"] .chart-note {
   }
   body.role-part .stage[data-chart="geddes-fig3"],
   body.role-pres .stage[data-chart="geddes-fig3"] {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto auto;
+    grid-template-columns: minmax(0, 1.05fr) minmax(230px, .95fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
   }
   body.role-part .stage[data-chart="geddes-fig3"] .split,
   body.role-pres .stage[data-chart="geddes-fig3"] .split {
@@ -420,12 +420,30 @@ body.role-pres .stage[data-chart="geddes-fig6"] .chart-note {
   }
   body.role-part .stage[data-chart="geddes-fig3"] .ask-panel,
   body.role-pres .stage[data-chart="geddes-fig3"] .ask-panel {
-    grid-column: 1;
-    grid-row: 4;
+    grid-column: 2;
+    grid-row: 2 / 4;
+    padding: 8px;
+  }
+  body.role-part .stage[data-chart="geddes-fig3"] .ask-q {
+    font-size: 14px;
+    margin-bottom: .35rem;
+  }
+  body.role-part .stage[data-chart="geddes-fig3"] .choices,
+  body.role-pres .stage[data-chart="geddes-fig3"] .opt-preview,
+  body.role-pres .stage[data-chart="geddes-fig3"] .talk {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 5px;
+  }
+  body.role-part .stage[data-chart="geddes-fig3"] .choices button,
+  body.role-pres .stage[data-chart="geddes-fig3"] .opt-preview li,
+  body.role-pres .stage[data-chart="geddes-fig3"] .talk li {
+    min-height: 36px;
+    padding: 6px 8px;
+    font-size: 12px;
   }
   body.role-part .stage[data-chart="geddes-fig3"] figure.chart::after,
   body.role-pres .stage[data-chart="geddes-fig3"] figure.chart::after {
-    max-height: 235px;
+    max-height: 210px;
   }
 }
 
