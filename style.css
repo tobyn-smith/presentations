@@ -632,8 +632,16 @@ button { cursor: pointer; }
 .title-join {
   margin: 0;
   font-family: var(--display);
-  font-size: clamp(15px, 1.9vh, 19px);
+  font-size: clamp(20px, 2.8vh, 30px);
+  font-weight: 600;
+  line-height: 1.12;
   color: var(--ink);
+}
+.title-join a {
+  display: inline-block;
+  max-width: 100%;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.16em;
 }
 .title-join-block .join-qr {
   width: min(100%, 16.5rem);
