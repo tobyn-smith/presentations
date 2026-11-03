@@ -1408,6 +1408,25 @@
       } else done(false);
     });
   }
+  if (isPres) {
+    var nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+    var wasReload = !!(nav && nav.type === "reload");
+    var shouldResume = false;
+    try { shouldResume = sessionStorage.getItem("deck-resume-live") === "1"; } catch (e) {}
+    if (wasReload && shouldResume) {
+      var resumed = false;
+      DeckSync.onStatus(function (status) {
+        if (resumed) return;
+        if (status.mode === "firebase" || status.mode === "backup") {
+          resumed = true;
+          try { sessionStorage.removeItem("deck-resume-live"); } catch (e) {}
+          DeckSync.present();
+        } else if (status.mode === "local") {
+          try { sessionStorage.removeItem("deck-resume-live"); } catch (e) {}
+        }
+      });
+    }
+  }
   DeckSync.onResponses(function (id, list) {
     var i = DeckSync.getSlide();
     if (String(i) !== String(id)) return;
