@@ -175,24 +175,19 @@ try {
   check(responsePosts===1,"rapid duplicate activation produces one response post");
   check(await presenter.locator(".responses li").count()===1,"presenter sees the first response row");
 
-  /* Add four distinct students: the presenter must display five answers,
-     not just the first one or a partial list. */
+  /* Four additional browser sessions submit under distinct student IDs.
+     This isolates response transport/aggregation from the slide-navigation UI. */
   const extraStudents=[];
   for(let n=0;n<4;n++) {
     const peer=await studentContext.newPage();
     peer.on("pageerror",e=>failures.push("additional student browser error: "+e.message));
     await peer.goto("http://127.0.0.1:4174/index.html?room=geddes-qa",{waitUntil:"domcontentloaded"});
-    /* Each new page has its own session ID; explicitly take a seat rather
-       than inheriting the first student's local seat state. */
-    await peer.evaluate(()=>DeckSync.sit());
-    await peer.waitForFunction(()=>DeckSync.isPresenting()&&DeckSync.seated(),null,{timeout:10000});
-    await peer.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").startsWith("3"),null,{timeout:10000});
-    await peer.waitForSelector("#drag-place",{state:"visible",timeout:10000});
-    await peer.locator('select[data-token-place="Labour was repressed or coopted"]').selectOption("shown");
-    await peer.locator('select[data-token-place="That produced fast growth"]').selectOption("not");
-    await peer.locator('select[data-token-place="Slower-growth countries are missing"]').selectOption("shown");
-    await peer.click("#drag-send");
-    await peer.waitForSelector(".thanks",{state:"visible",timeout:10000});
+    await peer.waitForFunction(()=>typeof DeckSync!=="undefined"&&DeckSync.getStatus().mode==="backup",null,{timeout:10000});
+    const delivered=await peer.evaluate(async n=>{
+      sessionStorage.setItem("deck-sid","geddes-qa-student-"+n);
+      return DeckSync.submit("2",{text:"Additional student "+n+" response",choice:"shown",kind:"placement",bin:"shown"});
+    },n);
+    check(delivered,"additional student "+(n+1)+" response reaches the backup room");
     extraStudents.push(peer);
   }
   await presenter.waitForFunction(()=>DeckSync.getResponses("2").length===5,null,{timeout:15000});
