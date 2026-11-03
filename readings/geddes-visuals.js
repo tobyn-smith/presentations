@@ -26,7 +26,7 @@
   };
   regions.claims = [
     {n:"01",title:"Left: selected NICs",body:"Five familiar success stories share repressed or coopted labour. With no low-growth cases and little variation in repression, this panel cannot test the causal claim."},
-    {n:"02",title:"Right: East Asia",body:"The positive pattern is real within this regional sample, but the region was selected in a way correlated with growth."},
+    {n:"02",title:"Right: East Asia",body:"The positive pattern is real within this regional sample, but the region was selected in a way correlated with growth. Table 1 shows average East Asian growth of 5.2%, compared with 2.2% in Latin America and 1.0% in Africa."},
     {n:"03",title:"What we can say",body:"The figure shows why a pattern inside a selected group cannot automatically be generalised."}
   ];
 
@@ -122,6 +122,9 @@
   var cl = script("close");
   cl.title = "Conclusion: 13:15–15:00";
   /* Timings move the sample question ahead of the graph-reading activity. */
+  script("ask").say = "Imagine I want to explain economic growth, so I start with countries that grew quickly. The top graph shows the pattern I might assume across all countries. But the lower graph shows another possibility: once the missing cases are included, the relationship may disappear. That is why Geddes says we need cases where the outcome did not happen as well.";
+  script("regions").say = "Figure 1 puts two samples side by side. On the left are five familiar fast-growing countries, where repression barely varies. On the right are seven East Asian countries, where the association looks positive. Table 1 helps explain the problem: East Asia had unusually high average growth, so selecting that region is already linked to the outcome. The figure shows why the relationship may not travel beyond that sample.";
+  script("fits").say = "Now compare Figures 2 and 3. The reported r-squared falls to .07 in the wider Third World sample and .01 in the more advanced subset. Which reading is closest to Geddes's conclusion? The relationship that looked persuasive in a selected group weakens in the wider samples. That is not the same as proving the hypothesis false.";
   script("regions").title = "The wider comparison: 3:30-4:20";
   function plainDashes(value) {
     if (typeof value === "string") return value.replace(/[–—]/g, "-");
