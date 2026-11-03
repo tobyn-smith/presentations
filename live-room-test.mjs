@@ -158,19 +158,6 @@ try {
   await thirdPlace.press("Enter");
   check(await firstPlace.inputValue()==="shown" && await secondPlace.inputValue()==="not" && await thirdPlace.inputValue()==="shown","placement interaction works using keyboard-only controls");
 
-  firebaseOnline=false;
-  ntfyOnline=false;
-  await Promise.all([
-    presenter.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000}),
-    student.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000})
-  ]);
-  await student.click("#drag-send");
-  await student.waitForSelector(".submit-error",{state:"visible"});
-  check(await student.locator("#drag-send").isEnabled(),"failed submission re-enables Send");
-  check((await student.locator(".submit-error").innerText()).includes("did not reach the room"),"failed submission gives a clear retry message");
-  check(responsePosts===0,"failed submission is not counted as delivered");
-  check(await presenter.locator(".responses li").count()===0,"failed response is not shown to the presenter");
-
   /* Slide 4 is a choice-plus-explanation activity. Check that its selected
      answer and written reason both appear on the presenter screen. */
   await presenter.click("#next");
@@ -187,6 +174,20 @@ try {
   await presenter.screenshot({path:path.join(out,"slide4-room-response.png"),animations:"disabled"});
   await presenter.click("#prev");
   await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="3",null,{timeout:10000});
+
+  firebaseOnline=false;
+  ntfyOnline=false;
+  await Promise.all([
+    presenter.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000}),
+    student.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000})
+  ]);
+  await student.click("#drag-send");
+  await student.waitForSelector(".submit-error",{state:"visible"});
+  check(await student.locator("#drag-send").isEnabled(),"failed submission re-enables Send");
+  check((await student.locator(".submit-error").innerText()).includes("did not reach the room"),"failed submission gives a clear retry message");
+  check(responsePosts===0,"failed submission is not counted as delivered");
+  check(await presenter.locator(".responses li").count()===0,"failed response is not shown to the presenter");
+
   await student.screenshot({path:path.join(out,"failed-submission.png"),animations:"disabled"});
 
   ntfyOnline=true;
