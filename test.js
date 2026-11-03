@@ -60,7 +60,7 @@ assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
 assert.ok(/ten country-period instances/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
 assert.ok(/five selected Table 2 observations/.test(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.note));
-assert.ok(/curved relationship/.test(JSON.stringify(SLIDES.filter(function (s) { return s.id === "fits"; }))));
+assert.ok(/curve or a few NICs/.test(JSON.stringify(SLIDES.filter(function (s) { return s.id === "fits"; }))));
 assert.ok(!/The five are all a 3/.test(JSON.stringify(SLIDES)));
 
 var prompts = SLIDES.filter(function (s) { return s.type === "prompt"; });
