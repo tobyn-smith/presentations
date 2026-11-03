@@ -142,6 +142,12 @@ try {
         if (mode === "student" && [2,3].includes(index) && metrics.askPanelLeft < metrics.askRight - 8) {
           report.failures.push(viewport.width + "x" + viewport.height + " student prompt " + (index + 1) + " does not place the task beside the teaching column");
         }
+        if (mode === "student" && [2,3].includes(index) && metrics.askHeight < 100) {
+          report.failures.push(viewport.width + "x" + viewport.height + " student activity has no teaching column");
+        }
+        if (mode === "student" && [2,3].includes(index) && metrics.askPanelLeft < metrics.askRight - 8) {
+          report.failures.push(viewport.width + "x" + viewport.height + " student activity is not side by side");
+        }
         if (metrics.chartId === "geddes-fig3" && metrics.askPanelLeft < metrics.chartRight - 8) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 question panel is not beside the graph");
         }
