@@ -245,6 +245,25 @@ try {
   check(await presenter.locator(".responses li").count()===5,"normal presenter refresh restores all five responses from Firebase");
   await presenter.screenshot({path:path.join(out,"refresh-from-firebase.png"),animations:"disabled"});
 
+  /* Figure 3's choice-text interaction needs its own presenter-side check:
+     the choices should be visible before responses, and the selected answer
+     should arrive in the presenter room panel after Send. */
+  for (let step=0;step<4;step++) await presenter.click("#next");
+  await presenter.waitForFunction(()=>document.querySelector("#counter")?.textContent.trim()==="7",null,{timeout:10000});
+  await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="7",null,{timeout:10000});
+  await presenter.waitForFunction(()=>document.querySelectorAll(".presenter-choice-preview li").length===3,null,{timeout:10000});
+  check(await presenter.locator(".presenter-choice-preview li").count()===3 && await presenter.locator(".presenter-choice-preview").isVisible(),"Figure 3 choices are visible in presenter mode before responses");
+  check((await presenter.locator(".ask-q").innerText()).includes("Which reading fits Geddes's caution?"),"Figure 3 presenter mode shows the matching discussion question");
+  await student.locator('#choices button[data-choice="A curve, or a few NICs drive it"]').click();
+  await student.locator(".send").click();
+  await student.waitForSelector(".thanks",{state:"visible",timeout:10000});
+  await presenter.waitForFunction(()=>DeckSync.getResponses("6").length===1,null,{timeout:12000});
+  await presenter.waitForFunction(()=>document.querySelectorAll("#viz .responses li").length===1,null,{timeout:10000});
+  check(await presenter.locator("#viz .responses li").count()===1,"Figure 3 student choice reaches the presenter response panel");
+  check((await presenter.locator("#viz .responses li").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 presenter displays the selected interpretation");
+  check(await presenter.locator(".presenter-choice-preview").isVisible(),"Figure 3 choices remain visible alongside incoming responses");
+  await presenter.screenshot({path:path.join(out,"figure3-presenter-response.png"),animations:"disabled"});
+
   console.log("Live-room checks: "+checks.length);
   checks.forEach(x=>console.log("PASS "+x));
   if(failures.length){failures.forEach(x=>console.error("FAIL "+x));process.exitCode=1;}
