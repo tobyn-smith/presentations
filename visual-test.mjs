@@ -40,6 +40,7 @@ await new Promise(resolve => server.listen(4173, "127.0.0.1", resolve));
 const browser = await chromium.launch({ headless: true });
 const viewports = [
   { width: 1920, height: 1080 },
+  { width: 1600, height: 900 },
   { width: 1366, height: 768 },
   { width: 1280, height: 720 },
   { width: 1024, height: 768 }
@@ -109,11 +110,23 @@ try {
           const chart = stage.querySelector("figure.chart[data-chart]");
           const chartId = chart?.getAttribute("data-chart") || "";
           const artHeight = chart ? Math.round(parseFloat(getComputedStyle(chart, "::after").height) || 0) : 0;
+          const stageRect = stage.getBoundingClientRect();
+          const outside = Array.from(stage.querySelectorAll("h1,.split,.ask-panel,.chart,.claim-bars,.choices,form.answer,.drag-place,.drag-rank"))
+            .filter(el => {
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.height > 0 &&
+                (r.left < stageRect.left - 2 || r.right > stageRect.right + 2 ||
+                 r.top < stageRect.top - 2 || r.bottom > stageRect.bottom + 2);
+            })
+            .map(el => el.className || el.tagName.toLowerCase());
           return {
             title: stage.querySelector("h1")?.textContent.trim() || "",
             titleJoinHeight: Math.round(stage.querySelector(".title-join")?.getBoundingClientRect().height || 0),
             scrollWidth: root.scrollWidth,
+            pageHeightOverflow: Math.max(0, root.scrollHeight - window.innerHeight),
             viewportWidth: window.innerWidth,
+            dataChart: stage.getAttribute("data-chart") || "",
+            outsideStage: outside,
             stageClientHeight: stage.clientHeight,
             stageScrollHeight: stage.scrollHeight,
             stageOverflow: Math.max(0, stage.scrollHeight - stage.clientHeight),
@@ -139,6 +152,15 @@ try {
         }
         if (metrics.stageOverflow > 24) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": content extends " + metrics.stageOverflow + "px beyond the slide stage");
+        }
+        if (metrics.pageHeightOverflow > 1) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": the page itself scrolls vertically");
+        }
+        if (metrics.outsideStage.length) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": key content extends beyond the visible board: " + metrics.outsideStage.join(", "));
+        }
+        if (metrics.chartId && metrics.dataChart !== metrics.chartId) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": slide figure metadata is missing or stale");
         }
         if (metrics.nestedClips.length) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": nested content clipped: " + metrics.nestedClips.join(", "));
@@ -214,8 +236,11 @@ try {
   await admin.click("#failsafe-open");
   await admin.waitForSelector("#failsafe [role=dialog]", { state: "visible" });
   const dialogText = await admin.locator("#failsafe").innerText();
-  if (!dialogText.toLowerCase().includes("room status") || !dialogText.toLowerCase().includes("recovery")) {
-    report.failures.push("Room status drawer is missing its title or recovery actions");
+  if (!dialogText.toLowerCase().includes("room status") ||
+      !dialogText.toLowerCase().includes("room actions") ||
+      !dialogText.toLowerCase().includes("activity") ||
+      !dialogText.toLowerCase().includes("responses")) {
+    report.failures.push("Room status drawer is missing its live activity or recovery information");
   }
   await admin.screenshot({ path: path.join(out, "room-status.png"), animations: "disabled" });
   await admin.keyboard.press("Shift+Tab");
