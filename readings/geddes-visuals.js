@@ -33,7 +33,7 @@
   fits.chart = {
     id: "geddes-fig23", title: "Figures 2 and 3 · Broader samples",
     source: "Geddes (1990), Figures 2 and 3",
-    note: "Figure 2: Third World sample, r² = .07. Figure 3: more advanced countries, r² = .01. The plots show no simple linear relationship; Geddes discusses a possible curve and the influence of a few unusually fast-growing NICs.",
+    note: "Figure 2: Third World sample, r² = .07. Figure 3: more advanced countries, r² = .01. The plots show no simple linear relationship; Geddes discusses a possible curved relationship and the influence of a few unusually fast-growing NICs.",
     plots: []
   };
   fits.claims = [];
