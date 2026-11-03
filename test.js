@@ -55,7 +55,7 @@ assert.strictEqual(SLIDES.filter(function (s) { return s.id === "figure5"; })[0]
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "chile"; })[0].chart.id, "geddes-fig6");
 assert.ok(/Figure 3/.test(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.source));
 assert.ok(/Figure 2/.test(SLIDES.filter(function (s) { return s.id === "figure2"; })[0].chart.source));
-assert.ok(/Seven instances/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
+assert.ok(/Seven defeat\/no-revolution/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.id, "table2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
 assert.ok(/ten country-period instances/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
@@ -207,6 +207,7 @@ assert.ok(audienceCss.indexOf("grid-template-columns: repeat(3, minmax(0, 1fr))"
 assert.ok(deckSrc.indexOf("data-response-count") !== -1);
 assert.ok(deckSrc.indexOf("var join = isPres ?") !== -1, "title link is presenter-only");
 assert.ok(deckSrc.indexOf("class=\"join-qr\"") === -1);
+assert.ok(!/tobynsmith\\.me\\/geddes/.test(user), "student HTML has no title URL");
 assert.ok(deckSrc.indexOf("if (document.body.classList.contains(\"is-hold\"))") !== -1);
 assert.ok(deckSrc.indexOf("revealBtn") === -1);
 assert.ok(backup.indexOf("slideshow.js") !== -1);
