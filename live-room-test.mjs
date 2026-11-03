@@ -108,7 +108,7 @@ async function waitForStoredResponse() {
   const until=Date.now()+12000;
   while(Date.now()<until) {
     const rows=(roomData.places && roomData.places["2"]) || (roomData.votes && roomData.votes["2"]);
-    if(rows && Object.keys(rows).length===1) return true;
+    if(rows && Object.keys(rows).length===5) return true;
     await new Promise(resolve=>setTimeout(resolve,100));
   }
   return false;
@@ -173,14 +173,36 @@ try {
   await student.waitForSelector(".thanks",{state:"visible",timeout:10000});
   await presenter.waitForSelector(".responses li",{state:"visible",timeout:10000});
   check(responsePosts===1,"rapid duplicate activation produces one response post");
-  check(await presenter.locator(".responses li").count()===1,"presenter sees one response row");
+  check(await presenter.locator(".responses li").count()===1,"presenter sees the first response row");
+
+  /* Add four distinct students: the presenter must display five answers,
+     not just the first one or a partial list. */
+  const extraStudents=[];
+  for(let n=0;n<4;n++) {
+    const peer=await studentContext.newPage();
+    peer.on("pageerror",e=>failures.push("additional student browser error: "+e.message));
+    await peer.goto("http://127.0.0.1:4174/index.html?room=geddes-qa",{waitUntil:"domcontentloaded"});
+    await peer.waitForFunction(()=>DeckSync.isPresenting()&&DeckSync.seated(),null,{timeout:10000});
+    await peer.waitForSelector("#drag-place");
+    await peer.locator('select[data-token-place="Labour was repressed or coopted"]').selectOption("shown");
+    await peer.locator('select[data-token-place="That produced fast growth"]').selectOption("not");
+    await peer.locator('select[data-token-place="Slower-growth countries are missing"]').selectOption("shown");
+    await peer.click("#drag-send");
+    await peer.waitForSelector(".thanks",{state:"visible",timeout:10000});
+    extraStudents.push(peer);
+  }
+  await presenter.waitForFunction(()=>DeckSync.getResponses("2").length===5,null,{timeout:15000});
+  await presenter.waitForFunction(()=>document.querySelectorAll(".responses li").length===5,null,{timeout:10000});
+  check(responsePosts===5,"five students produce five distinct response posts");
+  check(await presenter.locator(".responses li").count()===5,"presenter renders all five responses");
+  await presenter.screenshot({path:path.join(out,"five-responses.png"),animations:"disabled"});
   await presenter.screenshot({path:path.join(out,"backup-response.png"),animations:"disabled"});
 
   await presenter.reload({waitUntil:"domcontentloaded"});
   await presenter.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000});
   await presenter.waitForFunction(()=>DeckSync.isPresenting(),null,{timeout:8000});
   await presenter.waitForSelector(".responses li",{state:"visible",timeout:10000});
-  check(await presenter.locator(".responses li").count()===1,"presenter refresh restores response from backup history");
+  check(await presenter.locator(".responses li").count()===5,"presenter refresh restores all five responses from backup history");
   check(await presenter.evaluate(()=>DeckSync.isPresenting()),"presenter refresh restores the live room state");
   await presenter.screenshot({path:path.join(out,"refresh-from-backup.png"),animations:"disabled"});
 
@@ -192,7 +214,7 @@ try {
 
   await presenter.reload({waitUntil:"domcontentloaded"});
   await presenter.waitForSelector(".responses li",{state:"visible",timeout:10000});
-  check(await presenter.locator(".responses li").count()===1,"normal presenter refresh restores response from Firebase");
+  check(await presenter.locator(".responses li").count()===5,"normal presenter refresh restores all five responses from Firebase");
   await presenter.screenshot({path:path.join(out,"refresh-from-firebase.png"),animations:"disabled"});
 
   console.log("Live-room checks: "+checks.length);
