@@ -96,7 +96,7 @@ try {
             chartArtworkHeight: artHeight,
             chartWidth: chart ? Math.round(chart.getBoundingClientRect().width) : 0,
             stageClientWidth: stage.clientWidth,
-            repeatedSectionKicker: mode === "student" && Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none")
+            repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none")
           };
         });
         if (metrics.scrollWidth > viewport.width + 1) {
