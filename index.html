@@ -10,8 +10,16 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3C/svg%3E" />
 <link rel="stylesheet" href="type.css" />
 <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="geddes-figures.css" />
+<link rel="stylesheet" href="audience.css" />
 </head>
-<body class="role-part" data-role="participant">
+<body class="role-part is-desk" data-role="participant">
+<div class="desktop-notice" role="status">
+  <div class="desktop-notice-card">
+    <h1>Open this on a laptop</h1>
+    <p>The discussion slides are designed for a classroom screen. Open this page on a desktop or laptop at least 960 pixels wide.</p>
+  </div>
+</div>
 <main class="deck">
   <div class="board">
     <span class="accent-tab" aria-hidden="true"></span>
@@ -22,6 +30,11 @@
         <button type="button" class="hand-btn" id="hand" hidden aria-pressed="false">Hand up</button>
         <p class="counter" id="counter"></p>
       </div>
+    </header>
+    <header class="uga-banner" aria-label="University of Georgia">
+      <span class="uga-plate"><img class="uga-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158"></span>
+      <p class="uga-deck">Discussion</p>
+      <p class="uga-kicker" id="uga-kicker"></p>
     </header>
     <section class="stage" id="stage" aria-live="off"></section>
     <footer class="brand">
@@ -35,6 +48,7 @@
 <script src="slides.js"></script>
 <script src="prompts.js"></script>
 <script src="readings/geddes-1990.js"></script>
+<script src="readings/geddes-visuals.js"></script>
 <script src="build-week.js"></script>
 <script src="apply-content.js"></script>
 <script src="sync.js"></script>

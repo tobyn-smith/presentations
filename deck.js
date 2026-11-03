@@ -8,8 +8,6 @@
   var prevBtn = document.getElementById("prev");
   var nextBtn = document.getElementById("next");
   var resetBtn = document.getElementById("reset");
-  var revealBtn = document.getElementById("reveal");
-  var revealed = {};
   var wipeBtn = document.getElementById("wipe");
   var liveBtn = document.getElementById("live");
   var handBtn = document.getElementById("hand");
@@ -28,12 +26,6 @@
     if (path.slice(-1) !== "/") path += "/";
     return location.origin + path;
   }
-  function qrSrc(url) {
-    if (cfg().joinUrl && String(url) === String(cfg().joinUrl)) return "join-qr.svg";
-    return "https://api.qrserver.com/v1/create-qr-code/?size=460x460&ecc=M&margin=8&data="
-      + encodeURIComponent(url);
-  }
-
   var STOP = "a an the and or but if to of in on for with as at by from is it this that was were be been being are was we you they i me my our your their not no so than then there here what when which who how why can could would should may might will just about into over after before also more most some any only own other than too very".split(" ");
 
   function esc(s) {
@@ -155,11 +147,6 @@
       counter.textContent = isPres ? n : (n + " / " + slides().length);
     }
     if (resetBtn) resetBtn.hidden = s.type !== "prompt";
-    if (revealBtn) {
-      revealBtn.hidden = s.type !== "prompt";
-      revealBtn.textContent = revealed[s.id] ? "Hide answers" : "Reveal answers";
-      revealBtn.setAttribute("aria-pressed", revealed[s.id] ? "true" : "false");
-    }
     if (prevBtn) prevBtn.disabled = i === 0;
     if (nextBtn) nextBtn.disabled = i === slides().length - 1;
     stage.classList.toggle("prompt", s.type === "prompt");
@@ -375,6 +362,7 @@
   function fitStage() {
     if (!stage) return;
     stage.style.transform = "";
+    if (!isPres) return;
     if (window.innerWidth < 720) return;
     var room = stage.clientHeight;
     var need = stage.scrollHeight;
@@ -539,16 +527,12 @@
   function htmlFor(s, i) {
     if (s.type === "title") {
       var href = joinHref();
-      var shown = href.replace(/^https:\/\//, "");
+      var shown = href.replace(/^https:\/\//, "").replace(/\/$/, "");
       var seats = seatedHtml();
-      var join = isPres
-        ? '<div class="title-join-block">'
-          + '<img class="join-qr" src="' + qrSrc(href) + '" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
-          + '<p class="title-scan">Scan to join</p>'
-          + '<p class="title-join">' + esc(shown) + "</p>"
-          + (seats || "")
-          + "</div>"
-        : "";
+      var join = '<div class="title-join-block">'
+        + '<p class="title-join"><a href="' + esc(href) + '">' + esc(shown) + '</a></p>'
+        + (seats || "")
+        + "</div>";
       return '<div class="title-card">'
         + '<div class="title-copy">'
         + '<img class="uga-logo title-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158">'
@@ -1000,6 +984,7 @@
       }
     }
     if (!list.length && !html) html = '<p class="empty">No answers yet.</p>';
+    viz.setAttribute("data-response-count", String(list.length));
     viz.innerHTML = html;
     showViz(s);
   }
@@ -1007,7 +992,7 @@
   function showViz(s) {
     var viz = document.getElementById("viz");
     if (!viz) return;
-    var show = !!(s && revealed[s.id] && viz.innerHTML.trim());
+    var show = !!(s && Number(viz.getAttribute("data-response-count")) > 0);
     viz.classList.toggle("is-hidden", !show);
     var win = viz.closest(".ss-win");
     if (win) win.classList.toggle("has-answers", show);
@@ -1021,7 +1006,8 @@
 
   function paintHandBtn() {
     if (!handBtn) return;
-    var show = !isPres && DeckSync.seated() && !document.body.classList.contains("is-waiting");
+    var current = slides()[DeckSync.getSlide()];
+    var show = !isPres && DeckSync.seated() && !document.body.classList.contains("is-waiting") && current && current.type === "prompt";
     handBtn.hidden = !show;
     if (!show) return;
     var up = DeckSync.handUp();
@@ -1076,8 +1062,8 @@
     var rows = [
       ["Room", snap.localOnly ? "This computer only" : snap.room],
       ["Session", snap.session],
-      ["Go live", snap.presenting ? "On · last push " + failsafeAge(snap.hereAgeMs) : "Off · phones on Hold"],
-      ["Phones", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Can join" : "Not confirmed yet")],
+      ["Go live", snap.presenting ? "On · last push " + failsafeAge(snap.hereAgeMs) : "Off · audience on Hold"],
+      ["Audience", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Can join" : "Not confirmed yet")],
       ["Live sync", snap.localOnly ? "This computer only" : (snap.status.detail || snap.status.mode)],
       ["Firebase HTTP", snap.firebaseHttp ? String(snap.firebaseHttp) : "none"],
       ["Checked in", String(snap.seats.length)],
@@ -1209,8 +1195,11 @@
         return;
       }
       if (DeckSync.seated()) {
-        if (onBoard()) return;
-        if (!document.body.classList.contains("is-hold")) holdRoom();
+        if (document.body.classList.contains("is-hold")) {
+          paintHoldPeers();
+          return;
+        }
+        holdRoom();
         return;
       }
       if (!document.body.classList.contains("is-checkin")) checkIn();
@@ -1230,7 +1219,10 @@
           }
           return;
         }
-        if (onBoard() || document.body.classList.contains("is-hold")) return;
+        if (document.body.classList.contains("is-hold")) {
+          paintHoldPeers();
+          return;
+        }
         holdRoom();
         return;
       }
@@ -1293,8 +1285,8 @@
         paintLive();
         paintFailsafeStatus();
         failsafeLog(res.ok
-          ? "Firebase has Go live. Phones should leave Hold within a second."
-          : ("Push failed. " + (res.error || "Try Test phone paths.")));
+          ? "Firebase has Go live. Audience screens should leave Hold within a second."
+          : ("Push failed. " + (res.error || "Try Test audience connection.")));
       });
     });
     var fsSlide = document.getElementById("fs-slide");
@@ -1311,7 +1303,7 @@
     });
     var fsProbe = document.getElementById("fs-probe");
     if (fsProbe) fsProbe.addEventListener("click", function () {
-      failsafeLog("Testing Firebase and ntfy…");
+      failsafeLog("Testing the audience connection…");
       DeckSync.probe().then(function (res) {
         paintFailsafeStatus();
         var fb = res.firebase || {};
@@ -1334,7 +1326,7 @@
       DeckSync.pullRoom().then(function (ok) {
         paintLive();
         paintFailsafeStatus();
-        failsafeLog(ok ? "Reloaded seats, answers, and Go live from Firebase." : "Pull failed. Test phone paths.");
+        failsafeLog(ok ? "Reloaded seats, answers, and Go live from Firebase." : "Pull failed. Test audience connection.");
       });
     });
     var fsSeats = document.getElementById("fs-seats");
@@ -1342,7 +1334,7 @@
       failsafeLog("Clearing leftover seats…");
       DeckSync.clearSeats().then(function (ok) {
         paintFailsafeStatus();
-        failsafeLog(ok ? "Seat list cleared. People can check in again." : "Could not clear seats. Test phone paths.");
+        failsafeLog(ok ? "Seat list cleared. People can check in again." : "Could not clear seats. Test audience connection.");
       });
     });
     var fsEnd = document.getElementById("fs-end");
@@ -1350,7 +1342,7 @@
       DeckSync.standDown();
       paintLive();
       paintFailsafeStatus();
-      failsafeLog("Room ended. Phones should return to Hold.");
+      failsafeLog("Room ended. Audience screens should return to Hold.");
     });
     var fsCopy = document.getElementById("fs-copy");
     if (fsCopy) fsCopy.addEventListener("click", function () {
@@ -1365,7 +1357,7 @@
       if (!b) return;
       e.preventDefault();
       var kickedSid = b.getAttribute("data-kick");
-      if (!confirm("Remove this person? Their phone goes back to check-in and they have to start over.")) return;
+      if (!confirm("Remove this person? Their screen returns to check-in and they have to start over.")) return;
       DeckSync.kick(kickedSid);
       paintSeated();
       paintFailsafeStatus();
@@ -1416,14 +1408,6 @@
     if (prevBtn) prevBtn.addEventListener("click", function () { go(DeckSync.getSlide() - 1); });
     if (nextBtn) nextBtn.addEventListener("click", function () { go(DeckSync.getSlide() + 1); });
     if (resetBtn) resetBtn.addEventListener("click", function () { DeckSync.reset(String(DeckSync.getSlide())); });
-    if (revealBtn) revealBtn.addEventListener("click", function () {
-      var s = slides()[DeckSync.getSlide()];
-      if (!s || s.type !== "prompt") return;
-      revealed[s.id] = !revealed[s.id];
-      revealBtn.textContent = revealed[s.id] ? "Hide answers" : "Reveal answers";
-      revealBtn.setAttribute("aria-pressed", revealed[s.id] ? "true" : "false");
-      showViz(s);
-    });
     if (wipeBtn) wipeBtn.addEventListener("click", function () {
       if (confirm("Clear every answer from this session?")) DeckSync.wipe();
     });

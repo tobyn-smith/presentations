@@ -13,6 +13,7 @@
 <meta http-equiv="Cache-Control" content="no-store" />
 <link rel="stylesheet" href="type.css" />
 <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="geddes-figures.css" />
 </head>
 <body class="role-pres" data-role="presenter">
 <div id="gate" class="lock" hidden>
@@ -41,7 +42,7 @@
       </div>
     </form>
     <p class="backup-link"><a href="start.html">Not sure where to start?</a></p>
-    <p class="backup-link"><a href="slideshow.html">Phones down? Open the slideshow.</a></p>
+    <p class="backup-link"><a href="slideshow.html">Live connection down? Open the slideshow.</a></p>
     <p class="backup-link"><a href="edit.html">Change the slides or the class list.</a></p>
   </div>
 </div>
@@ -56,7 +57,6 @@
       <p class="live-status" id="live-status"></p>
       <div class="admin-nav">
         <button type="button" id="reset" hidden>Clear answers</button>
-        <button type="button" id="reveal" hidden>Reveal</button>
         <button type="button" id="wipe" hidden>Clear all</button>
         <button type="button" id="prev">Back</button>
         <button type="button" id="next">Next</button>
@@ -88,7 +88,7 @@
       <h2 id="failsafe-title">Room tools</h2>
       <button type="button" class="failsafe-close" id="failsafe-close">Close</button>
     </div>
-    <p class="failsafe-lead">Only if phones stick or a name will not leave.</p>
+    <p class="failsafe-lead">Use these only if the live room or participant list needs attention.</p>
     <dl class="failsafe-status" id="failsafe-status"></dl>
     <pre class="failsafe-log" id="failsafe-log" hidden></pre>
     <h3 class="failsafe-h">Presenter key</h3>
@@ -108,19 +108,15 @@
     <div class="failsafe-cmds">
       <button type="button" id="fs-push">
         <strong>Push live again</strong>
-        <span>Write Go live to Firebase, republish this slide, and confirm the room read it back.</span>
+        <span>Write Go live to Firebase, republish this slide, and confirm the audience room read it back.</span>
       </button>
       <button type="button" id="fs-slide">
         <strong>Republish this slide</strong>
-        <span>Send the current slide index again so late phones catch up.</span>
-      </button>
-      <button type="button" id="fs-title">
-        <strong>Show the QR / title</strong>
-        <span>Jump everyone to slide 1 so late arrivals can see the join code.</span>
+        <span>Send the current slide index again so late audience screens catch up.</span>
       </button>
       <button type="button" id="fs-probe">
-        <strong>Test phone paths</strong>
-        <span>Ping Firebase read/write and ntfy. Tells you which path campus is blocking.</span>
+        <strong>Test audience connection</strong>
+        <span>Check Firebase read/write and the backup message path. Shows whether audience updates can reach the room.</span>
       </button>
       <button type="button" id="fs-pull">
         <strong>Pull room</strong>
@@ -134,10 +130,6 @@
         <strong>Allow removed people back</strong>
         <span>Clear the kick list so a removed name can check in again from a new session.</span>
       </button>
-      <button type="button" id="fs-end">
-        <strong>End room</strong>
-        <span>Send everyone back to Hold. Same as End live.</span>
-      </button>
       <button type="button" id="fs-copy">
         <strong>Copy status</strong>
         <span>Copy a report you can paste into a message if you still need help.</span>
@@ -148,15 +140,15 @@
       </a>
       <a class="failsafe-backup" href="script.html">
         <strong>Script</strong>
-        <span>What you say. About twenty minutes. Cues stay in the notes.</span>
+        <span>Speaker notes and timings for the 15-minute discussion.</span>
       </a>
       <a class="failsafe-backup" href="slideshow.html" target="_blank" rel="noopener">
         <strong>Backup</strong>
-        <span>Plain slides. No phones. Same Geddes boards.</span>
+        <span>Backup presentation if the live room connection fails.</span>
       </a>
       <a class="failsafe-backup" href="index.html" target="_blank" rel="noopener">
         <strong>Audience</strong>
-        <span>The phone page. Check-in, then answers.</span>
+        <span>Desktop audience view. Open this link on a laptop to follow the slides and join the activities.</span>
       </a>
       <a class="failsafe-backup" href="edit.html">
         <strong>Change slides and names</strong>
@@ -171,6 +163,7 @@
 <script src="slides.js"></script>
 <script src="prompts.js"></script>
 <script src="readings/geddes-1990.js"></script>
+<script src="readings/geddes-visuals.js"></script>
 <script src="build-week.js"></script>
 <script src="apply-content.js"></script>
 <script src="gate.js"></script>

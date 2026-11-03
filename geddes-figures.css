@@ -1,0 +1,34 @@
+/* Readable original-figure redraws for the Geddes seminar. */
+figure.chart[data-chart="geddes-fig1"] .plot-panels,
+figure.chart[data-chart="geddes-fig23"] .plot-panels,
+figure.chart[data-chart="geddes-fig4"] .plot-panels,
+figure.chart[data-chart="geddes-fig5"] .plot-panels,
+figure.chart[data-chart="geddes-fig6"] .plot-panels { display:none !important; }
+figure.chart[data-chart="geddes-fig1"]::after,
+figure.chart[data-chart="geddes-fig23"]::after,
+figure.chart[data-chart="geddes-fig4"]::after,
+figure.chart[data-chart="geddes-fig5"]::after,
+figure.chart[data-chart="geddes-fig6"]::after {
+  content:""; display:block; width:100%; margin:.35rem auto 0;
+  background-position:center; background-repeat:no-repeat; background-size:contain;
+}
+figure.chart[data-chart="geddes-fig1"]::after { height:clamp(245px, 38vh, 410px); background-image:url("figures/geddes-fig1.svg"); }
+figure.chart[data-chart="geddes-fig23"]::after { height:clamp(280px, 43vh, 455px); background-image:url("figures/geddes-fig23.svg"); }
+figure.chart[data-chart="geddes-fig4"]::after { height:clamp(260px, 39vh, 405px); background-image:url("figures/geddes-fig4.svg"); }
+figure.chart[data-chart="geddes-fig5"]::after { height:clamp(260px, 39vh, 405px); background-image:url("figures/geddes-fig5.svg"); }
+figure.chart[data-chart="geddes-fig6"]::after { height:clamp(270px, 41vh, 430px); background-image:url("figures/geddes-fig6.svg"); }
+.join-qr,.title-scan { display:none !important; }
+.title-join-block { display:flex !important; align-items:center; justify-content:center; text-align:center; min-width:0; }
+.title-join { margin:0 !important; font:700 clamp(25px, 3.6vw, 48px)/1.15 var(--display) !important; letter-spacing:.01em; overflow-wrap:anywhere; }
+.title-join a { color:var(--navy); text-decoration:underline; text-decoration-color:var(--accent); text-decoration-thickness:3px; text-underline-offset:7px; }
+body.role-part .title-join a { color:#102b43; }
+body.role-pres .stage.title .title-join-block, body.role-part .stage.title .title-join-block { padding:1rem; }
+body.role-part .stage.prompt .split.has-viz .split-viz { min-height:0; }
+body.role-part .stage.prompt figure.chart[data-chart="geddes-fig23"]::after { height:clamp(260px, 40vh, 420px); }
+body.role-part .stage.claims figure.chart[data-chart="geddes-fig4"]::after, body.role-part .stage.claims figure.chart[data-chart="geddes-fig5"]::after { height:clamp(230px, 35vh, 360px); }
+
+figure.chart[data-chart="geddes-selection"] .plot-panels { display:none !important; }
+figure.chart[data-chart="geddes-selection"]::after {
+  content:""; display:block; width:100%; height:clamp(260px, 40vh, 430px); margin:.35rem auto 0;
+  background:url("figures/geddes-selection.svg") center/contain no-repeat;
+}
