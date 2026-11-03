@@ -152,9 +152,9 @@
         + '<path d="M44 40l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
         + '<path d="M44 110l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
         + '<path d="M44 180l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
-        + '<text x="82" y="48" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Labour</text>'
-        + '<text x="82" y="118" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Skocpol</text>'
-        + '<text x="82" y="188" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Chile</text>'
+        + '<text x="82" y="48" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Build</text>'
+        + '<text x="82" y="118" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Test</text>'
+        + '<text x="82" y="188" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Time</text>'
         + "</svg></div>";
     }
     if (s.id === "chile") return yearChartHtml();
