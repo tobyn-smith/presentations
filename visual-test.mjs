@@ -93,7 +93,10 @@ try {
             stageOverflow: Math.max(0, stage.scrollHeight - stage.clientHeight),
             nestedClips: clips,
             chartId,
-            chartArtworkHeight: artHeight
+            chartArtworkHeight: artHeight,
+            chartWidth: chart ? Math.round(chart.getBoundingClientRect().width) : 0,
+            stageClientWidth: stage.clientWidth,
+            repeatedSectionKicker: mode === "student" && Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none")
           };
         });
         if (metrics.scrollWidth > viewport.width + 1) {
@@ -107,6 +110,12 @@ try {
         }
         if (metrics.chartId === "geddes-fig3" && metrics.stageOverflow > 40) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 still needs scrolling (" + metrics.stageOverflow + "px overflow)");
+        }
+        if (metrics.chartId === "geddes-fig2" && metrics.chartWidth < metrics.stageClientWidth * .72) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 2 leaves an empty chart column");
+        }
+        if (metrics.repeatedSectionKicker) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " repeats the section label above the slide title");
         }
         await page.screenshot({
           path: path.join(dir, "slide-" + String(index + 1).padStart(2, "0") + ".png"),
