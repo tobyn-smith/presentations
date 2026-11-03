@@ -205,6 +205,12 @@ assert.ok(start.indexOf("Phones.") === -1);
   var src = fs.readFileSync("./" + name, "utf8");
   assert.ok(src.toLowerCase().indexOf("rehear") === -1, "old local-only wording left in " + name);
 });
+assert.ok(deckSrc.indexOf("var keepBoard = !force && !changed && onBoard()") !== -1);
+assert.ok(deckSrc.indexOf("if (isPres || DeckSync.isPresenting()) render(n);") !== -1);
+assert.ok(!/deck-content[\s\S]{0,500}sharePack/.test(deckSrc));
+assert.ok(fs.readFileSync("./sync.js", "utf8").indexOf("if (lastHere && lastHere > t) return;") !== -1);
+assert.ok(user.indexOf('aria-live="off"') !== -1);
+assert.ok(admin.indexOf('aria-live="off"') !== -1);
 
 global.DECK = { useFileSlides: true, room: "test-room", title: "Week" };
 store["deck-content"] = JSON.stringify({

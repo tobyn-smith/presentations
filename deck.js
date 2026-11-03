@@ -119,16 +119,18 @@
     });
   }
 
+  function onBoard() {
+    return !!(stage && stage.innerHTML
+      && !document.body.classList.contains("is-waiting")
+      && !document.body.classList.contains("is-hold")
+      && !document.body.classList.contains("is-checkin"));
+  }
+
   function render(i, force) {
     var s = slides()[i];
     if (!s) return;
     var changed = i !== lastIndex;
-    var keepBoard = !force && !changed
-      && !document.body.classList.contains("is-waiting")
-      && !document.body.classList.contains("is-hold")
-      && !document.body.classList.contains("is-checkin")
-      && stage
-      && stage.querySelector("#drag-place, #drag-rank, #form, #choices, .thanks");
+    var keepBoard = !force && !changed && onBoard();
     lastIndex = i;
     document.body.classList.remove("is-waiting", "is-checkin", "is-checkin-name", "is-checkin-face", "is-hold");
     stage.classList.remove("hold");
@@ -180,7 +182,6 @@
       }
       paintMe();
       paintHandBtn();
-      fitStage();
       return;
     }
     stage.innerHTML = htmlFor(s, i);
@@ -1193,8 +1194,16 @@
 
   if (!isPres) {
     DeckSync.onPresenting(function (on) {
-      if (on && DeckSync.seated()) render(DeckSync.getSlide());
-      else if (!on) waitScreen();
+      if (on && DeckSync.seated()) {
+        var n = DeckSync.getSlide();
+        if (lastIndex === n && onBoard()) return;
+        render(n);
+      } else if (!on) {
+        if (document.body.classList.contains("is-waiting")
+          || document.body.classList.contains("is-hold")
+          || document.body.classList.contains("is-checkin")) return;
+        waitScreen();
+      }
     });
     DeckSync.resumeSeat();
     if (DeckSync.isPresenting() && DeckSync.seated()) render(DeckSync.getSlide());
@@ -1459,11 +1468,6 @@
     if (!unlocked()) return;
     var n = DeckSync.getSlide();
     n = Math.max(0, Math.min(slides().length - 1, n));
-    if (isPres) {
-      render(n);
-      if (DeckSync.isPresenting() && DeckSync.sharePack) DeckSync.sharePack();
-    } else if (DeckSync.isPresenting()) {
-      render(n);
-    }
+    if (isPres || DeckSync.isPresenting()) render(n);
   });
 })();
