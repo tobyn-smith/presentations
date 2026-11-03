@@ -174,7 +174,8 @@ try {
   const comparisonAnswer = await presenter.locator("#viz .responses li").innerText();
   check(comparisonAnswer.includes("Countries with slower growth"),"slide 4 selected comparison appears on the presenter screen");
   check(comparisonAnswer.includes("outcome varies"),"slide 4 written explanation appears on the presenter screen");
-  check(await presenter.locator("#slide-live-results").isVisible(),"slide 4 has a visible on-slide response area");
+  check(await presenter.locator("#stage > #slide-live-results").isVisible(),"slide 4 has a visible full-width response area inside the slide stage");
+  check(await presenter.locator("#slide-live-results").evaluate(el=>{const r=el.getBoundingClientRect(),s=document.querySelector("#stage").getBoundingClientRect();return r.width>0&&r.height>0&&r.left>=s.left&&r.right<=s.right+1&&r.bottom<=s.bottom+1;}),"slide 4 response area is within the visible slide bounds");
   check((await presenter.locator("#slide-live-results").innerText()).includes("Countries with slower growth"),"slide 4 itself displays the selected answer");
   check((await presenter.locator("#slide-live-results").innerText()).includes("outcome varies"),"slide 4 itself displays the written reason");
   check((await student.locator(".submission-receipt").innerText()).includes("Countries with slower growth"),"slide 4 participant sees their submitted choice in the receipt");
@@ -292,7 +293,8 @@ try {
   await presenter.waitForFunction(()=>document.querySelectorAll("#viz .responses li").length===1,null,{timeout:10000});
   check(await presenter.locator("#viz .responses li").count()===1,"Figure 3 student choice reaches the presenter response panel");
   check((await presenter.locator("#viz .responses li").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 presenter displays the selected interpretation");
-  check(await presenter.locator("#slide-live-results").isVisible(),"slide 7 has a visible on-slide response area");
+  check(await presenter.locator("#stage > #slide-live-results").isVisible(),"slide 7 has a visible full-width response area inside the slide stage");
+  check(await presenter.locator("#slide-live-results").evaluate(el=>{const r=el.getBoundingClientRect(),s=document.querySelector("#stage").getBoundingClientRect();return r.width>0&&r.height>0&&r.left>=s.left&&r.right<=s.right+1&&r.bottom<=s.bottom+1;}),"slide 7 response area is within the visible slide bounds");
   check((await presenter.locator("#slide-live-results").innerText()).includes("A curve, or a few NICs drive it"),"slide 7 itself displays the selected interpretation");
   check((await student.locator(".you").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 participant sees their submitted interpretation");
   check(await presenter.locator(".presenter-choice-preview").isVisible(),"Figure 3 choices remain visible alongside incoming responses");
