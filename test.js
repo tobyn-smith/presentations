@@ -271,6 +271,7 @@ var talk = fs.readFileSync("./slideshow.js", "utf8");
 assert.ok(talk.indexOf("function bindRank") !== -1);
 assert.ok(talk.indexOf("function bindPlace") !== -1);
 assert.ok(talk.indexOf("function fitStage") !== -1);
+assert.ok(talk.indexOf("Math.max(0.68") === -1, "backup slideshow does not shrink slides to fit");
 assert.ok(deckSrc.indexOf("ss-win-dots") === -1);
 assert.ok(talk.indexOf("ss-win-dots") === -1);
 assert.ok(deckSrc.indexOf("ss-win-label") !== -1);
