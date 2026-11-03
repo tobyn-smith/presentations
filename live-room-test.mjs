@@ -134,6 +134,14 @@ try {
   await presenter.click("#next");
   await presenter.waitForFunction(()=>document.querySelector("#counter")?.textContent.trim()==="3");
   await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").startsWith("3"));
+  const initialSlideState = await presenter.evaluate(()=>({
+    slide:DeckSync.getSlide(),
+    saved:sessionStorage.getItem("deck-slide-geddes-qa")
+  }));
+  check(initialSlideState.slide===2 && initialSlideState.saved==="2","presenter slide position is persisted before transport failure");
+  const slideWriteDeadline=Date.now()+6000;
+  while(roomData.slide!==2 && Date.now()<slideWriteDeadline) await new Promise(resolve=>setTimeout(resolve,100));
+  check(roomData.slide===2,"Firebase has acknowledged the presenter's current slide before failover");
   await student.waitForSelector("#drag-place");
   const firstPlace=student.locator('select[data-token-place="Labour was repressed or coopted"]');
   const secondPlace=student.locator('select[data-token-place="That produced fast growth"]');
