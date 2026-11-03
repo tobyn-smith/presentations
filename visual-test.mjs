@@ -67,7 +67,12 @@ try {
         await page.click("#seat");
         await page.waitForFunction(() => (document.querySelector("#counter")?.textContent || "").split("/")[0].trim() === "1");
       } else {
-        await page.goto("http://127.0.0.1:4173/slideshow.html", { waitUntil: "networkidle" });
+        await page.addInitScript(() => sessionStorage.setItem("deck-key", "6010"));
+        await page.goto("http://127.0.0.1:4173/present/index.html?local=1", { waitUntil: "networkidle" });
+        await page.waitForSelector("#next", { state: "visible" });
+        await page.waitForSelector("#live", { state: "visible" });
+        await page.click("#live");
+        await page.waitForFunction(() => document.querySelector("#live")?.getAttribute("aria-pressed") === "true");
       }
       const total = await page.evaluate(() => (window.SLIDES || []).length);
       report.slides = total;
@@ -131,6 +136,9 @@ try {
         });
         if (metrics.scrollWidth > viewport.width + 1) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": horizontal page overflow");
+        }
+        if (metrics.stageOverflow > 24) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": content extends " + metrics.stageOverflow + "px beyond the slide stage");
         }
         if (metrics.nestedClips.length) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": nested content clipped: " + metrics.nestedClips.join(", "));
