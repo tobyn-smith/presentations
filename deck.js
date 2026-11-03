@@ -137,6 +137,8 @@
     lastIndex = i;
     document.body.classList.remove("is-waiting", "is-checkin", "is-checkin-name", "is-checkin-face", "is-hold");
     stage.classList.remove("hold");
+    stage.setAttribute("data-chart", s.chart && s.chart.id ? String(s.chart.id) : "");
+    stage.setAttribute("data-slide-id", s.id || "");
     document.title = (isPres ? "Presenter · " : "") + (s.title || brand());
     if (kicker) {
       kicker.textContent = "";
@@ -1107,7 +1109,12 @@
   }
 
   DeckSync.onSlide(function (n) {
-    if (!isPres && (!DeckSync.isPresenting() || !DeckSync.seated())) return;
+    if (isPres) {
+      var panel = document.getElementById("failsafe");
+      if (panel && !panel.hidden) paintFailsafeStatus();
+      return;
+    }
+    if (!DeckSync.isPresenting() || !DeckSync.seated()) return;
     render(n);
   });
   function failsafeLog(text) {
@@ -1121,12 +1128,21 @@
     var host = document.getElementById("failsafe-status");
     if (!host || !DeckSync.snapshot) return;
     var snap = DeckSync.snapshot();
+    var current = slides()[snap.slide] || {};
+    var activity = current.type === "prompt" ? (current.title || "Class activity") : "Teaching slide";
+    var received = current.type === "prompt" && DeckSync.getResponses
+      ? DeckSync.getResponses(String(snap.slide)).length
+      : 0;
+    var connection = snap.localOnly ? "Local preview only" : (snap.status.detail || snap.status.mode || "Checking…");
+    if (snap.status.mode === "backup") connection += " · temporary backup; restore Firebase before refreshing";
     var rows = [
-      ["Connection", snap.localOnly ? "Local preview only" : (snap.status.detail || snap.status.mode || "Checking…")],
-      ["Presentation", snap.presenting ? "Live" : "On hold"],
+      ["Connection", connection],
+      ["Room", snap.presenting ? "Live" : "On hold"],
       ["Audience", snap.localOnly ? "Disabled in local preview" : (snap.status.phones ? "Available" : "Not confirmed")],
       ["Checked in", String(snap.seats.length)],
       ["Current slide", String((snap.slide || 0) + 1) + " of " + slides().length],
+      ["Activity", activity],
+      ["Responses", current.type === "prompt" ? String(received) + " received" : "Not collecting"],
       ["Last issue", snap.error || "None"]
     ];
     host.innerHTML = rows.map(function (row) {
@@ -1375,10 +1391,11 @@
     });
     var fsSeats = document.getElementById("fs-seats");
     if (fsSeats) fsSeats.addEventListener("click", function () {
-      failsafeLog("Clearing leftover seats…");
+      if (!confirm("Reset all audience check-ins? This also removes students who are currently connected.")) return;
+      failsafeLog("Resetting audience check-ins…");
       DeckSync.clearSeats().then(function (ok) {
         paintFailsafeStatus();
-        failsafeLog(ok ? "Seat list cleared. People can check in again." : "Could not clear seats. Test audience connection.");
+        failsafeLog(ok ? "All check-ins were reset. Students can join again." : "Could not reset check-ins. Test audience connection.");
       });
     });
     var fsCopy = document.getElementById("fs-copy");
@@ -1398,6 +1415,7 @@
     if (isPres) {
       paintResponses(s, i, list);
       showViz(s);
+      paintFailsafeStatus();
       fitStage();
       return;
     }
