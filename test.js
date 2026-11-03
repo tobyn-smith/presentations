@@ -295,6 +295,11 @@ assert.ok(syncSrc.indexOf("new EventSource(fbUrl(\"\"))") !== -1);
 assert.ok(syncSrc.indexOf("method: \"PATCH\"") !== -1);
 assert.ok(syncSrc.indexOf("return shout(row)") !== -1, "response submission exposes delivery success or failure");
 assert.ok(syncSrc.indexOf("Backup message could not be sent") !== -1, "backup delivery failures are surfaced");
+assert.ok(syncSrc.indexOf("function retryFirebase()") !== -1 && syncSrc.indexOf("setInterval(retryFirebase, 20000)") !== -1, "Firebase reconnection is retried");
+assert.ok(syncSrc.indexOf("function takeRoom(data)") !== -1 && syncSrc.indexOf("ingestAnswers(data)") !== -1, "presenter refresh restores persisted room responses");
+assert.ok(syncSrc.indexOf("onResponses: function (fn)") !== -1, "presenter response listeners are restored after room data loads");
+assert.ok(fs.existsSync("./docs/live-room-verification.md"), "live transport and refresh scenarios have a repeatable test plan");
+
 assert.ok(deckSrc.indexOf("pendingSubmissions") !== -1 && deckSrc.indexOf("That did not reach the room") !== -1, "student submission blocks duplicates and provides a retry path");
 
 assert.ok(syncSrc.indexOf("function startBackup()") !== -1);
