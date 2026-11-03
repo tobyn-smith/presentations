@@ -86,6 +86,7 @@ try {
           const artHeight = chart ? Math.round(parseFloat(getComputedStyle(chart, "::after").height) || 0) : 0;
           return {
             title: stage.querySelector("h1")?.textContent.trim() || "",
+            titleJoinHeight: Math.round(stage.querySelector(".title-join")?.getBoundingClientRect().height || 0),
             scrollWidth: root.scrollWidth,
             viewportWidth: window.innerWidth,
             stageClientHeight: stage.clientHeight,
@@ -121,6 +122,9 @@ try {
         }
         if (metrics.chartId === "geddes-fig3" && metrics.askPanelLeft < metrics.chartRight - 8) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 question panel is not beside the graph");
+        }
+        if (index === 0 && metrics.titleJoinHeight > 45) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " title URL wraps into multiple lines");
         }
         if (metrics.repeatedSectionKicker) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " repeats the section label above the slide title");
