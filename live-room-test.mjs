@@ -200,6 +200,7 @@ try {
   await presenter.reload({waitUntil:"domcontentloaded"});
   await presenter.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000});
   await presenter.waitForFunction(()=>DeckSync.isPresenting(),null,{timeout:8000});
+  await presenter.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").trim()==="3",null,{timeout:15000});
   await presenter.waitForFunction(()=>DeckSync.getResponses("2").length===5,null,{timeout:15000});
   await presenter.waitForFunction(()=>document.querySelectorAll(".responses li").length===5,null,{timeout:10000});
   check(await presenter.locator(".responses li").count()===5,"presenter refresh restores all five responses from backup history");
@@ -217,6 +218,7 @@ try {
   check(await waitForStoredResponse(),"Firebase reconnection persists all five queued responses");
 
   await presenter.reload({waitUntil:"domcontentloaded"});
+  await presenter.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").trim()==="3",null,{timeout:15000});
   await presenter.waitForFunction(()=>DeckSync.getResponses("2").length===5,null,{timeout:15000});
   await presenter.waitForFunction(()=>document.querySelectorAll(".responses li").length===5,null,{timeout:10000});
   check(await presenter.locator(".responses li").count()===5,"normal presenter refresh restores all five responses from Firebase");
