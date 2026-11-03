@@ -182,6 +182,9 @@ try {
     const peer=await studentContext.newPage();
     peer.on("pageerror",e=>failures.push("additional student browser error: "+e.message));
     await peer.goto("http://127.0.0.1:4174/index.html?room=geddes-qa",{waitUntil:"domcontentloaded"});
+    /* Each new page has its own session ID; explicitly take a seat rather
+       than inheriting the first student's local seat state. */
+    await peer.evaluate(()=>DeckSync.sit());
     await peer.waitForFunction(()=>DeckSync.isPresenting()&&DeckSync.seated(),null,{timeout:10000});
     await peer.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").startsWith("3"),null,{timeout:10000});
     await peer.waitForSelector("#drag-place",{state:"visible",timeout:10000});
