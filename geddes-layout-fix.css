@@ -451,3 +451,130 @@ body.role-part .submit-error {
   color: #ffd9df;
   font: 600 14px/1.35 var(--sans);
 }
+
+
+/* Figure 3 is a two-column teaching frame: evidence left, question right.
+   This avoids making the room panel fall below the fold on 4:3 laptop screens. */
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]),
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, .88fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: start;
+  align-items: stretch;
+  column-gap: clamp(10px, 1.4vw, 20px);
+  row-gap: clamp(6px, .8vh, 10px);
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask {
+  display: contents !important;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-kicker,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-kicker {
+  display: none !important;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) h1,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) h1 {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin: 0;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split {
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  align-self: start;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz {
+  width: 100% !important;
+  min-width: 0;
+  height: auto !important;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .help,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .help,
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .chart-source,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .chart-source,
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .chart-note,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .chart-note {
+  display: none !important;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart {
+  height: auto !important;
+  min-height: 0;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: 1400 / 760;
+  background-size: contain;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding: clamp(12px, 1.5vh, 20px);
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-q {
+  font-size: clamp(17px, 2.1vh, 23px);
+  line-height: 1.18;
+  margin: 0 0 .55rem;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+  gap: 8px;
+  margin: .3rem 0 0;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 9px 10px;
+  font-size: clamp(13px, 1.6vh, 17px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 8px;
+  margin: .3rem 0 0;
+}
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview li {
+  min-width: 0;
+  margin: 0;
+  padding: 10px;
+  font-size: clamp(13px, 1.55vh, 17px);
+  line-height: 1.2;
+}
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]),
+  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) {
+    grid-template-columns: minmax(0, 1.1fr) minmax(270px, .9fr);
+  }
+  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices,
+  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview {
+    grid-template-columns: minmax(0,1fr) !important;
+  }
+}
+@media (max-height: 700px) and (min-width: 800px) {
+  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
+    padding: 10px;
+  }
+}
