@@ -385,7 +385,8 @@
         + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit ? esc(chart.unit) : "") + "</span>"
         + "</div>";
     }).join("");
-    var fig = '<figure class="chart" data-chart="' + esc(chart.id || "") + '">'
+    var accessible = [chart.title, chart.source, chart.note].filter(Boolean).join(". ");
+    var fig = '<figure class="chart" data-chart="' + esc(chart.id || "") + '" role="img" aria-label="' + esc(accessible) + '">'
       + (chart.source || chart.note ? "<figcaption>"
         + (chart.source ? '<p class="chart-source">' + esc(chart.source) + "</p>" : "")
         + (chart.note ? '<p class="chart-note">' + esc(chart.note) + "</p>" : "")
