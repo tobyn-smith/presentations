@@ -387,7 +387,11 @@ body.role-pres .stage[data-chart="geddes-fig6"] .chart-note {
   body.role-part .stage[data-chart="geddes-fig1"] .chart::after,
   body.role-pres .stage[data-chart="geddes-fig1"] .chart::after,
   body.role-part .stage[data-chart="geddes-fig2"] .chart::after,
-  body.role-pres .stage[data-chart="geddes-fig2"] .chart::after,
+  body.role-pres .stage[data-chart="geddes-fig2"] .chart::after {
+    height: clamp(270px, 46vh, 290px) !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig1"] .chart::after,
+  body.role-pres .stage[data-chart="geddes-fig1"] .chart::after,
   body.role-part .stage[data-chart="geddes-fig6"] .chart::after,
   body.role-pres .stage[data-chart="geddes-fig6"] .chart::after {
     height: clamp(230px, 38vh, 255px) !important;
@@ -396,7 +400,7 @@ body.role-pres .stage[data-chart="geddes-fig6"] .chart-note {
   body.role-pres .stage[data-chart="geddes-fig4"] .chart::after,
   body.role-part .stage[data-chart="geddes-fig5"] .chart::after,
   body.role-pres .stage[data-chart="geddes-fig5"] .chart::after {
-    height: clamp(235px, 39vh, 265px) !important;
+    height: clamp(350px, 60vh, 370px) !important;
   }
   body.role-part .stage h1,
   body.role-pres .stage h1 {
