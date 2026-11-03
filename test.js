@@ -197,7 +197,7 @@ assert.ok(layoutFix.indexOf("geddes-fig3") !== -1, "Figure 3 graph and interacti
 assert.ok(layoutFix.indexOf("@media (max-width: 1100px)") !== -1, "compact laptop layouts are handled");
 
 /* Layout regression guards for the Figure 3 nested-scroll/clipping bug. */
-assert.ok(layoutFix.indexOf("body.role-part .stage.prompt:has(.chart[data-chart=\\"geddes-fig3\\"]) .ask-panel") !== -1);
+assert.ok(layoutFix.indexOf('body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel') !== -1);
 assert.ok(layoutFix.indexOf("overflow: visible !important") !== -1, "Figure 3 answer panel must not create a nested clipped scroll area");
 assert.ok(layoutFix.indexOf("max-height: none !important") !== -1, "Figure 3 answer panel must be allowed to grow to its content");
 assert.ok(layoutFix.indexOf("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") !== -1, "Figure 3 choices use a compact two-column layout");
@@ -233,7 +233,7 @@ assert.ok(deckSrc.indexOf("Waiting for votes") === -1);
 assert.ok(user.indexOf("data-role=\"participant\"") !== -1);
 assert.ok(user.indexOf("classList.add(\"is-desk\")") === -1);
 assert.ok(audienceCss.indexOf("calc(100svh * 16 / 9)") !== -1);
-assert.ok(audienceCss.indexOf("@media (max-width: 959px)") !== -1);
+assert.ok(audienceCss.indexOf("@media (max-width: 799px)") !== -1, "student view and desktop notice share the 800px minimum");
 assert.ok(audienceCss.indexOf("grid-template-columns: repeat(3, minmax(0, 1fr))") !== -1);
 assert.ok(deckSrc.indexOf("data-response-count") !== -1);
 assert.ok(deckSrc.indexOf("var join = isPres ?") !== -1, "title link is presenter-only");
