@@ -197,6 +197,12 @@ try {
   await presenter.screenshot({path:path.join(out,"five-responses.png"),animations:"disabled"});
   await presenter.screenshot({path:path.join(out,"backup-response.png"),animations:"disabled"});
 
+  const beforeBackupRefresh = await presenter.evaluate(()=>({
+    slide:DeckSync.getSlide(),
+    counter:document.querySelector("#counter")?.textContent||"",
+    saved:sessionStorage.getItem("deck-slide-geddes-qa")
+  }));
+  console.log("Before backup presenter refresh: "+JSON.stringify(beforeBackupRefresh));
   await presenter.reload({waitUntil:"domcontentloaded"});
   await presenter.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000});
   await presenter.waitForFunction(()=>DeckSync.isPresenting(),null,{timeout:8000});
