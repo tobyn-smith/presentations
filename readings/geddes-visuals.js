@@ -46,14 +46,14 @@
   fits.type = "prompt";
   fits.title = "Figure 3: the more advanced countries";
   fits.help = "Compare this pattern with Figure 2, then choose the interpretation closest to Geddes's conclusion.";
-  fits.ask = "Which interpretation best fits Figures 2 and 3?";
+  fits.ask = "Which two explanations does Geddes consider for Figure 3?";
   fits.input = "choice-text";
   fits.requireText = false;
   fits.placeholder = "";
   fits.options = [
-    "The linear relationship is weak, but a curved pattern may be possible",
-    "The hypothesis is proved false",
-    "Moderate repression is proven to cause growth"
+    "A curved relationship, or a few unusually fast-growing NICs",
+    "The hypothesis is disproved by the wider sample",
+    "A strong straight-line relationship across all countries"
   ];
   fits.chart = {
     id: "geddes-fig3", title: "Figure 3 · More advanced Third World countries",
