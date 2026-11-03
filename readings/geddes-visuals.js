@@ -49,6 +49,7 @@
     {n:"r²",title:".07",body:"The wider sample makes the straight-line relationship almost disappear."}
   ];
   fits.type = "prompt";
+  fits.viz = "list";
   fits.kicker = "PART 2 - RAQUEL";
   fits.title = "Can a straight line miss a curve?";
   fits.help = "Look at the almost-flat line and the cluster near score 3.";
@@ -128,6 +129,7 @@
     notes:"TOBYN · 5:10-5:50\nPoint out the weak downward line and r-squared. Do not call this proof that labour repression has no effect; it is a simple bivariate comparison."
   });
   r.script = order.map(function (id) { return script(id); });
+  slide("quote-sample").viz = "list";
   var q = script("quote-sample");
   q.title = "Interaction 2: build a fairer comparison: 3:00-4:00";
   q.say = "You are designing the comparison now. The five success stories are not useless, but they cannot test the claim alone. What would you add first, and why?";
@@ -203,7 +205,7 @@
   script("figure5").say = "Geddes then tests the external-threat part more broadly using Spanish American cases with the structural conditions Skocpol identifies. Figure 5 shows seven instances of defeat without revolution, two revolutions without the specified defeat, and one instance of both. These are country-period instances, not ten different countries. The pattern casts doubt on a simple link between defeat and revolution, but Geddes is clear that it is not a definitive disproof.";
   script("figure5").notes = "RAQUEL · 9:15-10:30\nExplain the measure: defeat in a war accompanied by invasion and/or loss of territory; revolution within 20 years. Seven defeat/no-revolution instances, two revolutions without that specified defeat, one instance of both (Bolivia). Not ten unique countries. Cuba is an intermediate case; bracketed El Salvador, Peru and Guatemala had long peasant insurgencies but not yet revolution. Geddes says the test is imperfect and not a definitive disconfirmation, but it does cast doubt.";
   script("hirschman").say = "The Chile example is slightly different because the selection happens over time. Hirschman's account ends in 1961, after inflation falls sharply under Alessandri's stabilisation policies. But look at the exact numbers: inflation falls to 5 per cent in 1960, then rises to 10 per cent in 1961. Two unusually low years make the policy look more successful if we stop there. Geddes asks what happens if we keep looking.";
-  script("hirschman").notes = "TOBYN · 10:30-12:00\nThe slide uses selected values from Table 2, not the complete series. Alessandri was elected in 1958 and began an all-out stabilisation effort in mid-1959. Inflation: 33% in 1959, 5% in 1960, 10% in 1961. Avoid saying it kept falling through 1961. The point is the choice of endpoint.";
+  script("hirschman").notes = "TOBYN · 10:30-12:00\nThe slide uses selected values from Table 2, not the complete series. Alessandri was elected in 1958 and began an all-out stabilisation effort in mid-1959. Inflation: 33% in 1959, 5% in 1960, 10% in 1961. Avoid saying it kept falling through 1961. The choice of endpoint matters.";
   script("chile").say = "Figure 6 carries the series through to 1972. Inflation rises above 100 per cent again. Geddes argues that 1960 and 1961 were unusual years, better explained by orthodox stabilisation policies than by a lasting change in how political groups behaved. She excludes the later 1973 to 1976 hyperinflation from this comparison. So stopping at 1961 gives a very different impression from looking at the longer series.";
   script("chile").notes = "TOBYN · 12:00-13:30\nPoint to the vertical marker showing Hirschman's 1961 endpoint and the 1972 end of Geddes's series. Figure 6 uses sources beyond Hirschman's Table 2. Geddes excludes 1973-76 hyperinflation and says 1960-61 look unusual, best explained by orthodox stabilisation policies. Do not say the graph proves every part of Hirschman's argument wrong.";
   script("close").say = "So the same question keeps coming back: what have we left out? It might be countries where the outcome did not happen, cases that do not fit the explanation, or years that change the picture. Geddes is not saying case studies are useless. They are useful for building explanations and understanding processes. But if we want to test a claim, we need to look beyond the cases that first made it convincing.";
