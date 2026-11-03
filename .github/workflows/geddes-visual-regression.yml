@@ -8,6 +8,7 @@ on:
       - "*.css"
       - "*.js"
       - "*.html"
+      - "present/**"
       - "visual-test.mjs"
       - ".github/workflows/geddes-visual-regression.yml"
   workflow_dispatch:
