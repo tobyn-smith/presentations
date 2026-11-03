@@ -122,7 +122,7 @@ assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /TOBYN/.test(s.n
 assert.ok(SCRIPT.some(function (s) { return s.id === "nics" && /INTERACTION 1 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "quote-sample" && /INTERACTION 2 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /INTERACTION 3 OF 3/.test(s.notes); }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /Figures 2 and 3/.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /Figures 2 and 3/.test(s.say); }));
 assert.ok(/15:00/.test(SCRIPT[SCRIPT.length - 1].title));
 assert.ok(!/five-minute pairs activity/.test(JSON.stringify(SLIDES)));
 
