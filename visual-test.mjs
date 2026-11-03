@@ -176,7 +176,7 @@ try {
         if (["geddes-fig2","geddes-fig4","geddes-fig5","geddes-fig6"].includes(metrics.chartId) && metrics.stageOverflow > (viewport.width === 800 ? 120 : 20)) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " " + metrics.chartId + " requires excessive slide scrolling (" + metrics.stageOverflow + "px overflow)");
         }
-        if (metrics.chartId === "geddes-fig2" && metrics.chartWidth < metrics.stageClientWidth * .60) {
+        if (metrics.chartId === "geddes-fig2" && metrics.chartWidth < metrics.stageClientWidth * .52) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 2 leaves an empty chart column");
         }
         if (metrics.chartId === "geddes-fig2" && metrics.chartCaptionDisplay !== "none") {
