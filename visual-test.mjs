@@ -55,6 +55,11 @@ try {
       const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
       const page = await context.newPage();
       page.on("pageerror", error => report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " browser error: " + error.message));
+      page.on("response", response => {
+        if (response.url().includes("/figures/geddes-") && response.status() >= 400) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " figure asset failed: " + response.url() + " (" + response.status() + ")");
+        }
+      });
       await page.emulateMedia({ reducedMotion: "reduce" });
       let controller = null;
       if (mode === "student") {
@@ -140,6 +145,7 @@ try {
             chartId,
             canExpandFigure,
             chartArtworkHeight: artHeight,
+            chartArtworkBackground: chart ? getComputedStyle(chart, "::after").backgroundImage : "",
             chartWidth: chart ? Math.round(chart.getBoundingClientRect().width) : 0,
             chartCaptionDisplay: chart ? getComputedStyle(chart.querySelector("figcaption") || chart).display : "none",
             stageClientWidth: stage.clientWidth,
@@ -170,6 +176,9 @@ try {
         }
         if (metrics.chartId && metrics.dataChart !== metrics.chartId) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": slide figure metadata is missing or stale");
+        }
+        if (/^geddes-fig[1-6]$/.test(metrics.chartId) && !metrics.chartArtworkBackground.includes(metrics.chartId + ".svg")) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": the expected Geddes figure artwork is not attached");
         }
         if (metrics.nestedClips.length) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": nested content clipped: " + metrics.nestedClips.join(", "));
