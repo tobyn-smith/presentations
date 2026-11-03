@@ -43,7 +43,7 @@ The tests do not contact the production Firebase room or clear real student chec
 5. Restore Firebase. The client retries the connection; confirm Room status returns to Firebase.
 6. Confirm the queued backup response is written to Firebase, so it survives a later presenter refresh.
 
-Backup delivery is temporary. Responses received over the backup transport are retained locally and replayed into Firebase when the connection returns. Room status warns the presenter when the room is using the temporary transport.
+Backup delivery is temporary. Responses received over the backup transport are retained locally and replayed into Firebase when the connection returns. When the backup stream reconnects, the presenter republishes its current slide and live heartbeat; the active slide is also retained across a presenter refresh. Room status warns the presenter when the room is using the temporary transport.
 
 ## 4. Presenter refresh
 
