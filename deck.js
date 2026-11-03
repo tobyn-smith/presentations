@@ -1225,7 +1225,10 @@
           }
           return;
         }
-        if (onBoard() || document.body.classList.contains("is-hold")) return;
+        if (document.body.classList.contains("is-hold")) {
+          paintHoldPeers();
+          return;
+        }
         holdRoom();
         return;
       }
