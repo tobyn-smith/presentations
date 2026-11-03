@@ -203,7 +203,8 @@
         + (chart.source ? '<p class="chart-source">' + esc(chart.source) + "</p>" : "")
         + (chart.note ? '<p class="chart-note">' + esc(chart.note) + "</p>" : "")
         + "</figcaption>" : "")
-      + (chart.plots ? '<div class="plot-panels">' + chart.plots.map(function (p) { return '<section class="plot-panel"><h3>' + esc(p.title) + '</h3><div class="plot-area" role="img" aria-label="' + esc(p.title) + '"><span class="plot-y">Growth</span><span class="plot-x">Labour repression</span>' + p.points.map(function (pt) { return '<i style="left:' + Number(pt[0]) + '%;bottom:' + Number(pt[1]) + '%"></i>'; }).join("") + '</div><p>r² = ' + esc(p.r2) + '</p></section>'; }).join("") + '</div>' : "")\n      + (!chart.plots ? '<div class="chart-bars" role="img" aria-label="' + esc(chart.title) + '">' + rows + "</div>" : "")
+      + (chart.plots ? '<div class="plot-panels">' + chart.plots.map(function (p) { return '<section class="plot-panel"><h3>' + esc(p.title) + '</h3><div class="plot-area" role="img" aria-label="' + esc(p.title) + '"><span class="plot-y">Growth</span><span class="plot-x">Labour repression</span>' + p.points.map(function (pt) { return '<i style="left:' + Number(pt[0]) + '%;bottom:' + Number(pt[1]) + '%"></i>'; }).join("") + '</div><p>r² = ' + esc(p.r2) + '</p></section>'; }).join("") + '</div>' : "")
+      + (!chart.plots ? '<div class="chart-bars" role="img" aria-label="' + esc(chart.title) + '">' + rows + "</div>" : "")
       + "</figure>";
     return windowHtml("paper", chart.title || "Table", fig);
   }
