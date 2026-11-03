@@ -1117,13 +1117,6 @@
     log.textContent = text || "";
   }
 
-  function failsafeAge(ms) {
-    if (ms == null) return "never";
-    if (ms < 1500) return "just now";
-    if (ms < 60000) return Math.round(ms / 1000) + "s ago";
-    return Math.round(ms / 60000) + "m ago";
-  }
-
   function paintFailsafeStatus() {
     var host = document.getElementById("failsafe-status");
     if (!host || !DeckSync.snapshot) return;
@@ -1139,11 +1132,6 @@
     host.innerHTML = rows.map(function (row) {
       return "<div><dt>" + esc(row[0]) + "</dt><dd>" + esc(row[1]) + "</dd></div>";
     }).join("");
-    var people = document.getElementById("failsafe-people");
-    if (people) {
-      var list = DeckSync.getSeats();
-      people.innerHTML = '<p class="failsafe-empty">' + list.length + (list.length === 1 ? " person is in." : " people are in.") + "</p>";
-    }
   }
 
   var failsafeOpener = null;
@@ -1351,28 +1339,11 @@
     if (fsPanel) fsPanel.addEventListener("click", function (e) {
       if (e.target === fsPanel) setFailsafeOpen(false);
     });
-    var fsPush = document.getElementById("fs-push");
-    if (fsPush) fsPush.addEventListener("click", function () {
-      failsafeLog("Pushing Go live…");
-      DeckSync.pushLive().then(function (res) {
-        paintLive();
-        paintFailsafeStatus();
-        failsafeLog(res.ok
-          ? "Firebase has Go live. Audience screens should leave Hold within a second."
-          : ("Push failed. " + (res.error || "Try Test audience connection.")));
-      });
-    });
     var fsSlide = document.getElementById("fs-slide");
     if (fsSlide) fsSlide.addEventListener("click", function () {
       DeckSync.republish();
       paintFailsafeStatus();
       failsafeLog("Sent slide " + (DeckSync.getSlide() + 1) + " again.");
-    });
-    var fsTitle = document.getElementById("fs-title");
-    if (fsTitle) fsTitle.addEventListener("click", function () {
-      DeckSync.setSlide(0);
-      paintFailsafeStatus();
-      failsafeLog("Sent everyone to the title slide.");
     });
     var fsProbe = document.getElementById("fs-probe");
     if (fsProbe) fsProbe.addEventListener("click", function () {
@@ -1424,23 +1395,6 @@
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function () { done(true); }).catch(function () { done(false); });
       } else done(false);
-    });
-    document.body.addEventListener("click", function (e) {
-      var b = e.target.closest("[data-kick]");
-      if (!b) return;
-      e.preventDefault();
-      var kickedSid = b.getAttribute("data-kick");
-      if (!confirm("Remove this person? Their screen returns to check-in and they have to start over.")) return;
-      DeckSync.kick(kickedSid);
-      paintSeated();
-      paintFailsafeStatus();
-      failsafeLog("Removed one person. They have to check in again.");
-    });
-    var fsUnkick = document.getElementById("fs-unkick");
-    if (fsUnkick) fsUnkick.addEventListener("click", function () {
-      DeckSync.unkickAll();
-      paintFailsafeStatus();
-      failsafeLog("Cleared removals. Anyone can check in again.");
     });
   }
   DeckSync.onResponses(function (id, list) {
