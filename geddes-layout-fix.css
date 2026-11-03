@@ -1734,11 +1734,68 @@ body.role-pres .stage[data-slide-id="quote-sample"] #viz .room-empty-state {
 }
 
 
-/* Choice-and-reason activities render class responses on the slide itself. */
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask { display:flex; flex-direction:column; min-width:0; min-height:0; overflow:hidden; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask > h1 { flex:0 0 auto; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask > .split { flex:1 1 auto; min-height:0; overflow:hidden; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results { flex:0 0 auto; min-height:0; max-height:34%; margin-top:10px; padding:10px 12px; border:1px solid rgba(22,50,79,.22); border-left:5px solid var(--accent); border-radius:10px; background:#fffdf7; color:#16324f; overflow:auto; }
+/* Choice-and-reason results occupy their own full-width row on the slide.
+   They are deliberately separate from both the teaching content and #viz. */
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) {
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  align-items: stretch;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask,
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask-panel {
+  grid-row: 1;
+  min-height: 0;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .slide-live-results {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-height: 29%;
+  margin: 0;
+  padding: 9px 12px;
+  border: 1px solid rgba(22,50,79,.22);
+  border-left: 5px solid var(--accent);
+  border-radius: 10px;
+  background: #fffdf7;
+  color: #16324f;
+  overflow: auto;
+  z-index: 2;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .slide-live-results .slide-live-results-title {
+  margin: 0 0 6px;
+  color: #ba0c2f;
+  font-family: var(--display);
+  font-size: clamp(12px,1.5vh,16px);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-detail-block,
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-summary-block { min-width:0; margin:0; }
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-responses-heading,
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-summary-heading {
+  margin:0 0 5px; color:#16324f; font-size:11px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .responses {
+  display:flex; flex-wrap:wrap; gap:6px; margin:0; padding:0; list-style:none;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .responses .card {
+  flex:1 1 220px; min-width:0; padding:7px 9px; border:1px solid #ded7ca; border-radius:7px; background:#f4efe5;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .response-index {
+  display:block; margin-bottom:3px; color:#ba0c2f; font-size:10px; font-weight:800; text-transform:uppercase;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .said {
+  margin:0; color:#16324f; font-size:clamp(12px,1.45vh,15px); line-height:1.2; overflow-wrap:anywhere;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .meta {
+  margin:4px 0 0; color:#465a6b; font-size:11px; font-weight:700;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-empty-state {
+  margin:0; color:#465a6b; font-size:12px;
+}
 body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-title { margin:0 0 7px; color:#ba0c2f; font-family:var(--display); font-size:clamp(13px,1.65vh,17px); font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
 body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-summary-heading,
 body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-responses-heading { margin:0 0 5px; color:#16324f; font-size:12px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
