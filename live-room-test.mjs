@@ -183,7 +183,8 @@ try {
     peer.on("pageerror",e=>failures.push("additional student browser error: "+e.message));
     await peer.goto("http://127.0.0.1:4174/index.html?room=geddes-qa",{waitUntil:"domcontentloaded"});
     await peer.waitForFunction(()=>DeckSync.isPresenting()&&DeckSync.seated(),null,{timeout:10000});
-    await peer.waitForSelector("#drag-place");
+    await peer.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").startsWith("3"),null,{timeout:10000});
+    await peer.waitForSelector("#drag-place",{state:"visible",timeout:10000});
     await peer.locator('select[data-token-place="Labour was repressed or coopted"]').selectOption("shown");
     await peer.locator('select[data-token-place="That produced fast growth"]').selectOption("not");
     await peer.locator('select[data-token-place="Slower-growth countries are missing"]').selectOption("shown");
