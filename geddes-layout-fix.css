@@ -674,3 +674,47 @@ body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .talk li {
     grid-template-columns: minmax(0,1fr);
   }
 }
+
+
+/* Full-width teaching figures: let the original comparison carry the slide. */
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split {
+  display: block !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-side,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-side,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-side,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-side {
+  display: none !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-viz,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-viz,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-viz,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-viz {
+  width: 100% !important;
+  max-width: none !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after {
+  aspect-ratio: 1200 / 700;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: min(52vh, 500px);
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after {
+  aspect-ratio: 1400 / 760;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: min(52vh, 500px);
+}
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after,
+  body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after,
+  body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after,
+  body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after {
+    max-height: 44vh;
+  }
+}
