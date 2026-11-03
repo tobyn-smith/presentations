@@ -985,12 +985,11 @@
     if (isPres || !s.recall) return "";
     var m = mine(s.recall);
     if (!m) return "";
-    if (m.choice && m.text) {
-      return '<p class="you">You called the load-bearing claim <strong>' + esc(m.choice) + "</strong>. “" + esc(m.text) + "”</p>";
-    }
-    if (m.choice) return '<p class="you">You called the load-bearing claim <strong>' + esc(m.choice) + "</strong>.</p>";
-    if (m.text) return '<p class="you">You wrote: “' + esc(m.text) + "”</p>";
-    return "";
+    var parts = [];
+    if (m.choice) parts.push("<strong>Choice:</strong> " + esc(m.choice));
+    if (m.text) parts.push("<strong>Reason:</strong> " + esc(m.text));
+    if (!parts.length) return "";
+    return '<p class="you"><strong>Your response</strong><br>' + parts.join("<br>") + "</p>";
   }
 
   function submit(s, i, payload) {
