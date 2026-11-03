@@ -485,6 +485,19 @@ body.role-part :focus-visible {
   outline-offset: 3px;
 }
 
+/* Presenter controls wrap rather than pushing the board off-screen. */
+body.role-pres .chrome-right {
+  min-width: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: .45rem;
+}
+body.role-pres .chrome-right > * { min-width: 0; }
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-pres .chrome-right { gap: .3rem; }
+  body.role-pres .chrome-right button { padding-inline: .45rem; }
+}
+
 /* Presenter room status: scrolls as a single panel if the viewport is short. */
 .failsafe {
   align-items: center;
