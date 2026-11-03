@@ -444,7 +444,7 @@
     return '<div class="drag-rank" id="drag-rank">'
       + '<ol class="rank-list">'
       + opts.map(function (o, idx) {
-        return '<li data-opt="' + esc(o) + '"><span class="rank-n">' + (idx + 1) + '</span><span class="rank-lab">' + esc(o) + "</span></li>";
+        return '<li data-opt="' + esc(o) + '" tabindex="-1"><span class="rank-n">' + (idx + 1) + '</span><span class="rank-lab">' + esc(o) + '</span><span class="rank-controls"><button type="button" data-move="up" aria-label="Move ' + esc(o) + ' up"' + (idx === 0 ? " disabled" : "") + '>↑</button><button type="button" data-move="down" aria-label="Move ' + esc(o) + ' down"' + (idx === opts.length - 1 ? " disabled" : "") + '>↓</button></span></li>';
       }).join("")
       + "</ol>"
       + (withSend ? '<button type="button" class="send" id="drag-send">Send</button>' : "")
@@ -456,8 +456,9 @@
     var slots = s.slots || [];
     return '<div class="drag-place" id="drag-place">'
       + '<div class="token-tray" data-home="1">'
-      + tokens.map(function (t) {
-        return '<span class="token" data-token="' + esc(t) + '" tabindex="0">' + esc(t) + "</span>";
+      + tokens.map(function (t, idx) {
+        var selectId = "place-token-" + idx;
+        return '<div class="token-choice" data-token-choice="' + esc(t) + '"><button type="button" class="token" data-token="' + esc(t) + '">' + esc(t) + '</button><label class="sr" for="' + selectId + '">Place ' + esc(t) + '</label><select class="token-place" id="' + selectId + '" data-token-place="' + esc(t) + '"><option value="">Choose a group</option>' + slots.map(function (slot) { return '<option value="' + esc(slot.id) + '">' + esc(slot.label) + '</option>'; }).join("") + '</select></div>';
       }).join("")
       + "</div>"
       + '<div class="slot-row">'
@@ -693,6 +694,16 @@
     }
   }
 
+  function paintRankControls(list) {
+    var items = list.querySelectorAll("[data-opt]");
+    Array.prototype.forEach.call(items, function (li, idx) {
+      var up = li.querySelector('[data-move="up"]');
+      var down = li.querySelector('[data-move="down"]');
+      if (up) up.disabled = idx === 0;
+      if (down) down.disabled = idx === items.length - 1;
+    });
+  }
+
   function bindRank(s, i, canSend) {
     if (!canSend || isPres) return;
     var list = document.querySelector("#drag-rank .rank-list");
@@ -712,8 +723,21 @@
       held.classList.remove("is-dragging");
       held = null;
       numberRanks(list);
+      paintRankControls(list);
     }
+    list.addEventListener("click", function (e) {
+      var move = e.target.closest("button[data-move]");
+      if (!move) return;
+      var li = move.closest("[data-opt]");
+      if (!li) return;
+      var direction = move.getAttribute("data-move");
+      if (direction === "up" && li.previousElementSibling) list.insertBefore(li, li.previousElementSibling);
+      if (direction === "down" && li.nextElementSibling) list.insertBefore(li.nextElementSibling, li);
+      numberRanks(list);
+      paintRankControls(list);
+    });
     list.addEventListener("pointerdown", function (e) {
+      if (e.target.closest("button")) return;
       var li = e.target.closest("[data-opt]");
       if (!li) return;
       held = li;
@@ -754,16 +778,18 @@
       return slot ? slot.querySelector(".slot-well") : null;
     }
     function lift(tok, x, y) {
-      var rect = tok.getBoundingClientRect();
+      var pair = tok.closest(".token-choice") || tok;
+      var rect = pair.getBoundingClientRect();
       grabX = x - rect.left;
       grabY = y - rect.top;
-      tok.classList.add("is-dragging");
-      tok.style.position = "fixed";
-      tok.style.left = rect.left + "px";
-      tok.style.top = rect.top + "px";
-      tok.style.width = rect.width + "px";
-      tok.style.zIndex = "20";
-      tok.style.pointerEvents = "none";
+      pair.classList.add("is-dragging");
+      pair.style.position = "fixed";
+      pair.style.left = rect.left + "px";
+      pair.style.top = rect.top + "px";
+      pair.style.width = rect.width + "px";
+      pair.style.zIndex = "20";
+      pair.style.pointerEvents = "none";
+      return pair;
     }
     function follow(x, y) {
       if (!held) return;
@@ -783,13 +809,14 @@
       held.style.zIndex = "";
       held.style.pointerEvents = "";
       if (well) well.appendChild(held);
+      var select = held.querySelector("[data-token-place]");
+      if (select) select.value = well && well.closest(".slot") ? well.closest(".slot").getAttribute("data-slot") : "";
       held = null;
     }
     board.addEventListener("pointerdown", function (e) {
       var tok = e.target.closest(".token");
       if (!tok) return;
-      held = tok;
-      lift(tok, e.clientX, e.clientY);
+      held = lift(tok, e.clientX, e.clientY);
       try { tok.setPointerCapture(e.pointerId); } catch (err) {}
       e.preventDefault();
     });
@@ -804,6 +831,16 @@
     board.addEventListener("pointercancel", function () {
       if (!held) return;
       drop(-1, -1);
+    });
+    board.addEventListener("change", function (e) {
+      var select = e.target.closest("select[data-token-place]");
+      if (!select) return;
+      var pair = select.closest(".token-choice");
+      if (!pair) return;
+      var target = select.value
+        ? board.querySelector('.slot[data-slot="' + select.value + '"] .slot-well')
+        : board.querySelector(".token-tray");
+      if (target) target.appendChild(pair);
     });
     var send = document.getElementById("drag-send");
     if (send && canSend) {
