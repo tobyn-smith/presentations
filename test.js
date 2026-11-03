@@ -185,7 +185,12 @@ var cfgSrc = fs.readFileSync("./config.js", "utf8");
 [deckSrc, syncSrc, readme, cfgSrc, admin, user, start, backup].forEach(function (src) {
   assert.ok(!/[Rr]ehears|[Dd]ry run|[Pp]ractice run/.test(src), "no rehearsal wording");
 });
-assert.ok(fs.existsSync("./scripts/export-me-geddes.sh"));
+var meSync = fs.readFileSync("./docs/me-sync.md", "utf8");
+assert.ok(meSync.indexOf("test -f geddes/index.html") !== -1);
+assert.ok(meSync.indexOf("test -f geddes/present/index.html") !== -1);
+assert.ok(meSync.indexOf("location.replace(\"/geddes/\"") !== -1);
+assert.ok(fs.existsSync("./me-drop-in/presentations/index.html"));
+assert.ok(fs.existsSync("./me-drop-in/presentations/present/index.html"));
 assert.ok(deckSrc.indexOf("function bindRank") !== -1);
 assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
 assert.ok(deckSrc.indexOf("id=\"drag-send\"") !== -1);

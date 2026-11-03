@@ -50,7 +50,7 @@ If someone else might be using this live example at the same time, put a room wo
 
 GitHub also serves the same files at [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/). The QR points at tobynsmith.me/geddes/.
 
-To put this on the personal site, run `scripts/export-me-geddes.sh`. Copy `me-export/geddes/` to `me/geddes/` and `me-export/presentations/` to `me/presentations/`. Leave `me/6010/` alone (INTL 6010 Heroku hop). GitHub Pages ignores `_redirects` and `_headers`, so the export omits them and uses a meta refresh stub for `/presentations`.
+The `me` site copies this repo the same way it copies poems: checkout, `cp -a` into `geddes/`, drop `.git`, `.github`, `.gitignore` and the other files listed in [docs/me-sync.md](docs/me-sync.md). Leave `me/6010/` alone. GitHub Pages ignores `_redirects` and `_headers`, so `/presentations` is a meta refresh stub to `/geddes/`.
 
 ## Your own copy
 
