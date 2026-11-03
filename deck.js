@@ -529,10 +529,10 @@
       var href = joinHref();
       var shown = href.replace(/^https:\/\//, "").replace(/\/$/, "");
       var seats = seatedHtml();
-      var join = '<div class="title-join-block">'
+      var join = isPres ? '<div class="title-join-block">'
         + '<p class="title-join"><a href="' + esc(href) + '">' + esc(shown) + '</a></p>'
         + (seats || "")
-        + "</div>";
+        + "</div>" : "";
       return '<div class="title-card">'
         + '<div class="title-copy">'
         + '<img class="uga-logo title-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158">'
