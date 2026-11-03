@@ -247,7 +247,7 @@ assert.ok(deckSrc.indexOf('data-token-place') !== -1 && deckSrc.indexOf('board.a
 assert.ok(deckSrc.indexOf('role="img" aria-label="\' + esc(accessible)') !== -1, "figure redraws expose an accessible description");
 
 assert.ok(deckSrc.indexOf("if (!canSend || isPres) return;") !== -1, "presenter cannot drag or submit student input");
-assert.ok(deckSrc.indexOf("if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return;") !== -1, "only a seated live student can submit");
+assert.ok(deckSrc.indexOf("if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return Promise.resolve(false);") !== -1, "only a seated live student can submit");
 assert.ok(deckSrc.indexOf("Room responses") !== -1, "presenter sees response summary rather than drag trays");
 assert.ok(!/dragHtml\(s, false\)/.test(deckSrc), "presenter view does not render student drag controls");
 assert.ok(deckSrc.indexOf("id=\"drag-send\"") !== -1);
