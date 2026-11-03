@@ -16,7 +16,7 @@
  {id:"fits",type:"claims",kicker:"PART 1 - TOBYN",title:"The pattern weakens across samples",chart:{id:"r2",title:"Figures 1-3: growth and labour repression",source:"Geddes, Figures 1-3",note:"Bars show Geddes’s reported r² values, not recreated scatterplots. Figure 1’s East Asia panel: .56; Figure 2’s wider Third World sample: .07; Figure 3’s more advanced subset: .01. These are bivariate fits, not causal effects.",max:0.6,bars:[{label:"Figure 1 · East Asia panel",n:0.56},{label:"Figure 2 · Third World",n:0.07},{label:"Figure 3 · More advanced subset",n:0.01}]},claims:[
   {n:"01",title:"A strong result in one group",body:"The East Asian panel has the strongest linear fit of the three comparisons."},
   {n:"02",title:"Not a simple disproof",body:"Geddes notes that a few East Asian cases may drive it, and that a curved relationship is possible."}]},
- {id:"quote-sample",type:"prompt",kicker:"PART 1 - TOBYN",title:"Build a fairer comparison",lead:"The five selected countries all have the outcome: fast growth.",claims:[
+ {id:"quote-sample",type:"prompt",kicker:"PART 1 - TOBYN",title:"Build a fairer comparison",claims:[
   {n:"01",title:"Five cases",body:"Every country in the sample grew quickly."},
   {n:"02",title:"One outcome",body:"We cannot see what happens when growth is slower."},
   {n:"03",title:"A missing comparison",body:"The sample needs cases beyond the original group."}
@@ -28,7 +28,7 @@
  {id:"figure5",type:"claims",kicker:"PART 2 - RAQUEL",title:"Does external defeat predict revolution?",chart:{id:"figure5",title:"Cases in Geddes's Figure 5",source:"Geddes, Figure 5 · Spanish American cases",note:"Seven instances of defeat without revolution; two revolutions without the specified defeat; one instance of both. not nine separate country labels.",max:7,bars:[{label:"Defeat, no revolution",n:7},{label:"Revolution, no such defeat",n:2},{label:"Both",n:1}]},claims:[
   {n:"01",title:"The measure matters",body:"Defeat means losing a war with invasion and/or loss of territory. Revolution is tracked over the next 20 years."},
   {n:"02",title:"A challenge, not a verdict",body:"The cases are not random and the threat measure is imperfect. Geddes raises doubt rather than claiming a definitive refutation."}]},
- {id:"hirschman",type:"claims",kicker:"PART 2 - RAQUEL",title:"Chile: stop the clock at 1961?",chart:{id:"table2",title:"Chilean inflation · selected years",source:"Geddes, Table 2",note:"These are five selected Table 2 observations, not the full Figure 6 series.",max:84,unit:"%",bars:[{label:"1955",n:84},{label:"1956",n:38},{label:"1957",n:17},{label:"1960",n:5},{label:"1961",n:10}]},claims:[
+ {id:"hirschman",type:"claims",kicker:"PART 2 - RAQUEL",title:"Chile: stop the clock at 1961?",chart:{id:"table2",title:"Chilean inflation · selected years",source:"Geddes, Table 2",note:"Five selected Table 2 observations; not the full Figure 6 series.",max:84,unit:"%",bars:[{label:"1955",n:84},{label:"1956",n:38},{label:"1957",n:17},{label:"1960",n:5},{label:"1961",n:10}]},claims:[
   {n:"01",title:"The story so far",body:"Inflation falls sharply under Alessandri's stabilisation policies."},
   {n:"02",title:"The endpoint matters",body:"Stop in 1961 and the change looks lasting."}]},
  {id:"chile",type:"claims",kicker:"PART 2 - RAQUEL",title:"What changes when we keep looking?",claims:[
