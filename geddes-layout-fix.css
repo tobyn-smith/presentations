@@ -733,3 +733,48 @@ body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart 
     min-height: 300px !important;
   }
 }
+
+
+/* The sample-design activity uses its left column as a teaching canvas:
+   context, Geddes's warning and the question are separate, readable beats. */
+body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask,
+body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask {
+  justify-content: space-between;
+  gap: clamp(12px, 2vh, 22px);
+}
+body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .lead,
+body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .lead {
+  margin: 0;
+  padding: clamp(16px, 2vw, 24px);
+  border-left: 6px solid #ba0c2f;
+  border-radius: 12px;
+  background: #102b43;
+  color: #fffdf8;
+  font: 600 clamp(19px, 2.4vh, 26px)/1.25 var(--sans);
+  box-shadow: 0 8px 20px rgba(16,43,67,.1);
+}
+body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .quote,
+body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .quote {
+  margin: 0;
+  padding: clamp(18px, 2vw, 26px);
+  border-left: 6px solid #ba0c2f;
+  border-radius: 12px;
+  background: #fffdf8;
+  box-shadow: 0 8px 20px rgba(16,43,67,.08);
+}
+body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .quote p,
+body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .quote p {
+  color: #102b43;
+  font-size: clamp(18px, 2.2vh, 24px);
+  line-height: 1.35;
+}
+body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .help,
+body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .help {
+  margin: 0;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: #dfe8e2;
+  color: #102b43;
+  font-size: clamp(15px, 1.9vh, 19px);
+  line-height: 1.35;
+}
