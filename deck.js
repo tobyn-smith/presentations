@@ -26,12 +26,6 @@
     if (path.slice(-1) !== "/") path += "/";
     return location.origin + path;
   }
-  function qrSrc(url) {
-    if (cfg().joinUrl && String(url) === String(cfg().joinUrl)) return "join-qr.svg";
-    return "https://api.qrserver.com/v1/create-qr-code/?size=460x460&ecc=M&margin=8&data="
-      + encodeURIComponent(url);
-  }
-
   var STOP = "a an the and or but if to of in on for with as at by from is it this that was were be been being are was we you they i me my our your their not no so than then there here what when which who how why can could would should may might will just about into over after before also more most some any only own other than too very".split(" ");
 
   function esc(s) {
@@ -1292,7 +1286,7 @@
         paintFailsafeStatus();
         failsafeLog(res.ok
           ? "Firebase has Go live. Audience screens should leave Hold within a second."
-          : ("Push failed. " + (res.error || "Try Test phone paths.")));
+          : ("Push failed. " + (res.error || "Try Test audience connection.")));
       });
     });
     var fsSlide = document.getElementById("fs-slide");
@@ -1332,7 +1326,7 @@
       DeckSync.pullRoom().then(function (ok) {
         paintLive();
         paintFailsafeStatus();
-        failsafeLog(ok ? "Reloaded seats, answers, and Go live from Firebase." : "Pull failed. Test phone paths.");
+        failsafeLog(ok ? "Reloaded seats, answers, and Go live from Firebase." : "Pull failed. Test audience connection.");
       });
     });
     var fsSeats = document.getElementById("fs-seats");
@@ -1340,7 +1334,7 @@
       failsafeLog("Clearing leftover seats…");
       DeckSync.clearSeats().then(function (ok) {
         paintFailsafeStatus();
-        failsafeLog(ok ? "Seat list cleared. People can check in again." : "Could not clear seats. Test phone paths.");
+        failsafeLog(ok ? "Seat list cleared. People can check in again." : "Could not clear seats. Test audience connection.");
       });
     });
     var fsEnd = document.getElementById("fs-end");
@@ -1363,7 +1357,7 @@
       if (!b) return;
       e.preventDefault();
       var kickedSid = b.getAttribute("data-kick");
-      if (!confirm("Remove this person? Their phone goes back to check-in and they have to start over.")) return;
+      if (!confirm("Remove this person? Their screen returns to check-in and they have to start over.")) return;
       DeckSync.kick(kickedSid);
       paintSeated();
       paintFailsafeStatus();
