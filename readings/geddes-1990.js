@@ -23,22 +23,20 @@
       id: "ask",
       type: "claims",
       kicker: "The paper",
-      title: "What is she actually asking?",
+      title: "What is she after?",
       claims: [
-        { n: "1", title: "Not a new theory", body: "She is not offering a new account of why Korea grew, or why France had a revolution." },
-        { n: "2", title: "She is testing a habit", body: "I think she wants to know what happens when we pick cases because they already have the outcome." },
-        { n: "3", title: "The unit is the country", body: "All the way through. Working paper 90-13, 1990." }
+        { n: "1", title: "Not another growth story", body: "She is not trying to explain Korea, or the French Revolution." },
+        { n: "2", title: "The habit is the point", body: "What happens if we only pick countries that already have the outcome we like?" }
       ]
     },
     {
       id: "habit",
       type: "claims",
       kicker: "The habit",
-      title: "What do you see if you only read winners?",
+      title: "Only the winners",
       claims: [
-        { n: "1", title: "Read the winners", body: "Want revolution? Read revolutions. Want growth? Read the fast growers." },
-        { n: "2", title: "Then the shared bits", body: "You then see what those cases share." },
-        { n: "3", title: "The rest stay hidden", body: "You cannot see whether the others share it too." }
+        { n: "1", title: "You read the revolutions", body: "Or the fast growers. Then you notice what they share." },
+        { n: "2", title: "The others never get a look", body: "So you cannot tell if the same things show up in the slow cases too." }
       ],
       fromClass: {
         week: 8,
@@ -59,7 +57,7 @@
       id: "nics",
       type: "prompt",
       kicker: "Case 1. Labour and growth",
-      title: "What do the five actually give you?",
+      title: "What do these five actually show?",
       help: "",
       input: "place",
       viz: "bars-list",
@@ -85,7 +83,7 @@
       id: "regions",
       type: "claims",
       kicker: "Case 1. Labour and growth",
-      title: "What happens if you pick East Asia?",
+      title: "East Asia is a growth pick",
       chart: {
         id: "table1",
         title: "Table 1. Average country growth",
@@ -101,8 +99,8 @@
         ]
       },
       claims: [
-        { n: "1", title: "East Asia 5.2, Africa 1.0", body: "Average country growth, GNP per capita, 1960 to 1982." },
-        { n: "2", title: "Picking East Asia picks growth", body: "Geography is tied to growth. Pick East Asia and you have, in effect, picked on growth." }
+        { n: "1", title: "5.2 against 1.0", body: "GNP per capita, 1960 to 1982. East Asia at the top, Africa at the bottom." },
+        { n: "2", title: "The region is doing the work", body: "If you choose East Asia you have already chosen high growth." }
       ],
       fromClass: {
         week: 6,
@@ -113,7 +111,7 @@
       id: "scores",
       type: "claims",
       kicker: "Case 1. Labour and growth",
-      title: "How did she score the unions?",
+      title: "Her labour scores",
       stats: [
         { value: "1", label: "Free unions, own leaders, strikes happen. India, Jamaica, Venezuela." },
         { value: "2", label: "Unions legal. Strikes rare or squeezed. Colombia, Zimbabwe, Malaysia." },
@@ -121,8 +119,8 @@
         { value: "4", label: "Banned, or violence is severe. Chile 1973 to 1979, Syria, Benin." }
       ],
       claims: [
-        { n: "1", title: "Country Reports, 1980 and 1988", body: "She calls the score imperfect." },
-        { n: "2", title: "The five all sit at 3", body: "Singapore, South Korea, Taiwan, Brazil, Mexico. Repression does not vary. There is no slow country in that set." }
+        { n: "1", title: "A rough 1 to 4", body: "From the Country Reports, 1980 and 1988. She says the score is imperfect." },
+        { n: "2", title: "All five sit on 3", body: "Singapore, South Korea, Taiwan, Brazil, Mexico. No slow country in that set, so repression does not move." }
       ],
       fromClass: {
         week: 10,
@@ -133,7 +131,7 @@
       id: "fits",
       type: "claims",
       kicker: "Case 1. Labour and growth",
-      title: "Does the claim travel?",
+      title: "Does it hold once you widen the sample?",
       chart: {
         id: "r2",
         title: "r squared from Figures 1, 2 and 3",
@@ -146,9 +144,8 @@
         ]
       },
       claims: [
-        { n: "1", title: "East Asia looks tidy", body: "Figure 1, r squared 0.56. Growth is highest at repression 3." },
-        { n: "2", title: "A wider set does not", body: "Figure 2, 0.07. Figure 3, 0.01. Two readings: a curve, or a few unusual cases." },
-        { n: "3", title: "Not a disproof", body: "The test does not prove the claim false. The link vanishes in a representative sample." }
+        { n: "1", title: "East Asia looks neat", body: "Figure 1. r squared 0.56. Growth highest at repression 3." },
+        { n: "2", title: "Then it falls apart", body: "Figure 2 is 0.07. Figure 3 is 0.01. Either a weak curve, or a handful of odd cases. That is not a disproof." }
       ]
     },
     {
@@ -165,23 +162,23 @@
       id: "skocpol",
       type: "claims",
       kicker: "Case 2. Skocpol on revolutions",
-      title: "What are the three links?",
+      title: "Skocpol's chain",
       names: ["France", "Russia", "China"],
       claims: [
-        { n: "1", title: "Threat leads to reform", body: "A foreign military threat pushes the state to try reform." },
-        { n: "2", title: "Reform can split the elite", body: "The split comes where the dominant class has its own base and shares power." },
-        { n: "3", title: "A split is not enough", body: "Revolution follows only where villages are autonomous. Printed p. 12." }
+        { n: "1", title: "A threat, then reform", body: "A foreign military threat is what gets the state moving." },
+        { n: "2", title: "Reform can split the elite", body: "That happens where the dominant class has its own base and already shares power." },
+        { n: "3", title: "Villages have to be free", body: "A split at the top is not enough. Revolution only if villages are autonomous. Printed p. 12." }
       ]
     },
     {
       id: "contrast",
       type: "claims",
       kicker: "Case 2. Skocpol on revolutions",
-      title: "Where does the chain break?",
+      title: "Where that chain snaps",
       claims: [
-        { n: "1", title: "Prussia and Japan", body: "The threat was as bad as in France. The dominant class had no independent base. No elite split. No revolution." },
-        { n: "2", title: "Britain 1640 to 1660", body: "The elite split. Villages were not autonomous. No revolution." },
-        { n: "3", title: "Prussia 1848", body: "Same break. Split at the top. Villages not free. No revolution." }
+        { n: "1", title: "Prussia and Japan", body: "The threat was as bad as France. The dominant class had no independent base, so no split, and no revolution." },
+        { n: "2", title: "Britain, 1640 to 1660", body: "The elite did split. Villages were not autonomous. Still no revolution." },
+        { n: "3", title: "Prussia in 1848", body: "Same problem. Split at the top, villages not free." }
       ]
     },
     {
@@ -205,7 +202,7 @@
       id: "figure5",
       type: "claims",
       kicker: "Case 2. Skocpol on revolutions",
-      title: "What did the nine countries show?",
+      title: "Nine countries, one tidy story gone",
       chart: {
         id: "figure5",
         title: "Figure 5. Defeat in war and revolution",
@@ -218,15 +215,15 @@
         ]
       },
       claims: [
-        { n: "1", title: "Seven, two, and one", body: "Mexico 1910 and Nicaragua 1979 had no such defeat. Bolivia fits: 1935 defeat, 1952 revolution." },
-        { n: "2", title: "Doubt, not disproof", body: "The set is not random, and her threat score is crude. She calls this doubt, not a disproof." }
+        { n: "1", title: "Seven, two, one", body: "Mexico 1910 and Nicaragua 1979 had no such defeat. Bolivia is the one that fits: 1935 defeat, 1952 revolution." },
+        { n: "2", title: "She is not claiming a kill", body: "The set is not random. The threat score is crude. She calls it doubt." }
       ]
     },
     {
       id: "hirschman",
       type: "claims",
       kicker: "Case 3. Hirschman on Chile",
-      title: "What if the series stops early?",
+      title: "Stop the series early and it looks solved",
       chart: {
         id: "figure6",
         title: "Figure 6, from Table 2",
@@ -242,15 +239,15 @@
         ]
       },
       claims: [
-        { n: "1", title: "He stops on a low", body: "Chile 1930 to 1961. 1955 is 84 per cent. 1960 and 1961 are 5 and 10." },
-        { n: "2", title: "The end shapes the story", body: "Figure 6 runs to 1972. She says it does not look solved. Later it goes past 100 per cent." }
+        { n: "1", title: "1961 is a low year", body: "Chile, 1930 to 1961. Inflation hits 84 per cent in 1955, then 5 and 10 in 1960 and 1961." },
+        { n: "2", title: "Keep going and it does not", body: "Figure 6 runs to 1972. She says it does not look solved. Later the series goes past 100 per cent." }
       ]
     },
     {
       id: "chile",
       type: "prompt",
       kicker: "Case 3. Hirschman on Chile",
-      title: "Which comparison would you trust?",
+      title: "Which of these would you trust?",
       help: "",
       input: "choice-text",
       requireText: true,
@@ -270,30 +267,29 @@
       kicker: "Close",
       title: "Studying only the cases where something happened can inspire a new theory, but only cases where it did not happen as well can test it.",
       claims: [
-        { n: "1", title: "Compare the outcomes", body: "Winners can start a theory. Cases where it did not happen have to be in the test." },
-        { n: "2", title: "Check your sample", body: "A link in a small selected sample may vanish in a broader one. The years you study can change the conclusion." },
-        { n: "3", title: "Generating is not testing", body: "A hunch from the winners is fine. It is not a test. Same rule on our own papers." }
+        { n: "1", title: "Winners start hunches", body: "Fine. Use them. Just do not treat that as a test." },
+        { n: "2", title: "The misses have to be in", body: "If it did not happen there, that case still belongs in the sample. Years matter too. A short window can lie." }
       ]
     },
     {
       id: "discuss",
       type: "claims",
       kicker: "Discussion",
-      title: "What do you want to argue with?",
+      title: "What do you want to push back on?",
       claims: [
-        { n: "1", title: "Only the friendly cases", body: "What is the danger of working only with cases that support the argument?" },
-        { n: "2", title: "Too many cases", body: "If the universe is huge, how do you choose?" },
-        { n: "3", title: "Where the series ends", body: "How do you pick an endpoint? Must you always use the most recent data?" }
+        { n: "1", title: "Friendly cases", body: "What goes wrong if you only keep the ones that help?" },
+        { n: "2", title: "A huge universe", body: "You cannot read everything. So how do you choose?" },
+        { n: "3", title: "Where you stop the series", body: "Does the last year have to be the newest one you can find?" }
       ]
     },
     {
       id: "pairs",
       type: "claims",
       kicker: "Five minutes",
-      title: "How are you picking cases?",
+      title: "Your cases, five minutes",
       claims: [
-        { n: "1", title: "Your own research", body: "How are you selecting cases for your own work? This is the Research Design assignment." },
-        { n: "2", title: "The missing outcome", body: "Would your selection include cases where the outcome did not occur?" }
+        { n: "1", title: "What are you selecting?", body: "Think about the Research Design assignment. How are you picking?" },
+        { n: "2", title: "Did the thing fail anywhere?", body: "If it never happened in a case, is that case still in?" }
       ]
     }
   ],
