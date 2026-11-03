@@ -135,9 +135,20 @@ try {
   await presenter.waitForFunction(()=>document.querySelector("#counter")?.textContent.trim()==="3");
   await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").startsWith("3"));
   await student.waitForSelector("#drag-place");
-  await student.locator('select[data-token-place="Labour was repressed or coopted"]').selectOption("shown");
-  await student.locator('select[data-token-place="That produced fast growth"]').selectOption("not");
-  await student.locator('select[data-token-place="Slower-growth countries are missing"]').selectOption("shown");
+  const firstPlace=student.locator('select[data-token-place="Labour was repressed or coopted"]');
+  const secondPlace=student.locator('select[data-token-place="That produced fast growth"]');
+  const thirdPlace=student.locator('select[data-token-place="Slower-growth countries are missing"]');
+  await firstPlace.focus();
+  await firstPlace.press("ArrowDown");
+  await firstPlace.press("Enter");
+  await secondPlace.focus();
+  await secondPlace.press("ArrowDown");
+  await secondPlace.press("ArrowDown");
+  await secondPlace.press("Enter");
+  await thirdPlace.focus();
+  await thirdPlace.press("ArrowDown");
+  await thirdPlace.press("Enter");
+  check(await firstPlace.inputValue()==="shown" && await secondPlace.inputValue()==="not" && await thirdPlace.inputValue()==="shown","placement interaction works using keyboard-only controls");
 
   firebaseOnline=false;
   ntfyOnline=false;
@@ -150,6 +161,7 @@ try {
   check(await student.locator("#drag-send").isEnabled(),"failed submission re-enables Send");
   check((await student.locator(".submit-error").innerText()).includes("did not reach the room"),"failed submission gives a clear retry message");
   check(responsePosts===0,"failed submission is not counted as delivered");
+  check(await presenter.locator(".responses li").count()===0,"failed response is not shown to the presenter");
   await student.screenshot({path:path.join(out,"failed-submission.png"),animations:"disabled"});
 
   ntfyOnline=true;
