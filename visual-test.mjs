@@ -111,6 +111,7 @@ try {
           });
           const chart = stage.querySelector("figure.chart[data-chart]");
           const chartId = chart?.getAttribute("data-chart") || "";
+          const canExpandFigure = /^geddes-(selection|fig[1-6])$/.test(chartId);
           const artHeight = chart ? Math.round(parseFloat(getComputedStyle(chart, "::after").height) || 0) : 0;
           const stageRect = stage.getBoundingClientRect();
           const outside = Array.from(stage.querySelectorAll("h1,.split,.ask-panel,.chart,.claim-bars,.choices,form.answer,.drag-place,.drag-rank"))
@@ -134,6 +135,7 @@ try {
             stageOverflow: Math.max(0, stage.scrollHeight - stage.clientHeight),
             nestedClips: clips,
             chartId,
+            canExpandFigure,
             chartArtworkHeight: artHeight,
             chartWidth: chart ? Math.round(chart.getBoundingClientRect().width) : 0,
             chartCaptionDisplay: chart ? getComputedStyle(chart.querySelector("figcaption") || chart).display : "none",
@@ -217,7 +219,7 @@ try {
           path: path.join(dir, "slide-" + String(index + 1).padStart(2, "0") + ".png"),
           animations: "disabled"
         });
-        if (metrics.chartId) {
+        if (metrics.canExpandFigure) {
           const expand = page.locator('[data-expand-figure="' + metrics.chartId + '"]');
           if (await expand.count() !== 1) {
             report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": figure expand control is missing");
