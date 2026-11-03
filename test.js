@@ -119,13 +119,19 @@ SCRIPT.forEach(function (s) {
 });
 assert.ok(SCRIPT.some(function (s) { return s.id === "open" && /TOBYN/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "skocpol" && /RAQUEL/.test(s.notes); }));
-["regions","figure2","fits","skocpol","figure4","figure5","hirschman","chile"].forEach(function (id) {
+["regions","figure2","fits","skocpol","figure4","figure5"].forEach(function (id) {
   var row = SCRIPT.filter(function (s) { return s.id === id; })[0];
   assert.ok(row && /RAQUEL/.test(row.notes), "Raquel owns graph section slide " + id);
 });
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].type, "prompt", "Figure 3 accepts student responses");
 assert.ok(SCRIPT.some(function (s) { return s.id === "hirschman" && /RAQUEL/.test(s.notes); }), "Hirschman slide follows the Part 2 speaker label");
 assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /TOBYN/.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "quote-sample" && /TOBYN/.test(s.notes); }), "Tobyn completes the sample-design interaction before handover");
+["hirschman","chile","close"].forEach(function (id) {
+  var row = SCRIPT.filter(function (s) { return s.id === id; })[0];
+  assert.ok(row && /TOBYN/.test(row.notes), "Tobyn leads the final Chile section and conclusion");
+});
+
 assert.ok(SCRIPT.some(function (s) { return s.id === "nics" && /INTERACTION 1 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "quote-sample" && /INTERACTION 2 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /INTERACTION 3 OF 3/.test(s.notes); }));
