@@ -718,3 +718,18 @@ body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart:
     max-height: 44vh;
   }
 }
+
+
+/* Figure 2 already carries its title, r-squared and source inside the artwork.
+   Remove the duplicate caption block so the graph is not pushed below the fold. */
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart figcaption,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart figcaption {
+  display: none !important;
+}
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after,
+  body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after {
+    height: 300px !important;
+    min-height: 300px !important;
+  }
+}
