@@ -84,3 +84,62 @@ body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
 body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-q { margin:0 0 6px; font-size:clamp(17px,2.2vh,23px); }
 body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:0; }
 body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices button { min-height:54px; padding:7px 10px; font-size:clamp(13px,1.65vh,17px); }
+
+/* Classroom figures: let the figure occupy the whole board, not half a column. */
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split {
+  grid-template-columns:minmax(0,1fr) !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-side,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split-side,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-side,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-side,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-side,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-side,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split-side,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-side,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-side,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-side {
+  display:none !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-viz,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split-viz,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-viz,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-viz,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-viz,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-viz,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split-viz,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-viz,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-viz,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-viz {
+  width:100%; min-width:0; height:100%; min-height:0;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) figure.chart::after,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) figure.chart::after,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after {
+  height:clamp(420px,58vh,620px) !important;
+}
+/* Presenter controls are for slide navigation and room management, never student input. */
+body.role-pres .stage.prompt .drag-rank [data-opt],
+body.role-pres .stage.prompt .drag-place .token,
+body.role-pres .stage.prompt #choices button,
+body.role-pres .stage.prompt #ans,
+body.role-pres .stage.prompt #form button[type="submit"] {
+  pointer-events:none !important;
+  cursor:default !important;
+}
