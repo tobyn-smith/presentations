@@ -4036,3 +4036,234 @@ html.reading-off .reading { display: none; }
     grid-template-columns: 1fr;
   }
 }
+
+
+/* GEDDES 15-MINUTE EDITION
+   A restrained editorial system: UGA crimson, deep navy, warm paper.
+   Fewer competing surfaces; clearer hierarchy; stronger chart contrast. */
+:root {
+  --page: #101820;
+  --paper: #f6f2e8;
+  --tile: #fffdf8;
+  --tile-cream: #eee7d8;
+  --tile-sage: #e0e8e2;
+  --navy: #102b43;
+  --gold: #f0d48a;
+  --gold-ink: #5d481c;
+  --ink: #142536;
+  --ink-soft: #34485a;
+  --ink-faint: #536475;
+  --rule: #d7d0c3;
+  --accent: #ba0c2f;
+  --accent-ink: #ffffff;
+  --wash: #ebe6dc;
+  --radius: 14px;
+  --display: "Oswald", "Arial Narrow", Arial, sans-serif;
+  --sans: "Merriweather Sans", Arial, Helvetica, sans-serif;
+}
+.role-pres .chrome {
+  background: #101820;
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+}
+.role-pres .board {
+  background: var(--paper);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.22);
+}
+.role-pres .uga-banner {
+  background: var(--navy);
+  border-bottom: 4px solid var(--accent);
+}
+.role-pres .uga-kicker {
+  color: var(--gold);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+.role-pres .stage {
+  color: var(--ink);
+}
+.role-pres .stage h1 {
+  color: var(--navy);
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+.role-pres .stage.claims h1,
+.role-pres .stage.compare h1 {
+  font-size: clamp(34px, 4.8vh, 52px);
+  max-width: 24ch;
+  margin-bottom: clamp(14px, 2.2vh, 24px);
+}
+.role-pres .stage.claims .split {
+  gap: clamp(1rem, 2vw, 1.8rem);
+}
+.role-pres .claim-bars {
+  gap: clamp(0.65rem, 1.1vh, 0.95rem);
+}
+.role-pres .claim-bars li {
+  border-radius: 12px;
+  border: 1px solid rgba(16,43,67,0.08);
+  box-shadow: 0 5px 16px rgba(16,43,67,0.06);
+  padding: clamp(16px, 1.8vh, 22px);
+}
+.role-pres .claim-bars li:nth-child(1) {
+  background: var(--navy);
+  color: var(--tile);
+  border-color: var(--navy);
+}
+.role-pres .claim-bars li:nth-child(1) h2 { color: var(--gold); }
+.role-pres .claim-bars li:nth-child(1) p { color: #fffdf8; }
+.role-pres .claim-bars li:nth-child(2) {
+  background: var(--tile);
+  border-left: 5px solid var(--accent);
+}
+.role-pres .claim-bars li:nth-child(3) {
+  background: var(--tile-sage);
+}
+.role-pres .claim-bars h2 {
+  font-size: clamp(22px, 2.7vh, 30px);
+  line-height: 1.12;
+}
+.role-pres .claim-bars p {
+  font-size: clamp(17px, 2.05vh, 22px);
+  line-height: 1.35;
+}
+.role-pres .ss-win {
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(16,43,67,0.08);
+}
+.role-pres .ss-win.ss-paper {
+  border: 1px solid var(--rule);
+  background: var(--tile);
+}
+.role-pres .ss-win-label {
+  color: var(--accent);
+  letter-spacing: 0.12em;
+}
+.role-pres .chart-source {
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+.role-pres .chart-note {
+  color: var(--ink-soft);
+  max-width: 44ch;
+}
+.role-pres .chart-track {
+  background: #e5e2dc;
+  border-radius: 4px;
+  height: clamp(12px, 1.8vh, 18px);
+}
+.role-pres .chart-fill {
+  background: var(--navy);
+  border-radius: 4px;
+}
+.role-pres .chart-row:nth-child(1) .chart-fill { background: var(--accent); }
+.role-pres .chart-row:nth-child(3) .chart-fill { background: #567d69; }
+.role-pres .chart-lab {
+  color: var(--ink);
+  font-weight: 600;
+}
+.role-pres .chart-n {
+  color: var(--navy);
+  font-weight: 600;
+}
+.role-pres .pair {
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  box-shadow: 0 5px 16px rgba(16,43,67,0.06);
+}
+.role-pres .pair:first-child {
+  background: var(--navy);
+  color: var(--tile);
+}
+.role-pres .pair:first-child h2,
+.role-pres .pair:first-child .pair-label { color: var(--gold); }
+.role-pres .pair:last-child {
+  background: var(--tile);
+  border-top: 5px solid var(--accent);
+}
+.role-pres .stage.prompt.has-drag h1 {
+  color: var(--navy);
+}
+.role-pres .stage.prompt.has-drag .split-viz .ss-win {
+  background: var(--navy);
+  color: var(--tile);
+}
+.role-pres .stage.prompt.has-drag .ss-win-label { color: var(--gold); }
+.role-pres .stage.prompt.has-drag .token {
+  background: var(--tile);
+  color: var(--navy);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  font-weight: 600;
+}
+.role-pres .stage.prompt.has-drag .slot {
+  background: rgba(255,255,255,0.08);
+  border: 1px dashed rgba(255,255,255,0.45);
+  border-radius: 10px;
+}
+.role-pres .stage.prompt.has-drag .slot-lab {
+  color: var(--gold);
+  font-weight: 600;
+}
+.role-pres .stage.prompt.has-drag .slot-well {
+  border-radius: 8px;
+}
+.role-pres .stage.prompt.has-drag .slot-empty {
+  color: rgba(255,255,255,0.72);
+}
+.role-pres .stage.prompt.has-close .ask-q {
+  color: var(--navy);
+}
+.role-pres .stage.prompt.has-close .choices button,
+.role-pres .stage.prompt.has-close .send {
+  border-radius: 8px;
+}
+.role-pres .stage.prompt.has-notes #viz .bar .lab { color: var(--tile); }
+.role-pres .stage.prompt.has-notes #viz .bar .n { color: var(--gold); }
+.role-pres .stage.prompt.has-notes #viz .tally { color: var(--gold); }
+.role-pres .stage.prompt.has-notes #viz .bar .track {
+  background: rgba(255,255,255,0.18);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.role-pres .stage.prompt.has-notes #viz .bar .fill { background: var(--accent); }
+.role-pres .stage.prompt.has-notes #viz .card {
+  background: var(--tile);
+  color: var(--ink);
+  border: 0;
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+}
+.role-pres .stage.prompt.has-notes #viz .said { color: var(--ink); }
+.role-pres .stage.prompt.has-notes #viz .meta { color: var(--ink-faint); }
+.role-part .stage {
+  color: var(--ink);
+}
+.role-part .stage h1 {
+  color: var(--navy);
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+}
+.role-part .claim-bars li {
+  border-radius: 10px;
+  border: 1px solid rgba(16,43,67,0.1);
+  box-shadow: 0 3px 12px rgba(16,43,67,0.05);
+}
+.role-part .claim-bars li:nth-child(1) {
+  background: var(--navy);
+  color: var(--tile);
+}
+.role-part .claim-bars li:nth-child(1) h2 { color: var(--gold); }
+.role-part .claim-bars li:nth-child(1) p { color: var(--tile); }
+.role-part .claim-bars li:nth-child(2) {
+  background: var(--tile);
+  border-left: 4px solid var(--accent);
+}
+.role-part .claim-bars li:nth-child(3) { background: var(--tile-sage); }
+.role-part .chart-track { border-radius: 4px; }
+.role-part .chart-fill { border-radius: 4px; }
+.role-part .pair { border-radius: 10px; }
+@media (max-width: 720px) {
+  .role-part .stage.claims h1 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  .role-part .claim-bars li { box-shadow: none; }
+  .role-part .chart-note { max-width: none; }
+}
