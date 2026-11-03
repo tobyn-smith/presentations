@@ -1,0 +1,25 @@
+name: Geddes deck checks
+
+on:
+  pull_request:
+    paths:
+      - "readings/geddes-1990.js"
+      - "test.js"
+      - "style.css"
+      - "deck.js"
+      - "slideshow.js"
+      - "build-week.js"
+      - "script-content.js"
+      - "prompts.js"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run deck and interaction checks
+        run: node test.js
