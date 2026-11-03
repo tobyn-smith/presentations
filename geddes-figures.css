@@ -26,3 +26,9 @@ body.role-pres .stage.title .title-join-block, body.role-part .stage.title .titl
 body.role-part .stage.prompt .split.has-viz .split-viz { min-height:0; }
 body.role-part .stage.prompt figure.chart[data-chart="geddes-fig23"]::after { height:clamp(260px, 40vh, 420px); }
 body.role-part .stage.claims figure.chart[data-chart="geddes-fig4"]::after, body.role-part .stage.claims figure.chart[data-chart="geddes-fig5"]::after { height:clamp(230px, 35vh, 360px); }
+
+figure.chart[data-chart="geddes-selection"] .plot-panels { display:none !important; }
+figure.chart[data-chart="geddes-selection"]::after {
+  content:""; display:block; width:100%; height:clamp(260px, 40vh, 430px); margin:.35rem auto 0;
+  background:url("figures/geddes-selection.svg") center/contain no-repeat;
+}
