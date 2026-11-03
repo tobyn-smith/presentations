@@ -13,13 +13,21 @@
   <p class="kicker">Edit the session</p>
   <h1>Presenter key</h1>
   <p>Same key as Present. That keeps students from changing the boards.</p>
-  <form id="gate-form">
+  <form id="gate-form" hidden>
     <label class="sr" for="key">Presenter key</label>
     <input id="key" type="password" autocomplete="current-password" placeholder="Presenter key" />
     <button type="submit">Open</button>
     <p class="err" id="gate-err" hidden>That key does not match.</p>
   </form>
-  <p class="hint">On the live example the key is <strong>example</strong>.</p>
+  <p id="gate-missing" class="hint" hidden>No key is stored on this computer. Choose one below. It stays in this browser.</p>
+  <form id="gate-set-form">
+    <div id="gate-set" hidden>
+      <input id="key-new" type="password" autocomplete="new-password" placeholder="Choose a key" />
+      <input id="key-again" type="password" autocomplete="new-password" placeholder="Type it again" />
+      <button type="submit">Save key on this computer</button>
+      <p class="err" id="gate-set-err" hidden>Those two did not match.</p>
+    </div>
+  </form>
 </div>
 
 <div id="app" hidden>
@@ -92,7 +100,7 @@
     <p class="now" id="now">Not saved yet.</p>
     <button type="button" id="save">Save</button>
     <a class="tool-link" href="slideshow.html">See the slideshow</a>
-    <a class="tool-link" href="adminpresentation.html">Present</a>
+    <a class="tool-link" href="present/">Present</a>
     <label class="tool-link file-btn">Open a backup
       <input id="restore" type="file" accept=".json,application/json" />
     </label>
@@ -102,6 +110,7 @@
 </div>
 
 <script src="config.js"></script>
+<script src="config.local.js"></script>
 <script src="roster.js"></script>
 <script src="slides.js"></script>
 <script src="script-content.js"></script>
@@ -109,6 +118,7 @@
 <script src="readings/geddes-1990.js"></script>
 <script src="build-week.js"></script>
 <script src="apply-content.js"></script>
+<script src="gate.js"></script>
 <script src="edit.js"></script>
 </body>
 </html>

@@ -1,0 +1,18 @@
+# Preview and any root host. GitHub Pages on tobynsmith.me ignores this file;
+# that copy lives under /6010/ so relative URLs already match.
+/6010/present /present/index.html 200
+/6010/present/ /present/index.html 200
+/6010 /index.html 200
+/6010/ /index.html 200
+/6010/* /:splat 200
+
+/presentations/present /present/ 301
+/presentations/present/ /present/ 301
+/presentations / 301
+/presentations/ / 301
+/presentations/* /:splat 301
+
+/adminpresentation /present/ 301
+/adminpresentation.html /present/ 301
+/adminpresentation/ /present/ 301
+/adminpresentation/index.html /present/ 301
