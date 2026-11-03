@@ -18,7 +18,6 @@
   var seen = {};
   var painted = {};
   var lastIndex = -1;
-  var draft = { name: "", face: null, q: "", step: "name" };
   var kickNotice = "";
 
   function cfg() { return window.DECK || {}; }
@@ -71,16 +70,8 @@
   }
 
   function holdPeersInner() {
-    var list = DeckSync.getSeats();
-    var mine = DeckSync.sessionId();
-    var n = list.length;
-    var count = n <= 1 ? "Just you for now" : n + " here";
-    var faces = list.map(function (row) {
-      return "<li" + (row.sid === mine ? ' class="is-me"' : "") + ' title="' + esc(row.name) + '">'
-        + Roster.faceHtml(row.face, row.name) + "</li>";
-    }).join("");
-    return '<p class="hold-count">' + count + "</p>"
-      + (faces ? '<ul class="hold-faces">' + faces + "</ul>" : "");
+    var n = DeckSync.getSeats().length;
+    return n <= 1 ? "Just you for now" : n + " here";
   }
 
   function paintHoldPeers() {
@@ -90,173 +81,39 @@
   }
 
   function holdRoom() {
-    var who = DeckSync.me() || {};
-    var first = Roster.firstName(who.name);
     document.body.classList.remove("is-checkin", "is-checkin-name", "is-checkin-face");
     document.body.classList.add("is-hold");
     stage.classList.remove("title");
     stage.classList.add("hold");
     stage.innerHTML = '<div class="hold-card">'
-      + '<div class="hold-glow" aria-hidden="true"></div>'
-      + '<div class="hold-avatar">'
-      + '<span class="hold-ring" aria-hidden="true"></span>'
-      + Roster.faceHtml(who.face, who.name)
-      + "</div>"
       + '<p class="wait-kicker">You\'re in</p>'
-      + "<h1>" + esc(first || "Hold") + "</h1>"
       + '<p class="lede">The room has not started.</p>'
-      + '<div class="hold-peers" id="hold-peers">' + holdPeersInner() + "</div>"
-      + '<button type="button" class="not-you" id="not-you">Not you?</button>'
+      + '<div class="hold-peers hold-count" id="hold-peers">' + holdPeersInner() + "</div>"
+      + '<button type="button" class="not-you" id="not-you">Leave</button>'
       + "</div>";
     var back = document.getElementById("not-you");
     if (back) back.addEventListener("click", function () {
       DeckSync.standUp();
-      draft = { name: "", face: null, q: "", step: "name" };
       checkIn();
     });
-  }
-
-  function filteredNames() {
-    var q = draft.q;
-    return Roster.names.filter(function (n) {
-      return !q || n.toLowerCase().indexOf(q) >= 0;
-    });
-  }
-
-  function nameButtonHtml(n, taken) {
-    var parts = String(n).split(/\s+/);
-    var first = parts[0] || n;
-    var rest = parts.slice(1).join(" ");
-    var held = !!taken[n];
-    var on = draft.name === n;
-    return '<button type="button" class="name-pick' + (on ? " on" : "") + (held ? " taken" : "") + '" data-name="' + esc(n) + '"'
-      + (held ? " disabled" : "") + ">"
-      + '<span class="name-first">' + esc(first) + "</span>"
-      + (rest ? '<span class="name-rest">' + esc(rest) + "</span>" : "")
-      + (held ? '<span class="name-taken">Taken</span>' : "")
-      + "</button>";
-  }
-
-  function namesHtml() {
-    if (!Roster.names.length) {
-      return "";
-    }
-    var taken = DeckSync.takenNames();
-    var names = filteredNames();
-    if (!names.length) return '<p class="names-empty">No one matches.</p>';
-    return names.map(function (n) { return nameButtonHtml(n, taken); }).join("");
-  }
-
-  function fillNames() {
-    var box = document.getElementById("names");
-    if (!box) return;
-    box.innerHTML = namesHtml();
-  }
-
-  function pickName(name) {
-    if (!name || DeckSync.takenNames()[name]) return;
-    draft.name = name;
-    if (!draft.face) draft.face = Roster.faceForName(draft.name);
-    draft.step = "face";
-    checkIn();
   }
 
   function checkIn() {
     document.body.classList.add("is-checkin");
-    document.body.classList.remove("is-hold");
-    document.body.classList.toggle("is-checkin-name", draft.step !== "face");
-    document.body.classList.toggle("is-checkin-face", draft.step === "face");
+    document.body.classList.remove("is-hold", "is-checkin-name", "is-checkin-face");
     stage.classList.remove("title", "hold");
-    if (draft.step === "face" && draft.name) {
-      var preview = draft.face || Roster.faceForName(draft.name);
-      draft.face = preview;
-      stage.innerHTML = '<button type="button" class="check-back" id="check-back">' + esc(draft.name) + "</button>"
-        + "<h1>Pick a picture</h1>"
-        + '<div class="check-you">'
-        + '<div class="check-preview" id="preview">' + Roster.faceHtml(preview, draft.name) + "</div>"
-        + "<div><p class=\"who-name\">" + esc(Roster.firstName(draft.name)) + "</p>"
-        + '<p class="who-hint">Change the picture if you want, then tap I\'m here.</p></div>'
-        + "</div>"
-        + '<div class="faces" id="faces">'
-        + Roster.faces.map(function (f) {
-          var on = String(preview.id) === f.id;
-          return '<button type="button" class="face-pick' + (on ? " on" : "") + '" data-face="' + f.id + '" aria-pressed="' + (on ? "true" : "false") + '">'
-            + Roster.faceHtml({ id: f.id }) + "</button>";
-        }).join("")
-        + "</div>"
-        + '<button type="button" class="seat-btn" id="seat">I\'m here</button>';
-    } else {
-      draft.step = "name";
-      var emptyList = !Roster.names.length;
-      stage.innerHTML = (kickNotice ? '<p class="kick-banner">' + esc(kickNotice) + "</p>" : "")
-        + '<p class="wait-kicker">' + esc(brand()) + "</p>"
-        + "<h1>Who are you?</h1>"
-        + '<label class="sr" for="find">' + (emptyList ? "Your name" : "Find your name") + "</label>"
-        + '<input class="find" id="find" type="' + (emptyList ? "text" : "search") + '" enterkeyhint="' + (emptyList ? "done" : "search") + '" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="' + (emptyList ? "Your name" : "Find your name") + '" value="' + esc(emptyList ? (draft.name || "") : draft.q) + '">'
-        + '<div class="names" id="names">' + namesHtml() + "</div>"
-        + (emptyList ? '<button type="button" class="seat-btn" id="use-typed">Continue</button>' : "");
-    }
+    stage.innerHTML = (kickNotice ? '<p class="kick-banner">' + esc(kickNotice) + "</p>" : "")
+      + '<div class="in-card">'
+      + '<p class="wait-kicker">' + esc(brand()) + "</p>"
+      + '<button type="button" class="in-btn" id="seat">I\'m in</button>'
+      + "</div>";
     bindCheckIn();
-    var picked = stage.querySelector(".name-pick.on") || stage.querySelector(".face-pick.on");
-    if (picked && picked.scrollIntoView) picked.scrollIntoView({ block: "nearest" });
   }
 
   function bindCheckIn() {
-    var find = document.getElementById("find");
-    if (find) {
-      find.addEventListener("input", function () {
-        if (!Roster.names.length) {
-          draft.name = find.value.replace(/\s+/g, " ").trim();
-          return;
-        }
-        draft.q = find.value.trim().toLowerCase();
-        fillNames();
-      });
-      find.addEventListener("keydown", function (e) {
-        if (e.key !== "Enter") return;
-        if (!Roster.names.length) {
-          pickName(find.value.replace(/\s+/g, " ").trim());
-          return;
-        }
-        var taken = DeckSync.takenNames();
-        var open = filteredNames().filter(function (n) { return !taken[n]; });
-        if (open.length === 1) pickName(open[0]);
-      });
-    }
-    var typed = document.getElementById("use-typed");
-    if (typed) typed.addEventListener("click", function () {
-      var field = document.getElementById("find");
-      pickName(field ? field.value.replace(/\s+/g, " ").trim() : "");
-    });
-    var names = document.getElementById("names");
-    if (names) names.addEventListener("click", function (e) {
-      var b = e.target.closest("button[data-name]");
-      if (!b || b.disabled) return;
-      pickName(b.getAttribute("data-name"));
-    });
-    var back = document.getElementById("check-back");
-    if (back) back.addEventListener("click", function () {
-      draft.step = "name";
-      checkIn();
-    });
-    var faces = document.getElementById("faces");
-    if (faces) faces.addEventListener("click", function (e) {
-      var b = e.target.closest("button[data-face]");
-      if (!b) return;
-      draft.face = { id: b.getAttribute("data-face") };
-      Array.prototype.forEach.call(faces.querySelectorAll(".face-pick"), function (el) {
-        var on = el === b;
-        el.classList.toggle("on", on);
-        el.setAttribute("aria-pressed", on ? "true" : "false");
-      });
-      var preview = document.getElementById("preview");
-      if (preview) preview.innerHTML = Roster.faceHtml(draft.face, draft.name);
-    });
     var seat = document.getElementById("seat");
     if (seat) seat.addEventListener("click", function () {
-      if (!draft.name || !draft.face) return;
-      if (DeckSync.takenNames()[draft.name]) { draft.step = "name"; checkIn(); return; }
-      DeckSync.sit(draft.name, draft.face);
+      DeckSync.sit();
       if (DeckSync.isPresenting()) render(DeckSync.getSlide());
       else holdRoom();
     });
@@ -337,47 +194,16 @@
     fitStage();
   }
 
-  function seatedSig(list) {
-    return list.map(function (r) {
-      return r.sid + ":" + r.name + ":" + ((r.face && r.face.id) || "");
-    }).join("|");
-  }
-
-  function seatedRows(list) {
-    return list.map(function (row) {
-      return '<li data-sid="' + esc(row.sid) + '" title="' + esc(row.name) + '">'
-        + Roster.faceHtml(row.face, row.name)
-        + "<span>" + esc(row.name) + "</span>"
-        + '<button type="button" class="kick-btn" data-kick="' + esc(row.sid) + '" aria-label="Remove ' + esc(row.name) + '">Remove</button>'
-        + "</li>";
-    }).join("");
-  }
-
   function seatedHtml() {
     if (!isPres) return "";
     var list = DeckSync.getSeats();
-    if (!list.length) return "";
-    var sig = seatedSig(list);
     return '<div class="seated" id="seated">'
       + '<p class="seated-count">' + list.length + (list.length === 1 ? " here" : " here") + "</p>"
-      + '<ul class="seated-list" data-sig="' + esc(sig) + '">' + seatedRows(list) + "</ul></div>";
+      + "</div>";
   }
 
-  function whoHtml(r) {
-    var name = r.name || "";
-    var face = r.face || {};
-    if (!name) {
-      var seats = DeckSync.getSeats();
-      for (var i = 0; i < seats.length; i++) {
-        if (seats[i].sid === r.sid) {
-          name = seats[i].name || name;
-          face = seats[i].face || face;
-          break;
-        }
-      }
-    }
-    if (!name) return "";
-    return '<p class="who">' + Roster.faceHtml(face, name) + "<span>" + esc(name) + "</span></p>";
+  function whoHtml() {
+    return "";
   }
 
   function quoteHtml(q) {
@@ -1176,14 +1002,8 @@
 
   function paintMe() {
     if (!meBox) return;
-    var who = DeckSync.me();
-    if (!who || isPres || document.body.classList.contains("is-waiting")) {
-      meBox.hidden = true;
-      meBox.innerHTML = "";
-      return;
-    }
-    meBox.hidden = false;
-    meBox.innerHTML = Roster.faceHtml(who.face, who.name) + "<span>" + esc(Roster.firstName(who.name)) + "</span>";
+    meBox.hidden = true;
+    meBox.innerHTML = "";
   }
 
   function paintHandBtn() {
@@ -1206,24 +1026,16 @@
       return;
     }
     handsBox.hidden = false;
-    handsBox.innerHTML = '<span class="hands-count">' + list.length + (list.length === 1 ? " hand" : " hands") + "</span>"
-      + '<ul>' + list.map(function (h) {
-        return '<li title="' + esc(h.name) + '">' + Roster.faceHtml(h.face, h.name)
-          + "<span>" + esc(Roster.firstName(h.name)) + "</span></li>";
-      }).join("") + "</ul>";
+    handsBox.innerHTML = '<span class="hands-count">' + list.length + (list.length === 1 ? " hand" : " hands") + "</span>";
   }
 
   function paintSeated() {
     var host = document.getElementById("seated");
     if (!host || !isPres) return;
     var list = DeckSync.getSeats();
-    var sig = seatedSig(list);
     var count = host.querySelector(".seated-count");
-    var ul = host.querySelector(".seated-list");
     if (count) count.textContent = list.length + (list.length === 1 ? " here" : " here");
-    if (!ul || ul.getAttribute("data-sig") === sig) return;
-    ul.setAttribute("data-sig", sig);
-    ul.innerHTML = seatedRows(list);
+    else host.innerHTML = '<p class="seated-count">' + list.length + (list.length === 1 ? " here" : " here") + "</p>";
   }
 
   DeckSync.onSlide(function (n) {
@@ -1265,11 +1077,7 @@
     var people = document.getElementById("failsafe-people");
     if (people) {
       var list = DeckSync.getSeats();
-      if (!list.length) people.innerHTML = '<p class="failsafe-empty">Nobody is checked in.</p>';
-      else people.innerHTML = list.map(function (row) {
-        return '<li><span>' + esc(row.name) + '</span>'
-          + '<button type="button" data-kick="' + esc(row.sid) + '">Remove</button></li>';
-      }).join("");
+      people.innerHTML = '<p class="failsafe-empty">' + list.length + (list.length === 1 ? " person is in." : " people are in.") + "</p>";
     }
   }
 
@@ -1392,8 +1200,7 @@
     DeckSync.resumeSeat();
     if (DeckSync.isPresenting() && DeckSync.seated()) render(DeckSync.getSlide());
     DeckSync.onKick(function () {
-      kickNotice = "You were removed. Find your name again to come back.";
-      draft = { name: "", face: null, q: "", step: "name" };
+      kickNotice = "You were removed. Tap I'm in to come back.";
       waitScreen();
     });
     setInterval(function () {
@@ -1414,12 +1221,6 @@
     DeckSync.onHands(paintHandBtn);
     DeckSync.onSeats(function () {
       if (document.body.classList.contains("is-hold")) paintHoldPeers();
-      if (document.body.classList.contains("is-checkin-face") && draft.name && DeckSync.takenNames()[draft.name]) {
-        draft.step = "name";
-        checkIn();
-        return;
-      }
-      if (document.body.classList.contains("is-checkin-name")) fillNames();
     });
   } else {
     DeckSync.onPresenting(paintLive);
@@ -1498,7 +1299,7 @@
     });
     var fsSeats = document.getElementById("fs-seats");
     if (fsSeats) fsSeats.addEventListener("click", function () {
-      failsafeLog("Clearing leftover names…");
+      failsafeLog("Clearing leftover seats…");
       DeckSync.clearSeats().then(function (ok) {
         paintFailsafeStatus();
         failsafeLog(ok ? "Seat list cleared. People can check in again." : "Could not clear seats. Test phone paths.");
@@ -1524,13 +1325,11 @@
       if (!b) return;
       e.preventDefault();
       var kickedSid = b.getAttribute("data-kick");
-      var row = DeckSync.getSeats().filter(function (r) { return r.sid === kickedSid; })[0];
-      var who = row ? row.name : "this person";
-      if (!confirm("Remove " + who + "? Their phone goes back to check-in and they have to start over.")) return;
+      if (!confirm("Remove this person? Their phone goes back to check-in and they have to start over.")) return;
       DeckSync.kick(kickedSid);
       paintSeated();
       paintFailsafeStatus();
-      failsafeLog("Removed " + who + ". They have to check in again.");
+      failsafeLog("Removed one person. They have to check in again.");
     });
     var fsUnkick = document.getElementById("fs-unkick");
     if (fsUnkick) fsUnkick.addEventListener("click", function () {
