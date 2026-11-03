@@ -158,7 +158,7 @@ try {
             panelBottom: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().bottom) : 0,
             answerDisplay: stage.querySelector(".ask-panel form.answer") ? getComputedStyle(stage.querySelector(".ask-panel form.answer")).display : "missing",
             repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none"),
-            emptyResponsePanelVisible: stage.getAttribute("data-slide-id") === "quote-sample" && Array.from(stage.querySelectorAll(".ss-win")).some(el => !el.classList.contains("has-answers") && getComputedStyle(el).display !== "none")
+            emptyResponsePanelVisible: stage.getAttribute("data-slide-id") === "quote-sample" && !!(stage.querySelector("#viz .room-empty-state") && getComputedStyle(stage.querySelector("#viz .room-empty-state")).display !== "none" && stage.querySelector("#viz .room-empty-state").getBoundingClientRect().height > 0)
           };
         });
         if (metrics.scrollWidth > viewport.width + 1) {
@@ -230,8 +230,8 @@ try {
         if (metrics.repeatedSectionKicker) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " repeats the section label above the slide title");
         }
-        if (mode === "presenter" && metrics.emptyResponsePanelVisible) {
-          report.failures.push(viewport.width + "x" + viewport.height + " shows an empty response panel over the presenter prompt");
+        if (mode === "presenter" && index === 3 && !metrics.emptyResponsePanelVisible) {
+          report.failures.push(viewport.width + "x" + viewport.height + " slide 4 presenter is missing its visible response waiting area");
         }
         await page.screenshot({
           path: path.join(dir, "slide-" + String(index + 1).padStart(2, "0") + ".png"),
