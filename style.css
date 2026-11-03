@@ -3947,3 +3947,92 @@ html.reading-off .reading { display: none; }
   padding: 0.4rem 0.7rem;
 }
 .failsafe-ok { color: #0d652d; font-size: 0.88rem; }
+
+ 
+/* Geddes live-board fixes: keep labels legible on navy and keep the room
+   responses inside the same visual system as the rest of the deck. */
+.role-pres .stage.prompt.has-notes #viz .bar .lab {
+  color: var(--tile);
+  line-height: 1.25;
+}
+.role-pres .stage.prompt.has-notes #viz .bar .n {
+  color: var(--gold);
+  font-family: var(--display);
+  font-variant-numeric: tabular-nums;
+}
+.role-pres .stage.prompt.has-notes #viz .tally {
+  color: var(--gold);
+}
+.role-pres .stage.prompt.has-notes #viz .bar .track {
+  background: rgba(255,255,255,0.18);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.role-pres .stage.prompt.has-notes #viz .bar .fill {
+  background: var(--accent);
+}
+.role-pres .stage.prompt.has-notes #viz .responses {
+  align-content: start;
+  min-width: 0;
+  overflow: auto;
+  padding: 0.1rem 0.1rem 0.35rem;
+}
+.role-pres .stage.prompt.has-notes #viz .card {
+  min-width: 0;
+  background: var(--tile);
+  color: var(--ink);
+  border: 0;
+  border-left: 3px solid var(--accent);
+  border-radius: 0;
+  box-shadow: none;
+}
+.role-pres .stage.prompt.has-notes #viz .said {
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.role-pres .stage.prompt.has-notes #viz .meta {
+  color: var(--ink-faint);
+}
+
+/* The student view is narrower than the presenter board. Give the three
+   country tiles their own rows instead of letting their labels collide. */
+.role-part .revolt-tiles {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  flex: none;
+}
+.role-part .revolt-tile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
+  min-height: 4.25rem;
+  height: auto;
+  flex: none;
+  padding: 0.65rem 0.9rem;
+}
+.role-part .revolt-tile svg {
+  display: block;
+  width: 3.4rem;
+  height: 2.25rem;
+  flex: 0 0 3.4rem;
+}
+.role-part .revolt-tile b {
+  display: block;
+  min-width: 0;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  font-size: clamp(1.35rem, 5vw, 1.8rem);
+}
+@media (min-width: 721px) {
+  .role-part .revolt-tiles {
+    grid-template-columns: 1fr;
+  }
+}
