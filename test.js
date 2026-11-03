@@ -225,12 +225,21 @@ assert.ok(layoutFix.indexOf("max-height: min(50vh, 390px)") !== -1, "Figure 3 ch
 assert.ok(layoutFix.indexOf("flex-wrap: wrap") !== -1, "presenter toolbar can wrap on narrower laptop widths");
 assert.ok(layoutFix.indexOf(":focus-visible") !== -1, "keyboard focus is visible across both presentation roles");
 assert.ok(layoutFix.indexOf(".failsafe-card") !== -1 && layoutFix.indexOf("grid-template-columns: repeat(2, minmax(0, 1fr))") !== -1, "room status panel follows the deck visual system");
+var deckSrc = fs.readFileSync("./deck.js", "utf8");
+var syncSrc = fs.readFileSync("./sync.js", "utf8");
 assert.ok(deckSrc.indexOf('stage.setAttribute("data-chart"') !== -1, "live student and presenter routes publish the active figure id");
 assert.ok(fs.readFileSync("./slideshow.js", "utf8").indexOf('stage.setAttribute("data-chart"') !== -1, "backup route shares the same figure layout metadata");
 assert.ok(fs.readFileSync("./readings/geddes-visuals.js", "utf8").indexOf('title:".07"') !== -1, "Figure 2 has a single clear takeaway beside the graph");
 assert.ok(deckSrc.indexOf('temporary backup; restore Firebase before refreshing') !== -1, "room status warns when the temporary backup transport is active");
 assert.ok(deckSrc.indexOf('["Activity", activity]') !== -1 && deckSrc.indexOf('["Responses"') !== -1, "room status reports the active activity and response count");
 assert.ok(deckSrc.indexOf('This also removes students who are currently connected') !== -1, "resetting check-ins requires an explicit warning");
+assert.ok(deckSrc.indexOf('if (isPres) {\n      render(n);') !== -1, "presenter view still renders when the room slide changes");
+assert.ok(deckSrc.indexOf('if (wasReload && shouldResume)') !== -1 && deckSrc.indexOf('DeckSync.present();') !== -1, "presenter refresh restores the live room");
+assert.ok(syncSrc.indexOf("function queueBackupResponse(msg)") !== -1 && syncSrc.indexOf("function flushBackupResponses()") !== -1, "backup responses are queued and persisted after reconnection");
+assert.ok(syncSrc.indexOf('lastError = "Firebase read HTTP " + r.status') !== -1, "Firebase read failures trigger backup mode");
+assert.ok(syncSrc.indexOf('sessionStorage.setItem("deck-resume-live", "1")') !== -1, "live presenter state is preserved during refresh");
+assert.ok(fs.existsSync("./live-room-test.mjs"), "live transport regression tests are included");
+assert.ok(fs.readFileSync("./.github/workflows/geddes-visual-regression.yml", "utf8").indexOf("node live-room-test.mjs") !== -1, "live transport tests run in CI");
 
 
 
@@ -253,7 +262,6 @@ assert.ok(backup.indexOf("uga-logo.png") !== -1);
 assert.ok(admin.indexOf("uga-arch") === -1);
 assert.ok(css.indexOf("user-select: none") !== -1);
 assert.ok(css.indexOf("flex-wrap: nowrap") !== -1);
-var deckSrc = fs.readFileSync("./deck.js", "utf8");
 assert.ok(deckSrc.indexOf("I'm in") !== -1);
 assert.ok(deckSrc.indexOf("Who are you?") === -1);
 assert.ok(deckSrc.indexOf("function bindRank") !== -1);
