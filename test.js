@@ -59,7 +59,7 @@ assert.ok(/Seven defeat\/no-revolution/.test(SLIDES.filter(function (s) { return
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.id, "table2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
 assert.ok(/ten country-period instances/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
-assert.ok(/continues through 1972/.test(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.note));
+assert.ok(/five selected Table 2 observations/.test(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.note));
 assert.ok(/curved relationship/.test(JSON.stringify(SLIDES.filter(function (s) { return s.id === "fits"; }))));
 assert.ok(!/The five are all a 3/.test(JSON.stringify(SLIDES)));
 
