@@ -650,7 +650,12 @@
         + "</div></div>";
     }
     if (isPres) {
-      return '<div class="ask">' + q + '</div><div class="ask-panel">'
+      var slideResults = s.input === "choice-text"
+        ? '<section class="slide-live-results" id="slide-live-results" aria-live="polite">'
+          + '<p class="slide-live-results-title">Class responses</p>'
+          + '<div class="slide-live-results-content" id="slide-live-results-content"></div></section>'
+        : "";
+      return '<div class="ask">' + q + slideResults + '</div><div class="ask-panel">'
         + windowHtml("term", "Room responses", askLine + optPreview + '<div id="viz"></div>')
         + "</div>";
     }
@@ -1105,6 +1110,12 @@
     viz.setAttribute("data-response-count", String(list.length));
     viz.classList.toggle("five-responses", list.length >= 5);
     viz.innerHTML = html;
+    var slideResults = document.getElementById("slide-live-results-content");
+    if (slideResults) {
+      slideResults.innerHTML = html;
+      var slideHost = slideResults.closest(".slide-live-results");
+      if (slideHost) slideHost.classList.toggle("has-responses", list.length > 0);
+    }
     showViz(s);
   }
   function showViz(s) {
