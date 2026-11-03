@@ -200,6 +200,13 @@ try {
   await presenter.reload({waitUntil:"domcontentloaded"});
   await presenter.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000});
   await presenter.waitForFunction(()=>DeckSync.isPresenting(),null,{timeout:8000});
+  const backupRefreshState = await presenter.evaluate(()=>({
+    slide:DeckSync.getSlide(),
+    counter:document.querySelector("#counter")?.textContent||"",
+    saved:sessionStorage.getItem("deck-slide-geddes-qa"),
+    presenting:DeckSync.isPresenting()
+  }));
+  console.log("Backup presenter refresh state: "+JSON.stringify(backupRefreshState));
   await presenter.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").trim()==="3",null,{timeout:15000});
   await presenter.waitForFunction(()=>DeckSync.getResponses("2").length===5,null,{timeout:15000});
   await presenter.waitForFunction(()=>document.querySelectorAll(".responses li").length===5,null,{timeout:10000});
