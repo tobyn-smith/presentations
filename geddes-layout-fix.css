@@ -1358,3 +1358,25 @@ body.role-pres .stage[data-chart="geddes-fig6"] {
     max-height: 48px !important;
   }
 }
+
+
+/* Figure 3 presenter mode: keep the three response choices visible beside
+   the graph, even after the first answer arrives. The live responses appear
+   below them in the same room panel. */
+body.role-pres .stage[data-chart="geddes-fig3"] .presenter-choice-preview {
+  display: grid !important;
+  visibility: visible !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px;
+  align-content: start;
+  grid-auto-rows: min-content;
+}
+body.role-pres .stage[data-chart="geddes-fig3"] .presenter-choice-preview li {
+  min-width: 0;
+  min-height: 44px;
+  height: auto;
+  padding: 9px 10px;
+  font-size: clamp(13px, 1.65vh, 17px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
