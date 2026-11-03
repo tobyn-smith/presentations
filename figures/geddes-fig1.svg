@@ -26,14 +26,14 @@
 <circle cx="519" cy="163" r="8"/><circle cx="519" cy="177" r="8"/><circle cx="519" cy="188" r="8"/><circle cx="519" cy="244" r="8"/><circle cx="519" cy="282" r="8"/>
 </g>
 <g fill="#102b43" font-family="Arial,sans-serif" font-size="18" font-weight="700">
-<text x="539" y="168">Singapore</text><text x="539" y="182">South Korea</text><text x="539" y="193">Taiwan</text><text x="539" y="249">Brazil</text><text x="539" y="287">Mexico</text>
+<text x="539" y="158">Singapore</text><text x="539" y="183">South Korea</text><text x="539" y="208">Taiwan</text><text x="539" y="249">Brazil</text><text x="539" y="287">Mexico</text>
 </g>
 <path d="M838 345L1394 142" stroke="#16324f" stroke-width="5" fill="none"/>
 <g fill="#ba0c2f">
 <circle cx="981" cy="321" r="8"/><circle cx="1019" cy="293" r="8"/><circle cx="1031" cy="279" r="8"/><circle cx="1200" cy="202" r="8"/><circle cx="1225" cy="191" r="8"/><circle cx="1238" cy="167" r="8"/><circle cx="1288" cy="272" r="8"/>
 </g>
 <g fill="#102b43" font-family="Arial,sans-serif" font-size="17">
-<text x="951" y="346">Philippines</text><text x="1029" y="283">Malaysia</text><text x="1041" y="272">Thailand</text><text x="1170" y="182">South Korea</text><text x="1230" y="216">Taiwan</text><text x="1248" y="162">Singapore</text><text x="1298" y="292">Indonesia</text>
+<text x="951" y="346">Philippines</text><text x="1038" y="292">Malaysia</text><text x="1040" y="264">Thailand</text><text x="1165" y="180">South Korea</text><text x="1232" y="222">Taiwan</text><text x="1265" y="150">Singapore</text><text x="1298" y="292">Indonesia</text>
 </g>
 <text x="1360" y="385" text-anchor="end" fill="#ba0c2f" font-family="Arial,sans-serif" font-size="23" font-weight="700">r² = .56</text>
 <rect x="250" y="475" width="1000" height="50" rx="16" fill="#102b43"/>
