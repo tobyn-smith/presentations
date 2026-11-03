@@ -45,7 +45,9 @@
     note: "r² = .07. Labour repression also appears in slow-growing countries.",
     plots: []
   };
-  fig2.claims = [];
+  fig2.claims = [
+    {n:"r²",title:".07",body:"The wider sample makes the straight-line relationship almost disappear."}
+  ];
   fits.type = "prompt";
   fits.kicker = "PART 2 - RAQUEL";
   fits.title = "Can a straight line miss a curve?";
