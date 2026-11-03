@@ -659,7 +659,7 @@
       return inner + '<div class="ask-panel">' + askLine + html + "</div>";
     };
     if (DeckSync.isDone(String(i))) {
-      return panel('<p class="thanks">Sent. Wait for the next slide.</p>');
+      return panel('<p class="thanks">Answer sent. Your response will appear on the presenter screen.</p>');
     }
     if (s.input === "text") {
       return panel(
