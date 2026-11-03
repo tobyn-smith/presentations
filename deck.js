@@ -467,6 +467,7 @@
     var tokens = s.tokens || [];
     var slots = s.slots || [];
     return '<div class="drag-place" id="drag-place">'
+      + '<p class="drag-instruction">Choose a group for each statement using the dropdown beside it, or drag the statement into a group. Place all three, then select Send.</p>'
       + '<div class="token-tray" data-home="1">'
       + tokens.map(function (t, idx) {
         var selectId = "place-token-" + idx;
@@ -692,7 +693,8 @@
     }
     if (s.input === "choice-text") {
       return panel(
-        '<div class="choices" id="choices" tabindex="-1">'
+        '<p class="input-instruction">' + (s.requireText ? "Choose one option, add a short reason, then select Send." : "Choose one option. Add a reason if useful, then select Send.") + "</p>"
+        + '<div class="choices" id="choices" tabindex="-1">'
         + (s.options || []).map(function (o) {
           return '<button type="button" data-choice="' + esc(o) + '">' + esc(o) + "</button>";
         }).join("")
