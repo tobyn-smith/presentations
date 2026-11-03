@@ -177,6 +177,12 @@ assert.ok(start.indexOf("Presenter") !== -1 && start.indexOf("Audience") !== -1 
 assert.ok(admin.indexOf('id="reveal"') === -1, "unused reveal control removed");
 assert.ok(admin.indexOf('id="fs-title"') === -1, "QR/title room tool removed");
 assert.ok(admin.indexOf('id="fs-end"') === -1, "duplicate end-room tool removed");
+assert.ok(admin.indexOf('id="failsafe-open" aria-haspopup="dialog"') !== -1, "room status opens an accessible dialog");
+assert.ok(admin.indexOf("Room status") !== -1 && admin.indexOf("Room tools") === -1, "outdated room tools panel has been renamed and rebuilt");
+assert.ok(admin.indexOf('id="fs-slide"') !== -1 && admin.indexOf('id="fs-pull"') !== -1 && admin.indexOf('id="fs-probe"') !== -1 && admin.indexOf('id="fs-seats"') !== -1 && admin.indexOf('id="fs-copy"') !== -1);
+assert.ok(admin.indexOf('id="key-change"') === -1 && admin.indexOf('id="roster-form"') === -1, "key and roster editing remain on the editor page, not in live-room recovery");
+assert.ok(admin.indexOf('id="fs-push"') === -1 && admin.indexOf('id="fs-unkick"') === -1, "obsolete duplicate recovery actions removed");
+
 assert.ok(admin.indexOf("class=\"brand\"") === -1);
 assert.ok(backup.indexOf("class=\"brand\"") === -1);
 assert.ok(admin.indexOf("stage-wrap") !== -1);
@@ -203,6 +209,9 @@ assert.ok(layoutFix.indexOf("max-height: none !important") !== -1, "Figure 3 ans
 assert.ok(layoutFix.indexOf("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") !== -1, "Figure 3 choices use a compact two-column layout");
 assert.ok(layoutFix.indexOf("height: clamp(245px, 34vh, 350px) !important") !== -1, "Figure 3 chart height is bounded to leave room for the question");
 assert.ok(layoutFix.indexOf("flex-wrap: wrap") !== -1, "presenter toolbar can wrap on narrower laptop widths");
+assert.ok(layoutFix.indexOf(":focus-visible") !== -1, "keyboard focus is visible across both presentation roles");
+assert.ok(layoutFix.indexOf(".failsafe-card") !== -1 && layoutFix.indexOf("grid-template-columns: repeat(2,minmax(0,1fr))") !== -1, "room status panel follows the deck visual system");
+
 
 
 ["geddes-selection.svg","geddes-fig1.svg","geddes-fig2.svg","geddes-fig3.svg","geddes-fig4.svg","geddes-fig5.svg","geddes-fig6.svg"].forEach(function (name) { assert.ok(fs.existsSync("./figures/" + name)); });
@@ -223,6 +232,10 @@ assert.ok(deckSrc.indexOf("I'm in") !== -1);
 assert.ok(deckSrc.indexOf("Who are you?") === -1);
 assert.ok(deckSrc.indexOf("function bindRank") !== -1);
 assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
+assert.ok(deckSrc.indexOf('data-move="up"') !== -1 && deckSrc.indexOf('data-move="down"') !== -1, "rank task has keyboard-operable move controls");
+assert.ok(deckSrc.indexOf('data-token-place') !== -1 && deckSrc.indexOf('board.addEventListener("change"') !== -1, "placement task has a keyboard-operable select alternative");
+assert.ok(deckSrc.indexOf('role="img" aria-label="\' + esc(accessible)') !== -1, "figure redraws expose an accessible description");
+
 assert.ok(deckSrc.indexOf("if (!canSend || isPres) return;") !== -1, "presenter cannot drag or submit student input");
 assert.ok(deckSrc.indexOf("if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return;") !== -1, "only a seated live student can submit");
 assert.ok(deckSrc.indexOf("Room responses") !== -1, "presenter sees response summary rather than drag trays");
