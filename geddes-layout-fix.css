@@ -283,12 +283,12 @@ body.role-pres .stage[data-chart="geddes-fig5"] .split-viz {
 }
 body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
 body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after {
-  height: clamp(360px, 56vh, 470px) !important;
+  height: clamp(380px, 58vh, 470px) !important;
   min-height: 0;
 }
 body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
 body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
-  height: clamp(360px, 54vh, 450px) !important;
+  height: clamp(380px, 58vh, 470px) !important;
   min-height: 0;
 }
 body.role-part .stage[data-chart="geddes-fig4"] .chart-source,
@@ -374,7 +374,7 @@ body.role-pres .stage[data-chart="geddes-fig6"] .chart-note {
   body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
   body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
   body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
-    height: clamp(320px, 48vh, 390px) !important;
+    height: clamp(350px, 60vh, 370px) !important;
   }
 }
 
