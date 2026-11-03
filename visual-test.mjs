@@ -52,6 +52,7 @@ try {
       const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
       page.on("pageerror", error => report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " browser error: " + error.message));
       await page.goto("http://127.0.0.1:4173/slideshow.html", { waitUntil: "networkidle" });
+      await page.emulateMedia({ reducedMotion: "reduce" });
       if (mode === "student") {
         await page.addStyleTag({ path: path.join(root, "audience.css") });
         await page.evaluate(() => {
