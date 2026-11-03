@@ -166,7 +166,10 @@ try {
 
   ntfyOnline=true;
   delayResponsePost=true;
-  await student.locator("#drag-send").evaluate(button=>{button.click();button.click();});
+  await student.locator("#drag-send").evaluate(button=>button.click());
+  await student.waitForTimeout(40);
+  check(!(await student.locator("#drag-send").isEnabled()),"Send locks while a response is in flight");
+  await student.locator("#drag-send").evaluate(button=>button.click());
   await student.waitForSelector(".thanks",{state:"visible",timeout:10000});
   await presenter.waitForSelector(".responses li",{state:"visible",timeout:10000});
   check(responsePosts===1,"rapid duplicate activation produces one response post");
