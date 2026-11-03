@@ -84,81 +84,30 @@
   </div>
 </main>
 <div class="failsafe" id="failsafe" hidden>
-  <div class="failsafe-card" role="dialog" aria-labelledby="failsafe-title">
-    <div class="failsafe-head">
-      <h2 id="failsafe-title">Room tools</h2>
+  <section class="failsafe-card" role="dialog" aria-modal="true" aria-labelledby="failsafe-title" aria-describedby="failsafe-lead">
+    <header class="failsafe-head">
+      <div><p class="failsafe-eyebrow">PRESENTER CONTROL</p><h2 id="failsafe-title">Room status</h2></div>
       <button type="button" class="failsafe-close" id="failsafe-close">Close</button>
-    </div>
-    <p class="failsafe-lead">Use these only if the live room or participant list needs attention.</p>
-    <dl class="failsafe-status" id="failsafe-status"></dl>
-    <pre class="failsafe-log" id="failsafe-log" hidden></pre>
-    <h3 class="failsafe-h">Presenter key</h3>
-    <form class="failsafe-key" id="key-change">
-      <input id="new-key" type="password" autocomplete="new-password" placeholder="New key" />
-      <button type="submit">Save key</button>
-      <p class="failsafe-ok" id="key-saved" hidden>Saved on this browser.</p>
-    </form>
-    <h3 class="failsafe-h">Class list</h3>
-    <form class="failsafe-roster" id="roster-form">
-      <textarea id="roster-text" placeholder="One name per line"></textarea>
-      <button type="submit">Save list</button>
-      <p class="failsafe-ok" id="roster-saved" hidden>Saved.</p>
-    </form>
-    <h3 class="failsafe-h">People in the room</h3>
-    <ul class="failsafe-people" id="failsafe-people"></ul>
-    <div class="failsafe-cmds">
-      <button type="button" id="fs-push">
-        <strong>Push live again</strong>
-        <span>Write Go live to Firebase, republish this slide, and confirm the audience room read it back.</span>
-      </button>
-      <button type="button" id="fs-slide">
-        <strong>Republish this slide</strong>
-        <span>Send the current slide index again so late audience screens catch up.</span>
-      </button>
-      <button type="button" id="fs-probe">
-        <strong>Test audience connection</strong>
-        <span>Check Firebase read/write and the backup message path. Shows whether audience updates can reach the room.</span>
-      </button>
-      <button type="button" id="fs-pull">
-        <strong>Pull room</strong>
-        <span>Reload seats, hands, answers, and Go live from Firebase.</span>
-      </button>
-      <button type="button" id="fs-seats">
-        <strong>Free leftover names</strong>
-        <span>Wipe the seat list if yesterday’s names still show as Taken.</span>
-      </button>
-      <button type="button" id="fs-unkick">
-        <strong>Allow removed people back</strong>
-        <span>Clear the kick list so a removed name can check in again from a new session.</span>
-      </button>
-      <button type="button" id="fs-copy">
-        <strong>Copy status</strong>
-        <span>Copy a report you can paste into a message if you still need help.</span>
-      </button>
-      <a class="failsafe-backup" href="start.html">
-        <strong>Start here</strong>
-        <span>The simple map of pages. Change slides, present, or open the slideshow.</span>
-      </a>
-      <a class="failsafe-backup" href="script.html">
-        <strong>Script</strong>
-        <span>Speaker notes and timings for the 15-minute discussion.</span>
-      </a>
-      <a class="failsafe-backup" href="slideshow.html" target="_blank" rel="noopener">
-        <strong>Backup</strong>
-        <span>Backup presentation if the live room connection fails.</span>
-      </a>
-      <a class="failsafe-backup" href="index.html" target="_blank" rel="noopener">
-        <strong>Audience</strong>
-        <span>Desktop audience view. Open this link on a laptop to follow the slides and join the activities.</span>
-      </a>
-      <a class="failsafe-backup" href="edit.html">
-        <strong>Change slides and names</strong>
-        <span>Plain boxes. No code. Saved on this computer.</span>
-      </a>
-    </div>
-  </div>
-</div>
-<script src="config.js"></script>
+    </header>
+    <p class="failsafe-lead" id="failsafe-lead">Check the live connection and recover the audience view if it falls behind.</p>
+    <dl class="failsafe-status" id="failsafe-status" aria-live="polite"></dl>
+    <pre class="failsafe-log" id="failsafe-log" role="status" aria-live="polite" hidden></pre>
+    <section class="failsafe-section" aria-labelledby="failsafe-recovery-title">
+      <h3 class="failsafe-h" id="failsafe-recovery-title">Recovery</h3>
+      <div class="failsafe-cmds">
+        <button type="button" id="fs-slide"><strong>Republish current slide</strong><span>Send the current slide again to audience screens.</span></button>
+        <button type="button" id="fs-pull"><strong>Refresh room data</strong><span>Reload the room's slide, attendance and responses from the live service.</span></button>
+        <button type="button" id="fs-probe"><strong>Run connection test</strong><span>Check whether the live service can be read from and written to.</span></button>
+        <button type="button" id="fs-seats"><strong>Clear stale check-ins</strong><span>Use only when old attendee sessions are still occupying the room.</span></button>
+        <button type="button" id="fs-copy"><strong>Copy diagnostics</strong><span>Copy the current connection report for troubleshooting.</span></button>
+      </div>
+    </section>
+    <footer class="failsafe-footer">
+      <a class="failsafe-backup" href="slideshow.html" target="_blank" rel="noopener"><strong>Open backup slideshow</strong><span>Use this if the live room connection is unavailable.</span></a>
+      <a class="failsafe-backup" href="start.html"><strong>Presentation start page</strong><span>Return to the presentation links and speaker notes.</span></a>
+    </footer>
+  </section>
+</div><script src="config.js"></script>
 <script src="config.local.js"></script>
 <script src="roster.js"></script>
 <script src="slides.js"></script>
@@ -170,44 +119,9 @@
 <script src="gate.js"></script>
 <script>
 DeckGate.bind();
-document.getElementById("key-change").addEventListener("submit", function (e) {
-  e.preventDefault();
-  var v = document.getElementById("new-key").value;
-  if (!v) return;
-  try {
-    localStorage.setItem(DeckGate.store, v);
-    sessionStorage.setItem(DeckGate.store, v);
-  } catch (err) {}
-  if (window.DECK) DECK.presenterKey = v;
-  document.getElementById("key-saved").hidden = false;
-  document.getElementById("new-key").value = "";
-});
 </script>
 <script src="sync.js"></script>
 <script src="deck.js"></script>
-<script>
-(function () {
-  var rosterForm = document.getElementById("roster-form");
-  var rosterText = document.getElementById("roster-text");
-  function fillRoster() {
-    if (!rosterText || !window.Roster) return;
-    rosterText.value = (Roster.names || []).join("\n");
-  }
-  fillRoster();
-  if (rosterForm) rosterForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var names = rosterText.value.split(/\n+/).map(function (n) {
-      return n.replace(/\s+/g, " ").trim();
-    }).filter(Boolean);
-    var done = window.DeckSync && DeckSync.setRoster
-      ? DeckSync.setRoster(names)
-      : (Roster.setNames(names), Promise.resolve(true));
-    Promise.resolve(done).then(function () {
-      document.getElementById("roster-saved").hidden = false;
-      fillRoster();
-    });
-  });
-})();
-</script>
+
 </body>
 </html>
