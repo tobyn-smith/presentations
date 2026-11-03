@@ -172,14 +172,7 @@
   function fitStage() {
     if (!stage) return;
     stage.style.transform = "";
-    if (window.innerWidth < 720) return;
-    var room = stage.clientHeight;
-    var need = stage.scrollHeight;
-    if (room > 0 && need > room + 2) {
-      var scale = Math.max(0.68, room / need);
-      stage.style.transformOrigin = "top center";
-      stage.style.transform = "scale(" + scale + ")";
-    }
+    stage.style.transformOrigin = "";
   }
 
   function chartHtml(chart) {
