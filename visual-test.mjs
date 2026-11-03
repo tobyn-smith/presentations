@@ -117,6 +117,31 @@ try {
       await page.close();
     }
   }
+
+  // Exercise the real presenter status drawer in local mode without contacting Firebase.
+  const admin = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+  await admin.addInitScript(() => sessionStorage.setItem("deck-key", "6010"));
+  await admin.goto("http://127.0.0.1:4173/present/?local=1", { waitUntil: "networkidle" });
+  await admin.waitForSelector("#failsafe-open", { state: "visible" });
+  await admin.click("#failsafe-open");
+  await admin.waitForSelector("#failsafe [role=dialog]", { state: "visible" });
+  const dialogText = await admin.locator("#failsafe").innerText();
+  if (!dialogText.includes("Room status") || !dialogText.includes("Recovery")) {
+    report.failures.push("Room status drawer is missing its title or recovery actions");
+  }
+  await admin.screenshot({ path: path.join(out, "room-status.png"), animations: "disabled" });
+  await admin.keyboard.press("Shift+Tab");
+  const wrappedLast = await admin.evaluate(() => document.activeElement?.textContent.trim());
+  await admin.keyboard.press("Tab");
+  const wrappedFirst = await admin.evaluate(() => document.activeElement?.id);
+  if (!wrappedLast.includes("Presentation start page") || wrappedFirst !== "failsafe-close") {
+    report.failures.push("Room status dialog focus does not wrap at its boundaries");
+  }
+  await admin.keyboard.press("Escape");
+  const closed = await admin.locator("#failsafe").isHidden();
+  const restored = await admin.evaluate(() => document.activeElement?.id === "failsafe-open");
+  if (!closed || !restored) report.failures.push("Room status dialog did not close and restore focus");
+  await admin.close();
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
