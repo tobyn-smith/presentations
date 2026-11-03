@@ -1290,3 +1290,19 @@ body.role-pres .stage.prompt.has-notes #viz.five-responses .responses .said {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+
+/* The plot slides use the same warm-white surface as the SVG artwork. */
+body.role-part .stage[data-chart="geddes-fig1"],
+body.role-pres .stage[data-chart="geddes-fig1"],
+body.role-part .stage[data-chart="geddes-fig2"],
+body.role-pres .stage[data-chart="geddes-fig2"],
+body.role-part .stage[data-chart="geddes-fig3"],
+body.role-pres .stage[data-chart="geddes-fig3"],
+body.role-part .stage[data-chart="geddes-fig6"],
+body.role-pres .stage[data-chart="geddes-fig6"] {
+  background: #fffdf8 !important;
+  border: 1px solid #ded7c9;
+  border-radius: 22px;
+  padding: clamp(16px, 2.2vw, 30px);
+}
