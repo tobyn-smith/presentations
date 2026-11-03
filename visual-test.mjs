@@ -146,7 +146,7 @@ try {
             panelBottom: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().bottom) : 0,
             answerDisplay: stage.querySelector(".ask-panel form.answer") ? getComputedStyle(stage.querySelector(".ask-panel form.answer")).display : "missing",
             repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none"),
-            emptyResponsePanelVisible: Array.from(stage.querySelectorAll(".ss-win-body #viz")).some(el => !el.classList.contains("is-hidden"))
+            emptyResponsePanelVisible: stage.getAttribute("data-slide-id") === "quote-sample" && Array.from(stage.querySelectorAll(".ss-win")).some(el => !el.classList.contains("has-answers") && getComputedStyle(el).display !== "none")
           };
         });
         if (metrics.scrollWidth > viewport.width + 1) {
