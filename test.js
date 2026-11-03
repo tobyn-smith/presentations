@@ -230,7 +230,7 @@ var syncSrc = fs.readFileSync("./sync.js", "utf8");
 assert.ok(deckSrc.indexOf('stage.setAttribute("data-chart"') !== -1, "live student and presenter routes publish the active figure id");
 assert.ok(fs.readFileSync("./slideshow.js", "utf8").indexOf('stage.setAttribute("data-chart"') !== -1, "backup route shares the same figure layout metadata");
 assert.ok(fs.readFileSync("./readings/geddes-visuals.js", "utf8").indexOf('title:".07"') !== -1, "Figure 2 has a single clear takeaway beside the graph");
-assert.ok(deckSrc.indexOf('temporary backup; restore Firebase before refreshing') !== -1, "room status warns when the temporary backup transport is active");
+assert.ok(deckSrc.indexOf('temporary backup; confirm Firebase recovery before ending the session') !== -1, "room status warns when the temporary backup transport is active");
 assert.ok(deckSrc.indexOf('["Activity", activity]') !== -1 && deckSrc.indexOf('["Responses"') !== -1, "room status reports the active activity and response count");
 assert.ok(deckSrc.indexOf('This also removes students who are currently connected') !== -1, "resetting check-ins requires an explicit warning");
 assert.ok(deckSrc.indexOf('if (isPres) {\n      render(n);') !== -1, "presenter view still renders when the room slide changes");
