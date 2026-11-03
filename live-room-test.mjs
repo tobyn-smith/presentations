@@ -107,8 +107,8 @@ function check(ok,label){(ok?checks:failures).push(label);}
 async function waitForStoredResponse() {
   const until=Date.now()+12000;
   while(Date.now()<until) {
-    const rows=(roomData.places && roomData.places["2"]) || (roomData.votes && roomData.votes["2"]);
-    if(rows && Object.keys(rows).length===5) return true;
+    const rows=Object.assign({},(roomData.places && roomData.places["2"]) || {},(roomData.votes && roomData.votes["2"]) || {});
+    if(Object.keys(rows).length===5) return true;
     await new Promise(resolve=>setTimeout(resolve,100));
   }
   return false;
