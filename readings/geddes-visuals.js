@@ -92,6 +92,8 @@
   };
   f5.claims = [];
 
+  var hirschmanSlide = slide("hirschman");
+  hirschmanSlide.kicker = "PART 2 - RAQUEL";
   var chile = slide("chile");
   chile.kicker = "PART 2 - RAQUEL";
   chile.type = "claims";
