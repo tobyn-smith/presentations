@@ -15,6 +15,7 @@ global.localStorage = {
 
 require("./prompts.js");
 require("./readings/geddes-1990.js");
+require("./readings/geddes-visuals.js");
 require("./script-content.js");
 require("./build-week.js");
 
