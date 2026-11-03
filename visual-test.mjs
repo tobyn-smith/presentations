@@ -105,6 +105,8 @@ try {
             stageClientWidth: stage.clientWidth,
             chartRight: chart ? Math.round(chart.getBoundingClientRect().right) : 0,
             askPanelLeft: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().left) : 0,
+            askRight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().right) : 0,
+            askHeight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().height) : 0,
             repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none")
           };
         });
@@ -131,6 +133,12 @@ try {
         }
         if (["geddes-fig1","geddes-fig6"].includes(metrics.chartId) && metrics.chartWidth < metrics.stageClientWidth * .72) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " " + metrics.chartId + " is not using the full slide width");
+        }
+        if (mode === "student" && [2,3].includes(index) && metrics.askHeight < 100) {
+          report.failures.push(viewport.width + "x" + viewport.height + " student prompt " + (index + 1) + " has no left teaching column");
+        }
+        if (mode === "student" && [2,3].includes(index) && metrics.askPanelLeft < metrics.askRight - 8) {
+          report.failures.push(viewport.width + "x" + viewport.height + " student prompt " + (index + 1) + " does not place the task beside the teaching column");
         }
         if (metrics.chartId === "geddes-fig3" && metrics.askPanelLeft < metrics.chartRight - 8) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 question panel is not beside the graph");
