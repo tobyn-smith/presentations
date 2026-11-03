@@ -119,6 +119,11 @@ SCRIPT.forEach(function (s) {
 });
 assert.ok(SCRIPT.some(function (s) { return s.id === "open" && /TOBYN/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "skocpol" && /RAQUEL/.test(s.notes); }));
+["regions","figure2","fits","skocpol","figure4","figure5","hirschman","chile"].forEach(function (id) {
+  var row = SCRIPT.filter(function (s) { return s.id === id; })[0];
+  assert.ok(row && /RAQUEL/.test(row.notes), "Raquel owns graph section slide " + id);
+});
+assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].type, "prompt", "Figure 3 accepts student responses");
 assert.ok(SCRIPT.some(function (s) { return s.id === "hirschman" && /TOBYN/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /TOBYN/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "nics" && /INTERACTION 1 OF 3/.test(s.notes); }));
@@ -202,6 +207,10 @@ assert.ok(deckSrc.indexOf("I'm in") !== -1);
 assert.ok(deckSrc.indexOf("Who are you?") === -1);
 assert.ok(deckSrc.indexOf("function bindRank") !== -1);
 assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
+assert.ok(deckSrc.indexOf("if (!canSend || isPres) return;") !== -1, "presenter cannot drag or submit student input");
+assert.ok(deckSrc.indexOf("if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return;") !== -1, "only a seated live student can submit");
+assert.ok(deckSrc.indexOf("Room responses") !== -1, "presenter sees response summary rather than drag trays");
+assert.ok(!/dragHtml\(s, false\)/.test(deckSrc), "presenter view does not render student drag controls");
 assert.ok(deckSrc.indexOf("id=\"drag-send\"") !== -1);
 assert.ok(deckSrc.indexOf("function fitStage") !== -1);
 assert.ok(deckSrc.indexOf("Waiting for votes") === -1);
