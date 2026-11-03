@@ -546,26 +546,32 @@
   }
 
   function takeResponses(val) {
-    val = val || {};
-    responses = {};
-    Object.keys(val).forEach(function (slideId) {
-      responses[slideId] = {};
-      Object.keys(val[slideId] || {}).forEach(function (k) {
-        var row = val[slideId][k] || {};
-        responses[slideId][k] = {
-          sid: k,
+    ingestAnswers({ responses: val });
+  }
+
+  function addAnswerBucket(bucket) {
+    if (!bucket || typeof bucket !== "object") return;
+    Object.keys(bucket).forEach(function (slideId) {
+      Object.keys(bucket[slideId] || {}).forEach(function (k) {
+        var row = bucket[slideId][k] || {};
+        apply({
+          t: "resp",
           slide: slideId,
+          sid: k,
           text: row.text || "",
           choice: row.choice || "",
           at: row.at || 0,
           bin: row.bin || ""
-        };
+        }, "fb");
       });
-      emitResp(slideId);
     });
-    (global.SLIDES || []).forEach(function (s, i) {
-      if (!val[i]) emitResp(String(i));
-    });
+  }
+
+  function ingestAnswers(data) {
+    if (!data) return;
+    addAnswerBucket(data.responses);
+    addAnswerBucket(data.votes);
+    addAnswerBucket(data.places);
   }
 
   function takeRoom(data) {
@@ -583,7 +589,7 @@
     if (data.roster) takeRoster(data.roster);
     if (data.pack) takePack(data.pack);
     takeHands(data.hands);
-    takeResponses(data.responses);
+    ingestAnswers(data);
   }
 
   function setSyncLine(mode, detail, phones) {
@@ -624,11 +630,23 @@
   function bindPublishFb() {
     publishFb = function (msg) {
       if (msg.t === "slide") fbPut("slide", msg.n);
-      else if (msg.t === "resp") fbPut("responses/" + msg.slide + "/" + msg.sid, {
-        text: msg.text || "", choice: msg.choice || "", at: msg.at || Date.now(), bin: msg.bin || ""
-      });
-      else if (msg.t === "reset") fbPut("responses/" + msg.slide, null);
-      else if (msg.t === "wipe") fbPut("responses", null);
+      else if (msg.t === "resp") {
+        var row = {
+          text: msg.text || "", choice: msg.choice || "", at: msg.at || Date.now(), bin: msg.bin || ""
+        };
+        var kind = msg.bin === "place" || msg.kind === "place" ? "places" : "votes";
+        fbPut(kind + "/" + msg.slide + "/" + msg.sid, row);
+      }
+      else if (msg.t === "reset") {
+        fbPut("votes/" + msg.slide, null);
+        fbPut("places/" + msg.slide, null);
+        fbPut("responses/" + msg.slide, null);
+      }
+      else if (msg.t === "wipe") {
+        fbPut("votes", null);
+        fbPut("places", null);
+        fbPut("responses", null);
+      }
       else if (msg.t === "here") fbPatch({ goneAt: null, here: msg.at || Date.now() });
       else if (msg.t === "gone") fbPatch({ here: null, goneAt: msg.at || Date.now() });
       else if (msg.t === "kick") {
@@ -662,7 +680,7 @@
     else if (p === "goneAt") { if (data) noteGone(data); }
     else if (p === "seats") takeSeats(data);
     else if (p === "hands") takeHands(data);
-    else if (p === "responses") takeResponses(data);
+    else if (p === "responses" || p === "votes" || p === "places") ingestAnswers(p === "responses" ? { responses: data } : p === "votes" ? { votes: data } : { places: data });
     else if (p === "pack") takePack(data);
     else if (p === "roster") takeRoster(data);
     else if (p === "kicks") takeKicks(data);
@@ -681,6 +699,40 @@
       if (!handId) return;
       if (data == null) apply({ t: "hand", sid: handId, up: false }, "fb");
       else apply({ t: "hand", sid: handId, up: true, slide: data.slide, at: data.at }, "fb");
+    } else if (p.indexOf("votes/") === 0 || p.indexOf("places/") === 0 || p.indexOf("responses/") === 0) {
+      var bits = p.split("/");
+      var slideId = bits[1];
+      var who = bits[2];
+      if (!slideId || !who) {
+        if (slideId && data && typeof data === "object" && !who) {
+          Object.keys(data).forEach(function (k) {
+            apply({
+              t: "resp",
+              slide: slideId,
+              sid: k,
+              text: data[k] && data[k].text,
+              choice: data[k] && data[k].choice,
+              at: data[k] && data[k].at,
+              bin: data[k] && data[k].bin
+            }, "fb");
+          });
+        }
+        return;
+      }
+      if (data == null) {
+        if (responses[slideId]) delete responses[slideId][who];
+        emitResp(slideId);
+        return;
+      }
+      apply({
+        t: "resp",
+        slide: slideId,
+        sid: who,
+        text: data.text,
+        choice: data.choice,
+        at: data.at,
+        bin: data.bin
+      }, "fb");
     }
   }
 
@@ -702,7 +754,6 @@
       fbSource.addEventListener("patch", onFbStream);
       fbSource.onerror = function () {
         fbErrs += 1;
-        if (fbErrs >= 3 && !backupOn) lockFirebase(lastFbHttp || 0);
       };
     } catch (e) {
       lockFirebase(0);
@@ -713,6 +764,21 @@
     if (!fbSource) return;
     try { fbSource.close(); } catch (e) {}
     fbSource = null;
+  }
+
+  var fbPoll = null;
+  function startFbPoll() {
+    if (fbPoll || localOnly) return;
+    fbPoll = setInterval(function () {
+      if (!usingFirebase || fbLocked) return;
+      fbFetch(fbUrl("")).then(function (r) {
+        lastFbHttp = r.status;
+        if (!r.ok) return;
+        return r.json().then(function (data) {
+          if (data && typeof data === "object") takeRoom(data);
+        });
+      }).catch(function () {});
+    }, 1000);
   }
 
   function enableFirebaseRest() {
@@ -734,6 +800,7 @@
         if (data && typeof data === "object") takeRoom(data);
         markFirebaseLive();
         openFbStream();
+        startFbPoll();
         if (presenting) publishFb({ t: "here", at: lastHere || Date.now(), session: session });
         if (me) publishFb({ t: "seat", sid: sid(), at: Date.now(), session: session });
       });
@@ -755,6 +822,7 @@
         markFirebaseLive();
         closeFbStream();
         openFbStream();
+        startFbPoll();
       });
     }).catch(function () {});
   }
@@ -844,6 +912,8 @@
         sid: sid(),
         text: payload.text || "",
         choice: payload.choice || "",
+        kind: payload.kind || "",
+        bin: payload.bin || payload.kind || "",
         at: Date.now()
       };
       shout(row);

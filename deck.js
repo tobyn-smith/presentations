@@ -837,7 +837,7 @@
           });
         });
         if (rows.length < (s.tokens || []).length) return;
-        submit(s, i, { choice: keySlot || rows[0], text: rows.join("; ") });
+        submit(s, i, { choice: keySlot || rows[0], text: rows.join("; "), kind: "place", bin: "place" });
       });
     }
   }

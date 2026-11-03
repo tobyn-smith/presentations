@@ -23,20 +23,20 @@
       id: "ask",
       type: "claims",
       kicker: "The paper",
-      title: "What is she after?",
+      title: "What is she asking?",
       claims: [
-        { n: "1", title: "Not another growth story", body: "She is not trying to explain Korea, or the French Revolution." },
-        { n: "2", title: "The habit is the point", body: "What happens if we only pick countries that already have the outcome we like?" }
+        { n: "1", title: "Korea and France", body: "This is not a paper about why Korea grew, or why France had a revolution." },
+        { n: "2", title: "Picking on the outcome", body: "She looks at what happens when we only study countries that already have the result." }
       ]
     },
     {
       id: "habit",
       type: "claims",
       kicker: "The habit",
-      title: "Only the winners",
+      title: "Reading only winners",
       claims: [
-        { n: "1", title: "You read the revolutions", body: "Or the fast growers. Then you notice what they share." },
-        { n: "2", title: "The others never get a look", body: "So you cannot tell if the same things show up in the slow cases too." }
+        { n: "1", title: "France, Russia, China", body: "Want revolution, you read those. Want growth, you read Taiwan, Korea, Singapore, Brazil, Mexico." },
+        { n: "2", title: "Slow cases stay off the desk", body: "You never check whether Africa or Bolivia share the same traits." }
       ],
       fromClass: {
         week: 8,
@@ -47,7 +47,7 @@
       id: "quote-universe",
       type: "claims",
       kicker: "From the paper",
-      title: "How do you even pick?",
+      title: "How do you pick?",
       quote: {
         text: "The two tasks crucial to testing any hypothesis are to identify the universe of cases to which the hypothesis should apply and to find or develop measures of the variables. If the universe is too large to make examining every case feasible, cases should be selected from it at random.",
         cite: "Geddes, IGS Working Paper 90-13, 1990."
@@ -57,7 +57,7 @@
       id: "nics",
       type: "prompt",
       kicker: "Case 1. Labour and growth",
-      title: "What do these five actually show?",
+      title: "The five growers",
       help: "",
       input: "place",
       viz: "bars-list",
@@ -83,7 +83,7 @@
       id: "regions",
       type: "claims",
       kicker: "Case 1. Labour and growth",
-      title: "East Asia is a growth pick",
+      title: "East Asia, 5.2",
       chart: {
         id: "table1",
         title: "Table 1. Average country growth",
@@ -99,8 +99,8 @@
         ]
       },
       claims: [
-        { n: "1", title: "5.2 against 1.0", body: "GNP per capita, 1960 to 1982. East Asia at the top, Africa at the bottom." },
-        { n: "2", title: "The region is doing the work", body: "If you choose East Asia you have already chosen high growth." }
+        { n: "1", title: "Table 1, 1960 to 1982", body: "Average GNP per capita growth. East Asia 5.2. Africa 1.0." },
+        { n: "2", title: "You already picked growth", body: "Choose East Asia and the high-growth countries are in the bag." }
       ],
       fromClass: {
         week: 6,
@@ -111,7 +111,7 @@
       id: "scores",
       type: "claims",
       kicker: "Case 1. Labour and growth",
-      title: "Her labour scores",
+      title: "Labour scored 1 to 4",
       stats: [
         { value: "1", label: "Free unions, own leaders, strikes happen. India, Jamaica, Venezuela." },
         { value: "2", label: "Unions legal. Strikes rare or squeezed. Colombia, Zimbabwe, Malaysia." },
@@ -119,8 +119,8 @@
         { value: "4", label: "Banned, or violence is severe. Chile 1973 to 1979, Syria, Benin." }
       ],
       claims: [
-        { n: "1", title: "A rough 1 to 4", body: "From the Country Reports, 1980 and 1988. She says the score is imperfect." },
-        { n: "2", title: "All five sit on 3", body: "Singapore, South Korea, Taiwan, Brazil, Mexico. No slow country in that set, so repression does not move." }
+        { n: "1", title: "Country Reports", body: "1980 and 1988. She says the coding is imperfect." },
+        { n: "2", title: "The five are all a 3", body: "Taiwan, Korea, Singapore, Brazil, Mexico. None of them is a slow grower, so the score does not move." }
       ],
       fromClass: {
         week: 10,
@@ -131,7 +131,7 @@
       id: "fits",
       type: "claims",
       kicker: "Case 1. Labour and growth",
-      title: "Does it hold once you widen the sample?",
+      title: "Three samples, three r squareds",
       chart: {
         id: "r2",
         title: "r squared from Figures 1, 2 and 3",
@@ -144,8 +144,8 @@
         ]
       },
       claims: [
-        { n: "1", title: "East Asia looks neat", body: "Figure 1. r squared 0.56. Growth highest at repression 3." },
-        { n: "2", title: "Then it falls apart", body: "Figure 2 is 0.07. Figure 3 is 0.01. Either a weak curve, or a handful of odd cases. That is not a disproof." }
+        { n: "1", title: "Figure 1, East Asia", body: "r squared 0.56. Growth highest at labour score 3." },
+        { n: "2", title: "Figure 2 is 0.07", body: "Figure 3, the more advanced set, is 0.01. In a wider sample the link is gone. She is not calling that a disproof." }
       ]
     },
     {
@@ -162,31 +162,31 @@
       id: "skocpol",
       type: "claims",
       kicker: "Case 2. Skocpol on revolutions",
-      title: "Skocpol's chain",
+      title: "France, Russia, China",
       names: ["France", "Russia", "China"],
       claims: [
-        { n: "1", title: "A threat, then reform", body: "A foreign military threat is what gets the state moving." },
-        { n: "2", title: "Reform can split the elite", body: "That happens where the dominant class has its own base and already shares power." },
-        { n: "3", title: "Villages have to be free", body: "A split at the top is not enough. Revolution only if villages are autonomous. Printed p. 12." }
+        { n: "1", title: "War, then reform", body: "A foreign military threat is what gets the state to try." },
+        { n: "2", title: "The landed class can split", body: "If they have their own base and already share power, reform can peel them off the state." },
+        { n: "3", title: "Villages on their own", body: "A split at the top is not enough. Revolution only if villages are autonomous. Page 12." }
       ]
     },
     {
       id: "contrast",
       type: "claims",
       kicker: "Case 2. Skocpol on revolutions",
-      title: "Where that chain snaps",
+      title: "No revolution",
       claims: [
-        { n: "1", title: "Prussia and Japan", body: "The threat was as bad as France. The dominant class had no independent base, so no split, and no revolution." },
-        { n: "2", title: "Britain, 1640 to 1660", body: "The elite did split. Villages were not autonomous. Still no revolution." },
-        { n: "3", title: "Prussia in 1848", body: "Same problem. Split at the top, villages not free." }
+        { n: "1", title: "Prussia and Japan", body: "The threat was as bad as France. The dominant class had no independent base, so no split." },
+        { n: "2", title: "Britain, 1640 to 1660", body: "The elite did split. Villages were not autonomous." },
+        { n: "3", title: "Prussia, 1848", body: "Split at the top again. Villages still not free." }
       ]
     },
     {
       id: "figure4",
       type: "compare",
       kicker: "Case 2. Skocpol on revolutions",
-      title: "What does Figure 4 actually show?",
-      lead: "I redrew the two tables on p. 14. I did not add counts she did not print.",
+      title: "Figure 4, page 14",
+      lead: "Two tables she printed. I did not add counts.",
       left: {
         label: "After a military threat",
         title: "Who stays together",
@@ -202,7 +202,7 @@
       id: "figure5",
       type: "claims",
       kicker: "Case 2. Skocpol on revolutions",
-      title: "Nine countries, one tidy story gone",
+      title: "Figure 5, nine countries",
       chart: {
         id: "figure5",
         title: "Figure 5. Defeat in war and revolution",
@@ -215,15 +215,15 @@
         ]
       },
       claims: [
-        { n: "1", title: "Seven, two, one", body: "Mexico 1910 and Nicaragua 1979 had no such defeat. Bolivia is the one that fits: 1935 defeat, 1952 revolution." },
-        { n: "2", title: "She is not claiming a kill", body: "The set is not random. The threat score is crude. She calls it doubt." }
+        { n: "1", title: "Mexico and Nicaragua", body: "Seven lost a war and had no revolution. Mexico 1910 and Nicaragua 1979 had a revolution with no such defeat." },
+        { n: "2", title: "Bolivia, 1935 and 1952", body: "That is the one match. She says treat the whole set as doubt. The threat score is crude." }
       ]
     },
     {
       id: "hirschman",
       type: "claims",
       kicker: "Case 3. Hirschman on Chile",
-      title: "Stop the series early and it looks solved",
+      title: "Hirschman stops in 1961",
       chart: {
         id: "figure6",
         title: "Figure 6, from Table 2",
@@ -239,15 +239,15 @@
         ]
       },
       claims: [
-        { n: "1", title: "1961 is a low year", body: "Chile, 1930 to 1961. Inflation hits 84 per cent in 1955, then 5 and 10 in 1960 and 1961." },
-        { n: "2", title: "Keep going and it does not", body: "Figure 6 runs to 1972. She says it does not look solved. Later the series goes past 100 per cent." }
+        { n: "1", title: "84, then 5 and 10", body: "Chile inflation, 1930 to 1961. 84 per cent in 1955. 5 in 1960. 10 in 1961." },
+        { n: "2", title: "Figure 6 to 1972", body: "She writes that it no longer looks solved. Later the series goes past 100 per cent." }
       ]
     },
     {
       id: "chile",
       type: "prompt",
       kicker: "Case 3. Hirschman on Chile",
-      title: "Which of these would you trust?",
+      title: "Which comparison?",
       help: "",
       input: "choice-text",
       requireText: true,
@@ -267,29 +267,29 @@
       kicker: "Close",
       title: "Studying only the cases where something happened can inspire a new theory, but only cases where it did not happen as well can test it.",
       claims: [
-        { n: "1", title: "Winners start hunches", body: "Fine. Use them. Just do not treat that as a test." },
-        { n: "2", title: "The misses have to be in", body: "If it did not happen there, that case still belongs in the sample. Years matter too. A short window can lie." }
+        { n: "1", title: "France can start an idea", body: "So can the five NICs. That is fine. It is not a test." },
+        { n: "2", title: "Put the misses in", body: "Countries where revolution or growth did not happen still belong in the sample. So do the later years." }
       ]
     },
     {
       id: "discuss",
       type: "claims",
       kicker: "Discussion",
-      title: "What do you want to push back on?",
+      title: "Questions",
       claims: [
-        { n: "1", title: "Friendly cases", body: "What goes wrong if you only keep the ones that help?" },
-        { n: "2", title: "A huge universe", body: "You cannot read everything. So how do you choose?" },
-        { n: "3", title: "Where you stop the series", body: "Does the last year have to be the newest one you can find?" }
+        { n: "1", title: "Only France, Russia, China", body: "What happens if those are the only revolutions you keep?" },
+        { n: "2", title: "Table 1 is huge", body: "You cannot read every country. How would you pick?" },
+        { n: "3", title: "Hirschman ended in 1961", body: "Would you stop there, or keep going to 1972?" }
       ]
     },
     {
       id: "pairs",
       type: "claims",
       kicker: "Five minutes",
-      title: "Your cases, five minutes",
+      title: "Five minutes",
       claims: [
-        { n: "1", title: "What are you selecting?", body: "Think about the Research Design assignment. How are you picking?" },
-        { n: "2", title: "Did the thing fail anywhere?", body: "If it never happened in a case, is that case still in?" }
+        { n: "1", title: "Research Design assignment", body: "How are you picking countries for your own work?" },
+        { n: "2", title: "A case where it never happens", body: "Is that case still in your set?" }
       ]
     }
   ],
@@ -321,7 +321,7 @@
     {
       id: "nics",
       title: "Five growers",
-      say: "Taiwan, South Korea, Singapore, Brazil, Mexico. Labour was repressed or coopted. What do the five actually give you?",
+      say: "Taiwan, South Korea, Singapore, Brazil, Mexico. Labour was repressed or coopted. What do the five give you?",
       notes: "The five are named with footnotes 2 to 5.\nFirst live board. People drag the three lines onto the two trays.\nThen Reveal and read two or three.\nWeek 8: same trap. Sample on the dependent variable."
     },
     {
