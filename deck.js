@@ -397,6 +397,14 @@
       + (chart.plots ? '<div class="plot-panels">' + chart.plots.map(function (p) { return '<section class="plot-panel"><h3>' + esc(p.title) + '</h3><div class="plot-area" role="img" aria-label="' + esc(p.title) + '"><span class="plot-y">Growth</span><span class="plot-x">Labour repression</span>' + p.points.map(function (pt) { return '<i style="left:' + Number(pt[0]) + '%;bottom:' + Number(pt[1]) + '%"></i>'; }).join("") + '</div><p>r² = ' + esc(p.r2) + '</p></section>'; }).join("") + '</div>' : "")
       + (!chart.plots ? '<div class="chart-bars" role="img" aria-label="' + esc(chart.title) + '">' + rows + "</div>" : "")
       + "</figure>";
+    if (/^geddes-/.test(chart.id || "")) {
+      var figureId = String(chart.id);
+      var safeFigureId = /^geddes-(selection|fig[1-6])$/.test(figureId) ? figureId : "";
+      return '<div class="figure-embed" data-figure="' + esc(safeFigureId) + '">'
+        + fig
+        + (safeFigureId ? '<button type="button" class="figure-expand" data-expand-figure="' + esc(safeFigureId) + '" aria-label="Expand ' + esc(chart.title || "figure") + '">Expand figure <span aria-hidden="true">↗</span></button>' : "")
+        + '</div>';
+    }
     return windowHtml("paper", chart.title || "Table", fig);
   }
 
@@ -867,6 +875,47 @@
     }
   }
 
+  function ensureFigureViewer() {
+    if (document.getElementById("figure-viewer")) return;
+    var viewer = document.createElement("div");
+    viewer.id = "figure-viewer";
+    viewer.className = "figure-viewer";
+    viewer.hidden = true;
+    viewer.setAttribute("role", "dialog");
+    viewer.setAttribute("aria-modal", "true");
+    viewer.setAttribute("aria-label", "Expanded figure");
+    viewer.innerHTML = '<div class="figure-viewer-backdrop" data-close-figure></div>'
+      + '<div class="figure-viewer-panel"><button type="button" class="figure-viewer-close" data-close-figure aria-label="Close expanded figure">Close <span aria-hidden="true">×</span></button>'
+      + '<img class="figure-viewer-image" alt=""><p class="figure-viewer-caption"></p></div>';
+    document.body.appendChild(viewer);
+    var close = function () {
+      viewer.hidden = true;
+      document.body.classList.remove("figure-viewer-open");
+      var trigger = viewer._trigger;
+      if (trigger && trigger.focus) trigger.focus();
+    };
+    viewer.addEventListener("click", function (event) {
+      if (event.target.closest("[data-close-figure]")) close();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !viewer.hidden) close();
+    });
+    stage.addEventListener("click", function (event) {
+      var trigger = event.target.closest("[data-expand-figure]");
+      if (!trigger) return;
+      var id = trigger.getAttribute("data-expand-figure");
+      if (!/^geddes-(selection|fig[1-6])$/.test(id || "")) return;
+      var img = viewer.querySelector(".figure-viewer-image");
+      img.src = "figures/" + id + ".svg";
+      img.alt = trigger.getAttribute("aria-label") || "Expanded figure";
+      viewer.querySelector(".figure-viewer-caption").textContent = img.alt;
+      viewer._trigger = trigger;
+      viewer.hidden = false;
+      document.body.classList.add("figure-viewer-open");
+      viewer.querySelector(".figure-viewer-close").focus();
+    });
+  }
+
   function bind(s, i) {
     bindRank(s, i, !isPres);
     bindPlace(s, i, !isPres);
@@ -1108,6 +1157,7 @@
     else host.innerHTML = '<p class="seated-count">' + list.length + (list.length === 1 ? " here" : " here") + "</p>";
   }
 
+  ensureFigureViewer();
   DeckSync.onSlide(function (n) {
     if (isPres) {
       render(n);
