@@ -140,6 +140,9 @@ try {
         if (mode === "student" && [2,3].includes(index) && metrics.askHeight < 100) {
           report.failures.push(viewport.width + "x" + viewport.height + " student prompt " + (index + 1) + " has no left teaching column");
         }
+        if (mode === "student" && [2,3,6].includes(index) && metrics.stageOverflow > 40) {
+          report.failures.push(viewport.width + "x" + viewport.height + " student interaction " + (index + 1) + " requires scrolling (" + metrics.stageOverflow + "px)");
+        }
         if (mode === "student" && [2,3].includes(index) && metrics.askPanelLeft < metrics.askRight - 8) {
           report.failures.push(viewport.width + "x" + viewport.height + " student prompt " + (index + 1) + " does not place the task beside the teaching column");
         }
