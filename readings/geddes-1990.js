@@ -35,9 +35,7 @@
   {n:"01",title:"Hirschman stops in 1961",body:"Inflation has fallen sharply. Stabilisation looks successful."},
   {n:"02",title:"Geddes keeps looking",body:"By 1972, inflation is above 100%. The low years did not last."}]},
  {id:"close",type:"claims",kicker:"PART 3 - TOBYN",title:"Case selection sets the limits of the answer",claims:[
-  {n:"01",title:"For theory building",body:"Cases with the outcome can help us notice patterns and develop explanations."},
-  {n:"02",title:"For testing",body:"We need cases where the outcome did not happen, selected from the wider universe."},
-  {n:"03",title:"For historical analysis",body:"We also need to justify where the comparison starts and where the timeline ends."}]}
+  {n:"",title:"A pattern is a starting point, not a test.",body:"To test an explanation, look beyond the cases where the outcome happened. Include cases where it did not, and be clear about where the comparison begins and ends."}]}
  ],
  script:[
  {id:"open",title:"Opening: 0:00-0:30",say:"We are looking at one deceptively simple question: do the cases we choose change the answers we get? Geddes's argument is that they can, and that this matters when we try to test explanations.",notes:"TOBYN · 0:00-0:30\nKeep this brisk. No biography or long introduction. Move straight to the research problem."},
