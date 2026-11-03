@@ -95,9 +95,9 @@
   f5.claims = [];
 
   var hirschmanSlide = slide("hirschman");
-  hirschmanSlide.kicker = "PART 2 - RAQUEL";
+  hirschmanSlide.kicker = "PART 3 - TOBYN";
   var chile = slide("chile");
-  chile.kicker = "PART 2 - RAQUEL";
+  chile.kicker = "PART 3 - TOBYN";
   chile.type = "claims";
   chile.title = "What changes when we keep looking?";
   chile.chart = {
@@ -134,10 +134,12 @@
   f.title = "Interaction 3: read the pattern: 6:00-7:15";
   f.say = "The straight-line fit is almost flat, but the highest growth rates cluster around repression level three. Geddes leaves two possibilities open: a curved relationship, or a few unusually fast-growing NICs driving the pattern. Which reading is closest to her argument?";
   f.notes = "RAQUEL · 6:00-7:15\nINTERACTION 3 OF 3. Give 20 seconds to choose, then ask one person why. Expected: the linear relationship is weak, but a curved pattern may be possible; a few NICs may drive it. Adding cases weakens the appearance of a curve. Do not say the hypothesis is proved or disproved.";
-  ["regions","figure2","fits","skocpol","figure4","figure5","hirschman","chile"].forEach(function (id) {
+  ["regions","figure2","fits","skocpol","figure4","figure5"].forEach(function (id) {
     var item = script(id);
     if (item) item.notes = item.notes.replace(/^TOBYN/g, "RAQUEL");
   });
+  script("hirschman").notes = script("hirschman").notes.replace(/^RAQUEL/g, "TOBYN");
+  script("chile").notes = script("chile").notes.replace(/^RAQUEL/g, "TOBYN");
   var sk = script("skocpol");
   sk.title = "Skocpol's explanation: 7:15-8:15";
   var f4s = script("figure4"); f4s.title = "Figure 4: test the links: 8:15-9:15";
