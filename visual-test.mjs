@@ -55,6 +55,11 @@ try {
       const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
       const page = await context.newPage();
       page.on("pageerror", error => report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " browser error: " + error.message));
+      page.on("response", response => {
+        if (response.url().includes("/figures/geddes-") && response.status() >= 400) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " figure asset failed: " + response.url() + " (" + response.status() + ")");
+        }
+      });
       await page.emulateMedia({ reducedMotion: "reduce" });
       let controller = null;
       if (mode === "student") {
@@ -125,6 +130,9 @@ try {
           return {
             title: stage.querySelector("h1")?.textContent.trim() || "",
             titleJoinHeight: Math.round(stage.querySelector(".title-join")?.getBoundingClientRect().height || 0),
+            titleJoinFontSize: Math.round(parseFloat(getComputedStyle(stage.querySelector(".title-join") || stage).fontSize) || 0),
+            presenterChoicePreviewCount: stage.querySelectorAll(".presenter-choice-preview li").length,
+            presenterChoicePreviewVisible: !!(stage.querySelector(".presenter-choice-preview") && getComputedStyle(stage.querySelector(".presenter-choice-preview")).display !== "none" && stage.querySelector(".presenter-choice-preview").getBoundingClientRect().height > 0),
             scrollWidth: root.scrollWidth,
             pageHeightOverflow: Math.max(0, root.scrollHeight - window.innerHeight),
             viewportWidth: window.innerWidth,
@@ -137,6 +145,7 @@ try {
             chartId,
             canExpandFigure,
             chartArtworkHeight: artHeight,
+            chartArtworkBackground: chart ? getComputedStyle(chart, "::after").backgroundImage : "",
             chartWidth: chart ? Math.round(chart.getBoundingClientRect().width) : 0,
             chartCaptionDisplay: chart ? getComputedStyle(chart.querySelector("figcaption") || chart).display : "none",
             stageClientWidth: stage.clientWidth,
@@ -149,7 +158,7 @@ try {
             panelBottom: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().bottom) : 0,
             answerDisplay: stage.querySelector(".ask-panel form.answer") ? getComputedStyle(stage.querySelector(".ask-panel form.answer")).display : "missing",
             repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none"),
-            emptyResponsePanelVisible: stage.getAttribute("data-slide-id") === "quote-sample" && Array.from(stage.querySelectorAll(".ss-win")).some(el => !el.classList.contains("has-answers") && getComputedStyle(el).display !== "none")
+            emptyResponsePanelVisible: stage.getAttribute("data-slide-id") === "quote-sample" && !!(stage.querySelector("#viz .room-empty-state") && getComputedStyle(stage.querySelector("#viz .room-empty-state")).display !== "none" && stage.querySelector("#viz .room-empty-state").getBoundingClientRect().height > 0)
           };
         });
         if (metrics.scrollWidth > viewport.width + 1) {
@@ -167,6 +176,9 @@ try {
         }
         if (metrics.chartId && metrics.dataChart !== metrics.chartId) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": slide figure metadata is missing or stale");
+        }
+        if (/^geddes-fig[1-6]$/.test(metrics.chartId) && !metrics.chartArtworkBackground.includes(metrics.chartId + ".svg")) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": the expected Geddes figure artwork is not attached");
         }
         if (metrics.nestedClips.length) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": nested content clipped: " + metrics.nestedClips.join(", "));
@@ -206,14 +218,20 @@ try {
         if (metrics.chartId === "geddes-fig3" && metrics.askPanelLeft < metrics.chartRight - 8) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 question panel is not beside the graph");
         }
+        if (index === 0 && mode === "presenter" && metrics.titleJoinFontSize < 20) {
+          report.failures.push(viewport.width + "x" + viewport.height + " title URL is not large enough to read from the room");
+        }
+        if (index === 6 && mode === "presenter" && (metrics.presenterChoicePreviewCount !== 3 || !metrics.presenterChoicePreviewVisible)) {
+          report.failures.push(viewport.width + "x" + viewport.height + " Figure 3 presenter mode is missing its three visible answer choices");
+        }
         if (index === 0 && metrics.titleJoinHeight > 45) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " title URL wraps into multiple lines");
         }
         if (metrics.repeatedSectionKicker) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " repeats the section label above the slide title");
         }
-        if (mode === "presenter" && metrics.emptyResponsePanelVisible) {
-          report.failures.push(viewport.width + "x" + viewport.height + " shows an empty response panel over the presenter prompt");
+        if (mode === "presenter" && index === 3 && !metrics.emptyResponsePanelVisible) {
+          report.failures.push(viewport.width + "x" + viewport.height + " slide 4 presenter is missing its visible response waiting area");
         }
         await page.screenshot({
           path: path.join(dir, "slide-" + String(index + 1).padStart(2, "0") + ".png"),

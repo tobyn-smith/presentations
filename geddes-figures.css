@@ -26,7 +26,7 @@ figure.chart[data-chart="geddes-selection"]::after { height:clamp(260px,40vh,430
 
 .join-qr,.title-scan { display:none !important; }
 .title-join-block { display:flex !important; align-items:center; justify-content:center; text-align:center; min-width:0; }
-.title-join { margin:0 !important; font:700 clamp(18px,2.4vw,32px)/1.15 var(--display) !important; letter-spacing:.01em; white-space:nowrap; overflow-wrap:normal; }
+.title-join { margin:0 !important; font:700 clamp(24px,3vw,40px)/1.05 var(--display) !important; letter-spacing:.01em; white-space:nowrap; overflow-wrap:normal; }
 .title-join a { color:var(--navy); text-decoration:underline; text-decoration-color:var(--accent); text-decoration-thickness:3px; text-underline-offset:7px; }
 body.role-part .title-join a { color:#102b43; }
 body.role-pres .stage.title .title-join-block,

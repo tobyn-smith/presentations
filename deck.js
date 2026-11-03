@@ -633,11 +633,11 @@
       + quoteHtml(s.quote)
       + articleHtml(s)
       + recap
-      + youHtml(s)
+      + (DeckSync.isDone(String(i)) ? "" : youHtml(s))
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "");
     var askLine = s.ask ? '<p class="ask-q">' + esc(s.ask) + "</p>" : "";
     var optPreview = (s.options && s.options.length && s.input !== "rank" && s.input !== "place")
-      ? '<ul class="talk opt-preview">' + s.options.map(function (o) {
+      ? '<ul class="talk opt-preview presenter-choice-preview">' + s.options.map(function (o) {
         return "<li>" + esc(o) + "</li>";
       }).join("") + "</ul>"
       : "";
@@ -651,7 +651,7 @@
     }
     if (isPres) {
       return '<div class="ask">' + q + '</div><div class="ask-panel">'
-        + windowHtml("term", "Room", askLine + optPreview + '<div id="viz"></div>')
+        + windowHtml("term", "Room responses", askLine + optPreview + '<div id="viz"></div>')
         + "</div>";
     }
     var inner = '<div class="ask">' + q + "</div>";
@@ -659,7 +659,12 @@
       return inner + '<div class="ask-panel">' + askLine + html + "</div>";
     };
     if (DeckSync.isDone(String(i))) {
-      return panel('<p class="thanks">Sent. Wait for the next slide.</p>');
+      var savedAnswer = mine(s.recall || s.id) || {};
+      var receipt = '<div class="submission-receipt"><p class="receipt-kicker">Response received</p>';
+      if (savedAnswer.choice) receipt += '<p><strong>Your choice</strong>' + esc(savedAnswer.choice) + "</p>";
+      if (savedAnswer.text) receipt += '<p><strong>Your reason</strong>' + esc(savedAnswer.text) + "</p>";
+      receipt += '<p class="thanks">Your answer has been sent to the presenter. You can wait here until the next slide.</p></div>';
+      return panel(receipt);
     }
     if (s.input === "text") {
       return panel(
@@ -985,12 +990,11 @@
     if (isPres || !s.recall) return "";
     var m = mine(s.recall);
     if (!m) return "";
-    if (m.choice && m.text) {
-      return '<p class="you">You called the load-bearing claim <strong>' + esc(m.choice) + "</strong>. “" + esc(m.text) + "”</p>";
-    }
-    if (m.choice) return '<p class="you">You called the load-bearing claim <strong>' + esc(m.choice) + "</strong>.</p>";
-    if (m.text) return '<p class="you">You wrote: “' + esc(m.text) + "”</p>";
-    return "";
+    var parts = [];
+    if (m.choice) parts.push("<strong>Choice:</strong> " + esc(m.choice));
+    if (m.text) parts.push("<strong>Reason:</strong> " + esc(m.text));
+    if (!parts.length) return "";
+    return '<p class="you"><strong>Your response</strong><br>' + parts.join("<br>") + "</p>";
   }
 
   function submit(s, i, payload) {
@@ -1050,82 +1054,67 @@
     if (!viz) return;
     list = list || [];
     var html = "";
-    if (s.viz === "bars" || s.viz === "bars-list") {
+    var hasSummary = s.viz === "bars" || s.viz === "bars-list";
+    var hasDetails = s.viz === "list" || s.viz === "words" || s.viz === "bars-list" || s.viz === "bars";
+    var firstPaint = !painted[s.id];
+    painted[s.id] = true;
+    if (hasSummary) {
       var opts = s.options || [];
       var counts = {};
       opts.forEach(function (o) { counts[o] = 0; });
       list.forEach(function (r) { if (r.choice && counts[r.choice] != null) counts[r.choice]++; });
-      var total = list.length;
-      var max = Math.max(1, total);
-      if (total) {
-      html += '<p class="tally">' + (total ? total + (total === 1 ? " answer" : " answers") : "") + "</p>";
+      html += '<section class="room-summary-block"><p class="room-summary-heading">Class tally · ' + list.length + (list.length === 1 ? " response" : " responses") + "</p>";
       html += '<div class="bars">';
       opts.forEach(function (o) {
         var n = counts[o] || 0;
-        html += '<div class="bar"><div class="bar-top"><span class="lab">' + esc(o) + "</span></div>"
-          + '<div class="track"><div class="fill" style="width:' + (n / max * 100) + '%"></div></div>'
-          + '<span class="n">' + n + "</span></div>";
+        var pct = list.length ? (n / list.length * 100) : 0;
+        html += '<div class="bar"><div class="bar-top"><span class="lab">' + esc(o) + "</span>"
+          + '<span class="n">' + n + "</span></div>"
+          + '<div class="track"><div class="fill" style="width:' + pct + '%"></div></div></div>';
       });
-      html += "</div>";
-      }
+      html += "</div></section>";
     }
-    if (s.viz === "words") {
-      var freq = wordFreq(list);
-      if (freq.length) {
-        html += '<div class="words">' + freq.map(function (x) {
-          return "<span><b>" + esc(x.w) + "</b> " + x.n + "</span>";
-        }).join("") + "</div>";
-      }
-    }
-    if (s.viz === "list" || s.viz === "words" || s.viz === "bars-list") {
-      var key = s.id;
-      var firstPaint = !painted[key];
-      painted[key] = true;
-      if (!list.length) {
-        if (s.viz !== "bars-list") {
-          if (s.starters && s.starters.length) {
-            html += '<p class="tally"></p>';
-            html += '<ul class="starters">' + s.starters.map(function (t) {
-              return "<li>" + esc(t) + "</li>";
-            }).join("") + "</ul>";
-          } else {
-            html += '<p class="empty">Answers land here.</p>';
-          }
-        }
-      } else {
-        if (s.viz !== "bars-list") {
-          html += '<p class="tally">' + list.length + (list.length === 1 ? " answer" : " answers") + "</p>";
-        }
+    if (hasDetails) {
+      html += '<section class="room-detail-block"><p class="room-responses-heading">Individual responses · ' + list.length + (list.length === 1 ? " response" : " responses") + "</p>";
+      if (list.length) {
         html += '<ol class="responses' + (list.length > 4 ? " many" : "") + '">';
-        list.forEach(function (r) {
-          var id = key + ":" + r.sid;
+        list.forEach(function (r, index) {
+          var id = s.id + ":" + r.sid;
           var fresh = !firstPaint && !seen[id];
           seen[id] = true;
           html += '<li class="card' + (fresh ? " fresh" : "") + '">';
-          html += '<span class="mark" aria-hidden="true">“</span>';
-          html += whoHtml(r);
+          html += '<span class="response-index">Response ' + (index + 1) + "</span>";
           if (r.text) html += '<p class="said">' + esc(r.text) + "</p>";
-          if (r.choice && !r.text) html += '<p class="said">' + esc(r.choice) + "</p>";
-          else if (r.choice) html += '<p class="meta">' + esc(r.choice) + "</p>";
+          if (r.choice) html += '<p class="meta">Selected: ' + esc(r.choice) + "</p>";
           html += "</li>";
         });
         html += "</ol>";
+      } else {
+        html += '<p class="room-empty-state">Waiting for the first response. Submissions will appear here.</p>';
       }
+      html += "</section>";
+    } else if (!list.length && !hasSummary) {
+      html = '<p class="room-empty-state">Waiting for the first response. Submissions will appear here.</p>';
     }
-    if (!list.length && !html) html = "";
+    if (s.viz === "words" && list.length) {
+      var freq = wordFreq(list);
+      if (freq.length) html += '<section class="room-word-summary"><p class="room-summary-heading">Common words</p><div class="words">' + freq.map(function (x) { return "<span><b>" + esc(x.w) + "</b> " + x.n + "</span>"; }).join("") + "</div></section>";
+    }
+    viz.classList.toggle("has-room-summary", hasSummary);
+    viz.classList.toggle("has-room-details", hasDetails && list.length > 0);
     viz.setAttribute("data-response-count", String(list.length));
     viz.classList.toggle("five-responses", list.length >= 5);
     viz.innerHTML = html;
     showViz(s);
   }
-
   function showViz(s) {
     var viz = document.getElementById("viz");
     if (!viz) return;
-    var show = !!(s && Number(viz.getAttribute("data-response-count")) > 0);
+    var count = Number(viz.getAttribute("data-response-count")) || 0;
+    var show = !!(s && s.viz);
     viz.classList.toggle("is-hidden", !show);
     var win = viz.closest(".ss-win");
-    if (win) win.classList.toggle("has-answers", show);
+    if (win) win.classList.toggle("has-answers", count > 0);
   }
 
   function paintMe() {
