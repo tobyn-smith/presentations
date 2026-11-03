@@ -45,7 +45,7 @@ var withChart = SLIDES.filter(function (s) { return s.chart; });
 assert.strictEqual(withChart.length, 4, "Table 1, Figures 1-3, Figure 5 and Table 2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "regions"; })[0].chart.bars.length, 5);
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.bars.length, 3);
-assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.plots.length, 2);
+assert.ok(/Rather than invent point coordinates/.test(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.note));
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.bars[0].n, 7);
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.id, "table2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
@@ -112,10 +112,10 @@ assert.ok(SCRIPT.some(function (s) { return s.id === "open" && /TOBYN/.test(s.no
 assert.ok(SCRIPT.some(function (s) { return s.id === "skocpol" && /RAQUEL/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "hirschman" && /TOBYN/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /TOBYN/.test(s.notes); }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "nics" && /INTERACTION 1 OF 2/.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "nics" && /INTERACTION 1 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "quote-sample" && /INTERACTION 2 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "chile" && /INTERACTION 3 OF 3/.test(s.notes); }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && s.say.indexOf("0.07") !== -1; }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && s.say.indexOf(".07") !== -1; }));
 assert.ok(/15:00/.test(SCRIPT[SCRIPT.length - 1].title));
 assert.ok(!/five-minute pairs activity/.test(JSON.stringify(SLIDES)));
 
