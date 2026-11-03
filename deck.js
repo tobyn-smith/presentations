@@ -360,17 +360,13 @@
   }
 
   function fitStage() {
+    /* Never shrink an entire slide to force overflowing content into view.
+       That made text and graphs unreadably small and still clipped on short
+       laptop screens. The shared layout stylesheet sizes each board and lets
+       the stage scroll internally when a slide genuinely needs more height. */
     if (!stage) return;
     stage.style.transform = "";
-    if (!isPres) return;
-    if (window.innerWidth < 720) return;
-    var room = stage.clientHeight;
-    var need = stage.scrollHeight;
-    if (room > 0 && need > room + 2) {
-      var scale = Math.max(0.68, room / need);
-      stage.style.transformOrigin = "top center";
-      stage.style.transform = "scale(" + scale + ")";
-    }
+    stage.style.transformOrigin = "";
   }
 
   function chartHtml(chart) {

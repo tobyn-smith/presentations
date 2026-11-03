@@ -1,0 +1,152 @@
+/* Shared anti-clipping layout for the Geddes student and presenter routes.
+   Both routes use the same 16:9 board and content bounds; only controls differ. */
+.role-part .stage,
+.role-pres .stage {
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.role-part .stage > *,
+.role-pres .stage > * { min-width: 0; }
+.role-part .stage h1,
+.role-pres .stage h1 {
+  max-width: none;
+  flex: 0 0 auto;
+  overflow-wrap: anywhere;
+}
+.role-part .stage.claims .split,
+.role-pres .stage.claims .split {
+  width: 100%;
+  min-width: 0;
+  align-items: stretch;
+}
+.role-part .stage.claims .split-viz,
+.role-pres .stage.claims .split-viz,
+.role-part .stage.claims .split-side,
+.role-pres .stage.claims .split-side {
+  min-width: 0;
+  min-height: 0;
+}
+.role-part .stage.claims .chart,
+.role-pres .stage.claims .chart,
+.role-part .stage.prompt .chart,
+.role-pres .stage.prompt .chart {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+.role-part .stage.claims .chart figcaption,
+.role-pres .stage.claims .chart figcaption,
+.role-part .stage.prompt .chart figcaption,
+.role-pres .stage.prompt .chart figcaption {
+  width: 100%;
+  max-width: none;
+  flex: 0 0 auto;
+}
+.role-part .stage.claims .chart-note,
+.role-pres .stage.claims .chart-note,
+.role-part .stage.prompt .chart-note,
+.role-pres .stage.prompt .chart-note {
+  max-width: 100%;
+}
+.role-part .stage.claims figure.chart[data-chart]::after,
+.role-pres .stage.claims figure.chart[data-chart]::after,
+.role-part .stage.prompt figure.chart[data-chart]::after,
+.role-pres .stage.prompt figure.chart[data-chart]::after {
+  display: block;
+  width: 100%;
+  max-width: none;
+  flex: 1 1 auto;
+  min-height: 250px;
+  height: auto !important;
+  margin: .35rem auto 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+/* Graph slides keep their explanatory text, but the figure itself gets the
+   whole width of its panel instead of inheriting the old 26rem presenter cap. */
+.role-pres .stage.claims .chart { max-width: none !important; }
+.role-pres .split-viz .chart { max-width: none !important; width: 100% !important; }
+.role-pres .split-viz .ss-win,
+.role-pres .split-viz .ss-win-body { min-width: 0; min-height: 0; }
+/* The two dense case matrices are more useful as full-slide figures. */
+.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split,
+.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split,
+.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split,
+.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split {
+  grid-template-columns: minmax(0,1fr) !important;
+}
+.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-side,
+.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-side,
+.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-side,
+.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-side { display:none !important; }
+/* Figure 3 plus its question: graph first, response choices below, all inside
+   the board's scrollable content area on shorter laptop screens. */
+.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]),
+.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.2vh, 14px);
+}
+.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask,
+.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask { flex: 0 0 auto; overflow: visible; }
+.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split,
+.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split {
+  flex: 0 0 auto;
+  display: block;
+  min-height: 0;
+}
+.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-side,
+.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-side { display:none !important; }
+.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
+.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz { width:100%; height:auto; }
+.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
+.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
+  height: clamp(280px, 42vh, 430px) !important;
+  min-height: 280px;
+  flex: none;
+}
+.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel,
+.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
+  flex: 0 0 auto;
+  max-height: none;
+  overflow: visible;
+}
+.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices,
+.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+}
+/* On compact laptop viewports, avoid side-by-side content that pushes controls
+   below the visible board. Scrolling is within the slide, never the page. */
+@media (min-width: 800px) and (max-width: 1100px) {
+  .role-part .stage.prompt,
+  .role-pres .stage.prompt { display:flex; flex-direction:column; }
+  .role-part .stage.prompt .ask-panel,
+  .role-pres .stage.prompt .ask-panel { flex:0 0 auto; }
+  .role-part .stage.claims .split.has-viz,
+  .role-pres .stage.claims .split.has-viz { grid-template-columns:minmax(0,1fr); }
+  .role-part .stage.claims .split-side,
+  .role-pres .stage.claims .split-side { min-height: auto; }
+  .role-part .stage.claims .claim-bars,
+  .role-pres .stage.claims .claim-bars { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .role-part .stage.claims .claim-bars li,
+  .role-pres .stage.claims .claim-bars li { min-height: 130px; }
+}
+@media (max-height: 700px) and (min-width: 800px) {
+  .role-part .stage,
+  .role-pres .stage { padding-top: 10px; padding-bottom: 10px; }
+  .role-part .stage h1,
+  .role-pres .stage h1 { font-size: clamp(27px, 4.2vh, 40px); margin-bottom: 8px; }
+  .role-part .stage.claims figure.chart::after,
+  .role-pres .stage.claims figure.chart::after { min-height: 230px; }
+}

@@ -189,6 +189,13 @@ assert.ok(css.indexOf("--navy") !== -1);
 assert.ok(css.indexOf("--gold") !== -1);
 assert.ok(fs.existsSync("./join-qr.svg"));
 assert.ok(fs.existsSync("./geddes-figures.css"));
+assert.ok(fs.existsSync("./geddes-layout-fix.css"));
+var layoutFix = fs.readFileSync("./geddes-layout-fix.css", "utf8");
+assert.ok(layoutFix.indexOf("overflow-y: auto !important") !== -1, "both routes allow internal slide scrolling instead of clipping");
+assert.ok(layoutFix.indexOf("max-width: none !important") !== -1, "graphs are not constrained to the old narrow presenter width");
+assert.ok(layoutFix.indexOf("geddes-fig3") !== -1, "Figure 3 graph and interaction have a dedicated fit");
+assert.ok(layoutFix.indexOf("@media (max-width: 1100px)") !== -1, "compact laptop layouts are handled");
+
 ["geddes-selection.svg","geddes-fig1.svg","geddes-fig2.svg","geddes-fig3.svg","geddes-fig4.svg","geddes-fig5.svg","geddes-fig6.svg"].forEach(function (name) { assert.ok(fs.existsSync("./figures/" + name)); });
 var fig4svg = fs.readFileSync("./figures/geddes-fig4.svg", "utf8");
 var fig5svg = fs.readFileSync("./figures/geddes-fig5.svg", "utf8");
