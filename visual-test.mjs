@@ -43,7 +43,8 @@ const viewports = [
   { width: 1600, height: 900 },
   { width: 1366, height: 768 },
   { width: 1280, height: 720 },
-  { width: 1024, height: 768 }
+  { width: 1024, height: 768 },
+  { width: 800, height: 600 }
 ];
 const report = { generatedAt: new Date().toISOString(), routes: { presenter: "/present/index.html?local=1", student: "/index.html?local=1", backup: "/slideshow.html" }, slides: 0, viewports: [], failures: [] };
 
