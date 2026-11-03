@@ -158,3 +158,120 @@ body.role-pres .stage.prompt figure.chart[data-chart="geddes-fig3"]::after { hei
 body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
   flex:0 0 auto; max-height:clamp(145px,22vh,190px); padding:10px 18px; overflow:auto;
 }
+
+
+/* Round-two classroom layout fixes: give figure SVGs the width of their actual slide. */
+body.role-part .stage.claims .split-viz,
+body.role-pres .stage.claims .split-viz,
+body.role-part .stage.claims .split-viz .ss-win,
+body.role-pres .stage.claims .split-viz .ss-win,
+body.role-part .stage.claims .split-viz .ss-win-body,
+body.role-pres .stage.claims .split-viz .ss-win-body {
+  width:100% !important;
+  max-width:none !important;
+  min-width:0;
+}
+body.role-part .stage.claims figure.chart[data-chart^="geddes-fig"],
+body.role-pres .stage.claims figure.chart[data-chart^="geddes-fig"] {
+  display:flex !important;
+  flex:1 1 auto;
+  flex-direction:column;
+  width:100% !important;
+  max-width:none !important;
+  min-width:0;
+  min-height:0;
+  height:100%;
+  margin:0;
+}
+body.role-part .stage.claims figure.chart[data-chart^="geddes-fig"] figcaption,
+body.role-pres .stage.claims figure.chart[data-chart^="geddes-fig"] figcaption {
+  flex:0 0 auto;
+  width:100%;
+  max-width:none;
+}
+body.role-part .stage.claims figure.chart[data-chart^="geddes-fig"] .chart-note,
+body.role-pres .stage.claims figure.chart[data-chart^="geddes-fig"] .chart-note {
+  width:100%;
+  max-width:none;
+  margin:.2rem 0 .45rem;
+  font-size:clamp(13px,1.65vh,17px);
+  line-height:1.25;
+}
+body.role-part .stage.claims figure.chart[data-chart^="geddes-fig"]::after,
+body.role-pres .stage.claims figure.chart[data-chart^="geddes-fig"]::after {
+  display:block;
+  flex:1 1 auto;
+  width:100% !important;
+  max-width:none;
+  min-width:0;
+  min-height:260px;
+  height:auto !important;
+  margin:.2rem auto 0;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:contain;
+}
+/* The student prompt's two columns are the discussion context and the activity. */
+body.role-part .stage.prompt > .ask,
+body.role-pres .stage.prompt > .ask {
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+}
+body.role-part .stage.prompt > .ask-panel,
+body.role-pres .stage.prompt > .ask-panel {
+  min-width:0;
+  min-height:0;
+  align-self:stretch;
+}
+/* Figure 3 has a graph first and a compact vote panel underneath. */
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) > .ask,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) > .ask {
+  flex:1 1 auto;
+  min-height:0;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ss-win,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ss-win,
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart {
+  width:100% !important;
+  max-width:none !important;
+  min-width:0;
+  min-height:0;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
+  height:clamp(250px,35vh,360px) !important;
+  min-height:0;
+  flex:1 1 auto;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) > .ask-panel,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) > .ask-panel {
+  flex:0 0 auto;
+  max-height:none;
+  overflow:visible;
+  padding:8px 14px;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+@media (max-height:650px) and (min-width:960px) {
+  body.role-part .stage { padding-top:10px; padding-bottom:10px; }
+  body.role-part .stage h1 { font-size:clamp(25px,4vh,38px); margin-bottom:8px; }
+  body.role-part .stage.prompt { gap:10px; }
+  body.role-part .stage.prompt .ask-panel { padding:10px 14px; }
+  body.role-part .stage.prompt .token { font-size:14px; padding:6px 8px; }
+  body.role-part .stage.prompt .slot { padding:7px; }
+  body.role-part .stage.prompt .slot-lab { font-size:15px; }
+  body.role-part .stage.prompt .slot-empty { font-size:13px; }
+  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart[data-chart="geddes-fig3"]::after { height:clamp(230px,32vh,300px) !important; }
+  body.role-pres .stage { padding-top:10px; padding-bottom:10px; }
+  body.role-pres .stage h1 { font-size:clamp(25px,4vh,38px); margin-bottom:8px; }
+  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart[data-chart="geddes-fig3"]::after { height:clamp(230px,32vh,300px) !important; }
+}
