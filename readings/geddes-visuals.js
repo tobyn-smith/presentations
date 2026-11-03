@@ -130,6 +130,8 @@
   });
   r.script = order.map(function (id) { return script(id); });
   slide("quote-sample").viz = "list";
+  slide("quote-sample").recall = "quote-sample";
+  fits.recall = "fits";
   var q = script("quote-sample");
   q.title = "Interaction 2: build a fairer comparison: 3:00-4:00";
   q.say = "You are designing the comparison now. The five success stories are not useless, but they cannot test the claim alone. What would you add first, and why?";
