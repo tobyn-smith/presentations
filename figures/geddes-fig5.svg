@@ -10,7 +10,7 @@
 
   <rect x="70" y="250" width="300" height="210" rx="16" fill="#203f5a" stroke="#6d8295" stroke-width="2"/>
   <text x="220" y="340" fill="#fffdf7" font-family="Arial, sans-serif" font-size="30" font-weight="700" text-anchor="middle">DEFEATED</text>
-  <text x="220" y="382" fill="#d6d2c4" font-family="Arial, sans-serif" font-size="20" text-anchor="middle">in external war</text>
+  <text x="220" y="382" fill="#d6d2c4" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">in external war</text>
 
   <rect x="390" y="250" width="520" height="210" rx="16" fill="#f3ead4"/>
   <rect x="390" y="250" width="12" height="210" rx="6" fill="#ba0c2f"/>
@@ -29,7 +29,7 @@
   <rect x="70" y="480" width="300" height="210" rx="16" fill="#203f5a" stroke="#6d8295" stroke-width="2"/>
   <text x="220" y="565" fill="#fffdf7" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">NOT</text>
   <text x="220" y="600" fill="#fffdf7" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">DEFEATED</text>
-  <text x="220" y="640" fill="#d6d2c4" font-family="Arial, sans-serif" font-size="20" text-anchor="middle">in external war</text>
+  <text x="220" y="640" fill="#d6d2c4" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">in external war</text>
 
   <rect x="390" y="480" width="520" height="210" rx="16" fill="#d5ddd0"/>
   <rect x="390" y="480" width="12" height="210" rx="6" fill="#ba0c2f"/>
@@ -43,5 +43,5 @@
   <text x="990" y="605" fill="#263c4d" font-family="Arial, sans-serif" font-size="24">All remaining cases in the comparison</text>
 
   <rect x="70" y="714" width="1460" height="58" rx="12" fill="#203f5a" stroke="#6d8295" stroke-width="1"/>
-  <text x="94" y="751" fill="#fffdf7" font-family="Arial, sans-serif" font-size="20">10 country-period instances, not 10 unique countries. Bolivia appears more than once; Cuba (1959) is treated separately.</text>
+  <text x="94" y="751" fill="#fffdf7" font-family="Arial, sans-serif" font-size="22">10 country-period instances, not 10 unique countries. Bolivia appears more than once; Cuba (1959) is treated separately.</text>
 </svg>
