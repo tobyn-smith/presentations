@@ -145,7 +145,8 @@ try {
             answerBottom: stage.querySelector(".ask-panel form.answer") ? Math.round(stage.querySelector(".ask-panel form.answer").getBoundingClientRect().bottom) : 0,
             panelBottom: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().bottom) : 0,
             answerDisplay: stage.querySelector(".ask-panel form.answer") ? getComputedStyle(stage.querySelector(".ask-panel form.answer")).display : "missing",
-            repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none")
+            repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none"),
+            emptyResponsePanelVisible: Array.from(stage.querySelectorAll(".ss-win-body #viz")).some(el => !el.classList.contains("is-hidden"))
           };
         });
         if (metrics.scrollWidth > viewport.width + 1) {
@@ -207,6 +208,9 @@ try {
         }
         if (metrics.repeatedSectionKicker) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " repeats the section label above the slide title");
+        }
+        if (mode === "presenter" && metrics.emptyResponsePanelVisible) {
+          report.failures.push(viewport.width + "x" + viewport.height + " shows an empty response panel over the presenter prompt");
         }
         await page.screenshot({
           path: path.join(dir, "slide-" + String(index + 1).padStart(2, "0") + ".png"),
