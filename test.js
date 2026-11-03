@@ -71,8 +71,6 @@ var voiceDump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT);
   "Now: ",
   "Discussion Question:",
   "Tobyn Smith",
-  "Part 1",
-  "Part 2",
   "Score three made-up",
   "delve",
   "tapestry",
