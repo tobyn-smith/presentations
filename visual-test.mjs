@@ -130,7 +130,7 @@ try {
   // Exercise the real presenter status drawer in local mode without contacting Firebase.
   const admin = await browser.newPage({ viewport: { width: 1366, height: 768 } });
   await admin.addInitScript(() => sessionStorage.setItem("deck-key", "6010"));
-  await admin.goto("http://127.0.0.1:4173/present/?local=1", { waitUntil: "networkidle" });
+  await admin.goto("http://127.0.0.1:4173/present/index.html?local=1", { waitUntil: "networkidle" });
   await admin.waitForSelector("#failsafe-open", { state: "visible" });
   await admin.click("#failsafe-open");
   await admin.waitForSelector("#failsafe [role=dialog]", { state: "visible" });
