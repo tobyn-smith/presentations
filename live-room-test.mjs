@@ -207,10 +207,14 @@ try {
   await presenter.screenshot({path:path.join(out,"refresh-from-backup.png"),animations:"disabled"});
 
   firebaseOnline=true;
+  /* The last student tab has the complete local response queue. Reloading it
+     forces an immediate Firebase bootstrap and verifies the whole queue flush. */
+  await extraStudents[3].reload({waitUntil:"domcontentloaded"});
+  await extraStudents[3].waitForFunction(()=>DeckSync.getStatus().mode==="firebase",null,{timeout:15000});
   await presenter.waitForFunction(()=>DeckSync.getStatus().mode==="firebase",null,{timeout:30000});
   await student.waitForFunction(()=>DeckSync.getStatus().mode==="firebase",null,{timeout:30000});
   await presenter.waitForFunction(()=>DeckSync.isPresenting(),null,{timeout:10000});
-  check(await waitForStoredResponse(),"Firebase reconnection persists the queued backup response");
+  check(await waitForStoredResponse(),"Firebase reconnection persists all five queued responses");
 
   await presenter.reload({waitUntil:"domcontentloaded"});
   await presenter.waitForSelector(".responses li",{state:"visible",timeout:10000});
