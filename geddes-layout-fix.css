@@ -1734,16 +1734,30 @@ body.role-pres .stage[data-slide-id="quote-sample"] #viz .room-empty-state {
 }
 
 
-/* Choice-and-reason results occupy their own full-width row on the slide.
-   They are deliberately separate from both the teaching content and #viz. */
+/* Choice-and-reason activities use a real two-column, two-row slide grid.
+   The base prompt layout is flex, so grid placement must be enabled here. */
 body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.25fr) minmax(16rem, .75fr) !important;
   grid-template-rows: minmax(0, 1fr) auto !important;
+  gap: clamp(.6rem, 1.1vh, .85rem) clamp(1rem, 2vw, 2rem);
   align-items: stretch;
-}
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask,
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask-panel {
-  grid-row: 1;
+  justify-content: stretch;
   min-height: 0;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask-panel {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
 }
 body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .slide-live-results {
   grid-column: 1 / -1;
@@ -1796,18 +1810,9 @@ body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="
 body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-empty-state {
   margin:0; color:#465a6b; font-size:12px;
 }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-title { margin:0 0 7px; color:#ba0c2f; font-family:var(--display); font-size:clamp(13px,1.65vh,17px); font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-summary-heading,
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-responses-heading { margin:0 0 5px; color:#16324f; font-size:12px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-summary-block { margin-bottom:7px; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .bars { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .bar { min-width:0; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .bar-top { display:flex; justify-content:space-between; gap:5px; color:#16324f; font-size:11px; line-height:1.15; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .track { height:6px; margin-top:4px; border-radius:8px; background:#e6e0d4; overflow:hidden; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .fill { height:100%; background:#ba0c2f; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .responses { display:flex; flex-wrap:wrap; gap:6px; margin:0; padding:0; list-style:none; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .responses .card { flex:1 1 190px; min-width:0; padding:7px 9px; border:1px solid #ded7ca; border-radius:7px; background:#f4efe5; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .response-index { display:block; margin-bottom:3px; color:#ba0c2f; font-size:10px; font-weight:800; text-transform:uppercase; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .said { margin:0; color:#16324f; font-size:clamp(12px,1.45vh,15px); line-height:1.2; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .meta { margin:4px 0 0; color:#465a6b; font-size:11px; font-weight:700; }
-body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-empty-state { margin:0; color:#465a6b; font-size:13px; }
+@media (max-width: 900px) {
+  body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) {
+    grid-template-columns: minmax(0, 1fr) minmax(13rem, .8fr) !important;
+    gap: .55rem;
+  }
+}
