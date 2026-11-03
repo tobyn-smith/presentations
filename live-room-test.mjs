@@ -50,7 +50,9 @@ function eventsAfter(id) {
 }
 
 const browser = await chromium.launch({headless:true});
-const context = await browser.newContext({viewport:{width:1366,height:768}});
+const presenterContext = await browser.newContext({viewport:{width:1366,height:768}});
+const studentContext = await browser.newContext({viewport:{width:1366,height:768}});
+async function installMocks(context) {
 await context.route("https://intl6010-default-rtdb.firebaseio.com/**", async route => {
   const req=route.request(), url=new URL(req.url());
   const raw=(url.pathname.split("/deck/")[1]||"").replace(/\.json$/,"");
@@ -96,6 +98,9 @@ await context.route("https://ntfy.sh/**", async route => {
   }
   return route.fulfill({status:404,body:"Not found"});
 });
+}
+await installMocks(presenterContext);
+await installMocks(studentContext);
 
 const checks=[], failures=[];
 function check(ok,label){(ok?checks:failures).push(label);}
@@ -110,7 +115,7 @@ async function waitForStoredResponse() {
 }
 
 try {
-  const presenter=await context.newPage();
+  const presenter=await presenterContext.newPage();
   await presenter.addInitScript(()=>sessionStorage.setItem("deck-key","6010"));
   presenter.on("pageerror",e=>failures.push("presenter browser error: "+e.message));
   await presenter.goto("http://127.0.0.1:4174/present/index.html?room=geddes-qa",{waitUntil:"domcontentloaded"});
@@ -118,7 +123,7 @@ try {
   await presenter.click("#live");
   await presenter.waitForFunction(()=>DeckSync.isPresenting());
 
-  const student=await context.newPage();
+  const student=await studentContext.newPage();
   student.on("pageerror",e=>failures.push("student browser error: "+e.message));
   await student.goto("http://127.0.0.1:4174/index.html?room=geddes-qa",{waitUntil:"domcontentloaded"});
   await student.waitForSelector("#seat",{state:"visible"});
@@ -179,7 +184,8 @@ try {
   checks.forEach(x=>console.log("PASS "+x));
   if(failures.length){failures.forEach(x=>console.error("FAIL "+x));process.exitCode=1;}
 } finally {
-  await context.close();
+  await presenterContext.close();
+  await studentContext.close();
   await browser.close();
   await new Promise(resolve=>server.close(resolve));
   fs.writeFileSync(path.join(out,"report.json"),JSON.stringify({checks,failures,responsePosts,ntfyHistory:ntfyHistory.length},null,2));
