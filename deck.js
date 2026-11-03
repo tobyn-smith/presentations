@@ -1077,7 +1077,7 @@
         }).join("") + "</div>";
       }
     }
-    if (s.viz === "list" || s.viz === "words" || s.viz === "bars-list") {
+    if (s.viz === "list" || s.viz === "words" || s.viz === "bars-list" || s.viz === "bars") {
       var key = s.id;
       var firstPaint = !painted[key];
       painted[key] = true;
@@ -1093,7 +1093,8 @@
           }
         }
       } else {
-        if (s.viz !== "bars-list") {
+        html += '<p class="room-responses-heading">Individual answers</p>';
+        if (s.viz !== "bars-list" && s.viz !== "bars") {
           html += '<p class="tally">' + list.length + (list.length === 1 ? " answer" : " answers") + "</p>";
         }
         html += '<ol class="responses' + (list.length > 4 ? " many" : "") + '">';
@@ -1111,6 +1112,9 @@
         });
         html += "</ol>";
       }
+    }
+    if ((s.viz === "bars" || s.viz === "bars-list") && list.length) {
+      html = '<p class="room-summary-heading">Class tally</p>' + html;
     }
     if (!list.length && !html) html = "";
     viz.setAttribute("data-response-count", String(list.length));
