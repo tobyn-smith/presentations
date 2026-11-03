@@ -207,8 +207,12 @@ assert.ok(start.indexOf("Phones.") === -1);
 });
 assert.ok(deckSrc.indexOf("var keepBoard = !force && !changed && onBoard()") !== -1);
 assert.ok(deckSrc.indexOf("if (isPres || DeckSync.isPresenting()) render(n);") !== -1);
+assert.ok(deckSrc.indexOf("if (!isPres && (!DeckSync.isPresenting() || !DeckSync.seated())) return;") !== -1);
 assert.ok(!/deck-content[\s\S]{0,500}sharePack/.test(deckSrc));
-assert.ok(fs.readFileSync("./sync.js", "utf8").indexOf("if (lastHere && lastHere > t) return;") !== -1);
+var syncSrc = fs.readFileSync("./sync.js", "utf8");
+assert.ok(syncSrc.indexOf("if (lastHere && lastHere > t) return;") !== -1);
+assert.ok(syncSrc.indexOf("localStorage.setItem(\"deck-me\"") !== -1);
+assert.ok(syncSrc.indexOf("function clearMe()") !== -1);
 assert.ok(user.indexOf('aria-live="off"') !== -1);
 assert.ok(admin.indexOf('aria-live="off"') !== -1);
 

@@ -55,6 +55,17 @@
   }
 
   function waitScreen() {
+    if (DeckSync.seated()) {
+      if (onBoard()) return;
+      if (document.body.classList.contains("is-hold")) {
+        paintHoldPeers();
+        return;
+      }
+      holdRoom();
+      paintMe();
+      paintHandBtn();
+      return;
+    }
     document.body.classList.add("is-waiting");
     document.body.classList.remove("is-hold", "is-checkin", "is-checkin-name", "is-checkin-face");
     document.title = brand();
@@ -63,8 +74,7 @@
     stage.classList.remove("prompt", "stats", "title", "hold", "compare", "charts", "story", "points");
     stage.classList.add("waiting");
     lastIndex = -1;
-    if (DeckSync.seated()) holdRoom();
-    else checkIn();
+    checkIn();
     paintMe();
     paintHandBtn();
   }
@@ -113,7 +123,7 @@
   function bindCheckIn() {
     var seat = document.getElementById("seat");
     if (seat) seat.addEventListener("click", function () {
-      DeckSync.sit();
+      if (!DeckSync.sit()) return;
       if (DeckSync.isPresenting()) render(DeckSync.getSlide());
       else holdRoom();
     });
@@ -1039,7 +1049,7 @@
   }
 
   DeckSync.onSlide(function (n) {
-    if (!isPres && !DeckSync.isPresenting()) return;
+    if (!isPres && (!DeckSync.isPresenting() || !DeckSync.seated())) return;
     render(n);
   });
   function failsafeLog(text) {
@@ -1198,12 +1208,14 @@
         var n = DeckSync.getSlide();
         if (lastIndex === n && onBoard()) return;
         render(n);
-      } else if (!on) {
-        if (document.body.classList.contains("is-waiting")
-          || document.body.classList.contains("is-hold")
-          || document.body.classList.contains("is-checkin")) return;
-        waitScreen();
+        return;
       }
+      if (DeckSync.seated()) {
+        if (onBoard()) return;
+        if (!document.body.classList.contains("is-hold")) holdRoom();
+        return;
+      }
+      if (!document.body.classList.contains("is-checkin")) checkIn();
     });
     DeckSync.resumeSeat();
     if (DeckSync.isPresenting() && DeckSync.seated()) render(DeckSync.getSlide());
@@ -1212,15 +1224,19 @@
       waitScreen();
     });
     setInterval(function () {
-      if (DeckSync.isPresenting() && DeckSync.seated()) {
-        var n = DeckSync.getSlide();
-        if (document.body.classList.contains("is-hold") || document.body.classList.contains("is-waiting") || document.body.classList.contains("is-checkin") || lastIndex !== n) {
-          render(n);
+      if (DeckSync.seated()) {
+        if (DeckSync.isPresenting()) {
+          var n = DeckSync.getSlide();
+          if (document.body.classList.contains("is-hold") || document.body.classList.contains("is-waiting") || document.body.classList.contains("is-checkin") || lastIndex !== n) {
+            render(n);
+          }
+          return;
         }
+        if (onBoard() || document.body.classList.contains("is-hold")) return;
+        holdRoom();
         return;
       }
-      if (!DeckSync.isPresenting() && DeckSync.seated() && !document.body.classList.contains("is-hold")) waitScreen();
-      else if (!DeckSync.seated() && !document.body.classList.contains("is-checkin")) waitScreen();
+      if (!document.body.classList.contains("is-checkin")) checkIn();
     }, 700);
     if (handBtn) handBtn.addEventListener("click", function () {
       DeckSync.raise(!DeckSync.handUp());

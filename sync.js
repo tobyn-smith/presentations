@@ -155,22 +155,34 @@
     hands = {};
     emitHands();
   }
-  function loadMe() {
-    if (me) return me;
-    try {
-      var raw = sessionStorage.getItem("deck-me");
-      if (!raw) return null;
-      var parsed = JSON.parse(raw);
-      if (!parsed || !(parsed.in || parsed.name)) return null;
-      me = { in: true };
-      return me;
-    } catch (e) {
-      return null;
+  function readStoredMe() {
+    var keys = ["sessionStorage", "localStorage"];
+    var i;
+    for (i = 0; i < keys.length; i++) {
+      try {
+        var raw = (keys[i] === "sessionStorage" ? sessionStorage : localStorage).getItem("deck-me");
+        if (!raw) continue;
+        var parsed = JSON.parse(raw);
+        if (parsed && (parsed.in || parsed.name)) return { in: true };
+      } catch (e) {}
     }
+    return null;
+  }
+  function loadMe() {
+    if (me && (me.in || me.name)) return me;
+    me = readStoredMe();
+    return me;
   }
   function saveMe(row) {
-    me = row;
-    try { sessionStorage.setItem("deck-me", JSON.stringify(row)); } catch (e) {}
+    me = { in: true };
+    var raw = JSON.stringify(me);
+    try { sessionStorage.setItem("deck-me", raw); } catch (e) {}
+    try { localStorage.setItem("deck-me", raw); } catch (e) {}
+  }
+  function clearMe() {
+    me = null;
+    try { sessionStorage.removeItem("deck-me"); } catch (e) {}
+    try { localStorage.removeItem("deck-me"); } catch (e) {}
   }
   setInterval(emitSeats, 2500);
 
@@ -342,11 +354,8 @@
     emitHands();
     if (kickedSid !== sid()) return;
     if (sitBeat) { clearInterval(sitBeat); sitBeat = null; }
-    me = null;
-    try {
-      sessionStorage.removeItem("deck-me");
-      sessionStorage.removeItem("deck-sid");
-    } catch (e) {}
+    clearMe();
+    try { sessionStorage.removeItem("deck-sid"); } catch (e) {}
     kickFns.forEach(function (fn) { fn({ sid: kickedSid, name: name || "" }); });
   }
 
@@ -762,6 +771,9 @@
       return out;
     },
     sit: function () {
+      if (kicks[sid()]) {
+        try { sessionStorage.removeItem("deck-sid"); } catch (e) {}
+      }
       if (kicks[sid()]) return false;
       saveMe({ in: true });
       function beat() {
@@ -781,8 +793,7 @@
       if (sitBeat) { clearInterval(sitBeat); sitBeat = null; }
       shout({ t: "hand", sid: sid(), up: false });
       shout({ t: "leave", sid: sid() });
-      me = null;
-      try { sessionStorage.removeItem("deck-me"); } catch (e) {}
+      clearMe();
     },
     resumeSeat: function () {
       if (loadMe()) this.sit();
