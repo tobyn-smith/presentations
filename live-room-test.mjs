@@ -281,6 +281,7 @@ try {
   await presenter.waitForFunction(()=>document.querySelectorAll("#viz .responses li").length===1,null,{timeout:10000});
   check(await presenter.locator("#viz .responses li").count()===1,"Figure 3 student choice reaches the presenter response panel");
   check((await presenter.locator("#viz .responses li").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 presenter displays the selected interpretation");
+  check((await student.locator(".you").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 participant sees their submitted interpretation");
   check(await presenter.locator(".presenter-choice-preview").isVisible(),"Figure 3 choices remain visible alongside incoming responses");
   await presenter.screenshot({path:path.join(out,"figure3-presenter-response.png"),animations:"disabled"});
 
