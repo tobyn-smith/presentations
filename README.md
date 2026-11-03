@@ -2,25 +2,25 @@
 
 People join from a phone. You run the boards. If check-in dies, the slideshow still works.
 
-Live copy (after this ships): **[tobynsmith.me/6010](https://tobynsmith.me/6010/)**. Old **[/presentations](https://tobynsmith.me/presentations/)** links redirect there.
+Live copy (after this ships): **[tobynsmith.me/geddes](https://tobynsmith.me/geddes/)**. Old **[/presentations](https://tobynsmith.me/presentations/)** links redirect there. The `/6010` class hop is unchanged.
 
-New here? Open **[Start](https://tobynsmith.me/6010/start.html)**. Three cards: Admin, Audience, Backup.
+New here? Open **[Start](https://tobynsmith.me/geddes/start.html)**. Three cards: Admin, Audience, Backup.
 
 ## Three views
 
-1. **Admin** — [Present](https://tobynsmith.me/6010/present/). Go live, next and back, reveal answers. Script is [here](https://tobynsmith.me/6010/script.html). The presenter key is not in this repo. Set it on the teaching laptop (first visit to Present, or `config.local.js`).
-2. **Audience** — [Phones](https://tobynsmith.me/6010/). Check in, then type when a question is up.
-3. **Backup** — [Slideshow](https://tobynsmith.me/6010/slideshow.html). Same boards, no phones.
+1. **Admin** — [Present](https://tobynsmith.me/geddes/present/). Go live, next and back, reveal answers. Script is [here](https://tobynsmith.me/geddes/script.html). The presenter code is `6010` (it sits in `config.js`; this is a casual gate, not a login).
+2. **Audience** — [Phones](https://tobynsmith.me/geddes/). Check in, then type when a question is up.
+3. **Backup** — [Slideshow](https://tobynsmith.me/geddes/slideshow.html). Same boards, no phones.
 
 ## Running a room
 
-1. Open [Start](https://tobynsmith.me/6010/start.html), then Admin. Use the presenter key stored on that computer.
+1. Open [Start](https://tobynsmith.me/geddes/start.html), then Admin. The presenter code is `6010`.
 2. Leave the title up. People scan the QR, or you text them the Audience link.
 3. Names show on the right when they are in.
 4. Hit **Go live**.
 5. Next and Back as usual. On a question, **Reveal** shows what people typed.
 
-If phones sit on Hold, open Room tools and tap **Push live again**. If that still fails, open the [slideshow](https://tobynsmith.me/6010/slideshow.html) and keep talking. I do that more often than I want to admit.
+If phones sit on Hold, open Room tools and tap **Push live again**. If that still fails, open the [slideshow](https://tobynsmith.me/geddes/slideshow.html) and keep talking. I do that more often than I want to admit.
 
 ## Adding a week
 
@@ -34,7 +34,7 @@ Edit has a switch, **Use week files**. Leave it on so a leftover browser copy do
 
 ## Changing the slides
 
-Open [Edit](https://tobynsmith.me/6010/edit.html). Type in the boxes. It saves on that computer.
+Open [Edit](https://tobynsmith.me/geddes/edit.html). Type in the boxes. It saves on that computer.
 
 Do this on the laptop you will present from. Present and the slideshow on that same computer will use your copy. Students get it too once you Go live.
 
@@ -46,11 +46,11 @@ If someone else might be using this live example at the same time, put a room wo
 
 ## Pages
 
-[Start](https://tobynsmith.me/6010/start.html) lists the three views. [Admin](https://tobynsmith.me/6010/present/) is you. [Audience](https://tobynsmith.me/6010/) is phones. [Backup](https://tobynsmith.me/6010/slideshow.html) is the plain slideshow. [Edit](https://tobynsmith.me/6010/edit.html) is names and slides. [Script](https://tobynsmith.me/6010/script.html) is what you say. [Computer layout](https://tobynsmith.me/6010/desk.html) is the audience page, wide.
+[Start](https://tobynsmith.me/geddes/start.html) lists the three views. [Admin](https://tobynsmith.me/geddes/present/) is you. [Audience](https://tobynsmith.me/geddes/) is phones. [Backup](https://tobynsmith.me/geddes/slideshow.html) is the plain slideshow. [Edit](https://tobynsmith.me/geddes/edit.html) is names and slides. [Script](https://tobynsmith.me/geddes/script.html) is what you say. [Computer layout](https://tobynsmith.me/geddes/desk.html) is the audience page, wide.
 
-GitHub also serves the same files at [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/). The QR points at tobynsmith.me/6010/.
+GitHub also serves the same files at [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/). The QR points at tobynsmith.me/geddes/.
 
-To put this on the personal site, run `scripts/export-me-6010.sh` and copy the folder to `me/6010/`. Replace `me/presentations/` with `me-drop-in/presentations/` so old links go to `/6010/`.
+To put this on the personal site, run `scripts/export-me-geddes.sh` and copy the folder to `me/geddes/`. Replace `me/presentations/` with `me-drop-in/presentations/` so old links go to `/geddes/`. Leave `me/6010/` alone (INTL 6010 Heroku hop).
 
 ## Your own copy
 

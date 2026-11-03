@@ -1,4 +1,4 @@
-/* Copy to config.local.js on the teaching laptop. Do not commit that copy. */
+/* Optional overlay. The public classroom code is already 6010 in config.js. */
 window.DECK = Object.assign(window.DECK || {}, {
-  presenterKey: "change-me"
+  presenterKey: "6010"
 });

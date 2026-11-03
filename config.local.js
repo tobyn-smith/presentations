@@ -1,3 +1,1 @@
-/* Optional overlay. Leave empty in git. Set a key on the teaching laptop
-   via the Present page or a private copy of this file. Do not put a live
-   passphrase in a pull request. */
+/* Optional overlay. The public classroom code is 6010 in config.js. */

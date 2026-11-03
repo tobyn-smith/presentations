@@ -1,16 +1,17 @@
 # Preview and any root host. GitHub Pages on tobynsmith.me ignores this file;
-# that copy lives under /6010/ so relative URLs already match.
-/6010/present /present/index.html 200
-/6010/present/ /present/index.html 200
-/6010 /index.html 200
-/6010/ /index.html 200
-/6010/* /:splat 200
+# that copy lives under /geddes/ so relative URLs already match.
+# Do not rewrite /6010. That path stays the Heroku INTL 6010 hop.
+/geddes/present /present/index.html 200
+/geddes/present/ /present/index.html 200
+/geddes /index.html 200
+/geddes/ /index.html 200
+/geddes/* /:splat 200
 
 /presentations/present /present/ 301
 /presentations/present/ /present/ 301
-/presentations / 301
-/presentations/ / 301
-/presentations/* /:splat 301
+/presentations /geddes/ 301
+/presentations/ /geddes/ 301
+/presentations/* /geddes/:splat 301
 
 /adminpresentation /present/ 301
 /adminpresentation.html /present/ 301

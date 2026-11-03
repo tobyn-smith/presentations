@@ -1,13 +1,16 @@
-/* Presenter lock. The passphrase lives in this browser or config.local.js, not in git. */
+/* Presenter lock. The classroom code is in config.js (casual gate, not a login).
+   First-visit set-key still runs if that field is empty. */
 (function (global) {
   var STORE = "deck-key";
 
   function configured() {
+    var fromFile = (global.DECK && DECK.presenterKey) || "";
+    if (fromFile) return fromFile;
     try {
       var saved = localStorage.getItem(STORE);
       if (saved) return saved;
     } catch (e) {}
-    return (global.DECK && DECK.presenterKey) || "";
+    return "";
   }
 
   function bind(opts) {
