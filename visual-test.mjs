@@ -113,6 +113,9 @@ try {
         if (metrics.chartId === "geddes-fig3" && metrics.stageOverflow > 40) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 still needs scrolling (" + metrics.stageOverflow + "px overflow)");
         }
+        if (["geddes-fig2","geddes-fig4","geddes-fig5","geddes-fig6"].includes(metrics.chartId) && metrics.stageOverflow > 20) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " " + metrics.chartId + " requires excessive slide scrolling (" + metrics.stageOverflow + "px overflow)");
+        }
         if (metrics.chartId === "geddes-fig2" && metrics.chartWidth < metrics.stageClientWidth * .72) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 2 leaves an empty chart column");
         }
