@@ -4,6 +4,19 @@
   if (!r) return;
   function slide(id) { return r.slides.filter(function (x) { return x.id === id; })[0]; }
 
+  var ask = slide("ask");
+  ask.chart = {
+    id: "geddes-selection", title: "The cases you leave out matter",
+    source: "Geddes (1990), conceptual selection-bias illustration",
+    note: "The upper plot is the pattern a researcher might assume. The lower plot shows why the missing cases could change the conclusion.",
+    plots: []
+  };
+  ask.claims = [
+    {n:"01",title:"Start with A and B",body:"If we only study the cases with the outcome, it is easy to mistake a shared feature for its cause."},
+    {n:"02",title:"The missing cases matter",body:"Cases without the outcome tell us whether the same feature is common there too."},
+    {n:"03",title:"Testing needs variation",body:"To test a cause, compare cases across the outcome, not only the successful ones."}
+  ];
+
   var regions = slide("regions");
   regions.chart = {
     id: "geddes-fig1", title: "Figure 1 · The selected cases and East Asia",
