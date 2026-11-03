@@ -196,6 +196,15 @@ assert.ok(layoutFix.indexOf("max-width: none !important") !== -1, "graphs are no
 assert.ok(layoutFix.indexOf("geddes-fig3") !== -1, "Figure 3 graph and interaction have a dedicated fit");
 assert.ok(layoutFix.indexOf("@media (max-width: 1100px)") !== -1, "compact laptop layouts are handled");
 
+/* Layout regression guards for the Figure 3 nested-scroll/clipping bug. */
+assert.ok(layoutFix.indexOf("body.role-part .stage.prompt:has(.chart[data-chart=\\"geddes-fig3\\"]) .ask-panel") !== -1);
+assert.ok(layoutFix.indexOf("overflow: visible !important") !== -1, "Figure 3 answer panel must not create a nested clipped scroll area");
+assert.ok(layoutFix.indexOf("max-height: none !important") !== -1, "Figure 3 answer panel must be allowed to grow to its content");
+assert.ok(layoutFix.indexOf("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") !== -1, "Figure 3 choices use a compact two-column layout");
+assert.ok(layoutFix.indexOf("height: clamp(245px, 34vh, 350px) !important") !== -1, "Figure 3 chart height is bounded to leave room for the question");
+assert.ok(layoutFix.indexOf("flex-wrap: wrap") !== -1, "presenter toolbar can wrap on narrower laptop widths");
+
+
 ["geddes-selection.svg","geddes-fig1.svg","geddes-fig2.svg","geddes-fig3.svg","geddes-fig4.svg","geddes-fig5.svg","geddes-fig6.svg"].forEach(function (name) { assert.ok(fs.existsSync("./figures/" + name)); });
 var fig4svg = fs.readFileSync("./figures/geddes-fig4.svg", "utf8");
 var fig5svg = fs.readFileSync("./figures/geddes-fig5.svg", "utf8");
