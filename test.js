@@ -58,9 +58,12 @@ SLIDES.forEach(function (s) {
 
 var withChart = SLIDES.filter(function (s) { return s.chart || (s.charts && s.charts.length); });
 var withStats = SLIDES.filter(function (s) { return s.stats && s.stats.length; });
-assert.ok(withChart.length >= 1, "Table 1 chart");
-assert.ok(withStats.length >= 3, "labour scores, r squared, Figure 5");
+assert.ok(withChart.length >= 4, "Table 1, r squared, Figure 5, Table 2");
+assert.ok(withStats.length >= 1, "labour scores");
 assert.ok(SLIDES.some(function (s) { return s.id === "regions" && s.chart && s.chart.bars.length === 5; }));
+assert.ok(SLIDES.some(function (s) { return s.id === "fits" && s.chart && s.chart.bars.length === 3; }));
+assert.ok(SLIDES.some(function (s) { return s.id === "figure5" && s.chart && s.chart.bars[0].n === 7; }));
+assert.ok(SLIDES.some(function (s) { return s.id === "chile" && s.chart && s.chart.bars.length === 4; }));
 
 var prompts = SLIDES.filter(function (s) { return s.type === "prompt"; });
 assert.strictEqual(prompts.length, 2);
@@ -193,8 +196,10 @@ var talk = fs.readFileSync("./slideshow.js", "utf8");
 assert.ok(talk.indexOf("function bindRank") !== -1);
 assert.ok(talk.indexOf("function bindPlace") !== -1);
 assert.ok(talk.indexOf("function fitStage") !== -1);
-assert.ok(deckSrc.indexOf("ss-win-dots") !== -1);
-assert.ok(talk.indexOf("ss-win-dots") !== -1);
+assert.ok(deckSrc.indexOf("ss-win-dots") === -1);
+assert.ok(talk.indexOf("ss-win-dots") === -1);
+assert.ok(deckSrc.indexOf("ss-win-label") !== -1);
+assert.ok(talk.indexOf("ss-win-label") !== -1);
 assert.ok(start.indexOf("Phones.") === -1);
 
 global.DECK = { useFileSlides: true, room: "test-room", title: "Week" };

@@ -80,6 +80,7 @@
         id: "table1",
         title: "Table 1. Average country growth",
         source: "World Development Report, 1984 and 1988.",
+        note: "I redrew the 1960 to 1982 column. East Asia is 5.2. Africa is 1.0.",
         max: 6,
         bars: [
           { label: "East Asia", n: 5.2 },
@@ -123,11 +124,17 @@
       type: "claims",
       kicker: "Samples",
       title: "Does the claim travel?",
-      stats: [
-        { value: ".56", label: "East Asia only. Looks like a link. Figure 1, printed p. 8." },
-        { value: ".07", label: "A wider Third World set. Almost nothing. Slope slightly down. Figure 2, printed p. 10." },
-        { value: ".01", label: "Countries at least as advanced as South Korea." }
-      ],
+      chart: {
+        id: "r2",
+        title: "r squared from Figures 1, 2 and 3",
+        note: "I redrew the r squared values she prints. Figure 1, printed p. 8. Figure 2, printed p. 10. Figure 3 is the more advanced set.",
+        max: 0.6,
+        bars: [
+          { label: "East Asia, Figure 1", n: 0.56 },
+          { label: "Third World, Figure 2", n: 0.07 },
+          { label: "As advanced as South Korea, Figure 3", n: 0.01 }
+        ]
+      },
       claims: [
         { n: "1", title: "No real link among the five", body: "Slow countries repress labour too." },
         { n: "2", title: "That picture does not travel", body: "This simple check cannot disconfirm the claim." }
@@ -150,11 +157,17 @@
       type: "claims",
       kicker: "The check",
       title: "What did the nine countries show?",
-      stats: [
-        { value: "7", label: "Extreme military threat, no revolution." },
-        { value: "2", label: "Revolutions with no such threat." },
-        { value: "1", label: "Bolivia only. Defeated 1935, revolution 1952." }
-      ],
+      chart: {
+        id: "figure5",
+        title: "Figure 5. Defeat in war and revolution",
+        note: "I counted the cells she printed. Printed p. 20. Threat here is a lost war plus invasion or lost land.",
+        max: 7,
+        bars: [
+          { label: "Extreme threat, no revolution", n: 7 },
+          { label: "Revolution, no such threat", n: 2 },
+          { label: "Both. Bolivia 1935 and 1952", n: 1 }
+        ]
+      },
       claims: [
         { n: "1", title: "Figure 5, printed p. 20", body: "Threat: a lost war plus invasion or lost land." },
         { n: "2", title: "Not a definitive disconfirmation", body: "The set is not random, and her threat score is crude." }
@@ -177,6 +190,19 @@
         "Skocpol's three revolutions",
         "The nine Spanish-American cases"
       ],
+      chart: {
+        id: "table2",
+        title: "Table 2. Chilean inflation",
+        note: "Four years from Table 2, printed pp. 22 to 23. Hirschman ends the series in 1961.",
+        max: 84,
+        unit: "%",
+        bars: [
+          { label: "1955", n: 84 },
+          { label: "1957", n: 17 },
+          { label: "1960", n: 5 },
+          { label: "1961", n: 10 }
+        ]
+      },
       claims: [
         { n: "1", title: "Hirschman stops in 1961", body: "1955 was 84 per cent. 1960 and 1961 are 5 and 10. Printed pp. 22 to 23." }
       ]

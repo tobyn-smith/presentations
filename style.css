@@ -1347,6 +1347,14 @@ button { cursor: pointer; }
   justify-content: flex-start;
   padding-top: 1.8%;
   padding-bottom: 1.6%;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+.role-pres .stage.claims .split,
+.role-pres .stage.prompt.has-split .split {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 .steps {
   list-style: none;
@@ -1665,7 +1673,7 @@ button { cursor: pointer; }
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 .split.has-art {
-  grid-template-columns: minmax(0, 1.4fr) minmax(11rem, 0.72fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.95fr);
 }
 .split-art {
   min-width: 0;
@@ -1681,16 +1689,17 @@ button { cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1.2rem;
 }
 .art-panel svg {
-  width: min(100%, 16rem);
+  width: min(100%, 22rem);
   height: auto;
   max-height: 100%;
 }
 .art-close svg,
-.art-habit svg {
-  width: min(100%, 18rem);
+.art-habit svg,
+.art-ask svg {
+  width: min(92%, 24rem);
 }
 .year-chart {
   align-items: flex-end;
@@ -1753,6 +1762,13 @@ button { cursor: pointer; }
   background: transparent;
   border: 0;
   padding: 0.85rem 1rem 1rem;
+  overflow: visible;
+}
+.split-viz .chart figcaption {
+  flex: none;
+}
+.split-viz .chart-note {
+  max-width: none;
 }
 .split-viz .chart-bars {
   display: flex;
@@ -1943,36 +1959,19 @@ button { cursor: pointer; }
   height: 100%;
   border-radius: var(--radius);
 }
-.ss-win-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  min-height: 2rem;
-  padding: 0.45rem 0.85rem 0.2rem;
-  background: transparent;
-  border-bottom: 0;
-  flex: none;
-}
-.ss-win-dots {
-  display: flex;
-  gap: 0.28rem;
-}
-.ss-win-dots i {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--gold);
-}
-.ss-win-title {
+.ss-win-label {
   font-family: var(--display);
-  font-size: clamp(13px, 1.6vh, 16px);
-  letter-spacing: 0.16em;
+  font-size: clamp(13px, 1.55vh, 16px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--navy);
+  margin: 0 0 0.55rem;
+  flex: none;
 }
 .ss-win-who { display: none; }
 .ss-win-body {
-  padding: 0.35rem 0.85rem 0.85rem;
+  padding: 0.85rem 1rem 1rem;
   min-width: 0;
   overflow: visible;
   flex: 1 1 auto;
@@ -1985,15 +1984,32 @@ button { cursor: pointer; }
   color: var(--ink);
   overflow: hidden;
 }
-.ss-win.ss-paper .ss-win-bar {
-  background: var(--navy);
-  padding: 0.4rem 0.85rem;
-  border-radius: var(--radius) var(--radius) 0 0;
-  position: relative;
-  z-index: 2;
+.ss-win.ss-paper:has(.chart) {
+  overflow: visible;
 }
+.split-viz .ss-win:has(.chart),
+.split-viz .ss-win:has(.chart) .chart,
+.split-viz .ss-win:has(.chart) .ss-win-body {
+  height: auto;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+.chart-bars:has(.chart-row:nth-child(6)) {
+  gap: 0.38em;
+}
+.chart-bars:has(.chart-row:nth-child(6)) .chart-track {
+  height: 12px;
+}
+.chart-bars:has(.chart-row:nth-child(6)) .chart-n {
+  font-size: clamp(16px, 2.4vh, 26px);
+}
+.chart-bars:has(.chart-row:nth-child(6)) .chart-lab {
+  font-size: clamp(14px, 1.7vh, 18px);
+}
+.ss-win.ss-paper .ss-win-label { color: var(--navy); }
 .ss-win.ss-paper .ss-win-who { color: var(--gold-ink); border-left-color: var(--gold-ink); }
 .ss-win.ss-paper .ss-win-body { color: var(--ink); }
+.ss-win.ss-term .ss-win-label { color: var(--gold); }
 .ss-win.ss-term .ss-win-body { font-family: var(--sans); }
 .split-viz .ss-win .chart,
 .split-viz .ss-win .name-stack,
@@ -3479,6 +3495,100 @@ textarea {
     pointer-events: auto;
   }
   .role-pres .stage { padding: 1.1rem 1.2rem 1.4rem; }
+  .role-pres .stage.story,
+  .role-pres .stage.compare,
+  .role-pres .stage.charts,
+  .role-pres .stage.points,
+  .role-pres .stage.claims,
+  .role-pres .stage.prompt.has-split,
+  .role-pres .stage.prompt.has-drag,
+  .role-pres .stage.title {
+    height: auto;
+    flex: none;
+    min-height: 0;
+  }
+  .split,
+  .split.has-art,
+  .split.has-viz,
+  .split.has-drag-main,
+  .split:not(.has-viz) .claim-bars:has(> li:nth-child(3)),
+  .split:not(.has-viz) .claim-bars:has(> li:only-child),
+  .split.has-viz .claim-bars,
+  .role-pres .stage.claims .split,
+  .role-pres .stage.prompt.has-split .split,
+  .role-pres .stage.claims .split:not(.has-viz) .claim-bars,
+  .role-pres .title-copy .claim-bars,
+  .role-pres .stage.title .claim-bars,
+  .role-pres .stage.claims:not(.has-split) .claim-bars,
+  .claim-bars,
+  .ss-win,
+  .ss-win.ss-paper,
+  .split-viz,
+  .split-side,
+  .split-art,
+  .name-stack,
+  .stats-stack,
+  .talk,
+  .drag-place,
+  .drag-rank,
+  .slot-row,
+  .art-panel,
+  .year-chart,
+  .revolt-tiles {
+    grid-template-columns: 1fr;
+    height: auto;
+    flex: none;
+    min-height: 0;
+  }
+  .fig-pane {
+    height: auto;
+    flex: none;
+  }
+  .fig-split {
+    height: 7.2rem;
+  }
+  .split-viz .chart,
+  .split-viz .ss-win .chart,
+  .role-pres .stage.claims .chart {
+    height: auto;
+    max-width: none;
+    overflow: visible;
+  }
+  .chart-bars {
+    height: auto;
+  }
+  .split-art { display: none; }
+  .ss-win,
+  .ss-win.ss-paper {
+    overflow: visible;
+  }
+  .role-pres .stage.claims h1,
+  .role-pres .stage.prompt.has-split h1,
+  .role-pres .stage.prompt.has-drag h1 {
+    font-size: clamp(1.45rem, 7vw, 2rem);
+    margin-bottom: 0.75rem;
+  }
+  .name-stack li,
+  .role-pres .name-stack li,
+  .stats-stack .stat,
+  .claim-bars li,
+  .role-pres .stage.claims .split:not(.has-viz) .claim-bars li,
+  .role-pres .title-copy .claim-bars li,
+  .role-pres .split.has-viz .claim-bars li,
+  .talk li,
+  .revolt-tile {
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 3rem;
+  }
+  .role-pres .slot-row,
+  .talk:has(> li:nth-child(4)) {
+    grid-template-columns: 1fr;
+  }
+  .title-join-block .join-qr {
+    width: min(100%, 14rem);
+    max-height: 14rem;
+  }
   .role-pres .stage.title {
     text-align: left;
     padding-top: 1.1rem;
@@ -3545,6 +3655,22 @@ textarea {
   border: 0;
   border-radius: var(--radius);
   padding: 18px 20px;
+}
+.role-pres.is-backup .slide-stack .split {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.role-pres.is-backup .slide-stack > .ss-win.ss-term {
+  flex: 0 0 auto;
+  height: auto;
+}
+.role-pres.is-backup .slide-stack .talk {
+  flex: none;
+  height: auto;
+  align-content: start;
+}
+.role-pres.is-backup .slide-stack .talk li {
+  padding: 0.5rem 0.75rem;
 }
 .role-pres.is-backup .stage.title {
   display: flex;
