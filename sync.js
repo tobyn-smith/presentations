@@ -10,6 +10,9 @@
   }
   var room = String(queryRoom() || cfg.room || "session").replace(/[^a-zA-Z0-9_-]/g, "");
   var session = String(cfg.session || "1");
+  var backupResponseKey = "deck-backup-responses-" + room + "-" + session;
+  var backupResponses = {};
+  try { backupResponses = JSON.parse(localStorage.getItem(backupResponseKey) || "{}") || {}; } catch (e) {}
   var slide = 0;
   var responses = {};
   var slideFns = [];
@@ -204,6 +207,7 @@
       emitSlide();
       return;
     }
+    if (msg.t === "resp" && (via === "ntfy" || (via === "bc" && backupOn))) queueBackupResponse(msg);
     if (msg.t === "resp" && msg.slide != null && msg.sid) {
       var id = String(msg.slide);
       responses[id] = responses[id] || {};
@@ -684,6 +688,43 @@
     };
   }
 
+  function queueBackupResponse(msg) {
+    if (!msg || msg.t !== "resp" || msg.slide == null || !msg.sid) return;
+    var id = String(msg.slide);
+    backupResponses[id] = backupResponses[id] || {};
+    backupResponses[id][msg.sid] = {
+      t: "resp",
+      slide: id,
+      sid: String(msg.sid),
+      text: msg.text ? String(msg.text).slice(0, 800) : "",
+      choice: msg.choice != null ? String(msg.choice).slice(0, 80) : "",
+      kind: msg.kind || "",
+      bin: msg.bin || "",
+      at: msg.at || Date.now(),
+      session: session
+    };
+    try { localStorage.setItem(backupResponseKey, JSON.stringify(backupResponses)); } catch (e) {}
+  }
+
+  function flushBackupResponses() {
+    if (!usingFirebase || !publishFb) return Promise.resolve(false);
+    var jobs = [];
+    Object.keys(backupResponses).forEach(function (id) {
+      Object.keys(backupResponses[id] || {}).forEach(function (sidKey) {
+        jobs.push(publishFb(backupResponses[id][sidKey]));
+      });
+    });
+    if (!jobs.length) return Promise.resolve(true);
+    return Promise.all(jobs).then(function (results) {
+      var ok = results.every(Boolean);
+      if (ok) {
+        backupResponses = {};
+        try { localStorage.removeItem(backupResponseKey); } catch (e) {}
+      }
+      return ok;
+    }).catch(function () { return false; });
+  }
+
   function applyFbPath(path, data) {
     var p = String(path || "/").replace(/^\//, "");
     if (!p || p === "/") {
@@ -788,11 +829,18 @@
       if (!usingFirebase || fbLocked) return;
       fbFetch(fbUrl("")).then(function (r) {
         lastFbHttp = r.status;
-        if (!r.ok) return;
+        if (!r.ok) {
+          lastError = "Firebase read HTTP " + r.status;
+          lockFirebase(r.status);
+          return;
+        }
         return r.json().then(function (data) {
           if (data && typeof data === "object") takeRoom(data);
         });
-      }).catch(function () {});
+      }).catch(function () {
+        lastError = lastError || "Firebase read failed";
+        lockFirebase(0);
+      });
     }, 1000);
   }
 
@@ -814,6 +862,7 @@
       return r.json().then(function (data) {
         if (data && typeof data === "object") takeRoom(data);
         markFirebaseLive();
+        flushBackupResponses();
         openFbStream();
         startFbPoll();
         if (presenting) publishFb({ t: "here", at: lastHere || Date.now(), session: session });
@@ -835,6 +884,7 @@
         bindPublishFb();
         if (data && typeof data === "object") takeRoom(data);
         markFirebaseLive();
+        flushBackupResponses();
         closeFbStream();
         openFbStream();
         startFbPoll();
@@ -940,7 +990,10 @@
         bin: payload.bin || payload.kind || "",
         at: Date.now()
       };
-      return shout(row);
+      return shout(row).then(function (ok) {
+        if (ok && !usingFirebase) queueBackupResponse(row);
+        return ok;
+      });
     },
     onResponses: function (fn) { respFns.push(fn); },
     getResponses: function (id) {
