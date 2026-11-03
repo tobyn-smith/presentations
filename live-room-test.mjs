@@ -185,7 +185,7 @@ try {
     await peer.waitForFunction(()=>typeof DeckSync!=="undefined"&&DeckSync.getStatus().mode==="backup",null,{timeout:10000});
     const delivered=await peer.evaluate(async n=>{
       sessionStorage.setItem("deck-sid","geddes-qa-student-"+n);
-      return DeckSync.submit("2",{text:"Additional student "+n+" response",choice:"shown",kind:"placement",bin:"shown"});
+      return DeckSync.submit("2",{text:"Additional student "+n+" response",choice:"shown",kind:"place",bin:"place"});
     },n);
     check(delivered,"additional student "+(n+1)+" response reaches the backup room");
     extraStudents.push(peer);
