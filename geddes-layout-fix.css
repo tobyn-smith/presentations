@@ -1266,8 +1266,8 @@ body.role-pres .stage[data-chart="geddes-fig5"] .figure-expand {
 }
 
 
-/* Five live answers should remain readable together on the presenter board. */
-body.role-pres .stage.prompt.has-notes:has(.responses):not(:has(.bars)) .responses.many {
+/* Five live answers use an explicit response-count class, not structural selectors. */
+body.role-pres .stage.prompt.has-notes #viz.five-responses .responses.many {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: minmax(0, 1fr);
@@ -1277,16 +1277,16 @@ body.role-pres .stage.prompt.has-notes:has(.responses):not(:has(.bars)) .respons
   min-height: 0;
   gap: clamp(8px, 1vw, 14px);
 }
-body.role-pres .stage.prompt.has-notes:has(.responses) .responses .card {
+body.role-pres .stage.prompt.has-notes #viz.five-responses .responses .card {
   min-width: 0;
   min-height: 0;
   overflow-wrap: anywhere;
 }
-body.role-pres .stage.prompt.has-notes:has(.responses) .responses .said {
+body.role-pres .stage.prompt.has-notes #viz.five-responses .responses .said {
   overflow-wrap: anywhere;
 }
 @media (max-width: 900px) {
-  body.role-pres .stage.prompt.has-notes:has(.responses):not(:has(.bars)) .responses.many {
+  body.role-pres .stage.prompt.has-notes #viz.five-responses .responses.many {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
