@@ -3775,8 +3775,6 @@ textarea {
   letter-spacing: 0.02em;
 }
 .ss-win.ss-term .title-join { color: var(--gold); }
-.ask-panel:has(#viz .bars) .opt-preview,
-.ask-panel:has(#viz .responses) .opt-preview { display: none; }
 .role-pres .talk { flex: 1 1 auto; }
 .talk-scale {
   display: grid;
