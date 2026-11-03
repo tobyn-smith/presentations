@@ -42,9 +42,10 @@ assert.strictEqual(nics.slots.length, 2);
 assert.strictEqual(nics.names.length, 5);
 
 var withChart = SLIDES.filter(function (s) { return s.chart; });
-assert.strictEqual(withChart.length, 4, "Table 1, r squared, Figure 5 and Table 2");
+assert.strictEqual(withChart.length, 4, "Table 1, Figures 1-3, Figure 5 and Table 2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "regions"; })[0].chart.bars.length, 5);
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.bars.length, 3);
+assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.plots.length, 2);
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.bars[0].n, 7);
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.id, "table2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
@@ -54,7 +55,7 @@ assert.ok(/curved relationship/.test(JSON.stringify(SLIDES.filter(function (s) {
 assert.ok(!/The five are all a 3/.test(JSON.stringify(SLIDES)));
 
 var prompts = SLIDES.filter(function (s) { return s.type === "prompt"; });
-assert.strictEqual(prompts.length, 2, "exactly two live interactions");
+assert.strictEqual(prompts.length, 3, "exactly three live interactions");
 prompts.forEach(function (p) { assert.ok(p.help); });
 var chile = SLIDES.filter(function (s) { return s.id === "chile"; })[0];
 assert.strictEqual(chile.input, "choice-text");
@@ -114,7 +115,8 @@ assert.ok(SCRIPT.some(function (s) { return s.id === "skocpol" && /RAQUEL/.test(
 assert.ok(SCRIPT.some(function (s) { return s.id === "hirschman" && /TOBYN/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /TOBYN/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "nics" && /INTERACTION 1 OF 2/.test(s.notes); }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "chile" && /INTERACTION 2 OF 2/.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "quote-sample" && /INTERACTION 2 OF 3/.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "chile" && /INTERACTION 3 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && s.say.indexOf("0.07") !== -1; }));
 assert.ok(/15:00/.test(SCRIPT[SCRIPT.length - 1].title));
 assert.ok(!/five-minute pairs activity/.test(JSON.stringify(SLIDES)));
