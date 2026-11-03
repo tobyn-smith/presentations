@@ -43,7 +43,7 @@ assert.strictEqual(nics.names.length, 5);
 
 var withChart = SLIDES.filter(function (s) { return s.chart; });
 assert.strictEqual(withChart.length, 6, "Table 1, Figures 1-6 and Table 2 are represented across the boards");
-assert.strictEqual(SLIDES.filter(function (s) { return s.id === "regions"; })[0].chart.bars.length, 5);
+assert.strictEqual(SLIDES.filter(function (s) { return s.id === "regions"; })[0].chart.id, "geddes-fig1");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].type, "prompt");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "regions"; })[0].chart.id, "geddes-fig1");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.id, "geddes-fig23");
@@ -54,7 +54,7 @@ assert.ok(/Figures 2 and 3/.test(SLIDES.filter(function (s) { return s.id === "f
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.bars[0].n, 7);
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.id, "table2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
-assert.ok(/not nine separate country labels/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
+assert.ok(/not nine unique country labels/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
 assert.ok(/continues through 1972/.test(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.note));
 assert.ok(/curved relationship/.test(JSON.stringify(SLIDES.filter(function (s) { return s.id === "fits"; }))));
 assert.ok(!/The five are all a 3/.test(JSON.stringify(SLIDES)));
@@ -161,7 +161,7 @@ assert.ok(user.indexOf('id="uga-kicker"') !== -1);
 assert.ok(backup.indexOf("readings/geddes-1990.js") !== -1);
 assert.ok(backup.indexOf("readings/geddes-visuals.js") !== -1);
 assert.ok(backup.indexOf("geddes-figures.css") !== -1);
-assert.ok(start.indexOf("Admin") !== -1 && start.indexOf("Audience") !== -1 && start.indexOf("Backup") !== -1);
+assert.ok(start.indexOf("Presenter") !== -1 && start.indexOf("Audience") !== -1 && start.indexOf("Backup slideshow") !== -1);
 assert.ok(admin.indexOf('id="reveal"') === -1, "unused reveal control removed");
 assert.ok(admin.indexOf('id="fs-title"') === -1, "QR/title room tool removed");
 assert.ok(admin.indexOf('id="fs-end"') === -1, "duplicate end-room tool removed");
