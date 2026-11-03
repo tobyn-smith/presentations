@@ -184,6 +184,8 @@ try {
   check(await presenter.locator("#stage > .ask").isVisible(),"slide 4 teaching content remains visible after the answer arrives");
   check(await presenter.locator("#stage > .ask-panel").isVisible(),"slide 4 presenter controls remain visible after the answer arrives");
   check(await presenter.locator("#stage").evaluate(el=>getComputedStyle(el).display==="grid"),"slide 4 uses the intended slide grid rather than the default flex layout");
+  check(await presenter.locator("#stage").evaluate(el=>{const a=el.querySelector(".ask").getBoundingClientRect(),p=el.querySelector(".ask-panel").getBoundingClientRect(),r=el.querySelector("#slide-live-results").getBoundingClientRect();return a.bottom<=r.top+1&&p.bottom<=r.top+1&&r.bottom<=el.getBoundingClientRect().bottom+1;}),"slide 4 prompt, room panel and class responses occupy separate non-overlapping rows");
+  check(await presenter.locator("#stage .ask-panel .ss-win-body").evaluate(el=>{const r=el.getBoundingClientRect(),p=el.closest(".ask-panel").getBoundingClientRect();return r.top>=p.top-1&&r.bottom<=p.bottom+1;}),"slide 4 room-response content stays inside its panel");
   check((await student.locator(".submission-receipt").innerText()).includes("Countries with slower growth"),"slide 4 participant sees their submitted choice in the receipt");
   check((await student.locator(".submission-receipt").innerText()).includes("outcome varies"),"slide 4 participant sees their written reason in the receipt");
   await presenter.screenshot({path:path.join(out,"slide4-room-response.png"),animations:"disabled"});
@@ -305,6 +307,8 @@ try {
   check(await presenter.locator("#stage > .ask").isVisible(),"slide 7 figure and teaching content remain visible after the answer arrives");
   check(await presenter.locator("#stage > .ask-panel").isVisible(),"slide 7 presenter controls remain visible after the answer arrives");
   check(await presenter.locator("#stage").evaluate(el=>getComputedStyle(el).display==="grid"),"slide 7 uses the intended slide grid rather than the default flex layout");
+  check(await presenter.locator("#stage").evaluate(el=>{const a=el.querySelector(".ask").getBoundingClientRect(),p=el.querySelector(".ask-panel").getBoundingClientRect(),r=el.querySelector("#slide-live-results").getBoundingClientRect();return a.bottom<=r.top+1&&p.bottom<=r.top+1&&r.bottom<=el.getBoundingClientRect().bottom+1;}),"slide 7 prompt, room panel and class responses occupy separate non-overlapping rows");
+  check(await presenter.locator("#stage .ask-panel .ss-win-body").evaluate(el=>{const r=el.getBoundingClientRect(),p=el.closest(".ask-panel").getBoundingClientRect();return r.top>=p.top-1&&r.bottom<=p.bottom+1;}),"slide 7 room-response content stays inside its panel");
   check((await student.locator(".submission-receipt").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 participant sees their submitted interpretation in the response receipt");
   check(await presenter.locator(".presenter-choice-preview").isVisible(),"Figure 3 choices remain visible alongside incoming responses");
   await presenter.screenshot({path:path.join(out,"figure3-presenter-response.png"),animations:"disabled"});
