@@ -32,7 +32,9 @@ assert.strictEqual(SLIDES[0].title, "How the Cases You Choose Affect the Answers
 assert.ok(SLIDES.some(function (s) { return s.id === "close"; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "figure4" && s.type === "claims"; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "skocpol" && s.claims.length === 3; }));
-assert.ok(SLIDES.some(function (s) { return s.id === "quote-sample" && s.quote && /small samples selected on the dependent variable/.test(s.quote.text); }));
+var sampleTask = SLIDES.filter(function (s) { return s.id === "quote-sample"; })[0];
+assert.ok(sampleTask && sampleTask.type === "prompt" && sampleTask.options.length === 3, "case-selection interaction has three options");
+assert.ok(sampleTask.claims && sampleTask.claims.length === 3, "case-selection task explains the sampling problem");
 
 var nics = SLIDES.filter(function (s) { return s.id === "nics"; })[0];
 assert.ok(nics);
