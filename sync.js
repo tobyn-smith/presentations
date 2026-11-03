@@ -1012,6 +1012,7 @@
     isPresenting: function () { return presenting; },
     onPresenting: function (fn) { presentFns.push(fn); fn(presenting); },
     present: function () {
+      try { sessionStorage.removeItem("deck-resume-live"); } catch (e) {}
       wantLive = true;
       sharePack();
       function beat() {
@@ -1021,7 +1022,12 @@
       beat();
       if (!heartbeat) heartbeat = setInterval(beat, 4000);
       if (!leaveBound) {
-        leaveBound = function () { global.DeckSync.standDown(); };
+        leaveBound = function () {
+          if (presenting && !localOnly) {
+            try { sessionStorage.setItem("deck-resume-live", "1"); } catch (e) {}
+          }
+          global.DeckSync.standDown();
+        };
         window.addEventListener("pagehide", leaveBound);
         window.addEventListener("beforeunload", leaveBound);
       }
