@@ -279,7 +279,7 @@ assert.ok(deckSrc.indexOf("function bindRank") !== -1);
 assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
 assert.ok(deckSrc.indexOf('data-move="up"') !== -1 && deckSrc.indexOf('data-move="down"') !== -1, "rank task has keyboard-operable move controls");
 assert.ok(deckSrc.indexOf('data-token-place') !== -1 && deckSrc.indexOf('board.addEventListener("change"') !== -1, "placement task has a keyboard-operable select alternative");
-assert.ok(deckSrc.indexOf('role="img" aria-label="\' + esc(accessible)') !== -1, "figure redraws expose an accessible description");
+assert.ok(deckSrc.indexOf('role="group" aria-label="\' + esc(accessible)') !== -1, "figure redraws expose an accessible description");
 
 assert.ok(deckSrc.indexOf("if (!canSend || isPres) return;") !== -1, "presenter cannot drag or submit student input");
 assert.ok(deckSrc.indexOf("if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return Promise.resolve(false);") !== -1, "only a seated live student can submit");
