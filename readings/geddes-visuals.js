@@ -147,7 +147,7 @@
   var ch = script("chile");
   ch.title = "Figure 6: what changes by 1972?: 12:00-13:30";
   ch.say = "Figure 6 carries the Chile series beyond Hirschman's 1961 endpoint. The later rise changes the picture: those low years were not the end of the story. Geddes argues that this makes it harder to claim inflation had been brought under lasting control.";
-  ch.notes = "RAQUEL · 12:00-13:30\nPoint out the 1961 endpoint marker and the later rise. The early selected values come from Table 2; the extended trend is schematic, not a digitised annual dataset. Do not claim this proves every part of Hirschman's argument wrong.";
+  ch.notes = "TOBYN · 12:00-13:30\nPoint out the 1961 endpoint marker and the later rise. The early selected values come from Table 2; the extended trend is schematic, not a digitised annual dataset. Do not claim this proves every part of Hirschman's argument wrong.";
   var cl = script("close");
   cl.title = "Conclusion: 13:30-15:00";
   /* Timings move the sample question ahead of the graph-reading activity. */
