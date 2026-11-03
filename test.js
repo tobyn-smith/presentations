@@ -179,6 +179,13 @@ assert.ok(css.indexOf("flex-wrap: nowrap") !== -1);
 var deckSrc = fs.readFileSync("./deck.js", "utf8");
 assert.ok(deckSrc.indexOf("I'm in") !== -1);
 assert.ok(deckSrc.indexOf("Who are you?") === -1);
+var syncSrc = fs.readFileSync("./sync.js", "utf8");
+var readme = fs.readFileSync("./README.md", "utf8");
+var cfgSrc = fs.readFileSync("./config.js", "utf8");
+[deckSrc, syncSrc, readme, cfgSrc, admin, user, start, backup].forEach(function (src) {
+  assert.ok(!/[Rr]ehears|[Dd]ry run|[Pp]ractice run/.test(src), "no rehearsal wording");
+});
+assert.ok(fs.existsSync("./scripts/export-me-geddes.sh"));
 assert.ok(deckSrc.indexOf("function bindRank") !== -1);
 assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
 assert.ok(deckSrc.indexOf("id=\"drag-send\"") !== -1);

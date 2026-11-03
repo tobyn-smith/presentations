@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-size="2" data-space="roomy" data-font="lexend">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<title>Speaker script</title>
+<link rel="stylesheet" href="script.css" />
+</head>
+<body>
+<header class="top">
+  <p class="kicker">Speaker script</p>
+  <nav class="jump" id="jumps" aria-label="Jump"></nav>
+</header>
+
+<main class="wrap" id="script-root"></main>
+
+<div class="tools" role="toolbar" aria-label="Reading controls">
+  <p class="now" id="now"></p>
+  <button type="button" id="smaller" aria-label="Smaller text">A-</button>
+  <button type="button" id="bigger" aria-label="Bigger text">A+</button>
+  <button type="button" id="space" aria-pressed="false">More space</button>
+  <button type="button" id="font">OpenDyslexic</button>
+  <a class="tool-link" href="edit.html">Edit</a>
+  <a class="tool-link" href="start.html">Start</a>
+</div>
+
+<script src="config.js"></script>
+<script src="config.local.js"></script>
+<script src="script-content.js"></script>
+<script src="prompts.js"></script>
+<script src="readings/geddes-1990.js"></script>
+<script src="build-week.js"></script>
+<script src="apply-content.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

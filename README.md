@@ -50,7 +50,7 @@ If someone else might be using this live example at the same time, put a room wo
 
 GitHub also serves the same files at [tobyn-smith.github.io/presentations](https://tobyn-smith.github.io/presentations/). The QR points at tobynsmith.me/geddes/.
 
-To put this on the personal site, run `scripts/export-me-geddes.sh` and copy the folder to `me/geddes/`. Replace `me/presentations/` with `me-drop-in/presentations/` so old links go to `/geddes/`. Leave `me/6010/` alone (INTL 6010 Heroku hop).
+To put this on the personal site, run `scripts/export-me-geddes.sh`. Copy `me-export/geddes/` to `me/geddes/` and `me-export/presentations/` to `me/presentations/`. Leave `me/6010/` alone (INTL 6010 Heroku hop). GitHub Pages ignores `_redirects` and `_headers`, so the export omits them and uses a meta refresh stub for `/presentations`.
 
 ## Your own copy
 

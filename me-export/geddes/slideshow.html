@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Slideshow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3C/svg%3E" />
+<meta http-equiv="Cache-Control" content="no-store" />
+<link rel="stylesheet" href="type.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="role-pres is-backup">
+<main class="deck" id="app">
+  <header class="chrome is-quiet">
+    <p class="view-links"><a href="present/">Admin</a> · <a href="index.html">Audience</a></p>
+    <nav class="ghost-nav" aria-label="Slides">
+      <button type="button" id="prev">Back</button>
+      <button type="button" id="next">Next</button>
+      <p class="slide-num" id="counter"></p>
+    </nav>
+  </header>
+  <div class="stage-wrap">
+    <div class="board">
+      <header class="uga-banner" aria-label="University of Georgia">
+        <span class="uga-plate">
+          <img class="uga-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158">
+        </span>
+        <p class="uga-deck">Discussion</p>
+        <p class="uga-kicker" id="uga-kicker"></p>
+      </header>
+      <p class="from-class" id="from-class" hidden></p>
+      <span class="accent-tab" aria-hidden="true"></span>
+      <section class="stage" id="stage" aria-live="polite"></section>
+    </div>
+  </div>
+</main>
+<script src="config.js"></script>
+<script src="config.local.js"></script>
+<script src="slides.js"></script>
+<script src="prompts.js"></script>
+<script src="readings/geddes-1990.js"></script>
+<script src="build-week.js"></script>
+<script src="apply-content.js"></script>
+<script src="slideshow.js"></script>
+</body>
+</html>
