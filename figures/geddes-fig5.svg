@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 760" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" role="img" aria-labelledby="t d">
 <title id="t">Geddes Figure 5: defeat in war and revolution</title>
 <desc id="d">A two-by-two case table. Seven defeat without revolution instances; two revolutions without the specified defeat; one instance of both, Bolivia; and all remaining cases in neither category. The observation window is twenty years. These are ten country-period instances, not ten unique countries. Cuba is intermediate and several insurgencies had not yet resulted in revolution at the time of analysis.</desc>
 <rect width="1600" height="760" rx="24" fill="#102b43"/>
@@ -17,5 +17,5 @@
 <text x="470" y="515" font-size="52" font-weight="700" fill="#477e6a">2</text><text x="545" y="513" font-size="28" font-weight="700">REVOLUTION, NO DEFEAT</text><text x="470" y="575" font-size="24">Mexico 1910</text><text x="470" y="615" font-size="24">Nicaragua 1979</text>
 <text x="940" y="535" font-size="30" font-weight="700">NEITHER OUTCOME</text><text x="940" y="585" font-size="24" fill="#536475">All remaining cases in the comparison</text>
 </g>
-<rect x="70" y="685" width="1460" height="45" rx="12" fill="#f0d48a"/><text x="800" y="714" text-anchor="middle" fill="#102b43" font-family="Arial,sans-serif" font-size="19" font-weight="700">10 country-period instances, not 10 unique countries · Cuba is intermediate; some insurgencies were unresolved</text>
+<rect x="70" y="680" width="1460" height="88" rx="14" fill="#f0d48a"/><text x="800" y="715" text-anchor="middle" fill="#102b43" font-family="Arial,sans-serif" font-size="19" font-weight="700">10 country-period instances, not 10 unique countries · Cuba (1959) is an intermediate case</text><text x="800" y="746" text-anchor="middle" fill="#102b43" font-family="Arial,sans-serif" font-size="17">El Salvador, Peru and Guatemala had long insurgencies not yet resulting in revolution at the time of analysis</text>
 </svg>
