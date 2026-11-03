@@ -173,6 +173,10 @@ assert.ok(user.indexOf('id="uga-kicker"') !== -1);
 assert.ok(backup.indexOf("readings/geddes-1990.js") !== -1);
 assert.ok(backup.indexOf("readings/geddes-visuals.js") !== -1);
 assert.ok(backup.indexOf("geddes-figures.css") !== -1);
+assert.ok(backup.indexOf("geddes-layout-fix.css") !== -1, "backup slideshow uses the same anti-clipping layout rules");
+assert.ok(fs.existsSync("./visual-test.mjs"));
+assert.ok(fs.existsSync("./.github/workflows/geddes-visual-regression.yml"));
+
 assert.ok(start.indexOf("Presenter") !== -1 && start.indexOf("Audience") !== -1 && start.indexOf("Backup slideshow") !== -1);
 assert.ok(admin.indexOf('id="reveal"') === -1, "unused reveal control removed");
 assert.ok(admin.indexOf('id="fs-title"') === -1, "QR/title room tool removed");
@@ -221,6 +225,12 @@ assert.ok(fig4svg.indexOf("China after the") !== -1 && fig4svg.indexOf("Russia, 
 assert.ok(fig4svg.indexOf("Prussia") !== -1 && fig4svg.indexOf("Japan") !== -1);
 assert.ok(fig5svg.indexOf("Bolivia, 1903") !== -1 && fig5svg.indexOf("Nicaragua, 1979") !== -1);
 assert.ok(fig5svg.indexOf("Cuba (1959)") !== -1 && fig5svg.indexOf("El Salvador, Peru and Guatemala") !== -1);
+var fig6svg = fs.readFileSync("./figures/geddes-fig6.svg", "utf8");
+["1955","84%","1956","38%","1957","17%","1960","5%","1961","10%","1972","above 100%"].forEach(function (v) {
+  assert.ok(fig6svg.indexOf(v) !== -1, "Figure 6 retains " + v);
+});
+assert.ok(/not an annual series/.test(fig6svg), "Figure 6 labels the dashed extension as schematic");
+
 assert.ok(fs.existsSync("./uga-logo.png"));
 assert.ok(admin.indexOf("uga-logo.png") !== -1);
 assert.ok(backup.indexOf("uga-logo.png") !== -1);
@@ -282,6 +292,10 @@ assert.ok(syncSrc.indexOf("Live sync: Firebase") !== -1);
 assert.ok(syncSrc.indexOf("Live sync: backup, Firebase locked") !== -1);
 assert.ok(syncSrc.indexOf("new EventSource(fbUrl(\"\"))") !== -1);
 assert.ok(syncSrc.indexOf("method: \"PATCH\"") !== -1);
+assert.ok(syncSrc.indexOf("return shout(row)") !== -1, "response submission exposes delivery success or failure");
+assert.ok(syncSrc.indexOf("Backup message could not be sent") !== -1, "backup delivery failures are surfaced");
+assert.ok(deckSrc.indexOf("pendingSubmissions") !== -1 && deckSrc.indexOf("That did not reach the room") !== -1, "student submission blocks duplicates and provides a retry path");
+
 assert.ok(syncSrc.indexOf("function startBackup()") !== -1);
 assert.ok(user.indexOf('aria-live="off"') !== -1);
 assert.ok(admin.indexOf('aria-live="off"') !== -1);
