@@ -157,7 +157,8 @@
     if (resetBtn) resetBtn.hidden = s.type !== "prompt";
     if (revealBtn) {
       revealBtn.hidden = s.type !== "prompt";
-      revealBtn.textContent = revealed[s.id] ? "Hide" : "Reveal";
+      revealBtn.textContent = revealed[s.id] ? "Hide answers" : "Reveal answers";
+      revealBtn.setAttribute("aria-pressed", revealed[s.id] ? "true" : "false");
     }
     if (prevBtn) prevBtn.disabled = i === 0;
     if (nextBtn) nextBtn.disabled = i === slides().length - 1;
@@ -997,6 +998,7 @@
         html += "</ol>";
       }
     }
+    if (!list.length && !html) html = '<p class="empty">No answers yet.</p>';
     viz.innerHTML = html;
     showViz(s);
   }
@@ -1252,9 +1254,25 @@
     }
 
     if (liveBtn) liveBtn.addEventListener("click", function () {
-      if (DeckSync.isPresenting()) DeckSync.standDown();
-      else if (DeckSync.pushLive) DeckSync.pushLive().then(paintLive);
-      else DeckSync.present();
+      if (liveBtn.disabled) return;
+      if (DeckSync.isPresenting()) {
+        DeckSync.standDown();
+        paintLive();
+        return;
+      }
+      liveBtn.disabled = true;
+      liveBtn.textContent = "Starting…";
+      Promise.resolve(DeckSync.pushLive ? DeckSync.pushLive() : DeckSync.present())
+        .then(function (result) {
+          paintLive();
+          if (result && result.error && !result.ok) failsafeLog("Live could not be confirmed. " + result.error);
+        })
+        .catch(function (err) {
+          failsafeLog("Could not start live: " + (err && err.message ? err.message : "connection error"));
+          DeckSync.standDown();
+          paintLive();
+        })
+        .then(function () { liveBtn.disabled = false; paintLive(); });
     });
     bindFullScreen();
     DeckSync.onSeats(paintSeated);
@@ -1401,7 +1419,8 @@
       var s = slides()[DeckSync.getSlide()];
       if (!s || s.type !== "prompt") return;
       revealed[s.id] = !revealed[s.id];
-      revealBtn.textContent = revealed[s.id] ? "Hide" : "Reveal";
+      revealBtn.textContent = revealed[s.id] ? "Hide answers" : "Reveal answers";
+      revealBtn.setAttribute("aria-pressed", revealed[s.id] ? "true" : "false");
       showViz(s);
     });
     if (wipeBtn) wipeBtn.addEventListener("click", function () {
