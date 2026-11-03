@@ -4,7 +4,7 @@ The discussion is designed to run for 15 minutes. Keep to the handovers; there a
 
 | Time | Speaker | Boards | Job |
 |---|---|---|---|
-| 0:00-6:00 | Tobyn | Opening through the sample-selection check | Set up the problem, run two short activities, explain the growth comparison and hand over |
+| 0:00-6:00 | Tobyn | Opening through the sample-selection check | Set up the problem, run three short activities, explain the growth comparison and hand over |
 | 6:00-9:00 | Raquel | Skocpol, Figure 4 and Figure 5 | Explain the causal sequence, show the contrast cases, then qualify the wider test |
 | 9:00-15:00 | Tobyn | Chile, final interaction and close | Show how the endpoint changes the story, take the third vote with reasons, and connect the paper to our own research designs |
 
