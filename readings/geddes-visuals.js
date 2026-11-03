@@ -132,13 +132,13 @@
   var ch = script("chile");
   ch.title = "Figure 6 and the endpoint: 11:30-13:15";
   ch.say = "Figure 6 carries the Chile series beyond Hirschman's 1961 endpoint. The two low years are no longer the end of the story. Geddes argues that the later record makes it much harder to claim that groups had learned to contain inflation. She points instead to the stabilisation policies under Alessandri.";
-  ch.notes = "TOBYN · 11:00–13:15\nNo interaction on this slide. Point out the 1961 endpoint marker and the later rise. The 1930–61 values come from Table 2; the extended trend is a schematic redraw of Figure 6, not a digitised annual dataset. Avoid saying this proves Hirschman was wrong about every part of his argument.";
+  ch.notes = "TOBYN · 11:30-13:15\nNo interaction on this slide. Point out the 1961 endpoint marker and the later rise. The 1930–61 values come from Table 2; the extended trend is a schematic redraw of Figure 6, not a digitised annual dataset. Avoid saying this proves Hirschman was wrong about every part of his argument.";
   var cl = script("close");
   cl.title = "Conclusion: 13:15-15:00";
   /* Timings move the sample question ahead of the graph-reading activity. */
   script("ask").say = "Imagine I want to explain economic growth, so I start with countries that grew quickly. The top graph shows the pattern I might assume across all countries. But the lower graph shows another possibility: once the missing cases are included, the relationship may disappear. That is why Geddes says we need cases where the outcome did not happen as well.";
   script("regions").say = "Figure 1 puts two samples side by side. On the left are five familiar fast-growing countries, where repression barely varies. On the right are seven East Asian countries, where the association looks positive. Table 1 helps explain the problem: East Asia had unusually high average growth, so selecting that region is already linked to the outcome. The figure shows why the relationship may not travel beyond that sample.";
-  script("fits").say = "Now compare Figures 2 and 3. The reported r-squared falls to .07 in the wider Third World sample and .01 in the more advanced subset. Which reading is closest to Geddes's conclusion? The relationship that looked persuasive in a selected group weakens in the wider samples. That is not the same as proving the hypothesis false.";
+  script("fits").say = "Figure 3 is a slightly different picture. The straight-line fit is almost zero, but the highest growth rates cluster around repression level three. Geddes gives two possible explanations: perhaps the relationship is curved, or perhaps a few unusually fast-growing NICs are driving the pattern. Which interpretation best fits the two figures?";
   script("regions").title = "The wider comparison: 3:30-4:20";
   var hs = script("hirschman"); hs.title = "Chile and the endpoint: 10:00-11:30";
   script("chile").title = "Figure 6 and the endpoint: 11:30-13:15";
