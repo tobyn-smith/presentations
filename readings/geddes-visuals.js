@@ -38,7 +38,7 @@
   fig2.id = "figure2";
   fig2.type = "claims";
   fig2.kicker = "PART 2 - RAQUEL";
-  fig2.title = "Figure 2: the wider Third World sample";
+  fig2.title = "Figure 2: the wider sample";
   fig2.chart = {
     id: "geddes-fig2", title: "Figure 2 · Growth and labour repression in the Third World",
     source: "Geddes (1990), Figure 2",
