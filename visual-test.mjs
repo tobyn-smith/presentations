@@ -49,11 +49,26 @@ const report = { generatedAt: new Date().toISOString(), routes: { presenter: "/s
 try {
   for (const viewport of viewports) {
     for (const mode of ["presenter", "student"]) {
-      const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
+      const page = await context.newPage();
       page.on("pageerror", error => report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " browser error: " + error.message));
-      const route = mode === "student" ? "/index.html?local=1" : "/slideshow.html";
-      await page.goto("http://127.0.0.1:4173" + route, { waitUntil: "networkidle" });
       await page.emulateMedia({ reducedMotion: "reduce" });
+      let controller = null;
+      if (mode === "student") {
+        controller = await context.newPage();
+        controller.on("pageerror", error => report.failures.push("controller " + viewport.width + "x" + viewport.height + " browser error: " + error.message));
+        await controller.addInitScript(() => sessionStorage.setItem("deck-key", "6010"));
+        await controller.goto("http://127.0.0.1:4173/present/index.html?local=1", { waitUntil: "networkidle" });
+        await controller.waitForSelector("#live", { state: "visible" });
+        await controller.click("#live");
+        await controller.waitForFunction(() => document.querySelector("#live")?.getAttribute("aria-pressed") === "true");
+        await page.goto("http://127.0.0.1:4173/index.html?local=1", { waitUntil: "networkidle" });
+        await page.waitForSelector("#seat", { state: "visible" });
+        await page.click("#seat");
+        await page.waitForFunction(() => (document.querySelector("#counter")?.textContent || "").split("/")[0].trim() === "1");
+      } else {
+        await page.goto("http://127.0.0.1:4173/slideshow.html", { waitUntil: "networkidle" });
+      }
       const total = await page.evaluate(() => (window.SLIDES || []).length);
       report.slides = total;
       if (total !== 13) report.failures.push("Expected 13 slides, found " + total);
@@ -62,8 +77,13 @@ try {
 
       for (let index = 0; index < total; index++) {
         if (index > 0) {
-          await page.keyboard.press("ArrowRight");
-          await page.waitForFunction(expected => document.querySelector("#counter")?.textContent.trim() === String(expected), index + 1);
+          if (mode === "student") {
+            await controller.click("#next");
+            await page.waitForFunction(expected => (document.querySelector("#counter")?.textContent || "").split("/")[0].trim() === String(expected), index + 1);
+          } else {
+            await page.keyboard.press("ArrowRight");
+            await page.waitForFunction(expected => document.querySelector("#counter")?.textContent.trim() === String(expected), index + 1);
+          }
         }
         await page.waitForTimeout(80);
         await page.evaluate(() => {
@@ -170,7 +190,7 @@ try {
         });
         report.viewports.push({ mode, viewport: viewport.width + "x" + viewport.height, slide: index + 1, ...metrics });
       }
-      await page.close();
+      await context.close();
     }
   }
 
