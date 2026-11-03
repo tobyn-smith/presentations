@@ -217,6 +217,20 @@ try {
           path: path.join(dir, "slide-" + String(index + 1).padStart(2, "0") + ".png"),
           animations: "disabled"
         });
+        if (metrics.chartId) {
+          const expand = page.locator('[data-expand-figure="' + metrics.chartId + '"]');
+          if (await expand.count() !== 1) {
+            report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": figure expand control is missing");
+          } else {
+            await expand.click();
+            const viewer = page.locator("#figure-viewer");
+            await viewer.waitFor({ state: "visible", timeout: 3000 });
+            const loaded = await viewer.locator("img").evaluate(img => img.complete && img.naturalWidth > 0);
+            if (!loaded) report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": expanded SVG did not load");
+            await page.keyboard.press("Escape");
+            await viewer.waitFor({ state: "hidden", timeout: 3000 });
+          }
+        }
         report.viewports.push({ mode, viewport: viewport.width + "x" + viewport.height, slide: index + 1, ...metrics });
       }
       await context.close();
