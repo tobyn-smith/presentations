@@ -100,9 +100,14 @@ var voiceDump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT);
   "delve",
   "tapestry",
   "furthermore",
-  "—"
+  "—",
+  "actually",
+  "tidy",
+  "neat",
+  "falls apart",
+  "the point"
 ].forEach(function (bad) {
-  assert.ok(slideDump.indexOf(bad) === -1, "no " + bad + " on slides");
+  assert.ok(slideDump.toLowerCase().indexOf(bad.toLowerCase()) === -1, "no " + bad + " on slides");
 });
 [
   "delve",
@@ -113,6 +118,11 @@ var voiceDump = JSON.stringify(SLIDES) + JSON.stringify(SCRIPT);
   "it is important to note",
   "pivotal",
   "landscape",
+  "actually",
+  "tidy",
+  "neat",
+  "falls apart",
+  "the point",
   "—",
   "–"
 ].forEach(function (bad) {
