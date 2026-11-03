@@ -1306,3 +1306,55 @@ body.role-pres .stage[data-chart="geddes-fig6"] {
   border-radius: 22px;
   padding: clamp(16px, 2.2vw, 30px);
 }
+
+/* Fit the two full-board comparison figures on compact classroom displays.
+   The SVG remains expandable for students who need to inspect its labels. */
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-part .stage[data-chart="geddes-fig4"],
+  body.role-pres .stage[data-chart="geddes-fig4"],
+  body.role-part .stage[data-chart="geddes-fig5"],
+  body.role-pres .stage[data-chart="geddes-fig5"] {
+    padding: 12px 18px !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
+    height: clamp(250px, 39vh, 300px) !important;
+  }
+}
+@media (max-height: 650px) and (min-width: 800px) {
+  body.role-part .stage[data-chart="geddes-fig4"],
+  body.role-pres .stage[data-chart="geddes-fig4"],
+  body.role-part .stage[data-chart="geddes-fig5"],
+  body.role-pres .stage[data-chart="geddes-fig5"] {
+    padding: 8px 12px !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
+    height: clamp(205px, 35vh, 230px) !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig4"] h1,
+  body.role-pres .stage[data-chart="geddes-fig4"] h1,
+  body.role-part .stage[data-chart="geddes-fig5"] h1,
+  body.role-pres .stage[data-chart="geddes-fig5"] h1 {
+    font-size: clamp(23px, 3.8vh, 29px) !important;
+    margin: 0 0 4px !important;
+  }
+}
+@media (max-height: 800px) and (min-width: 801px) {
+  body.role-part .stage[data-chart="geddes-fig3"] .ask-panel form.answer textarea {
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+  }
+}
+@media (max-height: 650px) and (min-width: 800px) {
+  body.role-part .stage[data-chart="geddes-fig3"] .ask-panel form.answer textarea {
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+  }
+}
