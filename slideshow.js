@@ -387,14 +387,12 @@
         + (s.footer ? '<p class="footer-line">' + esc(s.footer) + "</p>" : "");
     }
     if (s.input === "place" || s.input === "rank") {
-      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
-        + '<div class="split has-viz has-drag-main">'
-        + '<div class="split-viz">' + vizHtml(s) + "</div>"
-        + '<div class="split-side">'
-        + windowHtml("term", "The trays", dragTalk(s))
-        + "</div></div>";
+      return '<div class="ask">' + kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
+        + '<div class="split has-viz"><div class="split-viz">' + vizHtml(s) + "</div></div>"
+        + "</div>"
+        + '<div class="ask-panel">' + windowHtml("term", "The trays", dragTalk(s)) + "</div>";
     }
-    return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
+    return '<div class="ask">' + kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
       + '<div class="slide-stack">'
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + splitHtml(s)
@@ -402,8 +400,8 @@
       + articleHtml(s)
       + recapHtml(s)
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "")
-      + (s.ask ? '<div class="ask-panel">' + windowHtml("term", "Room", '<p class="ask-q">' + esc(s.ask) + "</p>" + dragTalk(s)) + "</div>" : windowHtml("term", "Talk", talkHtml(s)))
-      + "</div>";
+      + "</div></div>"
+      + (s.ask ? '<div class="ask-panel">' + windowHtml("term", "Room", '<p class="ask-q">' + esc(s.ask) + "</p>" + dragTalk(s)) + "</div>" : windowHtml("ask-panel", "Talk", talkHtml(s)));
   }
 
   function dragTalk(s) {
