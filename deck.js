@@ -647,7 +647,7 @@
     }
     var inner = q;
     var panel = function (html) {
-      return inner + '<div class="ask-panel">' + askLine + html + "</div>";
+      return '<div class="ask">' + inner + "</div>" + '<div class="ask-panel">' + askLine + html + "</div>";
     };
     if (DeckSync.isDone(String(i))) {
       return panel('<p class="thanks">Sent. Wait for the next slide.</p>');
