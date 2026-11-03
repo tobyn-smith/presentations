@@ -17,6 +17,7 @@
   var painted = {};
   var lastIndex = -1;
   var kickNotice = "";
+  var pendingSubmissions = {};
 
   function cfg() { return window.DECK || {}; }
   function brand() { return cfg().title || "Discussion"; }
@@ -342,9 +343,9 @@
         + '<path d="M44 40l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
         + '<path d="M44 110l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
         + '<path d="M44 180l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
-        + '<text x="82" y="48" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Labour</text>'
-        + '<text x="82" y="118" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Skocpol</text>'
-        + '<text x="82" y="188" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Chile</text>'
+        + '<text x="82" y="48" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Build</text>'
+        + '<text x="82" y="118" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Test</text>'
+        + '<text x="82" y="188" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Time</text>'
         + "</svg></div>";
     }
     if (s.id === "chile") return yearChartHtml();
@@ -385,7 +386,8 @@
         + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit ? esc(chart.unit) : "") + "</span>"
         + "</div>";
     }).join("");
-    var fig = '<figure class="chart" data-chart="' + esc(chart.id || "") + '">'
+    var accessible = [chart.title, chart.source, chart.note].filter(Boolean).join(". ");
+    var fig = '<figure class="chart" data-chart="' + esc(chart.id || "") + '" role="img" aria-label="' + esc(accessible) + '">'
       + (chart.source || chart.note ? "<figcaption>"
         + (chart.source ? '<p class="chart-source">' + esc(chart.source) + "</p>" : "")
         + (chart.note ? '<p class="chart-note">' + esc(chart.note) + "</p>" : "")
@@ -444,7 +446,7 @@
     return '<div class="drag-rank" id="drag-rank">'
       + '<ol class="rank-list">'
       + opts.map(function (o, idx) {
-        return '<li data-opt="' + esc(o) + '"><span class="rank-n">' + (idx + 1) + '</span><span class="rank-lab">' + esc(o) + "</span></li>";
+        return '<li data-opt="' + esc(o) + '" tabindex="-1"><span class="rank-n">' + (idx + 1) + '</span><span class="rank-lab">' + esc(o) + '</span><span class="rank-controls"><button type="button" data-move="up" aria-label="Move ' + esc(o) + ' up"' + (idx === 0 ? " disabled" : "") + '>↑</button><button type="button" data-move="down" aria-label="Move ' + esc(o) + ' down"' + (idx === opts.length - 1 ? " disabled" : "") + '>↓</button></span></li>';
       }).join("")
       + "</ol>"
       + (withSend ? '<button type="button" class="send" id="drag-send">Send</button>' : "")
@@ -456,8 +458,9 @@
     var slots = s.slots || [];
     return '<div class="drag-place" id="drag-place">'
       + '<div class="token-tray" data-home="1">'
-      + tokens.map(function (t) {
-        return '<span class="token" data-token="' + esc(t) + '" tabindex="0">' + esc(t) + "</span>";
+      + tokens.map(function (t, idx) {
+        var selectId = "place-token-" + idx;
+        return '<div class="token-choice" data-token-choice="' + esc(t) + '"><button type="button" class="token" data-token="' + esc(t) + '">' + esc(t) + '</button><label class="sr" for="' + selectId + '">Place ' + esc(t) + '</label><select class="token-place" id="' + selectId + '" data-token-place="' + esc(t) + '"><option value="">Choose a group</option>' + slots.map(function (slot) { return '<option value="' + esc(slot.id) + '">' + esc(slot.label) + '</option>'; }).join("") + '</select></div>';
       }).join("")
       + "</div>"
       + '<div class="slot-row">'
@@ -641,7 +644,7 @@
         + windowHtml("term", "Room", askLine + optPreview + '<div id="viz"></div>')
         + "</div>";
     }
-    var inner = q;
+    var inner = '<div class="ask">' + q + "</div>";
     var panel = function (html) {
       return inner + '<div class="ask-panel">' + askLine + html + "</div>";
     };
@@ -693,6 +696,16 @@
     }
   }
 
+  function paintRankControls(list) {
+    var items = list.querySelectorAll("[data-opt]");
+    Array.prototype.forEach.call(items, function (li, idx) {
+      var up = li.querySelector('[data-move="up"]');
+      var down = li.querySelector('[data-move="down"]');
+      if (up) up.disabled = idx === 0;
+      if (down) down.disabled = idx === items.length - 1;
+    });
+  }
+
   function bindRank(s, i, canSend) {
     if (!canSend || isPres) return;
     var list = document.querySelector("#drag-rank .rank-list");
@@ -712,8 +725,21 @@
       held.classList.remove("is-dragging");
       held = null;
       numberRanks(list);
+      paintRankControls(list);
     }
+    list.addEventListener("click", function (e) {
+      var move = e.target.closest("button[data-move]");
+      if (!move) return;
+      var li = move.closest("[data-opt]");
+      if (!li) return;
+      var direction = move.getAttribute("data-move");
+      if (direction === "up" && li.previousElementSibling) list.insertBefore(li, li.previousElementSibling);
+      if (direction === "down" && li.nextElementSibling) list.insertBefore(li.nextElementSibling, li);
+      numberRanks(list);
+      paintRankControls(list);
+    });
     list.addEventListener("pointerdown", function (e) {
+      if (e.target.closest("button")) return;
       var li = e.target.closest("[data-opt]");
       if (!li) return;
       held = li;
@@ -754,16 +780,18 @@
       return slot ? slot.querySelector(".slot-well") : null;
     }
     function lift(tok, x, y) {
-      var rect = tok.getBoundingClientRect();
+      var pair = tok.closest(".token-choice") || tok;
+      var rect = pair.getBoundingClientRect();
       grabX = x - rect.left;
       grabY = y - rect.top;
-      tok.classList.add("is-dragging");
-      tok.style.position = "fixed";
-      tok.style.left = rect.left + "px";
-      tok.style.top = rect.top + "px";
-      tok.style.width = rect.width + "px";
-      tok.style.zIndex = "20";
-      tok.style.pointerEvents = "none";
+      pair.classList.add("is-dragging");
+      pair.style.position = "fixed";
+      pair.style.left = rect.left + "px";
+      pair.style.top = rect.top + "px";
+      pair.style.width = rect.width + "px";
+      pair.style.zIndex = "20";
+      pair.style.pointerEvents = "none";
+      return pair;
     }
     function follow(x, y) {
       if (!held) return;
@@ -783,13 +811,14 @@
       held.style.zIndex = "";
       held.style.pointerEvents = "";
       if (well) well.appendChild(held);
+      var select = held.querySelector("[data-token-place]");
+      if (select) select.value = well && well.closest(".slot") ? well.closest(".slot").getAttribute("data-slot") : "";
       held = null;
     }
     board.addEventListener("pointerdown", function (e) {
       var tok = e.target.closest(".token");
       if (!tok) return;
-      held = tok;
-      lift(tok, e.clientX, e.clientY);
+      held = lift(tok, e.clientX, e.clientY);
       try { tok.setPointerCapture(e.pointerId); } catch (err) {}
       e.preventDefault();
     });
@@ -804,6 +833,16 @@
     board.addEventListener("pointercancel", function () {
       if (!held) return;
       drop(-1, -1);
+    });
+    board.addEventListener("change", function (e) {
+      var select = e.target.closest("select[data-token-place]");
+      if (!select) return;
+      var pair = select.closest(".token-choice");
+      if (!pair) return;
+      var target = select.value
+        ? board.querySelector('.slot[data-slot="' + select.value + '"] .slot-well')
+        : board.querySelector(".token-tray");
+      if (target) target.appendChild(pair);
     });
     var send = document.getElementById("drag-send");
     if (send && canSend) {
@@ -895,11 +934,42 @@
   }
 
   function submit(s, i, payload) {
-    if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return;
-    remember(s.id, payload);
-    DeckSync.submit(String(i), payload);
-    DeckSync.markDone(String(i));
-    render(i, true);
+    if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return Promise.resolve(false);
+    var id = String(i);
+    if (DeckSync.isDone(id) || pendingSubmissions[id]) return Promise.resolve(false);
+    pendingSubmissions[id] = true;
+    var panel = stage.querySelector(".ask-panel");
+    var send = panel && panel.querySelector(".send");
+    var originalLabel = send ? send.textContent : "";
+    var error = panel && panel.querySelector(".submit-error");
+    if (error) error.remove();
+    if (send) {
+      send.disabled = true;
+      send.textContent = "Sending…";
+    }
+    function failed() {
+      pendingSubmissions[id] = false;
+      if (send) {
+        send.disabled = false;
+        send.textContent = originalLabel || "Try again";
+      }
+      if (panel && !panel.querySelector(".submit-error")) {
+        var notice = document.createElement("p");
+        notice.className = "submit-error";
+        notice.setAttribute("role", "alert");
+        notice.textContent = "That did not reach the room. Check the connection and try again.";
+        panel.appendChild(notice);
+      }
+      return false;
+    }
+    return Promise.resolve(DeckSync.submit(id, payload)).then(function (ok) {
+      pendingSubmissions[id] = false;
+      if (!ok) return failed();
+      remember(s.id, payload);
+      DeckSync.markDone(id);
+      if (DeckSync.getSlide() === i && lastIndex === i) render(i, true);
+      return true;
+    }).catch(failed);
   }
 
   function wordFreq(list) {
@@ -1047,47 +1117,39 @@
     log.textContent = text || "";
   }
 
-  function failsafeAge(ms) {
-    if (ms == null) return "never";
-    if (ms < 1500) return "just now";
-    if (ms < 60000) return Math.round(ms / 1000) + "s ago";
-    return Math.round(ms / 60000) + "m ago";
-  }
-
   function paintFailsafeStatus() {
     var host = document.getElementById("failsafe-status");
     if (!host || !DeckSync.snapshot) return;
     var snap = DeckSync.snapshot();
     var rows = [
-      ["Room", snap.localOnly ? "This computer only" : snap.room],
-      ["Session", snap.session],
-      ["Go live", snap.presenting ? "On · last push " + failsafeAge(snap.hereAgeMs) : "Off · audience on Hold"],
-      ["Audience", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Can join" : "Not confirmed yet")],
-      ["Live sync", snap.localOnly ? "This computer only" : (snap.status.detail || snap.status.mode)],
-      ["Firebase HTTP", snap.firebaseHttp ? String(snap.firebaseHttp) : "none"],
+      ["Connection", snap.localOnly ? "Local preview only" : (snap.status.detail || snap.status.mode || "Checking…")],
+      ["Presentation", snap.presenting ? "Live" : "On hold"],
+      ["Audience", snap.localOnly ? "Disabled in local preview" : (snap.status.phones ? "Available" : "Not confirmed")],
       ["Checked in", String(snap.seats.length)],
-      ["Join", (snap.join || "").replace(/^https:\/\//, "")],
-      ["Slide", String((snap.slide || 0) + 1)],
-      ["Last error", snap.error || "None"]
+      ["Current slide", String((snap.slide || 0) + 1) + " of " + slides().length],
+      ["Last issue", snap.error || "None"]
     ];
     host.innerHTML = rows.map(function (row) {
       return "<div><dt>" + esc(row[0]) + "</dt><dd>" + esc(row[1]) + "</dd></div>";
     }).join("");
-    var people = document.getElementById("failsafe-people");
-    if (people) {
-      var list = DeckSync.getSeats();
-      people.innerHTML = '<p class="failsafe-empty">' + list.length + (list.length === 1 ? " person is in." : " people are in.") + "</p>";
-    }
   }
 
+  var failsafeOpener = null;
   function setFailsafeOpen(on) {
     var panel = document.getElementById("failsafe");
     if (!panel) return;
+    if (on && !panel.hidden) return;
+    if (on) failsafeOpener = document.activeElement;
     panel.hidden = !on;
     document.body.classList.toggle("is-failsafes", !!on);
     if (on) {
       paintFailsafeStatus();
       failsafeLog("");
+      var close = document.getElementById("failsafe-close");
+      if (close) close.focus();
+    } else if (failsafeOpener && failsafeOpener.focus) {
+      failsafeOpener.focus();
+      failsafeOpener = null;
     }
   }
 
@@ -1277,28 +1339,11 @@
     if (fsPanel) fsPanel.addEventListener("click", function (e) {
       if (e.target === fsPanel) setFailsafeOpen(false);
     });
-    var fsPush = document.getElementById("fs-push");
-    if (fsPush) fsPush.addEventListener("click", function () {
-      failsafeLog("Pushing Go live…");
-      DeckSync.pushLive().then(function (res) {
-        paintLive();
-        paintFailsafeStatus();
-        failsafeLog(res.ok
-          ? "Firebase has Go live. Audience screens should leave Hold within a second."
-          : ("Push failed. " + (res.error || "Try Test audience connection.")));
-      });
-    });
     var fsSlide = document.getElementById("fs-slide");
     if (fsSlide) fsSlide.addEventListener("click", function () {
       DeckSync.republish();
       paintFailsafeStatus();
       failsafeLog("Sent slide " + (DeckSync.getSlide() + 1) + " again.");
-    });
-    var fsTitle = document.getElementById("fs-title");
-    if (fsTitle) fsTitle.addEventListener("click", function () {
-      DeckSync.setSlide(0);
-      paintFailsafeStatus();
-      failsafeLog("Sent everyone to the title slide.");
     });
     var fsProbe = document.getElementById("fs-probe");
     if (fsProbe) fsProbe.addEventListener("click", function () {
@@ -1336,13 +1381,6 @@
         failsafeLog(ok ? "Seat list cleared. People can check in again." : "Could not clear seats. Test audience connection.");
       });
     });
-    var fsEnd = document.getElementById("fs-end");
-    if (fsEnd) fsEnd.addEventListener("click", function () {
-      DeckSync.standDown();
-      paintLive();
-      paintFailsafeStatus();
-      failsafeLog("Room ended. Audience screens should return to Hold.");
-    });
     var fsCopy = document.getElementById("fs-copy");
     if (fsCopy) fsCopy.addEventListener("click", function () {
       var text = JSON.stringify(DeckSync.snapshot(), null, 2);
@@ -1350,23 +1388,6 @@
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function () { done(true); }).catch(function () { done(false); });
       } else done(false);
-    });
-    document.body.addEventListener("click", function (e) {
-      var b = e.target.closest("[data-kick]");
-      if (!b) return;
-      e.preventDefault();
-      var kickedSid = b.getAttribute("data-kick");
-      if (!confirm("Remove this person? Their screen returns to check-in and they have to start over.")) return;
-      DeckSync.kick(kickedSid);
-      paintSeated();
-      paintFailsafeStatus();
-      failsafeLog("Removed one person. They have to check in again.");
-    });
-    var fsUnkick = document.getElementById("fs-unkick");
-    if (fsUnkick) fsUnkick.addEventListener("click", function () {
-      DeckSync.unkickAll();
-      paintFailsafeStatus();
-      failsafeLog("Cleared removals. Anyone can check in again.");
     });
   }
   DeckSync.onResponses(function (id, list) {
@@ -1386,7 +1407,16 @@
     document.addEventListener("keydown", function (e) {
       if (!unlocked()) return;
       if (document.body.classList.contains("is-failsafes")) {
-        if (e.key === "Escape") { e.preventDefault(); setFailsafeOpen(false); }
+        if (e.key === "Escape") { e.preventDefault(); setFailsafeOpen(false); return; }
+        if (e.key === "Tab") {
+          var dialog = document.querySelector("#failsafe [role='dialog']");
+          var focusable = dialog ? [].slice.call(dialog.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(function (el) { return !el.hidden; }) : [];
+          if (focusable.length) {
+            var first = focusable[0], last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+          }
+        }
         return;
       }
       if (e.target && /input|textarea/i.test(e.target.tagName)) return;

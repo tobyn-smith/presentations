@@ -294,14 +294,24 @@
     if (backupOn || localOnly || !usingFirebase) {
       try { if (bc) bc.postMessage(msg); } catch (e) {}
     }
-    publishLive(msg);
+    return publishLive(msg);
   }
 
-  var publishNtfy = function () {};
-  var publishFb = function () {};
+  var publishNtfy = function () { return Promise.resolve(false); };
+  var publishFb = function () { return Promise.resolve(false); };
   function publishLive(msg) {
-    if (usingFirebase && !fbLocked) publishFb(msg);
-    else publishNtfy(msg);
+    if (localOnly) return Promise.resolve(true);
+    if (usingFirebase && !fbLocked) {
+      return Promise.resolve(publishFb(msg)).then(function (ok) {
+        if (ok) return true;
+        lockFirebase(lastFbHttp || 0);
+        return Promise.resolve(publishNtfy(msg)).then(function (backupOk) { return !!backupOk; });
+      }).catch(function () {
+        lockFirebase(lastFbHttp || 0);
+        return Promise.resolve(publishNtfy(msg)).then(function (backupOk) { return !!backupOk; });
+      });
+    }
+    return Promise.resolve(publishNtfy(msg)).then(function (ok) { return !!ok; });
   }
 
   function firebaseConfigured() {
@@ -639,43 +649,38 @@
 
   function bindPublishFb() {
     publishFb = function (msg) {
-      if (msg.t === "slide") fbPut("slide", msg.n);
-      else if (msg.t === "resp") {
+      if (msg.t === "slide") return fbPut("slide", msg.n);
+      if (msg.t === "resp") {
         var row = {
           text: msg.text || "", choice: msg.choice || "", at: msg.at || Date.now(), bin: msg.bin || ""
         };
         var kind = msg.bin === "place" || msg.kind === "place" ? "places" : "votes";
-        fbPut(kind + "/" + msg.slide + "/" + msg.sid, row);
+        return fbPut(kind + "/" + msg.slide + "/" + msg.sid, row);
       }
-      else if (msg.t === "reset") {
-        fbPut("votes/" + msg.slide, null);
-        fbPut("places/" + msg.slide, null);
-        fbPut("responses/" + msg.slide, null);
-      }
-      else if (msg.t === "wipe") {
-        fbPut("votes", null);
-        fbPut("places", null);
-        fbPut("responses", null);
-      }
-      else if (msg.t === "here") fbPatch({ goneAt: null, here: msg.at || Date.now() });
-      else if (msg.t === "gone") fbPatch({ here: null, goneAt: msg.at || Date.now() });
-      else if (msg.t === "kick") {
-        fbPut("seats/" + msg.sid, null);
-        fbPut("hands/" + msg.sid, null);
-        fbPut("kicks/" + msg.sid, { name: msg.name || "", at: msg.at || Date.now() });
-      } else if (msg.t === "unkick") fbPut("kicks", null);
-      else if (msg.t === "seat") fbPut("seats/" + msg.sid, {
-        at: msg.at || Date.now()
-      });
-      else if (msg.t === "leave") {
-        fbPut("seats/" + msg.sid, null);
-        fbPut("hands/" + msg.sid, null);
-      } else if (msg.t === "hand") {
-        if (msg.up) fbPut("hands/" + msg.sid, {
-          slide: msg.slide, up: true, at: msg.at || Date.now()
-        });
-        else fbPut("hands/" + msg.sid, null);
-      }
+      if (msg.t === "reset") return Promise.all([
+        fbPut("votes/" + msg.slide, null),
+        fbPut("places/" + msg.slide, null),
+        fbPut("responses/" + msg.slide, null)
+      ]).then(function (rows) { return rows.every(Boolean); });
+      if (msg.t === "wipe") return Promise.all([
+        fbPut("votes", null), fbPut("places", null), fbPut("responses", null)
+      ]).then(function (rows) { return rows.every(Boolean); });
+      if (msg.t === "here") return fbPatch({ goneAt: null, here: msg.at || Date.now() });
+      if (msg.t === "gone") return fbPatch({ here: null, goneAt: msg.at || Date.now() });
+      if (msg.t === "kick") return Promise.all([
+        fbPut("seats/" + msg.sid, null),
+        fbPut("hands/" + msg.sid, null),
+        fbPut("kicks/" + msg.sid, { name: msg.name || "", at: msg.at || Date.now() })
+      ]).then(function (rows) { return rows.every(Boolean); });
+      if (msg.t === "unkick") return fbPut("kicks", null);
+      if (msg.t === "seat") return fbPut("seats/" + msg.sid, { at: msg.at || Date.now() });
+      if (msg.t === "leave") return Promise.all([
+        fbPut("seats/" + msg.sid, null), fbPut("hands/" + msg.sid, null)
+      ]).then(function (rows) { return rows.every(Boolean); });
+      if (msg.t === "hand") return msg.up
+        ? fbPut("hands/" + msg.sid, { slide: msg.slide, up: true, at: msg.at || Date.now() })
+        : fbPut("hands/" + msg.sid, null);
+      return Promise.resolve(true);
     };
   }
 
@@ -843,7 +848,16 @@
     var url = base + "/" + topic;
     var sseOpen = false;
     publishNtfy = function (msg) {
-      fetch(url, { method: "POST", body: JSON.stringify(msg) }).catch(function () {});
+      return fetch(url, { method: "POST", body: JSON.stringify(msg) }).then(function (r) {
+        if (!r.ok) {
+          lastError = "Backup message HTTP " + r.status;
+          return false;
+        }
+        return true;
+      }).catch(function () {
+        lastError = "Backup message could not be sent";
+        return false;
+      });
     };
     function ingest(raw) {
       try {
@@ -926,7 +940,7 @@
         bin: payload.bin || payload.kind || "",
         at: Date.now()
       };
-      shout(row);
+      return shout(row);
     },
     onResponses: function (fn) { respFns.push(fn); },
     getResponses: function (id) {

@@ -152,9 +152,9 @@
         + '<path d="M44 40l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
         + '<path d="M44 110l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
         + '<path d="M44 180l6 6 12-13" fill="none" stroke="#f3d89a" stroke-width="4"/>'
-        + '<text x="82" y="48" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Labour</text>'
-        + '<text x="82" y="118" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Skocpol</text>'
-        + '<text x="82" y="188" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Chile</text>'
+        + '<text x="82" y="48" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Build</text>'
+        + '<text x="82" y="118" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Test</text>'
+        + '<text x="82" y="188" fill="#16324f" font-size="22" font-family="Oswald, sans-serif">Time</text>'
         + "</svg></div>";
     }
     if (s.id === "chile") return yearChartHtml();
@@ -172,14 +172,7 @@
   function fitStage() {
     if (!stage) return;
     stage.style.transform = "";
-    if (window.innerWidth < 720) return;
-    var room = stage.clientHeight;
-    var need = stage.scrollHeight;
-    if (room > 0 && need > room + 2) {
-      var scale = Math.max(0.68, room / need);
-      stage.style.transformOrigin = "top center";
-      stage.style.transform = "scale(" + scale + ")";
-    }
+    stage.style.transformOrigin = "";
   }
 
   function chartHtml(chart) {
@@ -198,7 +191,8 @@
         + '<span class="chart-n">' + esc(fmtN(n)) + (chart.unit ? esc(chart.unit) : "") + "</span>"
         + "</div>";
     }).join("");
-    var fig = '<figure class="chart" data-chart="' + esc(chart.id || "") + '">'
+    var accessible = [chart.title, chart.source, chart.note].filter(Boolean).join(". ");
+    var fig = '<figure class="chart" data-chart="' + esc(chart.id || "") + '" role="img" aria-label="' + esc(accessible) + '">'
       + (chart.source || chart.note ? "<figcaption>"
         + (chart.source ? '<p class="chart-source">' + esc(chart.source) + "</p>" : "")
         + (chart.note ? '<p class="chart-note">' + esc(chart.note) + "</p>" : "")
@@ -393,14 +387,12 @@
         + (s.footer ? '<p class="footer-line">' + esc(s.footer) + "</p>" : "");
     }
     if (s.input === "place" || s.input === "rank") {
-      return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
-        + '<div class="split has-viz has-drag-main">'
-        + '<div class="split-viz">' + vizHtml(s) + "</div>"
-        + '<div class="split-side">'
-        + windowHtml("term", "The trays", dragTalk(s))
-        + "</div></div>";
+      return '<div class="ask">' + kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
+        + '<div class="split has-viz"><div class="split-viz">' + vizHtml(s) + "</div></div>"
+        + "</div>"
+        + '<div class="ask-panel">' + windowHtml("term", "The trays", dragTalk(s)) + "</div>";
     }
-    return kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
+    return '<div class="ask">' + kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>"
       + '<div class="slide-stack">'
       + (s.lead ? '<p class="lead">' + esc(s.lead) + "</p>" : "")
       + splitHtml(s)
@@ -408,8 +400,8 @@
       + articleHtml(s)
       + recapHtml(s)
       + (s.help ? '<p class="help">' + esc(s.help) + "</p>" : "")
-      + (s.ask ? '<div class="ask-panel">' + windowHtml("term", "Room", '<p class="ask-q">' + esc(s.ask) + "</p>" + dragTalk(s)) + "</div>" : windowHtml("term", "Talk", talkHtml(s)))
-      + "</div>";
+      + "</div></div>"
+      + (s.ask ? '<div class="ask-panel">' + windowHtml("term", "Room", '<p class="ask-q">' + esc(s.ask) + "</p>" + dragTalk(s)) + "</div>" : windowHtml("ask-panel", "Talk", talkHtml(s)));
   }
 
   function dragTalk(s) {

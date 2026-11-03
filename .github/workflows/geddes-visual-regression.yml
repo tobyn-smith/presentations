@@ -1,0 +1,38 @@
+name: Geddes visual regression
+
+on:
+  pull_request:
+    paths:
+      - "readings/**"
+      - "figures/**"
+      - "*.css"
+      - "*.js"
+      - "*.html"
+      - "present/**"
+      - "visual-test.mjs"
+      - ".github/workflows/geddes-visual-regression.yml"
+  workflow_dispatch:
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: npm install --no-save playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Capture and check all slides
+        run: node visual-test.mjs
+      - name: Upload slide screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: geddes-visual-review
+          path: artifacts/geddes-visual/
+          if-no-files-found: warn
+          retention-days: 14

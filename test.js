@@ -59,8 +59,8 @@ assert.ok(/Seven defeat\/no-revolution/.test(SLIDES.filter(function (s) { return
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.id, "table2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
 assert.ok(/ten country-period instances/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
-assert.ok(/continues through 1972/.test(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.note));
-assert.ok(/curved relationship/.test(JSON.stringify(SLIDES.filter(function (s) { return s.id === "fits"; }))));
+assert.ok(/five selected Table 2 observations/.test(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.note));
+assert.ok(/curve or a few NICs/.test(JSON.stringify(SLIDES.filter(function (s) { return s.id === "fits"; }))));
 assert.ok(!/The five are all a 3/.test(JSON.stringify(SLIDES)));
 
 var prompts = SLIDES.filter(function (s) { return s.type === "prompt"; });
@@ -119,20 +119,26 @@ SCRIPT.forEach(function (s) {
 });
 assert.ok(SCRIPT.some(function (s) { return s.id === "open" && /TOBYN/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "skocpol" && /RAQUEL/.test(s.notes); }));
-["regions","figure2","fits","skocpol","figure4","figure5","hirschman","chile"].forEach(function (id) {
+["regions","figure2","fits","skocpol","figure4","figure5"].forEach(function (id) {
   var row = SCRIPT.filter(function (s) { return s.id === id; })[0];
   assert.ok(row && /RAQUEL/.test(row.notes), "Raquel owns graph section slide " + id);
 });
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].type, "prompt", "Figure 3 accepts student responses");
-assert.ok(SCRIPT.some(function (s) { return s.id === "hirschman" && /TOBYN/.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "hirschman" && /TOBYN/.test(s.notes); }), "Hirschman slide returns to Tobyn for Part 3");
 assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /TOBYN/.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "quote-sample" && /TOBYN/.test(s.notes); }), "Tobyn completes the sample-design interaction before handover");
+["hirschman","chile","close"].forEach(function (id) {
+  var row = SCRIPT.filter(function (s) { return s.id === id; })[0];
+  assert.ok(row && /TOBYN/.test(row.notes), "Tobyn leads the final Chile section and conclusion");
+});
+
 assert.ok(SCRIPT.some(function (s) { return s.id === "nics" && /INTERACTION 1 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "quote-sample" && /INTERACTION 2 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /INTERACTION 3 OF 3/.test(s.notes); }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "figure2" && /weak/.test(s.say); }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /Figure 3/.test(s.say); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "figure2" && /r-squared is only \.07/.test(s.say); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /straight-line fit is almost flat/.test(s.say); }));
 assert.ok(/15:00/.test(SCRIPT[SCRIPT.length - 1].title));
-assert.deepStrictEqual(SLIDES.map(function (s) { return s.id; }), ["open","ask","nics","regions","quote-sample","figure2","fits","skocpol","figure4","figure5","hirschman","chile","close"]);
+assert.deepStrictEqual(SLIDES.map(function (s) { return s.id; }), ["open","ask","nics","quote-sample","regions","figure2","fits","skocpol","figure4","figure5","hirschman","chile","close"]);
 assert.ok(!/five-minute pairs activity/.test(JSON.stringify(SLIDES)));
 
 var fs = require("fs");
@@ -173,10 +179,21 @@ assert.ok(user.indexOf('id="uga-kicker"') !== -1);
 assert.ok(backup.indexOf("readings/geddes-1990.js") !== -1);
 assert.ok(backup.indexOf("readings/geddes-visuals.js") !== -1);
 assert.ok(backup.indexOf("geddes-figures.css") !== -1);
+assert.ok(backup.indexOf("geddes-layout-fix.css") !== -1, "backup slideshow uses the same anti-clipping layout rules");
+assert.ok(fs.existsSync("./visual-test.mjs"));
+assert.ok(/geddes-chart-enter/.test(fs.readFileSync("./geddes-figures.css", "utf8")), "figure artwork has a restrained entrance animation");
+assert.ok(fs.existsSync("./.github/workflows/geddes-visual-regression.yml"));
+
 assert.ok(start.indexOf("Presenter") !== -1 && start.indexOf("Audience") !== -1 && start.indexOf("Backup slideshow") !== -1);
 assert.ok(admin.indexOf('id="reveal"') === -1, "unused reveal control removed");
 assert.ok(admin.indexOf('id="fs-title"') === -1, "QR/title room tool removed");
 assert.ok(admin.indexOf('id="fs-end"') === -1, "duplicate end-room tool removed");
+assert.ok(admin.indexOf('id="failsafe-open" aria-haspopup="dialog"') !== -1, "room status opens an accessible dialog");
+assert.ok(admin.indexOf("Room status") !== -1 && admin.indexOf("Room tools") === -1, "outdated room tools panel has been renamed and rebuilt");
+assert.ok(admin.indexOf('id="fs-slide"') !== -1 && admin.indexOf('id="fs-pull"') !== -1 && admin.indexOf('id="fs-probe"') !== -1 && admin.indexOf('id="fs-seats"') !== -1 && admin.indexOf('id="fs-copy"') !== -1);
+assert.ok(admin.indexOf('id="key-change"') === -1 && admin.indexOf('id="roster-form"') === -1, "key and roster editing remain on the editor page, not in live-room recovery");
+assert.ok(admin.indexOf('id="fs-push"') === -1 && admin.indexOf('id="fs-unkick"') === -1, "obsolete duplicate recovery actions removed");
+
 assert.ok(admin.indexOf("class=\"brand\"") === -1);
 assert.ok(backup.indexOf("class=\"brand\"") === -1);
 assert.ok(admin.indexOf("stage-wrap") !== -1);
@@ -194,6 +211,7 @@ var layoutFix = fs.readFileSync("./geddes-layout-fix.css", "utf8");
 assert.ok(layoutFix.indexOf("overflow-y: auto !important") !== -1, "both routes allow internal slide scrolling instead of clipping");
 assert.ok(layoutFix.indexOf("max-width: none !important") !== -1, "graphs are not constrained to the old narrow presenter width");
 assert.ok(layoutFix.indexOf("geddes-fig3") !== -1, "Figure 3 graph and interaction have a dedicated fit");
+assert.ok(layoutFix.indexOf('geddes-fig1') !== -1 && layoutFix.indexOf('geddes-fig6') !== -1, "Figures 1 and 6 use full-width figure layouts");
 assert.ok(layoutFix.indexOf("@media (max-width: 1100px)") !== -1, "compact laptop layouts are handled");
 
 /* Layout regression guards for the Figure 3 nested-scroll/clipping bug. */
@@ -203,6 +221,9 @@ assert.ok(layoutFix.indexOf("max-height: none !important") !== -1, "Figure 3 ans
 assert.ok(layoutFix.indexOf("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") !== -1, "Figure 3 choices use a compact two-column layout");
 assert.ok(layoutFix.indexOf("height: clamp(245px, 34vh, 350px) !important") !== -1, "Figure 3 chart height is bounded to leave room for the question");
 assert.ok(layoutFix.indexOf("flex-wrap: wrap") !== -1, "presenter toolbar can wrap on narrower laptop widths");
+assert.ok(layoutFix.indexOf(":focus-visible") !== -1, "keyboard focus is visible across both presentation roles");
+assert.ok(layoutFix.indexOf(".failsafe-card") !== -1 && layoutFix.indexOf("grid-template-columns: repeat(2,minmax(0,1fr))") !== -1, "room status panel follows the deck visual system");
+
 
 
 ["geddes-selection.svg","geddes-fig1.svg","geddes-fig2.svg","geddes-fig3.svg","geddes-fig4.svg","geddes-fig5.svg","geddes-fig6.svg"].forEach(function (name) { assert.ok(fs.existsSync("./figures/" + name)); });
@@ -212,6 +233,12 @@ assert.ok(fig4svg.indexOf("China after the") !== -1 && fig4svg.indexOf("Russia, 
 assert.ok(fig4svg.indexOf("Prussia") !== -1 && fig4svg.indexOf("Japan") !== -1);
 assert.ok(fig5svg.indexOf("Bolivia, 1903") !== -1 && fig5svg.indexOf("Nicaragua, 1979") !== -1);
 assert.ok(fig5svg.indexOf("Cuba (1959)") !== -1 && fig5svg.indexOf("El Salvador, Peru and Guatemala") !== -1);
+var fig6svg = fs.readFileSync("./figures/geddes-fig6.svg", "utf8");
+["1955","84%","1956","38%","1957","17%","1960","5%","1961","10%","1972","above 100%"].forEach(function (v) {
+  assert.ok(fig6svg.indexOf(v) !== -1, "Figure 6 retains " + v);
+});
+assert.ok(/not an annual series/.test(fig6svg), "Figure 6 labels the dashed extension as schematic");
+
 assert.ok(fs.existsSync("./uga-logo.png"));
 assert.ok(admin.indexOf("uga-logo.png") !== -1);
 assert.ok(backup.indexOf("uga-logo.png") !== -1);
@@ -223,8 +250,12 @@ assert.ok(deckSrc.indexOf("I'm in") !== -1);
 assert.ok(deckSrc.indexOf("Who are you?") === -1);
 assert.ok(deckSrc.indexOf("function bindRank") !== -1);
 assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
+assert.ok(deckSrc.indexOf('data-move="up"') !== -1 && deckSrc.indexOf('data-move="down"') !== -1, "rank task has keyboard-operable move controls");
+assert.ok(deckSrc.indexOf('data-token-place') !== -1 && deckSrc.indexOf('board.addEventListener("change"') !== -1, "placement task has a keyboard-operable select alternative");
+assert.ok(deckSrc.indexOf('role="img" aria-label="\' + esc(accessible)') !== -1, "figure redraws expose an accessible description");
+
 assert.ok(deckSrc.indexOf("if (!canSend || isPres) return;") !== -1, "presenter cannot drag or submit student input");
-assert.ok(deckSrc.indexOf("if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return;") !== -1, "only a seated live student can submit");
+assert.ok(deckSrc.indexOf("if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return Promise.resolve(false);") !== -1, "only a seated live student can submit");
 assert.ok(deckSrc.indexOf("Room responses") !== -1, "presenter sees response summary rather than drag trays");
 assert.ok(!/dragHtml\(s, false\)/.test(deckSrc), "presenter view does not render student drag controls");
 assert.ok(deckSrc.indexOf("id=\"drag-send\"") !== -1);
@@ -248,6 +279,8 @@ var talk = fs.readFileSync("./slideshow.js", "utf8");
 assert.ok(talk.indexOf("function bindRank") !== -1);
 assert.ok(talk.indexOf("function bindPlace") !== -1);
 assert.ok(talk.indexOf("function fitStage") !== -1);
+assert.ok(talk.indexOf(">Build</text>") !== -1 && talk.indexOf(">Test</text>") !== -1 && talk.indexOf(">Time</text>") !== -1, "backup closing slide reinforces build, test and time");
+assert.ok(talk.indexOf("Math.max(0.68") === -1, "backup slideshow does not shrink slides to fit");
 assert.ok(deckSrc.indexOf("ss-win-dots") === -1);
 assert.ok(talk.indexOf("ss-win-dots") === -1);
 assert.ok(deckSrc.indexOf("ss-win-label") !== -1);
@@ -269,6 +302,18 @@ assert.ok(syncSrc.indexOf("Live sync: Firebase") !== -1);
 assert.ok(syncSrc.indexOf("Live sync: backup, Firebase locked") !== -1);
 assert.ok(syncSrc.indexOf("new EventSource(fbUrl(\"\"))") !== -1);
 assert.ok(syncSrc.indexOf("method: \"PATCH\"") !== -1);
+assert.ok(syncSrc.indexOf("return shout(row)") !== -1, "response submission exposes delivery success or failure");
+assert.ok(syncSrc.indexOf("Backup message could not be sent") !== -1, "backup delivery failures are surfaced");
+assert.ok(syncSrc.indexOf("function retryFirebase()") !== -1 && syncSrc.indexOf("setInterval(retryFirebase, 20000)") !== -1, "Firebase reconnection is retried");
+assert.ok(syncSrc.indexOf("function takeRoom(data)") !== -1 && syncSrc.indexOf("ingestAnswers(data)") !== -1, "presenter refresh restores persisted room responses");
+assert.ok(syncSrc.indexOf("onResponses: function (fn)") !== -1, "presenter response listeners are restored after room data loads");
+assert.ok(fs.existsSync("./docs/live-room-verification.md"), "live transport and refresh scenarios have a repeatable test plan");
+
+assert.ok(deckSrc.indexOf("pendingSubmissions") !== -1 && deckSrc.indexOf("That did not reach the room") !== -1, "student submission blocks duplicates and provides a retry path");
+assert.ok(deckSrc.indexOf('var inner = \'<div class="ask">\' + q + "</div>";') !== -1, "student prompt includes the teaching column");
+assert.ok(fs.readFileSync("./index.html", "utf8").includes('<body class="role-part is-desk"'), "audience page has its own participant role at load time");
+assert.ok(fs.readFileSync("./index.html", "utf8").includes('href="audience.css"'), "audience page loads its own classroom styles");
+
 assert.ok(syncSrc.indexOf("function startBackup()") !== -1);
 assert.ok(user.indexOf('aria-live="off"') !== -1);
 assert.ok(admin.indexOf('aria-live="off"') !== -1);
