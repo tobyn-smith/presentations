@@ -655,9 +655,9 @@
           + '<p class="slide-live-results-title">Class responses</p>'
           + '<div class="slide-live-results-content" id="slide-live-results-content"></div></section>'
         : "";
-      return '<div class="ask">' + q + slideResults + '</div><div class="ask-panel">'
+      return '<div class="ask">' + q + '</div><div class="ask-panel">'
         + windowHtml("term", "Room responses", askLine + optPreview + '<div id="viz"></div>')
-        + "</div>";
+        + "</div>" + slideResults;
     }
     var inner = '<div class="ask">' + q + "</div>";
     var panel = function (html) {
