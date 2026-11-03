@@ -529,10 +529,10 @@
       var href = joinHref();
       var shown = href.replace(/^https:\/\//, "").replace(/\/$/, "");
       var seats = seatedHtml();
-      var join = '<div class="title-join-block">'
+      var join = isPres ? '<div class="title-join-block">'
         + '<p class="title-join"><a href="' + esc(href) + '">' + esc(shown) + '</a></p>'
         + (seats || "")
-        + "</div>";
+        + "</div>" : "";
       return '<div class="title-card">'
         + '<div class="title-copy">'
         + '<img class="uga-logo title-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158">'
@@ -634,10 +634,10 @@
       : "";
     if (isPres && (s.input === "place" || s.input === "rank")) {
       return '<div class="ask">' + kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>" + "</div>"
-        + '<div class="split has-viz has-drag-main">'
+        + '<div class="split has-viz">'
         + '<div class="split-viz">' + vizHtml(s) + "</div>"
         + '<div class="split-side">'
-        + windowHtml("term", "The trays", dragHtml(s, false) + '<div id="viz"></div>')
+        + windowHtml("term", "Room responses", '<div id="viz"></div>')
         + "</div></div>";
     }
     if (isPres) {
@@ -698,6 +698,7 @@
   }
 
   function bindRank(s, i, canSend) {
+    if (!canSend || isPres) return;
     var list = document.querySelector("#drag-rank .rank-list");
     if (!list) return;
     var held = null;
@@ -740,6 +741,7 @@
   }
 
   function bindPlace(s, i, canSend) {
+    if (!canSend || isPres) return;
     var board = document.getElementById("drag-place");
     if (!board) return;
     var held = null;
@@ -897,6 +899,7 @@
   }
 
   function submit(s, i, payload) {
+    if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return;
     remember(s.id, payload);
     DeckSync.submit(String(i), payload);
     DeckSync.markDone(String(i));
