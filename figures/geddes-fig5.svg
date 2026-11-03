@@ -42,6 +42,7 @@
   <text x="990" y="555" fill="#16324f" font-family="Arial, sans-serif" font-size="31" font-weight="700">NEITHER OUTCOME</text>
   <text x="990" y="605" fill="#263c4d" font-family="Arial, sans-serif" font-size="24">All remaining cases in the comparison</text>
 
-  <rect x="70" y="714" width="1460" height="58" rx="12" fill="#203f5a" stroke="#6d8295" stroke-width="1"/>
-  <text x="94" y="751" fill="#fffdf7" font-family="Arial, sans-serif" font-size="22">10 country-period instances, not 10 unique countries. Bolivia appears more than once; Cuba (1959) is treated separately.</text>
+  <rect x="70" y="706" width="1460" height="66" rx="12" fill="#203f5a" stroke="#6d8295" stroke-width="1"/>
+  <text x="94" y="733" fill="#fffdf7" font-family="Arial, sans-serif" font-size="22">10 country-period instances, not 10 unique countries. Bolivia appears more than once; Cuba (1959) is treated separately.</text>
+  <text x="94" y="759" fill="#d6d2c4" font-family="Arial, sans-serif" font-size="22">El Salvador, Peru and Guatemala had long insurgencies, but no revolution in the period Geddes coded.</text>
 </svg>
