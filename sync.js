@@ -303,8 +303,11 @@
     if (localOnly) return Promise.resolve(true);
     if (usingFirebase && !fbLocked) {
       return Promise.resolve(publishFb(msg)).then(function (ok) {
-        return ok ? true : Promise.resolve(publishNtfy(msg)).then(function (backupOk) { return !!backupOk; });
+        if (ok) return true;
+        lockFirebase(lastFbHttp || 0);
+        return Promise.resolve(publishNtfy(msg)).then(function (backupOk) { return !!backupOk; });
       }).catch(function () {
+        lockFirebase(lastFbHttp || 0);
         return Promise.resolve(publishNtfy(msg)).then(function (backupOk) { return !!backupOk; });
       });
     }
