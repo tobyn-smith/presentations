@@ -3,7 +3,7 @@
  id:"geddes-1990", short:"Geddes", title:"How the Cases You Choose Affect the Answers You Get",
  authors:"Barbara Geddes", year:1990, source:"IGS Working Paper 90-13",
  slides:[
- {id:"open",type:"title",kicker:"INTL 6010 · Research Methods",title:"How the Cases You Choose Affect the Answers You Get",byline:"Barbara Geddes · 1990",presented:"Tobyn Smith and Raquel",lede:"A 15-minute discussion about what case selection lets us claim.",agenda:[],speaker:"",claims:[]},
+ {id:"open",type:"title",kicker:"INTL 6010 · Research Methods",title:"How the Cases You Choose Affect the Answers You Get",byline:"Barbara Geddes · 1990",presented:"Presented by Tobyn and Raquel",lede:"A 15-minute discussion about what case selection lets us claim.",agenda:[],speaker:"",claims:[]},
  {id:"ask",type:"claims",kicker:"The question",title:"When does a comparison mislead us?",claims:[
   {n:"01",title:"Start with the outcome",body:"Choose countries because they grew quickly, or because they had a revolution."},
   {n:"02",title:"Then look for a cause",body:"The cases may share a feature. But would countries without the outcome share it too?"},
