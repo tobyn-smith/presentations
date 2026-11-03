@@ -129,7 +129,7 @@
   var f = script("fits");
   f.title = "Interaction 3: reading Figure 3: 5:50-7:00";
   f.say = "Figure 3 is a slightly different picture. The straight-line fit is almost zero, but the highest growth rates cluster around repression level three. Geddes gives two possible explanations: perhaps the relationship is curved, or perhaps a few unusually fast-growing NICs are driving the pattern. Which interpretation best fits the two figures?";
-  f.notes = "TOBYN · 5:50-7:00\nINTERACTION 3 OF 3. Give the room 20-30 seconds to choose. Expected: the linear relationship is weak, but a curved pattern may be possible. Geddes also considers whether Singapore, Taiwan and South Korea drive the appearance of a curve; adding a few cases weakens it. Do not claim the hypothesis is proved or disproved. Hand over to Raquel.";
+  f.notes = "RAQUEL · 5:50-7:00\nINTERACTION 3 OF 3. Give the room 20-30 seconds to choose. Expected: the linear relationship is weak, but a curved pattern may be possible. Geddes also considers whether Singapore, Taiwan and South Korea drive the appearance of a curve; adding a few cases weakens it. Do not claim the hypothesis is proved or disproved. Hand over to Raquel.";
   ["regions","figure2","fits","skocpol","figure4","figure5","hirschman","chile"].forEach(function (id) {
     var item = script(id);
     if (item) item.notes = item.notes.replace(/^TOBYN/g, "RAQUEL");
@@ -141,14 +141,17 @@
   var ch = script("chile");
   ch.title = "Figure 6 and the endpoint: 11:30-13:15";
   ch.say = "Figure 6 carries the Chile series beyond Hirschman's 1961 endpoint. The two low years are no longer the end of the story. Geddes argues that the later record makes it much harder to claim that groups had learned to contain inflation. She points instead to the stabilisation policies under Alessandri.";
-  ch.notes = "TOBYN · 11:30-13:15\nNo interaction on this slide. Point out the 1961 endpoint marker and the later rise. The 1930–61 values come from Table 2; the extended trend is a schematic redraw of Figure 6, not a digitised annual dataset. Avoid saying this proves Hirschman was wrong about every part of his argument.";
+  ch.notes = "RAQUEL · 11:30-13:15\nNo interaction on this slide. Point out the 1961 endpoint marker and the later rise. The 1930-61 values come from Table 2; the extended trend is a schematic redraw of Figure 6, not a digitised annual dataset. Avoid saying this proves Hirschman was wrong about every part of his argument.";
   var cl = script("close");
   cl.title = "Conclusion: 13:15-15:00";
   /* Timings move the sample question ahead of the graph-reading activity. */
   script("ask").say = "Imagine I want to explain economic growth, so I start with countries that grew quickly. The top graph shows the pattern I might assume across all countries. But the lower graph shows another possibility: once the missing cases are included, the relationship may disappear. That is why Geddes says we need cases where the outcome did not happen as well.";
   script("regions").say = "Figure 1 is where the comparison widens. The five selected NICs all grew quickly, but there is very little variation in their labour-repression scores. The East Asian panel looks more convincing, with an r-squared of .56. But Geddes points out that East Asia was already an unusually fast-growing region. The question is whether the relationship holds once we look beyond it.";
   script("fits").say = "Figure 3 is not quite the same pattern. The straight-line fit is almost zero, but the highest growth rates cluster around repression level three. Geddes considers two possibilities: a curved relationship, or a few unusually fast-growing NICs driving the appearance of one. Neither explanation is settled by this graph.";
-  script("regions").title = "The wider comparison: 3:30-4:20";
+  script("regions").title = "Raquel: the graphs begin: 3:30-4:20";
+  script("ask").title = "Selection bias: 0:45-1:45";
+  script("nics").title = "Interaction 1: five fast growers: 1:45-2:45";
+  script("quote-sample").title = "Interaction 2: choosing the sample: 2:45-3:30";
   script("figure2").say = "Figure 2 takes us to a wider Third World sample. The fitted line slopes slightly down and the r-squared is only .07. Labour repression is also found in slow-growing countries, so the five success stories cannot tell us what caused growth.";
   var hs = script("hirschman"); hs.title = "Chile and the endpoint: 10:00-11:30";
   script("chile").title = "Figure 6 and the endpoint: 11:30-13:15";
