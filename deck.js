@@ -355,16 +355,15 @@
   function windowHtml(kind, title, inner) {
     if (!inner) return "";
     return '<div class="ss-win ss-' + kind + '">'
-      + '<div class="ss-win-bar">'
-      + '<span class="ss-win-dots" aria-hidden="true"><i></i><i></i><i></i></span>'
-      + (title ? '<span class="ss-win-title">' + esc(title) + "</span>" : "")
-      + "</div>"
-      + '<div class="ss-win-body">' + inner + "</div></div>";
+      + '<div class="ss-win-body">'
+      + (title ? '<p class="ss-win-label">' + esc(title) + "</p>" : "")
+      + inner + "</div></div>";
   }
 
   function fitStage() {
     if (!stage) return;
     stage.style.transform = "";
+    if (window.innerWidth < 720) return;
     var room = stage.clientHeight;
     var need = stage.scrollHeight;
     if (room > 0 && need > room + 2) {
