@@ -994,12 +994,12 @@ body.role-pres .stage[data-slide-id="quote-sample"] .ss-win:not(.has-answers) {
   body.role-pres .stage[data-chart="geddes-fig1"] figure.chart::after,
   body.role-part .stage[data-chart="geddes-fig6"] figure.chart::after,
   body.role-pres .stage[data-chart="geddes-fig6"] figure.chart::after {
-    height: clamp(390px, 56vh, 540px) !important;
+    height: clamp(420px, 60vh, 680px) !important;
   }
 
   body.role-part .stage[data-chart="geddes-fig2"] figure.chart::after,
   body.role-pres .stage[data-chart="geddes-fig2"] figure.chart::after {
-    height: clamp(400px, 58vh, 560px) !important;
+    height: clamp(430px, 62vh, 700px) !important;
   }
 
   body.role-part .stage[data-chart="geddes-fig3"],
@@ -1032,12 +1032,12 @@ body.role-pres .stage[data-slide-id="quote-sample"] .ss-win:not(.has-answers) {
   body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
   body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
   body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
-    height: clamp(480px, 60vh, 590px) !important;
+    height: clamp(500px, 64vh, 760px) !important;
   }
 
   body.role-part .stage[data-chart="geddes-fig6"] figure.chart::after,
   body.role-pres .stage[data-chart="geddes-fig6"] figure.chart::after {
-    height: clamp(400px, 58vh, 560px) !important;
+    height: clamp(430px, 62vh, 700px) !important;
   }
 }
 
