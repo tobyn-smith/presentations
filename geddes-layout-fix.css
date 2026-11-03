@@ -739,8 +739,15 @@ body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart 
    context, Geddes's warning and the question are separate, readable beats. */
 body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask,
 body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask {
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: clamp(12px, 2vh, 22px);
+}
+body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .slide-stack,
+body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .slide-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
 }
 body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .lead,
 body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .lead {
