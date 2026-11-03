@@ -18,6 +18,7 @@
   ];
 
   var regions = slide("regions");
+  regions.kicker = "PART 2 - RAQUEL";
   regions.chart = {
     id: "geddes-fig1", title: "Figure 1 · The selected cases and East Asia",
     source: "Geddes (1990), Figure 1",
@@ -34,7 +35,7 @@
   var fig2 = JSON.parse(JSON.stringify(fits));
   fig2.id = "figure2";
   fig2.type = "claims";
-  fig2.kicker = "PART 1 - TOBYN";
+  fig2.kicker = "PART 2 - RAQUEL";
   fig2.title = "Figure 2: the wider Third World sample";
   fig2.chart = {
     id: "geddes-fig2", title: "Figure 2 · Growth and labour repression in the Third World",
@@ -44,6 +45,7 @@
   };
   fig2.claims = [];
   fits.type = "prompt";
+  fits.kicker = "PART 2 - RAQUEL";
   fits.title = "Figure 3: the more advanced countries";
   fits.help = "Compare this pattern with Figure 2, then choose the interpretation closest to Geddes's conclusion.";
   fits.ask = "Which two explanations does Geddes consider for Figure 3?";
@@ -65,6 +67,7 @@
   fits.quote = null;
 
   var f4 = slide("figure4");
+  f4.kicker = "PART 2 - RAQUEL";
   f4.type = "claims";
   f4.title = "Skocpol's contrasts test different links";
   f4.lead = "Figure 4 sets out the cases at two stages in the argument. The comparisons are strategic, not a random sample.";
@@ -80,6 +83,7 @@
   f4.left = null; f4.right = null;
 
   var f5 = slide("figure5");
+  f5.kicker = "PART 2 - RAQUEL";
   f5.chart = {
     id: "geddes-fig5", title: "Figure 5 · Defeat in war and revolution",
     source: "Geddes (1990), Figure 5 · Spanish American cases",
@@ -89,6 +93,7 @@
   f5.claims = [];
 
   var chile = slide("chile");
+  chile.kicker = "PART 2 - RAQUEL";
   chile.type = "claims";
   chile.title = "Chile: the story continues after 1961";
   chile.chart = {
@@ -106,7 +111,7 @@
   chile.input = "";
   chile.options = [];
 
-  /* Keep the 12-slide run, with the sample discussion before the graph activity. */
+  /* Keep the 13-slide run, with the sample discussion before the graph activity. */
   var order = ["open","ask","nics","regions","quote-sample","figure2","fits","skocpol","figure4","figure5","hirschman","chile","close"];
   r.slides = order.map(function (id) { return id === "figure2" ? fig2 : slide(id); });
 
@@ -125,6 +130,10 @@
   f.title = "Interaction 3: reading Figure 3: 5:50-7:00";
   f.say = "Figure 3 is a slightly different picture. The straight-line fit is almost zero, but the highest growth rates cluster around repression level three. Geddes gives two possible explanations: perhaps the relationship is curved, or perhaps a few unusually fast-growing NICs are driving the pattern. Which interpretation best fits the two figures?";
   f.notes = "TOBYN · 5:50-7:00\nINTERACTION 3 OF 3. Give the room 20-30 seconds to choose. Expected: the linear relationship is weak, but a curved pattern may be possible. Geddes also considers whether Singapore, Taiwan and South Korea drive the appearance of a curve; adding a few cases weakens it. Do not claim the hypothesis is proved or disproved. Hand over to Raquel.";
+  ["regions","figure2","fits","skocpol","figure4","figure5","hirschman","chile"].forEach(function (id) {
+    var item = script(id);
+    if (item) item.notes = item.notes.replace(/^TOBYN/g, "RAQUEL");
+  });
   var sk = script("skocpol");
   sk.title = "Skocpol's explanation: 7:00-8:00";
   var f4s = script("figure4"); f4s.title = "Strategic contrasts: 8:00-9:00";
@@ -137,9 +146,10 @@
   cl.title = "Conclusion: 13:15-15:00";
   /* Timings move the sample question ahead of the graph-reading activity. */
   script("ask").say = "Imagine I want to explain economic growth, so I start with countries that grew quickly. The top graph shows the pattern I might assume across all countries. But the lower graph shows another possibility: once the missing cases are included, the relationship may disappear. That is why Geddes says we need cases where the outcome did not happen as well.";
-  script("regions").say = "Figure 1 puts two samples side by side. On the left are five familiar fast-growing countries, where repression barely varies. On the right are seven East Asian countries, where the association looks positive. Table 1 helps explain the problem: East Asia had unusually high average growth, so selecting that region is already linked to the outcome. The figure shows why the relationship may not travel beyond that sample.";
-  script("fits").say = "Figure 3 is a slightly different picture. The straight-line fit is almost zero, but the highest growth rates cluster around repression level three. Geddes gives two possible explanations: perhaps the relationship is curved, or perhaps a few unusually fast-growing NICs are driving the pattern. Which interpretation best fits the two figures?";
+  script("regions").say = "Figure 1 is where the comparison widens. The five selected NICs all grew quickly, but there is very little variation in their labour-repression scores. The East Asian panel looks more convincing, with an r-squared of .56. But Geddes points out that East Asia was already an unusually fast-growing region. The question is whether the relationship holds once we look beyond it.";
+  script("fits").say = "Figure 3 is not quite the same pattern. The straight-line fit is almost zero, but the highest growth rates cluster around repression level three. Geddes considers two possibilities: a curved relationship, or a few unusually fast-growing NICs driving the appearance of one. Neither explanation is settled by this graph.";
   script("regions").title = "The wider comparison: 3:30-4:20";
+  script("figure2").say = "Figure 2 takes us to a wider Third World sample. The fitted line slopes slightly down and the r-squared is only .07. Labour repression is also found in slow-growing countries, so the five success stories cannot tell us what caused growth.";
   var hs = script("hirschman"); hs.title = "Chile and the endpoint: 10:00-11:30";
   script("chile").title = "Figure 6 and the endpoint: 11:30-13:15";
   function plainDashes(value) {
