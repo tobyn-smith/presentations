@@ -42,10 +42,7 @@
     note: "The fitted line slopes slightly down (r² = .07). Geddes's point is that labour repression is also common in slow-growing countries.",
     plots: []
   };
-  fig2.claims = [
-    {n:"01",title:"The relationship disappears",body:"Once slower-growing countries enter the sample, the positive pattern seen among selected fast growers is no longer there."},
-    {n:"02",title:"This is not a final disproof",body:"It is a weak bivariate fit. Geddes says controls could still reveal a relationship."}
-  ];
+  fig2.claims = [];
   fits.type = "prompt";
   fits.title = "Figure 3: the more advanced countries";
   fits.help = "Compare this pattern with Figure 2, then choose the interpretation closest to Geddes's conclusion.";
@@ -79,13 +76,14 @@
   };
   f4.claims = [];
   f4.lead = "";
+  f4.chart.note = "Original 2×2 case table. Britain during the Civil War and Prussia in 1848 are discussed separately as low-village-autonomy contrasts, not listed in this matrix.";
   f4.left = null; f4.right = null;
 
   var f5 = slide("figure5");
   f5.chart = {
     id: "geddes-fig5", title: "Figure 5 · Defeat in war and revolution",
     source: "Geddes (1990), Figure 5 · Spanish American cases",
-    note: "Seven instances of defeat without revolution; two revolutions without the specified defeat; one case of both (Bolivia). Counts are instances, not nine unique country labels. Cuba is treated as an intermediate case.",
+    note: "Seven defeat/no-revolution instances, two revolutions without the specified defeat, and one case of both. These are ten country-period instances, not ten unique countries; Bolivia appears more than once. Cuba is an intermediate case.",
     plots: []
   };
   f5.claims = [];
