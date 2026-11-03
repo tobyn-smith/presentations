@@ -176,6 +176,11 @@ try {
   await presenter.screenshot({path:path.join(out,"slide4-room-response.png"),animations:"disabled"});
   await presenter.click("#prev");
   await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="3",null,{timeout:10000});
+  /* Returning to slide 3 rebuilds its controls, so restore the three placements
+     before the deliberate offline-send check. */
+  await student.locator('select[data-token-place="Labour was repressed or coopted"]').selectOption("shown");
+  await student.locator('select[data-token-place="That produced fast growth"]').selectOption("not");
+  await student.locator('select[data-token-place="Slower-growth countries are missing"]').selectOption("shown");
 
   firebaseOnline=false;
   ntfyOnline=false;
