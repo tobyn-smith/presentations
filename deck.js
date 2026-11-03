@@ -644,7 +644,7 @@
         + windowHtml("term", "Room", askLine + optPreview + '<div id="viz"></div>')
         + "</div>";
     }
-    var inner = q;
+    var inner = '<div class="ask">' + q + "</div>";
     var panel = function (html) {
       return inner + '<div class="ask-panel">' + askLine + html + "</div>";
     };
