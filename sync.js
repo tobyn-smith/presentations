@@ -962,7 +962,7 @@
     pollBackupHistory(true);
     if (!ntfyPollTimer) ntfyPollTimer = setInterval(function () {
       if (backupOn && !usingFirebase) pollBackupHistory(false);
-    }, 2500);
+    }, 1000);
     try {
       var es = new EventSource(url + "/sse");
       ntfySource = es;
@@ -970,6 +970,9 @@
       es.onerror = function () {};
       es.onopen = function () {
         sseOpen = true;
+        /* Re-read recent room history whenever the stream reconnects. This
+           recovers submissions sent while the SSE connection was down. */
+        pollBackupHistory(false);
         if (!usingFirebase) setSyncLine("backup", "Live sync: backup, Firebase locked", true);
       };
     } catch (e) {}
