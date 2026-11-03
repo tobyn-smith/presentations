@@ -10,6 +10,10 @@ on:
       - "*.html"
       - "present/**"
       - "visual-test.mjs"
+      - "live-room-test.mjs"
+      - "test.js"
+      - "sync.js"
+      - "docs/live-room-verification.md"
       - ".github/workflows/geddes-visual-regression.yml"
   workflow_dispatch:
 
@@ -26,13 +30,19 @@ jobs:
         run: npm install --no-save playwright
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+      - name: Run repository regression checks
+        run: node test.js
       - name: Capture and check all slides
         run: node visual-test.mjs
-      - name: Upload slide screenshots and report
+      - name: Test failed submissions, duplicates, refresh and reconnection
+        run: node live-room-test.mjs
+      - name: Upload slide screenshots and reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: geddes-visual-review
-          path: artifacts/geddes-visual/
+          path: |
+            artifacts/geddes-visual/
+            artifacts/geddes-live-room/
           if-no-files-found: warn
           retention-days: 14
