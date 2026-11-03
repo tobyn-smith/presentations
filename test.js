@@ -222,6 +222,7 @@ assert.ok(!layoutFix.includes(":has("), "the figure layout uses explicit slide m
 assert.ok(layoutFix.indexOf('body.role-part .stage[data-chart="geddes-fig3"] .ask-panel') !== -1);
 assert.ok(layoutFix.indexOf("overflow: visible !important") !== -1, "Figure 3 answer panel must not create a nested clipped scroll area");
 assert.ok(layoutFix.indexOf("max-height: none !important") !== -1, "Figure 3 answer panel must be allowed to grow to its content");
+assert.ok(layoutFix.indexOf("height: 56px !important") !== -1);
 assert.ok(layoutFix.indexOf("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") !== -1, "Figure 3 choices use a compact two-column layout");
 assert.ok(layoutFix.indexOf("max-height: min(50vh, 390px)") !== -1, "Figure 3 chart height is bounded to leave room for the question");
 assert.ok(layoutFix.indexOf("flex-wrap: wrap") !== -1, "presenter toolbar can wrap on narrower laptop widths");
