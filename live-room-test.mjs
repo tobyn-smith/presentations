@@ -158,13 +158,16 @@ try {
 
   await presenter.reload({waitUntil:"domcontentloaded"});
   await presenter.waitForFunction(()=>DeckSync.getStatus().mode==="backup",null,{timeout:8000});
+  await presenter.waitForFunction(()=>DeckSync.isPresenting(),null,{timeout:8000});
   await presenter.waitForSelector(".responses li",{state:"visible",timeout:10000});
   check(await presenter.locator(".responses li").count()===1,"presenter refresh restores response from backup history");
+  check(await presenter.evaluate(()=>DeckSync.isPresenting()),"presenter refresh restores the live room state");
   await presenter.screenshot({path:path.join(out,"refresh-from-backup.png"),animations:"disabled"});
 
   firebaseOnline=true;
   await presenter.waitForFunction(()=>DeckSync.getStatus().mode==="firebase",null,{timeout:30000});
   await student.waitForFunction(()=>DeckSync.getStatus().mode==="firebase",null,{timeout:30000});
+  await presenter.waitForFunction(()=>DeckSync.isPresenting(),null,{timeout:10000});
   check(await waitForStoredResponse(),"Firebase reconnection persists the queued backup response");
 
   await presenter.reload({waitUntil:"domcontentloaded"});
