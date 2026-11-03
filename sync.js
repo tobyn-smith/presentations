@@ -985,10 +985,10 @@
         /* Re-read recent room history whenever the stream reconnects. This
            recovers submissions sent while the SSE connection was down. */
         pollBackupHistory(false);
-        /* When the backup stream returns, the presenter republishes its
-           current slide and live heartbeat. Otherwise a room that lost both
-           Firebase and ntfy can come back online without its slide position. */
-        if (wantLive || presenting) {
+        /* When the backup stream returns, only the active presenter should
+           republish the current slide and live heartbeat. Otherwise a seated
+           student tab that is still on slide 1 can overwrite the room slide. */
+        if (wantLive) {
           shout({ t: "slide", n: slide });
           shout({ t: "here", at: Math.max(Date.now(), lastGoneAt + 1) });
         }
