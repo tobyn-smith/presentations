@@ -8,8 +8,6 @@
   var prevBtn = document.getElementById("prev");
   var nextBtn = document.getElementById("next");
   var resetBtn = document.getElementById("reset");
-  var revealBtn = document.getElementById("reveal");
-  var revealed = {};
   var wipeBtn = document.getElementById("wipe");
   var liveBtn = document.getElementById("live");
   var handBtn = document.getElementById("hand");
@@ -155,11 +153,6 @@
       counter.textContent = isPres ? n : (n + " / " + slides().length);
     }
     if (resetBtn) resetBtn.hidden = s.type !== "prompt";
-    if (revealBtn) {
-      revealBtn.hidden = s.type !== "prompt";
-      revealBtn.textContent = revealed[s.id] ? "Hide answers" : "Reveal answers";
-      revealBtn.setAttribute("aria-pressed", revealed[s.id] ? "true" : "false");
-    }
     if (prevBtn) prevBtn.disabled = i === 0;
     if (nextBtn) nextBtn.disabled = i === slides().length - 1;
     stage.classList.toggle("prompt", s.type === "prompt");
@@ -375,6 +368,7 @@
   function fitStage() {
     if (!stage) return;
     stage.style.transform = "";
+    if (!isPres) return;
     if (window.innerWidth < 720) return;
     var room = stage.clientHeight;
     var need = stage.scrollHeight;
@@ -1000,6 +994,7 @@
       }
     }
     if (!list.length && !html) html = '<p class="empty">No answers yet.</p>';
+    viz.setAttribute("data-response-count", String(list.length));
     viz.innerHTML = html;
     showViz(s);
   }
@@ -1007,7 +1002,7 @@
   function showViz(s) {
     var viz = document.getElementById("viz");
     if (!viz) return;
-    var show = !!(s && revealed[s.id] && viz.innerHTML.trim());
+    var show = !!(s && Number(viz.getAttribute("data-response-count")) > 0);
     viz.classList.toggle("is-hidden", !show);
     var win = viz.closest(".ss-win");
     if (win) win.classList.toggle("has-answers", show);
@@ -1021,7 +1016,8 @@
 
   function paintHandBtn() {
     if (!handBtn) return;
-    var show = !isPres && DeckSync.seated() && !document.body.classList.contains("is-waiting");
+    var current = slides()[DeckSync.getSlide()];
+    var show = !isPres && DeckSync.seated() && !document.body.classList.contains("is-waiting") && current && current.type === "prompt";
     handBtn.hidden = !show;
     if (!show) return;
     var up = DeckSync.handUp();
@@ -1416,14 +1412,6 @@
     if (prevBtn) prevBtn.addEventListener("click", function () { go(DeckSync.getSlide() - 1); });
     if (nextBtn) nextBtn.addEventListener("click", function () { go(DeckSync.getSlide() + 1); });
     if (resetBtn) resetBtn.addEventListener("click", function () { DeckSync.reset(String(DeckSync.getSlide())); });
-    if (revealBtn) revealBtn.addEventListener("click", function () {
-      var s = slides()[DeckSync.getSlide()];
-      if (!s || s.type !== "prompt") return;
-      revealed[s.id] = !revealed[s.id];
-      revealBtn.textContent = revealed[s.id] ? "Hide answers" : "Reveal answers";
-      revealBtn.setAttribute("aria-pressed", revealed[s.id] ? "true" : "false");
-      showViz(s);
-    });
     if (wipeBtn) wipeBtn.addEventListener("click", function () {
       if (confirm("Clear every answer from this session?")) DeckSync.wipe();
     });
