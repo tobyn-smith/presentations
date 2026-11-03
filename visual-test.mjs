@@ -44,7 +44,7 @@ const viewports = [
   { width: 1280, height: 720 },
   { width: 1024, height: 768 }
 ];
-const report = { generatedAt: new Date().toISOString(), routes: { presenter: "/slideshow.html", student: "/index.html?local=1" }, slides: 0, viewports: [], failures: [] };
+const report = { generatedAt: new Date().toISOString(), routes: { presenter: "/present/index.html?local=1", student: "/index.html?local=1", backup: "/slideshow.html" }, slides: 0, viewports: [], failures: [] };
 
 try {
   for (const viewport of viewports) {
@@ -173,6 +173,18 @@ try {
       await page.close();
     }
   }
+
+  // Smoke-test the separate backup slideshow route. It is a fallback, not the presenter UI.
+  const backup = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+  backup.on("pageerror", error => report.failures.push("backup slideshow browser error: " + error.message));
+  await backup.goto("http://127.0.0.1:4173/slideshow.html", { waitUntil: "networkidle" });
+  await backup.waitForSelector("#stage", { state: "visible" });
+  const backupSlides = await backup.evaluate(() => (window.SLIDES || []).length);
+  if (backupSlides !== 13) report.failures.push("Backup slideshow expected 13 slides, found " + backupSlides);
+  await backup.click("#next");
+  await backup.waitForFunction(() => (document.querySelector("#counter")?.textContent || "").trim().startsWith("2"));
+  await backup.screenshot({ path: path.join(out, "backup-slideshow.png"), animations: "disabled" });
+  await backup.close();
 
   // Exercise the real presenter status drawer in local mode without contacting Firebase.
   const admin = await browser.newPage({ viewport: { width: 1366, height: 768 } });
