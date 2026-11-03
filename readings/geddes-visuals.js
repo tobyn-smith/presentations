@@ -110,9 +110,14 @@
   cl.title = "Conclusion: 13:15–15:00";
   /* Timings move the sample question ahead of the graph-reading activity. */
   script("regions").title = "The wider comparison: 3:30-4:20";
-  r.script.forEach(function (item) {
-    ["title","say","notes"].forEach(function (key) {
-      if (typeof item[key] === "string") item[key] = item[key].replace(/[–—]/g, "-");
-    });
-  });
+  function plainDashes(value) {
+    if (typeof value === "string") return value.replace(/[–—]/g, "-");
+    if (Array.isArray(value)) return value.map(plainDashes);
+    if (value && typeof value === "object") {
+      Object.keys(value).forEach(function (key) { value[key] = plainDashes(value[key]); });
+    }
+    return value;
+  }
+  r.slides = plainDashes(r.slides);
+  r.script = plainDashes(r.script);
 })();
