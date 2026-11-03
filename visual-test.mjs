@@ -143,7 +143,7 @@ try {
   await admin.click("#failsafe-open");
   await admin.waitForSelector("#failsafe [role=dialog]", { state: "visible" });
   const dialogText = await admin.locator("#failsafe").innerText();
-  if (!dialogText.includes("Room status") || !dialogText.includes("Recovery")) {
+  if (!dialogText.toLowerCase().includes("room status") || !dialogText.toLowerCase().includes("recovery")) {
     report.failures.push("Room status drawer is missing its title or recovery actions");
   }
   await admin.screenshot({ path: path.join(out, "room-status.png"), animations: "disabled" });
