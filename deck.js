@@ -535,14 +535,10 @@
       var href = joinHref();
       var shown = href.replace(/^https:\/\//, "");
       var seats = seatedHtml();
-      var join = isPres
-        ? '<div class="title-join-block">'
-          + '<img class="join-qr" src="' + qrSrc(href) + '" width="460" height="460" alt="QR code for ' + esc(shown) + '">'
-          + '<p class="title-scan">Scan to join</p>'
-          + '<p class="title-join">' + esc(shown) + "</p>"
-          + (seats || "")
-          + "</div>"
-        : "";
+      var join = '<div class="title-join-block">'
+        + '<p class="title-join"><a href="' + esc(href) + '">' + esc(shown) + '</a></p>'
+        + (seats || "")
+        + "</div>";
       return '<div class="title-card">'
         + '<div class="title-copy">'
         + '<img class="uga-logo title-logo" src="uga-logo.png" alt="University of Georgia" width="1024" height="158">'
@@ -1205,8 +1201,11 @@
         return;
       }
       if (DeckSync.seated()) {
-        if (onBoard()) return;
-        if (!document.body.classList.contains("is-hold")) holdRoom();
+        if (document.body.classList.contains("is-hold")) {
+          paintHoldPeers();
+          return;
+        }
+        holdRoom();
         return;
       }
       if (!document.body.classList.contains("is-checkin")) checkIn();
