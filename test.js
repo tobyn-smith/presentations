@@ -74,6 +74,14 @@ assert.ok(SLIDES.some(function (s) { return s.id === "regions" && s.chart && s.c
 assert.ok(SLIDES.some(function (s) { return s.id === "fits" && s.chart && s.chart.bars.length === 3; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "figure5" && s.chart && s.chart.bars[0].n === 7; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "hirschman" && s.chart && s.chart.bars.length === 5; }));
+assert.ok(!/The five are all a 3/.test(JSON.stringify(SLIDES)), "do not assign an unsupported common score to all five growers");
+assert.ok(/repressed or coopted labour/.test(JSON.stringify(SLIDES.filter(function (s) { return s.id === "scores"; }))));
+assert.ok(/curved relationship/.test(JSON.stringify(SLIDES.filter(function (s) { return s.id === "fits"; }))));
+var fig5 = SLIDES.filter(function (s) { return s.id === "figure5"; })[0];
+assert.ok(/instances in her comparison/.test(fig5.chart.note), "Figure 5 bars describe case instances, not nine country labels");
+var chile = SLIDES.filter(function (s) { return s.id === "hirschman"; })[0];
+assert.ok(/^Table 2/.test(chile.chart.title), "selected Chile inflation values are labelled as Table 2");
+assert.ok(/not the full Figure 6 data/.test(chile.chart.note));
 assert.ok(!SLIDES.filter(function (s) { return s.id === "chile"; })[0].chart);
 
 var prompts = SLIDES.filter(function (s) { return s.type === "prompt"; });
