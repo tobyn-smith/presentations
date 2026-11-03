@@ -1114,6 +1114,7 @@
     }
     if (!list.length && !html) html = "";
     viz.setAttribute("data-response-count", String(list.length));
+    viz.classList.toggle("five-responses", list.length >= 5);
     viz.innerHTML = html;
     showViz(s);
   }
