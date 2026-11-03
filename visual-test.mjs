@@ -225,13 +225,13 @@ try {
             await expand.click();
             const viewer = page.locator("#figure-viewer");
             await viewer.waitFor({ state: "visible", timeout: 3000 });
-            const loaded = await viewer.locator("img").evaluate(img => img.complete && img.naturalWidth > 0);
+            const loaded = await viewer.locator("img").evaluate(img => img.decode().then(() => img.naturalWidth > 0));
             if (!loaded) report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": expanded SVG did not load");
             await page.keyboard.press("Escape");
             await viewer.waitFor({ state: "hidden", timeout: 3000 });
             await page.locator(".figure-embed figure.chart").click();
             await viewer.waitFor({ state: "visible", timeout: 3000 });
-            const graphLoaded = await viewer.locator("img").evaluate(img => img.complete && img.naturalWidth > 0);
+            const graphLoaded = await viewer.locator("img").evaluate(img => img.decode().then(() => img.naturalWidth > 0));
             if (!graphLoaded) report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": clicking the graph did not open its SVG");
             await page.keyboard.press("Escape");
             await viewer.waitFor({ state: "hidden", timeout: 3000 });
