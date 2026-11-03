@@ -1135,7 +1135,7 @@
       ? DeckSync.getResponses(String(snap.slide)).length
       : 0;
     var connection = snap.localOnly ? "Local preview only" : (snap.status.detail || snap.status.mode || "Checking…");
-    if (snap.status.mode === "backup") connection += " · temporary backup; restore Firebase before refreshing";
+    if (snap.status.mode === "backup") connection += " · temporary backup; confirm Firebase recovery before ending the session";
     var rows = [
       ["Connection", connection],
       ["Room", snap.presenting ? "Live" : "On hold"],
