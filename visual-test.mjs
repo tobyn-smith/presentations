@@ -44,22 +44,16 @@ const viewports = [
   { width: 1280, height: 720 },
   { width: 1024, height: 768 }
 ];
-const report = { generatedAt: new Date().toISOString(), route: "/slideshow.html", slides: 0, viewports: [], failures: [] };
+const report = { generatedAt: new Date().toISOString(), routes: { presenter: "/slideshow.html", student: "/index.html?local=1" }, slides: 0, viewports: [], failures: [] };
 
 try {
   for (const viewport of viewports) {
     for (const mode of ["presenter", "student"]) {
       const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
       page.on("pageerror", error => report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " browser error: " + error.message));
-      await page.goto("http://127.0.0.1:4173/slideshow.html", { waitUntil: "networkidle" });
+      const route = mode === "student" ? "/index.html?local=1" : "/slideshow.html";
+      await page.goto("http://127.0.0.1:4173" + route, { waitUntil: "networkidle" });
       await page.emulateMedia({ reducedMotion: "reduce" });
-      if (mode === "student") {
-        await page.addStyleTag({ path: path.join(root, "audience.css") });
-        await page.evaluate(() => {
-          document.body.classList.remove("role-pres", "is-backup");
-          document.body.classList.add("role-part", "is-desk");
-        });
-      }
       const total = await page.evaluate(() => (window.SLIDES || []).length);
       report.slides = total;
       if (total !== 13) report.failures.push("Expected 13 slides, found " + total);
@@ -108,6 +102,10 @@ try {
             askPanelLeft: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().left) : 0,
             askRight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().right) : 0,
             askHeight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().height) : 0,
+            answerHeight: stage.querySelector(".ask-panel form.answer") ? Math.round(stage.querySelector(".ask-panel form.answer").getBoundingClientRect().height) : 0,
+            answerBottom: stage.querySelector(".ask-panel form.answer") ? Math.round(stage.querySelector(".ask-panel form.answer").getBoundingClientRect().bottom) : 0,
+            panelBottom: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().bottom) : 0,
+            answerDisplay: stage.querySelector(".ask-panel form.answer") ? getComputedStyle(stage.querySelector(".ask-panel form.answer")).display : "missing",
             askRight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().right) : 0,
             askHeight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().height) : 0,
             repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none")
@@ -142,6 +140,11 @@ try {
         }
         if (mode === "student" && [2,3,6].includes(index) && metrics.stageOverflow > 40) {
           report.failures.push(viewport.width + "x" + viewport.height + " student interaction " + (index + 1) + " requires scrolling (" + metrics.stageOverflow + "px)");
+        }
+        if (mode === "student" && [3,6].includes(index)) {
+          if (metrics.answerHeight < 70 || metrics.answerDisplay === "none" || metrics.answerBottom > metrics.panelBottom + 2) {
+            report.failures.push(viewport.width + "x" + viewport.height + " student interaction " + (index + 1) + " has a missing or clipped response form");
+          }
         }
         if (mode === "student" && [2,3].includes(index) && metrics.askPanelLeft < metrics.askRight - 8) {
           report.failures.push(viewport.width + "x" + viewport.height + " student prompt " + (index + 1) + " does not place the task beside the teaching column");
