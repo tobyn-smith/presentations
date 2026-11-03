@@ -594,3 +594,11 @@ body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split-viz {
 /* The section label already appears in the UGA banner; do not repeat it above
    the title in the student view. */
 body.role-part.is-desk .slide-kicker { display: none !important; }
+
+
+/* The presenter backup renderer wraps prompt content in .slide-stack rather
+   than .ask; expose its children to the same Figure 3 grid. */
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-stack,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-stack {
+  display: contents !important;
+}
