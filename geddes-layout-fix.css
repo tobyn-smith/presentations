@@ -150,3 +150,136 @@
   .role-part .stage.claims figure.chart::after,
   .role-pres .stage.claims figure.chart::after { min-height: 230px; }
 }
+
+
+/* Final Figure 3 layout: one scroll owner, no clipped answer panel.
+   This block intentionally follows geddes-figures.css so it wins over the
+   older, more specific Figure 3 rules there. */
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]),
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch;
+  gap: clamp(6px, 0.9vh, 10px);
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding-top: clamp(8px, 1.2vh, 14px);
+  padding-bottom: clamp(10px, 1.4vh, 16px);
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask {
+  flex: 0 0 auto !important;
+  min-height: 0;
+  overflow: visible !important;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split {
+  flex: 0 0 auto !important;
+  min-height: 0;
+  display: block !important;
+  width: 100%;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz .ss-win,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz .ss-win {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ss-win-body,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ss-win-body {
+  height: auto;
+  min-height: 0;
+  padding: clamp(9px, 1.1vh, 14px) clamp(10px, 1.2vw, 18px);
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart {
+  height: auto !important;
+  min-height: 0;
+  flex: 0 0 auto !important;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
+  height: clamp(245px, 34vh, 350px) !important;
+  min-height: 245px !important;
+  max-height: 350px;
+  flex: 0 0 auto !important;
+  margin-top: .15rem;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel,
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
+  flex: 0 0 auto !important;
+  min-height: 0;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding: clamp(10px, 1.2vh, 15px) clamp(12px, 1.5vw, 20px);
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-q {
+  margin: 0 0 .45rem;
+  font-size: clamp(17px, 2.2vh, 23px);
+  line-height: 1.15;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px;
+  margin: .2rem 0 0;
+}
+body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 10px;
+  font-size: clamp(13px, 1.65vh, 17px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) #viz {
+  min-height: 0;
+  max-height: none;
+}
+
+/* Keep the student experience usable at normal laptop zoom and at 1024px. */
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
+  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
+    height: clamp(220px, 30vh, 300px) !important;
+    min-height: 220px !important;
+  }
+  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+@media (max-height: 700px) and (min-width: 800px) {
+  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
+  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
+    height: clamp(205px, 29vh, 255px) !important;
+    min-height: 205px !important;
+  }
+}
+
+/* The toolbar must not push navigation or status off a narrow laptop. */
+.role-pres .chrome-right {
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  row-gap: .35rem;
+}
+.role-pres .chrome-right > * { min-width: 0; }
+@media (max-width: 1100px) {
+  .role-pres .chrome { gap: .5rem; }
+  .role-pres .chrome-right { gap: .45rem; }
+}
+
+
+/* The base audience stylesheet loads after the shared patch. Match its
+   specificity explicitly so the stage, not a child card, owns scrolling. */
+body.role-part .stage,
+body.role-pres .stage {
+  min-height: 0;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
