@@ -17,6 +17,7 @@
   var painted = {};
   var lastIndex = -1;
   var kickNotice = "";
+  var pendingSubmissions = {};
 
   function cfg() { return window.DECK || {}; }
   function brand() { return cfg().title || "Discussion"; }
@@ -933,11 +934,42 @@
   }
 
   function submit(s, i, payload) {
-    if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return;
-    remember(s.id, payload);
-    DeckSync.submit(String(i), payload);
-    DeckSync.markDone(String(i));
-    render(i, true);
+    if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return Promise.resolve(false);
+    var id = String(i);
+    if (DeckSync.isDone(id) || pendingSubmissions[id]) return Promise.resolve(false);
+    pendingSubmissions[id] = true;
+    var panel = stage.querySelector(".ask-panel");
+    var send = panel && panel.querySelector(".send");
+    var originalLabel = send ? send.textContent : "";
+    var error = panel && panel.querySelector(".submit-error");
+    if (error) error.remove();
+    if (send) {
+      send.disabled = true;
+      send.textContent = "Sending…";
+    }
+    function failed() {
+      pendingSubmissions[id] = false;
+      if (send) {
+        send.disabled = false;
+        send.textContent = originalLabel || "Try again";
+      }
+      if (panel && !panel.querySelector(".submit-error")) {
+        var notice = document.createElement("p");
+        notice.className = "submit-error";
+        notice.setAttribute("role", "alert");
+        notice.textContent = "That did not reach the room. Check the connection and try again.";
+        panel.appendChild(notice);
+      }
+      return false;
+    }
+    return Promise.resolve(DeckSync.submit(id, payload)).then(function (ok) {
+      pendingSubmissions[id] = false;
+      if (!ok) return failed();
+      remember(s.id, payload);
+      DeckSync.markDone(id);
+      render(i, true);
+      return true;
+    }).catch(failed);
   }
 
   function wordFreq(list) {
