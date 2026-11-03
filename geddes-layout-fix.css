@@ -578,3 +578,19 @@ body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview 
     padding: 10px;
   }
 }
+
+
+/* A chart without a companion claim column owns the full slide width. */
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split {
+  grid-template-columns: minmax(0,1fr) !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split-viz,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split-viz {
+  width: 100% !important;
+  min-width: 0;
+}
+
+/* The section label already appears in the UGA banner; do not repeat it above
+   the title in the student view. */
+body.role-part.is-desk .slide-kicker { display: none !important; }
