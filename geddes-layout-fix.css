@@ -1897,3 +1897,127 @@ body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+
+/* Final visual pass from presenter screenshots: give teaching material first
+   claim on the board, then keep the response band compact and readable. */
+body.role-pres .stage.prompt[data-slide-id="quote-sample"] {
+  grid-template-rows: minmax(0, 1fr) minmax(112px, 16%) !important;
+}
+body.role-pres .stage.prompt[data-slide-id="quote-sample"] > .ask {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start;
+  gap: clamp(10px, 1.4vh, 18px);
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+body.role-pres .stage.prompt[data-slide-id="quote-sample"] .claim-bars {
+  display: grid !important;
+  grid-template-rows: none !important;
+  grid-auto-rows: minmax(64px, auto);
+  align-content: start;
+  height: auto !important;
+  min-height: max-content;
+  gap: clamp(8px, 1vh, 12px);
+}
+body.role-pres .stage.prompt[data-slide-id="quote-sample"] .claim-bars li {
+  min-height: 64px !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding: 10px 14px !important;
+}
+body.role-pres .stage.prompt[data-slide-id="quote-sample"] .claim-bars li > *,
+body.role-pres .stage.prompt[data-slide-id="quote-sample"] .claim-bars li p {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+body.role-pres .stage.prompt[data-slide-id="quote-sample"] > .slide-live-results {
+  padding: 8px 12px;
+}
+body.role-pres .stage.prompt[data-slide-id="quote-sample"] .slide-live-results-title {
+  margin-bottom: 4px;
+}
+
+/* Figure 3: use the whole left column for the figure instead of leaving the
+   graph at the foot of a tall, mostly empty prompt. Keep room choices and
+   individual responses in the right column; the class feed gets a short band. */
+body.role-pres .stage.prompt[data-slide-id="fits"] {
+  grid-template-columns: minmax(0, 1.22fr) minmax(300px, .78fr) !important;
+  grid-template-rows: minmax(0, 1fr) minmax(112px, 16%) !important;
+  align-items: stretch !important;
+  overflow: hidden !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .ask {
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: stretch;
+  align-items: stretch;
+  gap: clamp(8px, 1vh, 12px);
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .ask h1 {
+  margin: 0 !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .ask .split {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  align-self: stretch !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .ask .split-viz {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .ask figure.chart {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .ask figure.chart::after {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  height: clamp(300px, 44vh, 420px) !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  background-position: center center !important;
+  background-size: contain !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .ask .help {
+  margin: 0 !important;
+  align-self: start;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .ask-panel {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .slide-live-results {
+  min-height: 0 !important;
+  padding: 7px 12px !important;
+  overflow: hidden !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .slide-live-results .slide-live-results-title {
+  margin: 0 0 4px !important;
+}
+body.role-pres .stage.prompt[data-slide-id="fits"] > .slide-live-results .slide-live-results-content {
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-pres .stage.prompt[data-slide-id="fits"] {
+    grid-template-columns: minmax(0, 1.05fr) minmax(260px, .95fr) !important;
+    grid-template-rows: minmax(0, 1fr) minmax(104px, 17%) !important;
+  }
+  body.role-pres .stage.prompt[data-slide-id="fits"] > .ask figure.chart::after {
+    height: clamp(260px, 40vh, 340px) !important;
+  }
+}
