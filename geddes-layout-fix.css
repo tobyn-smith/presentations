@@ -272,3 +272,14 @@ body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) #viz {
   .role-pres .chrome { gap: .5rem; }
   .role-pres .chrome-right { gap: .45rem; }
 }
+
+
+/* The base audience stylesheet loads after the shared patch. Match its
+   specificity explicitly so the stage, not a child card, owns scrolling. */
+body.role-part .stage,
+body.role-pres .stage {
+  min-height: 0;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
