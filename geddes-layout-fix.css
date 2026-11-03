@@ -1382,9 +1382,9 @@ body.role-pres .stage[data-chart="geddes-fig3"] .presenter-choice-preview li {
 }
 
 
-/* Room results: label the two different kinds of feedback and give each
-   its own predictable space. Individual answers stay large enough to read. */
-body.role-pres .stage.prompt.has-notes #viz:has(.room-responses-heading) {
+/* Room results: explicit state classes keep the two kinds of feedback
+   separate. Individual answers stay large enough to read. */
+body.role-pres .stage.prompt.has-notes #viz.has-room-details {
   display: grid !important;
   grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr) !important;
   grid-template-rows: auto auto minmax(0, 1fr) !important;
@@ -1403,11 +1403,11 @@ body.role-pres .stage.prompt.has-notes #viz .room-responses-heading {
   line-height: 1.1;
   text-transform: uppercase;
 }
-body.role-pres .stage.prompt.has-notes #viz .room-summary-heading {
+body.role-pres .stage.prompt.has-notes #viz.has-room-summary .room-summary-heading {
   grid-column: 1;
   grid-row: 1;
 }
-body.role-pres .stage.prompt.has-notes #viz .room-responses-heading {
+body.role-pres .stage.prompt.has-notes #viz.has-room-details .room-responses-heading {
   grid-column: 2;
   grid-row: 1;
 }
@@ -1440,19 +1440,19 @@ body.role-pres .stage.prompt.has-notes #viz .responses .said {
   font-size: clamp(16px, 2vh, 20px);
   line-height: 1.32;
 }
-body.role-pres .stage.prompt.has-notes #viz:has(.room-responses-heading):not(:has(.bars)) {
+body.role-pres .stage.prompt.has-notes #viz.has-room-details:not(.has-room-summary) {
   grid-template-columns: minmax(0, 1fr) !important;
   grid-template-rows: auto auto minmax(0, 1fr) !important;
 }
-body.role-pres .stage.prompt.has-notes #viz:has(.room-responses-heading):not(:has(.bars)) .room-responses-heading {
+body.role-pres .stage.prompt.has-notes #viz.has-room-details:not(.has-room-summary) .room-responses-heading {
   grid-column: 1;
   grid-row: 1;
 }
-body.role-pres .stage.prompt.has-notes #viz:has(.room-responses-heading):not(:has(.bars)) .tally {
+body.role-pres .stage.prompt.has-notes #viz.has-room-details:not(.has-room-summary) .tally {
   grid-column: 1;
   grid-row: 2;
 }
-body.role-pres .stage.prompt.has-notes #viz:has(.room-responses-heading):not(:has(.bars)) .responses {
+body.role-pres .stage.prompt.has-notes #viz.has-room-details:not(.has-room-summary) .responses {
   grid-column: 1;
   grid-row: 3;
 }
