@@ -928,7 +928,7 @@
       } catch (e) {}
     }
     function pollBackupHistory(initial) {
-      return fetch(url + "/json?poll=1&since=12h").then(function (r) {
+      return fetch(url + "/json?poll=1&since=12h&cache=" + Date.now(), { cache: "no-store" }).then(function (r) {
         if (!r.ok) throw new Error(String(r.status));
         return r.text();
       }).then(function (history) {
