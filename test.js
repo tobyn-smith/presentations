@@ -46,6 +46,7 @@ assert.strictEqual(withChart.length, 4, "Table 1, Figures 1-3, Figure 5 and Tabl
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "regions"; })[0].chart.bars.length, 5);
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.bars.length, 3);
 assert.ok(/not recreated scatterplots/.test(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.note));
+assert.ok(/not recreated scatterplots/.test(SLIDES.filter(function (s) { return s.id === "fits"; })[0].chart.note));
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.bars[0].n, 7);
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.id, "table2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
@@ -120,6 +121,10 @@ assert.ok(/15:00/.test(SCRIPT[SCRIPT.length - 1].title));
 assert.ok(!/five-minute pairs activity/.test(JSON.stringify(SLIDES)));
 
 var fs = require("fs");
+var vm = require("vm");
+["deck.js", "sync.js", "slideshow.js", "readings/geddes-1990.js"].forEach(function (name) {
+  new vm.Script(fs.readFileSync("./" + name, "utf8"), { filename: name });
+});
 var admin = fs.readFileSync("./present/index.html", "utf8");
 var adminAlias = fs.readFileSync("./adminpresentation.html", "utf8");
 var user = fs.readFileSync("./index.html", "utf8");
