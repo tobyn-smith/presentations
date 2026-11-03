@@ -1096,16 +1096,12 @@
     if (!host || !DeckSync.snapshot) return;
     var snap = DeckSync.snapshot();
     var rows = [
-      ["Room", snap.localOnly ? "This computer only" : snap.room],
-      ["Session", snap.session],
-      ["Go live", snap.presenting ? "On · last push " + failsafeAge(snap.hereAgeMs) : "Off · audience on Hold"],
-      ["Audience", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Can join" : "Not confirmed yet")],
-      ["Live sync", snap.localOnly ? "This computer only" : (snap.status.detail || snap.status.mode)],
-      ["Firebase HTTP", snap.firebaseHttp ? String(snap.firebaseHttp) : "none"],
+      ["Connection", snap.localOnly ? "Local preview only" : (snap.status.detail || snap.status.mode || "Checking…")],
+      ["Presentation", snap.presenting ? "Live" : "On hold"],
+      ["Audience", snap.localOnly ? "Disabled in local preview" : (snap.status.phones ? "Available" : "Not confirmed")],
       ["Checked in", String(snap.seats.length)],
-      ["Join", (snap.join || "").replace(/^https:\/\//, "")],
-      ["Slide", String((snap.slide || 0) + 1)],
-      ["Last error", snap.error || "None"]
+      ["Current slide", String((snap.slide || 0) + 1) + " of " + slides().length],
+      ["Last issue", snap.error || "None"]
     ];
     host.innerHTML = rows.map(function (row) {
       return "<div><dt>" + esc(row[0]) + "</dt><dd>" + esc(row[1]) + "</dd></div>";
@@ -1117,14 +1113,22 @@
     }
   }
 
+  var failsafeOpener = null;
   function setFailsafeOpen(on) {
     var panel = document.getElementById("failsafe");
     if (!panel) return;
+    if (on && !panel.hidden) return;
+    if (on) failsafeOpener = document.activeElement;
     panel.hidden = !on;
     document.body.classList.toggle("is-failsafes", !!on);
     if (on) {
       paintFailsafeStatus();
       failsafeLog("");
+      var close = document.getElementById("failsafe-close");
+      if (close) close.focus();
+    } else if (failsafeOpener && failsafeOpener.focus) {
+      failsafeOpener.focus();
+      failsafeOpener = null;
     }
   }
 
@@ -1423,7 +1427,16 @@
     document.addEventListener("keydown", function (e) {
       if (!unlocked()) return;
       if (document.body.classList.contains("is-failsafes")) {
-        if (e.key === "Escape") { e.preventDefault(); setFailsafeOpen(false); }
+        if (e.key === "Escape") { e.preventDefault(); setFailsafeOpen(false); return; }
+        if (e.key === "Tab") {
+          var dialog = document.querySelector("#failsafe [role='dialog']");
+          var focusable = dialog ? [].slice.call(dialog.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(function (el) { return !el.hidden; }) : [];
+          if (focusable.length) {
+            var first = focusable[0], last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+          }
+        }
         return;
       }
       if (e.target && /input|textarea/i.test(e.target.tagName)) return;
