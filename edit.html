@@ -37,7 +37,7 @@
 
   <main class="wrap">
     <h1>Change the slides and the class list</h1>
-    <p class="lede">No code. Do this on the computer you will present from. Save, then open Present or the slideshow on this same computer.</p>
+    <p class="lede">One deck, about twenty minutes. Save on this computer, then open Present.</p>
 
     <section class="sec" id="session">
       <h2>Session</h2>
@@ -68,7 +68,11 @@
       <div class="sec-head">
         <h2>Boards</h2>
       </div>
-      <p class="hint">A title board first is easiest. Add talking points or a question when you need one.</p>
+      <label class="switch">
+        <input id="use-file-slides" type="checkbox" />
+        Use week files
+      </label>
+      <p class="hint">Leave this on for the Geddes boards. Turn it off only if you typed your own set on this computer.</p>
       <div id="board-list"></div>
       <div class="add-row">
         <button type="button" id="add-title">Add a title board</button>
@@ -79,7 +83,7 @@
 
     <section class="sec" id="script">
       <h2>What you say</h2>
-      <p class="hint">Speaker notes. Paragraphs are what you say. Cues are reminders. They follow the boards above.</p>
+      <p class="hint">One continuous deck. Cues in the notes are private. Nothing of that goes on the boards.</p>
       <div id="script-list"></div>
     </section>
   </main>
@@ -101,6 +105,9 @@
 <script src="roster.js"></script>
 <script src="slides.js"></script>
 <script src="script-content.js"></script>
+<script src="prompts.js"></script>
+<script src="readings/geddes-1990.js"></script>
+<script src="build-week.js"></script>
 <script src="apply-content.js"></script>
 <script src="edit.js"></script>
 </body>

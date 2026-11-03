@@ -85,6 +85,50 @@ a {
   margin: 0 auto;
   padding: 1rem var(--pad) 2rem;
 }
+.start-banner {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.4rem 1rem 0.4rem 0.7rem;
+  background: #ba0c2f;
+  color: #fff;
+}
+.start-plate {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.28rem 0.55rem;
+  height: 34px;
+}
+.start-logo {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: 15.5rem;
+}
+.start-deck {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding-left: 0.75rem;
+  border-left: 1px solid rgba(255,255,255,0.45);
+  line-height: 1;
+}
+.start-kicker {
+  margin-left: auto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  box-shadow: inset 0 -3px 0 #f3d89a;
+  padding-bottom: 0.1rem;
+}
 .top {
   position: sticky;
   top: 0;

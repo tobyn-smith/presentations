@@ -1,3 +1,4 @@
+/* Fallback only. When readings/ files load, build-week.js replaces this list. */
 window.SLIDES = [
   {
     id: "title",
