@@ -1381,13 +1381,6 @@
         failsafeLog(ok ? "Seat list cleared. People can check in again." : "Could not clear seats. Test audience connection.");
       });
     });
-    var fsEnd = document.getElementById("fs-end");
-    if (fsEnd) fsEnd.addEventListener("click", function () {
-      DeckSync.standDown();
-      paintLive();
-      paintFailsafeStatus();
-      failsafeLog("Room ended. Audience screens should return to Hold.");
-    });
     var fsCopy = document.getElementById("fs-copy");
     if (fsCopy) fsCopy.addEventListener("click", function () {
       var text = JSON.stringify(DeckSync.snapshot(), null, 2);
