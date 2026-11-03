@@ -29,7 +29,7 @@ assert.strictEqual(SLIDES.length, 13, "the seminar is paced for fifteen minutes"
 assert.strictEqual(SLIDES[0].type, "title");
 assert.strictEqual(SLIDES[0].id, "open");
 assert.strictEqual(SLIDES[0].title, "How the Cases You Choose Affect the Answers You Get");
-assert.ok(SLIDES.some(function (s) { return s.id === "close"; }));
+assert.ok(SLIDES.some(function (s) { return s.id === "close" && s.claims.length === 1; }), "closing slide uses one natural takeaway, not a three-part framework graphic");
 assert.ok(SLIDES.some(function (s) { return s.id === "figure4" && s.type === "claims"; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "skocpol" && s.claims.length === 3; }));
 var sampleTask = SLIDES.filter(function (s) { return s.id === "quote-sample"; })[0];
