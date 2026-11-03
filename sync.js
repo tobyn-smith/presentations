@@ -875,6 +875,13 @@
       }
       return r.json().then(function (data) {
         if (data && typeof data === "object") takeRoom(data);
+        /* Keep the last locally selected presenter slide when the REST room
+           snapshot is empty or stale. Only a room snapshot with an explicit
+           slide field is authoritative on startup. */
+        if (wantLive) {
+          slide = Math.max(0, Math.min((global.SLIDES || []).length - 1, slide));
+          try { sessionStorage.setItem("deck-slide-" + room, String(slide)); } catch (e) {}
+        }
         markFirebaseLive();
         flushBackupResponses();
         openFbStream();
