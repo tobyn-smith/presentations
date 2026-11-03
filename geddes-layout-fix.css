@@ -1334,7 +1334,7 @@ body.role-pres .stage[data-chart="geddes-fig6"] {
   body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
   body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
   body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
-    height: clamp(205px, 35vh, 230px) !important;
+    height: clamp(255px, 45vh, 285px) !important;
   }
   body.role-part .stage[data-chart="geddes-fig4"] h1,
   body.role-pres .stage[data-chart="geddes-fig4"] h1,
