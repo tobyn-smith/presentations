@@ -533,7 +533,7 @@
   function htmlFor(s, i) {
     if (s.type === "title") {
       var href = joinHref();
-      var shown = href.replace(/^https:\/\//, "");
+      var shown = href.replace(/^https:\/\//, "").replace(/\/$/, "");
       var seats = seatedHtml();
       var join = '<div class="title-join-block">'
         + '<p class="title-join"><a href="' + esc(href) + '">' + esc(shown) + '</a></p>'
