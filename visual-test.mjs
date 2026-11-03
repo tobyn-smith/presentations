@@ -105,6 +105,9 @@ try {
         if (["geddes-fig2","geddes-fig4","geddes-fig5","geddes-fig6"].includes(metrics.chartId) && metrics.chartArtworkHeight < 300) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": figure artwork missing or too short (" + metrics.chartArtworkHeight + "px)");
         }
+        if (metrics.chartId === "geddes-fig3" && metrics.stageOverflow > 40) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 still needs scrolling (" + metrics.stageOverflow + "px overflow)");
+        }
         await page.screenshot({
           path: path.join(dir, "slide-" + String(index + 1).padStart(2, "0") + ".png"),
           animations: "disabled"
