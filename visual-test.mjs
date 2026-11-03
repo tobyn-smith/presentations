@@ -39,6 +39,7 @@ const server = http.createServer((req, res) => {
 await new Promise(resolve => server.listen(4173, "127.0.0.1", resolve));
 const browser = await chromium.launch({ headless: true });
 const viewports = [
+  { width: 2560, height: 1440 },
   { width: 1920, height: 1080 },
   { width: 1600, height: 900 },
   { width: 1366, height: 768 },
