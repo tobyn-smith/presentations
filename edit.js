@@ -13,42 +13,17 @@
       .replace(/"/g, "&quot;");
   }
 
-  function need() {
-    try {
-      var saved = localStorage.getItem(store);
-      if (saved) return saved;
-    } catch (e) {}
-    return (window.DECK && DECK.presenterKey) || "";
-  }
-
   function unlock() {
     gate.hidden = true;
     app.hidden = false;
     boot();
   }
 
-  var want = need();
-  if (!want) {
-    unlock();
+  if (window.DeckGate) {
+    DeckGate.bind({ onOpen: boot });
   } else {
-    try {
-      if (sessionStorage.getItem(store) === want) unlock();
-      else gate.hidden = false;
-    } catch (e) {
-      gate.hidden = false;
-    }
+    gate.hidden = false;
   }
-
-  document.getElementById("gate-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var v = document.getElementById("key").value;
-    if (v === need()) {
-      try { sessionStorage.setItem(store, v); } catch (err) {}
-      unlock();
-    } else {
-      document.getElementById("gate-err").hidden = false;
-    }
-  });
 
   function kindOf(s) {
     if (s.type === "title") return "title";
