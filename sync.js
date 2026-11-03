@@ -1013,7 +1013,11 @@
     sessionId: sid,
     getSlide: function () { return slide; },
     onSlide: function (fn) { slideFns.push(fn); fn(slide); },
-    setSlide: function (n) { shout({ t: "slide", n: n }); },
+    setSlide: function (n) {
+      n = Math.max(0, Math.min((global.SLIDES || []).length - 1, +n || 0));
+      try { sessionStorage.setItem("deck-slide-" + room, String(n)); } catch (e) {}
+      shout({ t: "slide", n: n });
+    },
     submit: function (slideId, payload) {
       var row = {
         t: "resp",
