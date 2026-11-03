@@ -1063,8 +1063,7 @@
       var counts = {};
       opts.forEach(function (o) { counts[o] = 0; });
       list.forEach(function (r) { if (r.choice && counts[r.choice] != null) counts[r.choice]++; });
-      html += '<section class="room-summary-block"><p class="room-summary-heading">Class tally</p>';
-      html += '<p class="tally">' + list.length + (list.length === 1 ? " response" : " responses") + "</p>";
+      html += '<section class="room-summary-block"><p class="room-summary-heading">Class tally · ' + list.length + (list.length === 1 ? " response" : " responses") + "</p>";
       html += '<div class="bars">';
       opts.forEach(function (o) {
         var n = counts[o] || 0;
@@ -1076,9 +1075,8 @@
       html += "</div></section>";
     }
     if (hasDetails) {
-      html += '<section class="room-detail-block"><p class="room-responses-heading">Individual responses</p>';
+      html += '<section class="room-detail-block"><p class="room-responses-heading">Individual responses · ' + list.length + (list.length === 1 ? " response" : " responses") + "</p>";
       if (list.length) {
-        html += '<p class="tally">' + list.length + (list.length === 1 ? " response" : " responses") + "</p>";
         html += '<ol class="responses' + (list.length > 4 ? " many" : "") + '">';
         list.forEach(function (r, index) {
           var id = s.id + ":" + r.sid;
