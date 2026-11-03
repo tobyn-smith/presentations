@@ -89,16 +89,16 @@
       <div><p class="failsafe-eyebrow">PRESENTER CONTROL</p><h2 id="failsafe-title">Room status</h2></div>
       <button type="button" class="failsafe-close" id="failsafe-close">Close</button>
     </header>
-    <p class="failsafe-lead" id="failsafe-lead">Check the live connection and recover the audience view if it falls behind.</p>
+    <p class="failsafe-lead" id="failsafe-lead">See what the class can currently access, check responses and recover the audience view if it falls behind.</p>
     <dl class="failsafe-status" id="failsafe-status" aria-live="polite"></dl>
     <pre class="failsafe-log" id="failsafe-log" role="status" aria-live="polite" hidden></pre>
     <section class="failsafe-section" aria-labelledby="failsafe-recovery-title">
-      <h3 class="failsafe-h" id="failsafe-recovery-title">Recovery</h3>
+      <h3 class="failsafe-h" id="failsafe-recovery-title">Room actions</h3>
       <div class="failsafe-cmds">
         <button type="button" id="fs-slide"><strong>Republish current slide</strong><span>Send the current slide again to audience screens.</span></button>
         <button type="button" id="fs-pull"><strong>Refresh room data</strong><span>Reload the room's slide, attendance and responses from the live service.</span></button>
         <button type="button" id="fs-probe"><strong>Run connection test</strong><span>Check whether the live service can be read from and written to.</span></button>
-        <button type="button" id="fs-seats"><strong>Clear stale check-ins</strong><span>Use only when old attendee sessions are still occupying the room.</span></button>
+        <button type="button" id="fs-seats"><strong>Reset check-ins</strong><span>Remove all audience check-ins, including active students. Confirmation required.</span></button>
         <button type="button" id="fs-copy"><strong>Copy diagnostics</strong><span>Copy the current connection report for troubleshooting.</span></button>
       </div>
     </section>

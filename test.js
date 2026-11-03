@@ -32,7 +32,9 @@ assert.strictEqual(SLIDES[0].title, "How the Cases You Choose Affect the Answers
 assert.ok(SLIDES.some(function (s) { return s.id === "close"; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "figure4" && s.type === "claims"; }));
 assert.ok(SLIDES.some(function (s) { return s.id === "skocpol" && s.claims.length === 3; }));
-assert.ok(SLIDES.some(function (s) { return s.id === "quote-sample" && s.quote && /small samples selected on the dependent variable/.test(s.quote.text); }));
+var sampleTask = SLIDES.filter(function (s) { return s.id === "quote-sample"; })[0];
+assert.ok(sampleTask && sampleTask.type === "prompt" && sampleTask.options.length === 3, "case-selection interaction has three options");
+assert.ok(sampleTask.claims && sampleTask.claims.length === 3, "case-selection task explains the sampling problem");
 
 var nics = SLIDES.filter(function (s) { return s.id === "nics"; })[0];
 assert.ok(nics);
@@ -59,7 +61,7 @@ assert.ok(/Seven defeat\/no-revolution/.test(SLIDES.filter(function (s) { return
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.id, "table2");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.bars.length, 5);
 assert.ok(/ten country-period instances/.test(SLIDES.filter(function (s) { return s.id === "figure5"; })[0].chart.note));
-assert.ok(/five selected Table 2 observations/.test(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.note));
+assert.ok(/Five selected Table 2 observations/.test(SLIDES.filter(function (s) { return s.id === "hirschman"; })[0].chart.note));
 assert.ok(/curve or a few NICs/.test(JSON.stringify(SLIDES.filter(function (s) { return s.id === "fits"; }))));
 assert.ok(!/The five are all a 3/.test(JSON.stringify(SLIDES)));
 
@@ -189,7 +191,8 @@ assert.ok(admin.indexOf('id="reveal"') === -1, "unused reveal control removed");
 assert.ok(admin.indexOf('id="fs-title"') === -1, "QR/title room tool removed");
 assert.ok(admin.indexOf('id="fs-end"') === -1, "duplicate end-room tool removed");
 assert.ok(admin.indexOf('id="failsafe-open" aria-haspopup="dialog"') !== -1, "room status opens an accessible dialog");
-assert.ok(admin.indexOf("Room status") !== -1 && admin.indexOf("Room tools") === -1, "outdated room tools panel has been renamed and rebuilt");
+assert.ok(admin.indexOf("Room status") !== -1 && admin.indexOf("Room actions") !== -1 && admin.indexOf("Room tools") === -1, "outdated room tools panel has been renamed and rebuilt");
+assert.ok(admin.indexOf("Reset check-ins") !== -1 && admin.indexOf("including active students") !== -1, "room reset action clearly warns that it disconnects active students");
 assert.ok(admin.indexOf('id="fs-slide"') !== -1 && admin.indexOf('id="fs-pull"') !== -1 && admin.indexOf('id="fs-probe"') !== -1 && admin.indexOf('id="fs-seats"') !== -1 && admin.indexOf('id="fs-copy"') !== -1);
 assert.ok(admin.indexOf('id="key-change"') === -1 && admin.indexOf('id="roster-form"') === -1, "key and roster editing remain on the editor page, not in live-room recovery");
 assert.ok(admin.indexOf('id="fs-push"') === -1 && admin.indexOf('id="fs-unkick"') === -1, "obsolete duplicate recovery actions removed");
@@ -212,17 +215,36 @@ assert.ok(layoutFix.indexOf("overflow-y: auto !important") !== -1, "both routes 
 assert.ok(layoutFix.indexOf("max-width: none !important") !== -1, "graphs are not constrained to the old narrow presenter width");
 assert.ok(layoutFix.indexOf("geddes-fig3") !== -1, "Figure 3 graph and interaction have a dedicated fit");
 assert.ok(layoutFix.indexOf('geddes-fig1') !== -1 && layoutFix.indexOf('geddes-fig6') !== -1, "Figures 1 and 6 use full-width figure layouts");
-assert.ok(layoutFix.indexOf("@media (max-width: 1100px)") !== -1, "compact laptop layouts are handled");
+assert.ok(layoutFix.indexOf("max-width: 1100px") !== -1, "compact laptop layouts are handled");
 
-/* Layout regression guards for the Figure 3 nested-scroll/clipping bug. */
-assert.ok(layoutFix.indexOf('body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel') !== -1);
+/* Layout regression guards: explicit figure metadata replaces competing :has rules. */
+assert.ok(!layoutFix.includes(":has("), "the figure layout uses explicit slide metadata, not competing :has selectors");
+assert.ok(layoutFix.indexOf('body.role-part .stage[data-chart="geddes-fig3"] .ask-panel') !== -1);
 assert.ok(layoutFix.indexOf("overflow: visible !important") !== -1, "Figure 3 answer panel must not create a nested clipped scroll area");
 assert.ok(layoutFix.indexOf("max-height: none !important") !== -1, "Figure 3 answer panel must be allowed to grow to its content");
+assert.ok(layoutFix.indexOf("height: 56px !important") !== -1);
 assert.ok(layoutFix.indexOf("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") !== -1, "Figure 3 choices use a compact two-column layout");
-assert.ok(layoutFix.indexOf("height: clamp(245px, 34vh, 350px) !important") !== -1, "Figure 3 chart height is bounded to leave room for the question");
+assert.ok(layoutFix.indexOf("max-height: min(50vh, 390px)") !== -1, "Figure 3 chart height is bounded to leave room for the question");
 assert.ok(layoutFix.indexOf("flex-wrap: wrap") !== -1, "presenter toolbar can wrap on narrower laptop widths");
 assert.ok(layoutFix.indexOf(":focus-visible") !== -1, "keyboard focus is visible across both presentation roles");
-assert.ok(layoutFix.indexOf(".failsafe-card") !== -1 && layoutFix.indexOf("grid-template-columns: repeat(2,minmax(0,1fr))") !== -1, "room status panel follows the deck visual system");
+assert.ok(layoutFix.indexOf(".failsafe-card") !== -1 && layoutFix.indexOf("grid-template-columns: repeat(2, minmax(0, 1fr))") !== -1, "room status panel follows the deck visual system");
+var deckSrc = fs.readFileSync("./deck.js", "utf8");
+var syncSrc = fs.readFileSync("./sync.js", "utf8");
+assert.ok(deckSrc.indexOf('stage.setAttribute("data-chart"') !== -1, "live student and presenter routes publish the active figure id");
+assert.ok(fs.readFileSync("./slideshow.js", "utf8").indexOf('stage.setAttribute("data-chart"') !== -1, "backup route shares the same figure layout metadata");
+assert.ok(fs.readFileSync("./readings/geddes-visuals.js", "utf8").indexOf('title:".07"') !== -1, "Figure 2 has a single clear takeaway beside the graph");
+assert.ok(deckSrc.indexOf('temporary backup; confirm Firebase recovery before ending the session') !== -1, "room status warns when the temporary backup transport is active");
+assert.ok(deckSrc.indexOf('["Activity", activity]') !== -1 && deckSrc.indexOf('["Responses"') !== -1, "room status reports the active activity and response count");
+assert.ok(deckSrc.indexOf('This also removes students who are currently connected') !== -1, "resetting check-ins requires an explicit warning");
+assert.ok(deckSrc.indexOf('if (isPres) {\n      render(n);') !== -1, "presenter view still renders when the room slide changes");
+assert.ok(deckSrc.indexOf('if (wasReload && shouldResume)') !== -1 && deckSrc.indexOf('DeckSync.present();') !== -1, "presenter refresh restores the live room");
+assert.ok(syncSrc.indexOf("function queueBackupResponse(msg)") !== -1 && syncSrc.indexOf("function flushBackupResponses()") !== -1, "backup responses are queued and persisted after reconnection");
+assert.ok(syncSrc.indexOf('lastError = "Firebase read HTTP " + r.status') !== -1, "Firebase read failures trigger backup mode");
+assert.ok(syncSrc.indexOf('if (msg.t === "resp") {\n      return publishLive(msg).then') !== -1, "failed response delivery is not broadcast to local presenter windows");
+assert.ok(syncSrc.indexOf('if (wantLive && global.DeckSync) global.DeckSync.present();') !== -1, "live room is republished after Firebase reconnects");
+assert.ok(syncSrc.indexOf('sessionStorage.setItem("deck-resume-live", "1")') !== -1, "live presenter state is preserved during refresh");
+assert.ok(fs.existsSync("./live-room-test.mjs"), "live transport regression tests are included");
+assert.ok(fs.readFileSync("./.github/workflows/geddes-visual-regression.yml", "utf8").indexOf("node live-room-test.mjs") !== -1, "live transport tests run in CI");
 
 
 
@@ -245,7 +267,6 @@ assert.ok(backup.indexOf("uga-logo.png") !== -1);
 assert.ok(admin.indexOf("uga-arch") === -1);
 assert.ok(css.indexOf("user-select: none") !== -1);
 assert.ok(css.indexOf("flex-wrap: nowrap") !== -1);
-var deckSrc = fs.readFileSync("./deck.js", "utf8");
 assert.ok(deckSrc.indexOf("I'm in") !== -1);
 assert.ok(deckSrc.indexOf("Who are you?") === -1);
 assert.ok(deckSrc.indexOf("function bindRank") !== -1);
@@ -292,7 +313,7 @@ assert.ok(start.indexOf("Phones.") === -1);
 });
 assert.ok(deckSrc.indexOf("var keepBoard = !force && !changed && onBoard()") !== -1);
 assert.ok(deckSrc.indexOf("if (isPres || DeckSync.isPresenting()) render(n);") !== -1);
-assert.ok(deckSrc.indexOf("if (!isPres && (!DeckSync.isPresenting() || !DeckSync.seated())) return;") !== -1);
+assert.ok(deckSrc.indexOf("if (!DeckSync.isPresenting() || !DeckSync.seated()) return;") !== -1, "student view renders only for a seated live participant");
 assert.ok(!/deck-content[\s\S]{0,500}sharePack/.test(deckSrc));
 var syncSrc = fs.readFileSync("./sync.js", "utf8");
 assert.ok(syncSrc.indexOf("if (lastHere && lastHere > t) return;") !== -1);

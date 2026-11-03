@@ -137,6 +137,8 @@
     lastIndex = i;
     document.body.classList.remove("is-waiting", "is-checkin", "is-checkin-name", "is-checkin-face", "is-hold");
     stage.classList.remove("hold");
+    stage.setAttribute("data-chart", s.chart && s.chart.id ? String(s.chart.id) : "");
+    stage.setAttribute("data-slide-id", s.id || "");
     document.title = (isPres ? "Presenter · " : "") + (s.title || brand());
     if (kicker) {
       kicker.textContent = "";
@@ -1052,7 +1054,7 @@
         html += "</ol>";
       }
     }
-    if (!list.length && !html) html = '<p class="empty">No answers yet.</p>';
+    if (!list.length && !html) html = "";
     viz.setAttribute("data-response-count", String(list.length));
     viz.innerHTML = html;
     showViz(s);
@@ -1107,7 +1109,13 @@
   }
 
   DeckSync.onSlide(function (n) {
-    if (!isPres && (!DeckSync.isPresenting() || !DeckSync.seated())) return;
+    if (isPres) {
+      render(n);
+      var panel = document.getElementById("failsafe");
+      if (panel && !panel.hidden) paintFailsafeStatus();
+      return;
+    }
+    if (!DeckSync.isPresenting() || !DeckSync.seated()) return;
     render(n);
   });
   function failsafeLog(text) {
@@ -1121,12 +1129,21 @@
     var host = document.getElementById("failsafe-status");
     if (!host || !DeckSync.snapshot) return;
     var snap = DeckSync.snapshot();
+    var current = slides()[snap.slide] || {};
+    var activity = current.type === "prompt" ? (current.title || "Class activity") : "Teaching slide";
+    var received = current.type === "prompt" && DeckSync.getResponses
+      ? DeckSync.getResponses(String(snap.slide)).length
+      : 0;
+    var connection = snap.localOnly ? "Local preview only" : (snap.status.detail || snap.status.mode || "Checking…");
+    if (snap.status.mode === "backup") connection += " · temporary backup; confirm Firebase recovery before ending the session";
     var rows = [
-      ["Connection", snap.localOnly ? "Local preview only" : (snap.status.detail || snap.status.mode || "Checking…")],
-      ["Presentation", snap.presenting ? "Live" : "On hold"],
+      ["Connection", connection],
+      ["Room", snap.presenting ? "Live" : "On hold"],
       ["Audience", snap.localOnly ? "Disabled in local preview" : (snap.status.phones ? "Available" : "Not confirmed")],
       ["Checked in", String(snap.seats.length)],
       ["Current slide", String((snap.slide || 0) + 1) + " of " + slides().length],
+      ["Activity", activity],
+      ["Responses", current.type === "prompt" ? String(received) + " received" : "Not collecting"],
       ["Last issue", snap.error || "None"]
     ];
     host.innerHTML = rows.map(function (row) {
@@ -1375,10 +1392,11 @@
     });
     var fsSeats = document.getElementById("fs-seats");
     if (fsSeats) fsSeats.addEventListener("click", function () {
-      failsafeLog("Clearing leftover seats…");
+      if (!confirm("Reset all audience check-ins? This also removes students who are currently connected.")) return;
+      failsafeLog("Resetting audience check-ins…");
       DeckSync.clearSeats().then(function (ok) {
         paintFailsafeStatus();
-        failsafeLog(ok ? "Seat list cleared. People can check in again." : "Could not clear seats. Test audience connection.");
+        failsafeLog(ok ? "All check-ins were reset. Students can join again." : "Could not reset check-ins. Test audience connection.");
       });
     });
     var fsCopy = document.getElementById("fs-copy");
@@ -1390,6 +1408,25 @@
       } else done(false);
     });
   }
+  if (isPres) {
+    var nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+    var wasReload = !!(nav && nav.type === "reload");
+    var shouldResume = false;
+    try { shouldResume = sessionStorage.getItem("deck-resume-live") === "1"; } catch (e) {}
+    if (wasReload && shouldResume) {
+      var resumed = false;
+      DeckSync.onStatus(function (status) {
+        if (resumed) return;
+        if (status.mode === "firebase" || status.mode === "backup") {
+          resumed = true;
+          try { sessionStorage.removeItem("deck-resume-live"); } catch (e) {}
+          DeckSync.present();
+        } else if (status.mode === "local") {
+          try { sessionStorage.removeItem("deck-resume-live"); } catch (e) {}
+        }
+      });
+    }
+  }
   DeckSync.onResponses(function (id, list) {
     var i = DeckSync.getSlide();
     if (String(i) !== String(id)) return;
@@ -1398,6 +1435,7 @@
     if (isPres) {
       paintResponses(s, i, list);
       showViz(s);
+      paintFailsafeStatus();
       fitStage();
       return;
     }

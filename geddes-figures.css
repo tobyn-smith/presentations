@@ -43,9 +43,20 @@ body.role-part .title-join-block { display:none !important; }
   from { transform:scaleX(0); }
   to { transform:scaleX(1); }
 }
+@keyframes geddes-chart-reveal {
+  from { clip-path:inset(0 100% 0 0); }
+  to { clip-path:inset(0 0 0 0); }
+}
 figure.chart[data-chart]::after {
   animation:geddes-chart-enter 720ms cubic-bezier(.2,.75,.25,1) both;
   transform-origin:center bottom;
+}
+figure.chart[data-chart="geddes-fig2"]::after,
+figure.chart[data-chart="geddes-fig3"]::after,
+figure.chart[data-chart="geddes-fig6"]::after {
+  animation:
+    geddes-chart-enter 720ms cubic-bezier(.2,.75,.25,1) both,
+    geddes-chart-reveal 1050ms cubic-bezier(.2,.75,.25,1) 100ms both;
 }
 .chart-fill {
   transform:scaleX(0);
