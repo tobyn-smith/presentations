@@ -1829,3 +1829,71 @@ body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="
     gap: .55rem;
   }
 }
+
+
+/* Final presenter fit for the two choice-and-reason slides.
+   Reserve a real, readable lower band for class responses and make the
+   two upper columns manage their own overflow instead of painting over it. */
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) {
+  grid-template-rows: minmax(0, 1fr) clamp(142px, 25%, 220px) !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask {
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  max-height: none !important;
+  overflow: hidden !important;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask-panel > .ss-win {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  max-height: none !important;
+  overflow: hidden !important;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask-panel > .ss-win > .ss-win-body {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .ask-panel #viz {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .slide-live-results {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  max-height: none !important;
+  overflow: hidden !important;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) > .slide-live-results > .slide-live-results-content {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-detail-block,
+body.role-pres .stage.prompt:is([data-slide-id="quote-sample"], [data-slide-id="fits"]) .slide-live-results-content .room-summary-block {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
