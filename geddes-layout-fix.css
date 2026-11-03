@@ -1213,3 +1213,54 @@ body.figure-viewer-open { overflow: hidden; }
     font-size: 12px;
   }
 }
+
+
+/* Figures 4 and 5 are the visual centre of their slides. Match the board
+   colour to the SVG artwork so the graphic reads as part of the slide,
+   rather than a poster sitting inside a separate white card. */
+body.role-part .stage[data-chart="geddes-fig4"],
+body.role-pres .stage[data-chart="geddes-fig4"] {
+  background: #102b43 !important;
+  color: #fffdf8;
+  border-radius: 22px;
+  padding: clamp(18px, 2.5vw, 36px);
+}
+body.role-part .stage[data-chart="geddes-fig5"],
+body.role-pres .stage[data-chart="geddes-fig5"] {
+  background: #16324f !important;
+  color: #fffdf8;
+  border-radius: 22px;
+  padding: clamp(18px, 2.5vw, 36px);
+}
+body.role-part .stage[data-chart="geddes-fig4"] h1,
+body.role-pres .stage[data-chart="geddes-fig4"] h1,
+body.role-part .stage[data-chart="geddes-fig5"] h1,
+body.role-pres .stage[data-chart="geddes-fig5"] h1 {
+  color: #fffdf8;
+}
+body.role-part .stage[data-chart="geddes-fig4"] .slide-kicker,
+body.role-pres .stage[data-chart="geddes-fig4"] .slide-kicker,
+body.role-part .stage[data-chart="geddes-fig5"] .slide-kicker,
+body.role-pres .stage[data-chart="geddes-fig5"] .slide-kicker {
+  color: #f0d48a;
+}
+body.role-part .stage[data-chart="geddes-fig4"] .figure-embed,
+body.role-pres .stage[data-chart="geddes-fig4"] .figure-embed,
+body.role-part .stage[data-chart="geddes-fig5"] .figure-embed,
+body.role-pres .stage[data-chart="geddes-fig5"] .figure-embed {
+  margin-top: 8px;
+}
+body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
+body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
+body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
+body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
+  height: clamp(390px, 65vh, 540px) !important;
+  border-radius: 0;
+}
+body.role-part .stage[data-chart="geddes-fig4"] .figure-expand,
+body.role-pres .stage[data-chart="geddes-fig4"] .figure-expand,
+body.role-part .stage[data-chart="geddes-fig5"] .figure-expand,
+body.role-pres .stage[data-chart="geddes-fig5"] .figure-expand {
+  border-color: rgba(255,255,255,.5);
+  background: rgba(4,17,29,.82);
+}
