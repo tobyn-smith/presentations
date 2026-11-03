@@ -56,6 +56,7 @@
   var localOnly = /[?&]local=1\b/.test(location.search);
   var forceFirebase = /[?&]firebase=1\b/.test(location.search);
   var ntfySource = null;
+  var ntfyPollTimer = null;
   var fbSource = null;
   var usingFirebase = false;
   var fbReachable = false;
@@ -926,32 +927,42 @@
         apply(typeof payload === "string" ? JSON.parse(payload) : payload, "ntfy");
       } catch (e) {}
     }
-    fetch(url + "/json?poll=1&since=12h").then(function (r) {
-      if (!r.ok) throw new Error(String(r.status));
-      return r.text();
-    }).then(function (text) {
-      var lastLive = null;
-      var lastSlide = null;
-      var lastPack = null;
-      text.split("\n").forEach(function (line) {
-        if (!line.trim()) return;
-        try {
-          var ev = JSON.parse(line);
-          if (ev && ev.event && ev.event !== "message") return;
-          var payload = ev && ev.message != null ? ev.message : line;
-          var msg = typeof payload === "string" ? JSON.parse(payload) : payload;
-          if (!msg || !msg.t) return;
-          if (msg.t === "here" || msg.t === "gone") lastLive = msg;
-          else if (msg.t === "slide") lastSlide = msg;
-          else if (msg.t === "pack") lastPack = msg;
-          else apply(msg, "ntfy");
-        } catch (e) {}
-      });
-      if (lastPack) apply(lastPack, "ntfy");
-      if (lastSlide) apply(lastSlide, "ntfy");
-      if (lastLive) apply(lastLive, "ntfy");
-      if (!usingFirebase) setSyncLine("backup", "Live sync: backup, Firebase locked", true);
-    }).catch(function () {});
+    function pollBackupHistory(initial) {
+      return fetch(url + "/json?poll=1&since=12h").then(function (r) {
+        if (!r.ok) throw new Error(String(r.status));
+        return r.text();
+      }).then(function (history) {
+        var lastLive = null;
+        var lastSlide = null;
+        var lastPack = null;
+        history.split("\n").forEach(function (line) {
+          if (!line.trim()) return;
+          try {
+            var ev = JSON.parse(line);
+            if (ev && ev.event && ev.event !== "message") return;
+            var payload = ev && ev.message != null ? ev.message : line;
+            var msg = typeof payload === "string" ? JSON.parse(payload) : payload;
+            if (!msg || !msg.t || (msg.session && msg.session !== session)) return;
+            if (msg.t === "resp") {
+              /* SSE is the fast path; this history poll recovers dropped events.
+                 Response IDs make replay safe. */
+              apply(msg, "ntfy");
+            } else if (initial && (msg.t === "here" || msg.t === "gone")) lastLive = msg;
+            else if (initial && msg.t === "slide") lastSlide = msg;
+            else if (initial && msg.t === "pack") lastPack = msg;
+            else if (initial) apply(msg, "ntfy");
+          } catch (e) {}
+        });
+        if (initial && lastPack) apply(lastPack, "ntfy");
+        if (initial && lastSlide) apply(lastSlide, "ntfy");
+        if (initial && lastLive) apply(lastLive, "ntfy");
+        if (!usingFirebase) setSyncLine("backup", "Live sync: backup, Firebase locked", true);
+      }).catch(function () {});
+    }
+    pollBackupHistory(true);
+    if (!ntfyPollTimer) ntfyPollTimer = setInterval(function () {
+      if (backupOn && !usingFirebase) pollBackupHistory(false);
+    }, 2500);
     try {
       var es = new EventSource(url + "/sse");
       ntfySource = es;
