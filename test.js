@@ -177,6 +177,8 @@ assert.ok(admin.indexOf("uga-arch") === -1);
 assert.ok(css.indexOf("user-select: none") !== -1);
 assert.ok(css.indexOf("flex-wrap: nowrap") !== -1);
 var deckSrc = fs.readFileSync("./deck.js", "utf8");
+assert.ok(deckSrc.indexOf("I'm in") !== -1);
+assert.ok(deckSrc.indexOf("Who are you?") === -1);
 assert.ok(deckSrc.indexOf("function bindRank") !== -1);
 assert.ok(deckSrc.indexOf("function bindPlace") !== -1);
 assert.ok(deckSrc.indexOf("id=\"drag-send\"") !== -1);

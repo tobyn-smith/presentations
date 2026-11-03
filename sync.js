@@ -110,13 +110,11 @@
   function seatList() {
     pruneSeats();
     return Object.keys(seats).map(function (k) { return seats[k]; })
-      .sort(function (a, b) { return String(a.name || "").localeCompare(String(b.name || "")); });
+      .sort(function (a, b) { return String(a.sid || "").localeCompare(String(b.sid || "")); });
   }
   function emitSeats() {
     var list = seatList();
-    var sig = list.map(function (r) {
-      return r.sid + ":" + r.name + ":" + ((r.face && r.face.id) || "");
-    }).join("|");
+    var sig = list.map(function (r) { return r.sid; }).join("|");
     if (sig === lastSeatSig) return;
     lastSeatSig = sig;
     seatFns.forEach(function (fn) { fn(list); });
@@ -141,9 +139,8 @@
       var raw = sessionStorage.getItem("deck-me");
       if (!raw) return null;
       var parsed = JSON.parse(raw);
-      if (!parsed || !parsed.name) return null;
-      if (global.Roster && !Roster.knownName(parsed.name)) return null;
-      me = { name: parsed.name, face: (global.Roster && Roster.sanitizeFace(parsed.face)) || parsed.face || {} };
+      if (!parsed || !(parsed.in || parsed.name)) return null;
+      me = { in: true };
       return me;
     } catch (e) {
       return null;
@@ -177,9 +174,7 @@
         text: msg.text ? String(msg.text).slice(0, 800) : "",
         choice: msg.choice != null ? String(msg.choice).slice(0, 80) : "",
         at: msg.at || Date.now(),
-        bin: msg.bin || "",
-        name: msg.name ? String(msg.name).slice(0, 80) : "",
-        face: (global.Roster && Roster.sanitizeFace(msg.face)) || {}
+        bin: msg.bin || ""
       };
       emitResp(id);
       return;
@@ -221,16 +216,9 @@
     if (msg.t === "gone") { noteGone(msg.at); return; }
     if (msg.t === "kick" && msg.sid) { takeKick(msg.sid, msg.name); return; }
     if (msg.t === "unkick") { kicks = {}; emitSeats(); return; }
-    if (msg.t === "seat" && msg.sid && msg.name) {
+    if (msg.t === "seat" && msg.sid) {
       if (kicks[msg.sid]) return;
-      var nm = String(msg.name).slice(0, 80);
-      if (global.Roster && !Roster.knownName(nm)) return;
-      var taken = Object.keys(seats).some(function (k) {
-        return k !== msg.sid && seats[k].name === nm && Date.now() - (seats[k].at || 0) < SEAT_MS;
-      });
-      if (taken) return;
-      var face = (global.Roster && Roster.sanitizeFace(msg.face)) || {};
-      seats[msg.sid] = { sid: msg.sid, name: nm, face: face, at: msg.at || Date.now() };
+      seats[msg.sid] = { sid: msg.sid, at: msg.at || Date.now() };
       emitSeats();
       return;
     }
@@ -244,12 +232,8 @@
     }
     if (msg.t === "hand" && msg.sid) {
       if (msg.up) {
-        var who = msg.name ? String(msg.name).slice(0, 80) : "";
-        if (who && global.Roster && !Roster.knownName(who)) return;
         hands[msg.sid] = {
           sid: msg.sid,
-          name: who,
-          face: (global.Roster && Roster.sanitizeFace(msg.face)) || {},
           slide: msg.slide != null ? String(msg.slide) : String(slide),
           up: true,
           at: msg.at || Date.now()
@@ -448,19 +432,12 @@
     var seen = {};
     Object.keys(val).forEach(function (k) {
       var row = val[k] || {};
-      if (!row.name) return;
       if (kicks[k]) {
         fbWrite("seats/" + k, null);
         return;
       }
-      if (global.Roster && !Roster.knownName(row.name)) return;
       seen[k] = true;
-      seats[k] = {
-        sid: k,
-        name: row.name,
-        face: (global.Roster && Roster.sanitizeFace(row.face)) || row.face || {},
-        at: row.at || Date.now()
-      };
+      seats[k] = { sid: k, at: row.at || Date.now() };
     });
     Object.keys(seats).forEach(function (k) {
       if (kicks[k]) {
@@ -480,8 +457,6 @@
       if (!row.up) return;
       hands[k] = {
         sid: k,
-        name: row.name || "",
-        face: (global.Roster && Roster.sanitizeFace(row.face)) || row.face || {},
         slide: row.slide != null ? String(row.slide) : String(slide),
         up: true,
         at: row.at || Date.now()
@@ -503,9 +478,7 @@
           text: row.text || "",
           choice: row.choice || "",
           at: row.at || 0,
-          bin: row.bin || "",
-          name: row.name || "",
-          face: row.face || {}
+          bin: row.bin || ""
         };
       });
       emitResp(slideId);
@@ -549,8 +522,7 @@
     publishFb = function (msg) {
       if (msg.t === "slide") fbWrite("slide", msg.n);
       else if (msg.t === "resp") fbWrite("responses/" + msg.slide + "/" + msg.sid, {
-        text: msg.text || "", choice: msg.choice || "", at: msg.at || Date.now(), bin: msg.bin || "",
-        name: msg.name || "", face: msg.face || {}
+        text: msg.text || "", choice: msg.choice || "", at: msg.at || Date.now(), bin: msg.bin || ""
       });
       else if (msg.t === "reset") fbWrite("responses/" + msg.slide, null);
       else if (msg.t === "wipe") fbWrite("responses", null);
@@ -566,22 +538,21 @@
         fbWrite("kicks/" + msg.sid, { name: msg.name || "", at: msg.at || Date.now() });
       } else if (msg.t === "unkick") fbWrite("kicks", null);
       else if (msg.t === "seat") fbWrite("seats/" + msg.sid, {
-        name: msg.name, face: msg.face || {}, at: msg.at || Date.now()
+        at: msg.at || Date.now()
       });
       else if (msg.t === "leave") {
         fbWrite("seats/" + msg.sid, null);
         fbWrite("hands/" + msg.sid, null);
       } else if (msg.t === "hand") {
         if (msg.up) fbWrite("hands/" + msg.sid, {
-          name: msg.name || "", face: msg.face || {}, slide: msg.slide, up: true, at: msg.at || Date.now()
+          slide: msg.slide, up: true, at: msg.at || Date.now()
         });
         else fbWrite("hands/" + msg.sid, null);
       }
     };
     if (presenting) publishFb({ t: "here", at: lastHere || Date.now(), session: session });
     if (me) publishFb({
-      t: "seat", sid: sid(), name: me.name,
-      face: { id: (me.face && me.face.id) || "" }, at: Date.now(), session: session
+      t: "seat", sid: sid(), at: Date.now(), session: session
     });
     function pollHere() {
       fbFetch(fbUrl("here")).then(function (r) {
@@ -699,17 +670,13 @@
     onSlide: function (fn) { slideFns.push(fn); fn(slide); },
     setSlide: function (n) { shout({ t: "slide", n: n }); },
     submit: function (slideId, payload) {
-      var who = loadMe() || {};
-      var face = who.face ? { id: who.face.id || "" } : {};
       var row = {
         t: "resp",
         slide: String(slideId),
         sid: sid(),
         text: payload.text || "",
         choice: payload.choice || "",
-        at: Date.now(),
-        name: who.name || "",
-        face: face
+        at: Date.now()
       };
       shout(row);
     },
@@ -765,16 +732,11 @@
       });
       return out;
     },
-    sit: function (name, face) {
-      if (global.Roster && !Roster.knownName(name)) return false;
+    sit: function () {
       if (kicks[sid()]) return false;
-      var row = {
-        name: name,
-        face: (global.Roster && Roster.sanitizeFace(face)) || face || {}
-      };
-      saveMe(row);
+      saveMe({ in: true });
       function beat() {
-        shout({ t: "seat", sid: sid(), name: row.name, face: { id: row.face.id || "" }, at: Date.now() });
+        shout({ t: "seat", sid: sid(), at: Date.now() });
       }
       beat();
       if (sitBeat) clearInterval(sitBeat);
@@ -794,16 +756,12 @@
       try { sessionStorage.removeItem("deck-me"); } catch (e) {}
     },
     resumeSeat: function () {
-      var who = loadMe();
-      if (who) this.sit(who.name, who.face);
+      if (loadMe()) this.sit();
     },
     raise: function (up) {
-      var who = loadMe() || {};
       shout({
         t: "hand",
         sid: sid(),
-        name: who.name || "",
-        face: who.face ? { id: who.face.id || "" } : {},
         up: !!up,
         slide: slide,
         at: Date.now()
@@ -840,7 +798,7 @@
         lastHere: lastHere,
         hereAgeMs: lastHere ? Date.now() - lastHere : null,
         slide: slide,
-        seats: seatList().map(function (r) { return r.name; }),
+        seats: seatList().map(function (r) { return r.sid; }),
         status: { live: status.live, mode: status.mode, detail: status.detail, phones: !!status.phones },
         firebase: fbReachable,
         error: lastError,
