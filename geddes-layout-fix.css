@@ -1,7 +1,9 @@
-/* Shared anti-clipping layout for the Geddes student and presenter routes.
-   Both routes use the same 16:9 board and content bounds; only controls differ. */
-.role-part .stage,
-.role-pres .stage {
+/* Geddes classroom layout — one source of truth.
+   The audience and presenter share the same board geometry. Their controls
+   differ, but neither view is allowed to hide slide content. */
+
+body.role-part .stage,
+body.role-pres .stage {
   min-width: 0;
   min-height: 0;
   overflow-x: hidden !important;
@@ -9,339 +11,418 @@
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
 }
-.role-part .stage > *,
-.role-pres .stage > * { min-width: 0; }
-.role-part .stage h1,
-.role-pres .stage h1 {
+
+body.role-part .stage > *,
+body.role-pres .stage > * {
+  min-width: 0;
+}
+
+body.role-part .stage h1,
+body.role-pres .stage h1 {
   max-width: none;
   flex: 0 0 auto;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  text-wrap: balance;
 }
-.role-part .stage.claims .split,
-.role-pres .stage.claims .split {
+
+body.role-part .stage.claims .split,
+body.role-pres .stage.claims .split,
+body.role-part .stage.prompt .split,
+body.role-pres .stage.prompt .split {
   width: 100%;
   min-width: 0;
   align-items: stretch;
 }
-.role-part .stage.claims .split-viz,
-.role-pres .stage.claims .split-viz,
-.role-part .stage.claims .split-side,
-.role-pres .stage.claims .split-side {
+
+body.role-part .stage .split-viz,
+body.role-pres .stage .split-viz,
+body.role-part .stage .split-side,
+body.role-pres .stage .split-side {
   min-width: 0;
   min-height: 0;
 }
-.role-part .stage.claims .chart,
-.role-pres .stage.claims .chart,
-.role-part .stage.prompt .chart,
-.role-pres .stage.prompt .chart {
+
+body.role-part .stage.claims .chart,
+body.role-pres .stage.claims .chart,
+body.role-part .stage.prompt .chart,
+body.role-pres .stage.prompt .chart {
+  display: flex;
+  flex-direction: column;
   width: 100% !important;
   max-width: none !important;
   min-width: 0;
   min-height: 0;
-  height: 100%;
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
+  height: auto !important;
+  flex: 0 1 auto;
 }
-.role-part .stage.claims .chart figcaption,
-.role-pres .stage.claims .chart figcaption,
-.role-part .stage.prompt .chart figcaption,
-.role-pres .stage.prompt .chart figcaption {
+
+body.role-part .stage .chart figcaption,
+body.role-pres .stage .chart figcaption {
   width: 100%;
   max-width: none;
   flex: 0 0 auto;
 }
-.role-part .stage.claims .chart-note,
-.role-pres .stage.claims .chart-note,
-.role-part .stage.prompt .chart-note,
-.role-pres .stage.prompt .chart-note {
+
+body.role-part .stage .chart-note,
+body.role-pres .stage .chart-note {
   max-width: 100%;
 }
-.role-part .stage.claims figure.chart[data-chart]::after,
-.role-pres .stage.claims figure.chart[data-chart]::after,
-.role-part .stage.prompt figure.chart[data-chart]::after,
-.role-pres .stage.prompt figure.chart[data-chart]::after {
-  display: block;
+
+/* Figure 1: retain the two original panels and give Raquel's three teaching
+   points a clear column of their own. */
+body.role-part .stage[data-chart="geddes-fig1"] .split,
+body.role-pres .stage[data-chart="geddes-fig1"] .split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(250px, .85fr);
+  gap: clamp(12px, 1.5vw, 22px);
+}
+body.role-part .stage[data-chart="geddes-fig1"] .split-viz,
+body.role-pres .stage[data-chart="geddes-fig1"] .split-viz {
   width: 100%;
-  max-width: none;
-  flex: 1 1 auto;
-  min-height: 250px;
-  height: auto !important;
-  margin: .35rem auto 0;
-  background-position: center;
-  background-repeat: no-repeat;
+  min-width: 0;
+}
+body.role-part .stage[data-chart="geddes-fig1"] .chart::after,
+body.role-pres .stage[data-chart="geddes-fig1"] .chart::after {
+  height: clamp(280px, 48vh, 420px) !important;
+  min-height: 0;
   background-size: contain;
 }
-/* Graph slides keep their explanatory text, but the figure itself gets the
-   whole width of its panel instead of inheriting the old 26rem presenter cap. */
-.role-pres .stage.claims .chart { max-width: none !important; }
-.role-pres .split-viz .chart { max-width: none !important; width: 100% !important; }
-.role-pres .split-viz .ss-win,
-.role-pres .split-viz .ss-win-body { min-width: 0; min-height: 0; }
-/* The two dense case matrices are more useful as full-slide figures. */
-.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split,
-.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split,
-.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split,
-.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split {
-  grid-template-columns: minmax(0,1fr) !important;
+body.role-part .stage[data-chart="geddes-fig1"] .claim-bars,
+body.role-pres .stage[data-chart="geddes-fig1"] .claim-bars {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  height: 100%;
+  gap: 9px;
 }
-.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-side,
-.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-side,
-.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-side,
-.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-side { display:none !important; }
-/* Figure 3 plus its question: graph first, response choices below, all inside
-   the board's scrollable content area on shorter laptop screens. */
-.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]),
-.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(8px, 1.2vh, 14px);
+body.role-part .stage[data-chart="geddes-fig1"] .claim-bars li,
+body.role-pres .stage[data-chart="geddes-fig1"] .claim-bars li {
+  min-height: 0;
+  height: auto;
 }
-.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask,
-.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask { flex: 0 0 auto; overflow: visible; }
-.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split,
-.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split {
-  flex: 0 0 auto;
-  display: block;
+
+/* Figure 2: the graph and one prominent statistic share the board. */
+body.role-part .stage[data-chart="geddes-fig2"] .split,
+body.role-pres .stage[data-chart="geddes-fig2"] .split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(230px, .8fr);
+  gap: clamp(12px, 1.5vw, 22px);
+}
+body.role-part .stage[data-chart="geddes-fig2"] .split-viz,
+body.role-pres .stage[data-chart="geddes-fig2"] .split-viz {
+  width: 100%;
+  min-width: 0;
+}
+body.role-part .stage[data-chart="geddes-fig2"] .chart::after,
+body.role-pres .stage[data-chart="geddes-fig2"] .chart::after {
+  height: clamp(330px, 55vh, 470px) !important;
   min-height: 0;
 }
-.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-side,
-.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-side { display:none !important; }
-.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
-.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz { width:100%; height:auto; }
-.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
-.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
-  height: clamp(280px, 42vh, 430px) !important;
-  min-height: 280px;
-  flex: none;
+body.role-part .stage[data-chart="geddes-fig2"] figure.chart figcaption,
+body.role-pres .stage[data-chart="geddes-fig2"] figure.chart figcaption {
+  display: none !important;
 }
-.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel,
-.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
-  flex: 0 0 auto;
-  max-height: none;
-  overflow: visible;
-}
-.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices,
-.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices {
+body.role-part .stage[data-chart="geddes-fig2"] .claim-bars,
+body.role-pres .stage[data-chart="geddes-fig2"] .claim-bars {
   display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
+  grid-template-rows: minmax(0, 1fr);
+  height: 100%;
 }
-/* On compact laptop viewports, avoid side-by-side content that pushes controls
-   below the visible board. Scrolling is within the slide, never the page. */
-@media (min-width: 800px) and (max-width: 1100px) {
-  .role-part .stage.prompt,
-  .role-pres .stage.prompt { display:flex; flex-direction:column; }
-  .role-part .stage.prompt .ask-panel,
-  .role-pres .stage.prompt .ask-panel { flex:0 0 auto; }
-  .role-part .stage.claims .split.has-viz,
-  .role-pres .stage.claims .split.has-viz { grid-template-columns:minmax(0,1fr); }
-  .role-part .stage.claims .split-side,
-  .role-pres .stage.claims .split-side { min-height: auto; }
-  .role-part .stage.claims .claim-bars,
-  .role-pres .stage.claims .claim-bars { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .role-part .stage.claims .claim-bars li,
-  .role-pres .stage.claims .claim-bars li { min-height: 130px; }
-}
-@media (max-height: 700px) and (min-width: 800px) {
-  .role-part .stage,
-  .role-pres .stage { padding-top: 10px; padding-bottom: 10px; }
-  .role-part .stage h1,
-  .role-pres .stage h1 { font-size: clamp(27px, 4.2vh, 40px); margin-bottom: 8px; }
-  .role-part .stage.claims figure.chart::after,
-  .role-pres .stage.claims figure.chart::after { min-height: 230px; }
+body.role-part .stage[data-chart="geddes-fig2"] .claim-bars li,
+body.role-pres .stage[data-chart="geddes-fig2"] .claim-bars li {
+  min-height: 0;
+  height: 100%;
 }
 
-
-/* Final Figure 3 layout: one scroll owner, no clipped answer panel.
-   This block intentionally follows geddes-figures.css so it wins over the
-   older, more specific Figure 3 rules there. */
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]),
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) {
-  display: flex !important;
-  flex-direction: column !important;
+/* Figure 3: the evidence stays beside the question. The help line sits below
+   the graph; the response panel never becomes a nested scroll container. */
+body.role-part .stage[data-chart="geddes-fig3"],
+body.role-pres .stage[data-chart="geddes-fig3"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.18fr) minmax(280px, .82fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: start;
   align-items: stretch;
-  gap: clamp(6px, 0.9vh, 10px);
+  column-gap: clamp(12px, 1.5vw, 22px);
+  row-gap: clamp(7px, .9vh, 12px);
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  padding-top: clamp(8px, 1.2vh, 14px);
-  padding-bottom: clamp(10px, 1.4vh, 16px);
 }
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask {
-  flex: 0 0 auto !important;
-  min-height: 0;
-  overflow: visible !important;
+
+body.role-part .stage[data-chart="geddes-fig3"] .ask,
+body.role-pres .stage[data-chart="geddes-fig3"] .ask,
+body.role-part .stage[data-chart="geddes-fig3"] .slide-stack,
+body.role-pres .stage[data-chart="geddes-fig3"] .slide-stack {
+  display: contents !important;
 }
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split {
-  flex: 0 0 auto !important;
-  min-height: 0;
-  display: block !important;
+
+body.role-part .stage[data-chart="geddes-fig3"] .slide-kicker,
+body.role-pres .stage[data-chart="geddes-fig3"] .slide-kicker {
+  display: none !important;
+}
+
+body.role-part .stage[data-chart="geddes-fig3"] h1,
+body.role-pres .stage[data-chart="geddes-fig3"] h1 {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin: 0;
+}
+
+body.role-part .stage[data-chart="geddes-fig3"] .split,
+body.role-pres .stage[data-chart="geddes-fig3"] .split {
+  grid-column: 1;
+  grid-row: 2;
   width: 100%;
+  min-width: 0;
+  min-height: 0;
+  align-self: start;
 }
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz .ss-win,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz .ss-win {
+
+body.role-part .stage[data-chart="geddes-fig3"] .split-viz,
+body.role-pres .stage[data-chart="geddes-fig3"] .split-viz {
   width: 100% !important;
+  min-width: 0;
+  height: auto !important;
+}
+
+body.role-part .stage[data-chart="geddes-fig3"] figure.chart,
+body.role-pres .stage[data-chart="geddes-fig3"] figure.chart {
+  width: 100%;
   height: auto !important;
   min-height: 0;
+  flex: 0 0 auto;
 }
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ss-win-body,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ss-win-body {
-  height: auto;
-  min-height: 0;
-  padding: clamp(9px, 1.1vh, 14px) clamp(10px, 1.2vw, 18px);
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart {
+
+body.role-part .stage[data-chart="geddes-fig3"] figure.chart::after,
+body.role-pres .stage[data-chart="geddes-fig3"] figure.chart::after {
+  width: 100%;
   height: auto !important;
-  min-height: 0;
-  flex: 0 0 auto !important;
+  min-height: 0 !important;
+  max-height: min(50vh, 390px);
+  aspect-ratio: 1400 / 760;
+  flex: 0 0 auto;
 }
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
-  height: clamp(245px, 34vh, 350px) !important;
-  min-height: 245px !important;
-  max-height: 350px;
-  flex: 0 0 auto !important;
-  margin-top: .15rem;
+
+body.role-part .stage[data-chart="geddes-fig3"] .chart-source,
+body.role-pres .stage[data-chart="geddes-fig3"] .chart-source,
+body.role-part .stage[data-chart="geddes-fig3"] .chart-note,
+body.role-pres .stage[data-chart="geddes-fig3"] .chart-note {
+  display: none !important;
 }
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
-  flex: 0 0 auto !important;
+
+body.role-part .stage[data-chart="geddes-fig3"] .help,
+body.role-pres .stage[data-chart="geddes-fig3"] .help {
+  grid-column: 1;
+  grid-row: 3;
+  margin: 0;
+  align-self: start;
+}
+
+body.role-part .stage[data-chart="geddes-fig3"] .ask-panel,
+body.role-pres .stage[data-chart="geddes-fig3"] .ask-panel {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  align-self: stretch;
+  width: 100%;
+  min-width: 0;
   min-height: 0;
   max-height: none !important;
   height: auto !important;
   overflow: visible !important;
-  padding: clamp(10px, 1.2vh, 15px) clamp(12px, 1.5vw, 20px);
+  padding: clamp(12px, 1.4vh, 18px);
 }
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-q {
-  margin: 0 0 .45rem;
-  font-size: clamp(17px, 2.2vh, 23px);
-  line-height: 1.15;
+
+body.role-part .stage[data-chart="geddes-fig3"] .ask-q {
+  margin: 0 0 .55rem;
+  font-size: clamp(17px, 2.1vh, 23px);
+  line-height: 1.18;
 }
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices {
+
+body.role-part .stage[data-chart="geddes-fig3"] .choices,
+body.role-pres .stage[data-chart="geddes-fig3"] .opt-preview,
+body.role-pres .stage[data-chart="geddes-fig3"] .talk {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 7px;
-  margin: .2rem 0 0;
+  gap: 8px;
+  align-content: start;
+  grid-auto-rows: min-content;
 }
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices button {
+
+body.role-part .stage[data-chart="geddes-fig3"] .choices button,
+body.role-pres .stage[data-chart="geddes-fig3"] .opt-preview li,
+body.role-pres .stage[data-chart="geddes-fig3"] .talk li {
   min-width: 0;
   min-height: 44px;
-  padding: 8px 10px;
+  height: auto;
+  padding: 9px 10px;
   font-size: clamp(13px, 1.65vh, 17px);
   line-height: 1.2;
   overflow-wrap: anywhere;
 }
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) #viz {
-  min-height: 0;
-  max-height: none;
-}
 
-/* Keep the student experience usable at normal laptop zoom and at 1024px. */
-@media (min-width: 800px) and (max-width: 1100px) {
-  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
-  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
-    height: clamp(220px, 30vh, 300px) !important;
-    min-height: 220px !important;
-  }
-  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
+/* Figure 4 and Figure 5 are dense matrices. They get the full board rather
+   than a narrow chart column; the SVG itself carries the key interpretation. */
+body.role-part .stage[data-chart="geddes-fig4"] .split,
+body.role-pres .stage[data-chart="geddes-fig4"] .split,
+body.role-part .stage[data-chart="geddes-fig5"] .split,
+body.role-pres .stage[data-chart="geddes-fig5"] .split {
+  display: block !important;
+  width: 100%;
 }
-@media (max-height: 700px) and (min-width: 800px) {
-  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
-  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
-    height: clamp(205px, 29vh, 255px) !important;
-    min-height: 205px !important;
-  }
-}
-
-/* The toolbar must not push navigation or status off a narrow laptop. */
-.role-pres .chrome-right {
-  min-width: 0;
-  max-width: 100%;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  row-gap: .35rem;
-}
-.role-pres .chrome-right > * { min-width: 0; }
-@media (max-width: 1100px) {
-  .role-pres .chrome { gap: .5rem; }
-  .role-pres .chrome-right { gap: .45rem; }
-}
-
-
-/* The base audience stylesheet loads after the shared patch. Match its
-   specificity explicitly so the stage, not a child card, owns scrolling. */
-body.role-part.is-desk .stage,
-body.role-pres .stage {
-  min-height: 0;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  overscroll-behavior: contain;
-}
-
-
-/* Geddes visual system: a single navy stage, paper surfaces, and one red/gold signal. */
-body.role-pres :focus-visible,
-body.role-part :focus-visible {
-  outline: 3px solid #f0d48a !important;
-  outline-offset: 3px;
-}
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after {
-  height: clamp(390px, 55vh, 560px) !important;
-  min-height: 320px !important;
-}
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) figure.chart::after,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) figure.chart::after,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) figure.chart::after,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) figure.chart::after {
-  height: clamp(390px, 54vh, 520px) !important;
-  min-height: 320px !important;
-}
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after {
-  height: clamp(390px, 55vh, 540px) !important;
-  min-height: 320px !important;
-}
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .chart-source,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .chart-source,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .chart-note,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .chart-note,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .chart-source,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .chart-source,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .chart-note,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .chart-note,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .chart-source,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .chart-source,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .chart-note,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .chart-note {
+body.role-part .stage[data-chart="geddes-fig4"] .split-side,
+body.role-pres .stage[data-chart="geddes-fig4"] .split-side,
+body.role-part .stage[data-chart="geddes-fig5"] .split-side,
+body.role-pres .stage[data-chart="geddes-fig5"] .split-side {
   display: none !important;
 }
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .ss-win-body,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .ss-win-body,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .ss-win-body,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .ss-win-body,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-body,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-body {
-  padding: clamp(8px, 1vh, 14px) clamp(10px, 1.2vw, 18px);
+body.role-part .stage[data-chart="geddes-fig4"] .split-viz,
+body.role-pres .stage[data-chart="geddes-fig4"] .split-viz,
+body.role-part .stage[data-chart="geddes-fig5"] .split-viz,
+body.role-pres .stage[data-chart="geddes-fig5"] .split-viz {
+  width: 100% !important;
+  max-width: none !important;
 }
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .ss-win-label,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .ss-win-label,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .ss-win-label,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .ss-win-label,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-label,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-label {
-  margin-bottom: .15rem;
+body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
+body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after {
+  height: clamp(360px, 56vh, 470px) !important;
+  min-height: 0;
+}
+body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
+body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
+  height: clamp(360px, 54vh, 450px) !important;
+  min-height: 0;
+}
+body.role-part .stage[data-chart="geddes-fig4"] .chart-source,
+body.role-pres .stage[data-chart="geddes-fig4"] .chart-source,
+body.role-part .stage[data-chart="geddes-fig4"] .chart-note,
+body.role-pres .stage[data-chart="geddes-fig4"] .chart-note,
+body.role-part .stage[data-chart="geddes-fig5"] .chart-source,
+body.role-pres .stage[data-chart="geddes-fig5"] .chart-source,
+body.role-part .stage[data-chart="geddes-fig5"] .chart-note,
+body.role-pres .stage[data-chart="geddes-fig5"] .chart-note {
+  display: none !important;
 }
 
-/* Keyboard alternatives remain visible beside the drag-first affordance. */
-.rank-list li { grid-template-columns: 1.6rem minmax(0,1fr) auto; }
-.rank-controls { display: inline-flex; gap: .25rem; }
+/* Figure 6 uses the same evidence-plus-interpretation composition as Figure 1. */
+body.role-part .stage[data-chart="geddes-fig6"] .split,
+body.role-pres .stage[data-chart="geddes-fig6"] .split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(250px, .85fr);
+  gap: clamp(12px, 1.5vw, 22px);
+}
+body.role-part .stage[data-chart="geddes-fig6"] .split-viz,
+body.role-pres .stage[data-chart="geddes-fig6"] .split-viz {
+  width: 100%;
+  min-width: 0;
+}
+body.role-part .stage[data-chart="geddes-fig6"] figure.chart::after,
+body.role-pres .stage[data-chart="geddes-fig6"] figure.chart::after {
+  height: clamp(300px, 48vh, 420px) !important;
+  min-height: 0;
+}
+body.role-part .stage[data-chart="geddes-fig6"] .claim-bars,
+body.role-pres .stage[data-chart="geddes-fig6"] .claim-bars {
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  height: 100%;
+  gap: 10px;
+}
+body.role-part .stage[data-chart="geddes-fig6"] .claim-bars li,
+body.role-pres .stage[data-chart="geddes-fig6"] .claim-bars li {
+  min-height: 0;
+  height: auto;
+}
+body.role-part .stage[data-chart="geddes-fig6"] .chart-source,
+body.role-pres .stage[data-chart="geddes-fig6"] .chart-source,
+body.role-part .stage[data-chart="geddes-fig6"] .chart-note,
+body.role-pres .stage[data-chart="geddes-fig6"] .chart-note {
+  display: none !important;
+}
+
+/* Compact laptop widths: preserve the comparison, but make every target
+   comfortable to use. At 800×600 the presenter view gets a short vertical
+   stack; the audience route displays its laptop notice below 960px. */
+@media (min-width: 800px) and (max-width: 1100px) {
+  body.role-part .stage[data-chart="geddes-fig1"] .split,
+  body.role-pres .stage[data-chart="geddes-fig1"] .split,
+  body.role-part .stage[data-chart="geddes-fig2"] .split,
+  body.role-pres .stage[data-chart="geddes-fig2"] .split,
+  body.role-part .stage[data-chart="geddes-fig6"] .split,
+  body.role-pres .stage[data-chart="geddes-fig6"] .split {
+    grid-template-columns: minmax(0, 1.25fr) minmax(220px, .75fr);
+    gap: 10px;
+  }
+  body.role-part .stage[data-chart="geddes-fig1"] .chart::after,
+  body.role-pres .stage[data-chart="geddes-fig1"] .chart::after,
+  body.role-part .stage[data-chart="geddes-fig6"] .chart::after,
+  body.role-pres .stage[data-chart="geddes-fig6"] .chart::after {
+    height: clamp(260px, 42vh, 340px) !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig2"] .chart::after,
+  body.role-pres .stage[data-chart="geddes-fig2"] .chart::after {
+    height: clamp(300px, 45vh, 360px) !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig3"],
+  body.role-pres .stage[data-chart="geddes-fig3"] {
+    grid-template-columns: minmax(0, 1.05fr) minmax(240px, .95fr);
+  }
+  body.role-part .stage[data-chart="geddes-fig3"] .choices,
+  body.role-pres .stage[data-chart="geddes-fig3"] .opt-preview,
+  body.role-pres .stage[data-chart="geddes-fig3"] .talk {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
+    height: clamp(320px, 48vh, 390px) !important;
+  }
+}
+
+@media (max-height: 650px) and (min-width: 800px) {
+  body.role-part .stage,
+  body.role-pres .stage {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  body.role-part .stage h1,
+  body.role-pres .stage h1 {
+    font-size: clamp(25px, 4.1vh, 34px);
+    margin-bottom: 6px;
+  }
+  body.role-part .stage[data-chart="geddes-fig3"],
+  body.role-pres .stage[data-chart="geddes-fig3"] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+  }
+  body.role-part .stage[data-chart="geddes-fig3"] .split,
+  body.role-pres .stage[data-chart="geddes-fig3"] .split {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  body.role-part .stage[data-chart="geddes-fig3"] .help,
+  body.role-pres .stage[data-chart="geddes-fig3"] .help {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  body.role-part .stage[data-chart="geddes-fig3"] .ask-panel,
+  body.role-pres .stage[data-chart="geddes-fig3"] .ask-panel {
+    grid-column: 1;
+    grid-row: 4;
+  }
+  body.role-part .stage[data-chart="geddes-fig3"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig3"] figure.chart::after {
+    max-height: 235px;
+  }
+}
+
+/* Keyboard alternatives are first-class controls, not a hidden fallback. */
+.rank-list li {
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
+}
+.rank-controls {
+  display: inline-flex;
+  gap: .25rem;
+}
 .rank-controls button {
   width: 2rem;
   min-height: 2rem;
@@ -351,7 +432,10 @@ body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-label
   color: #102b43;
   font-weight: 700;
 }
-.rank-controls button:disabled { opacity: .3; cursor: not-allowed; }
+.rank-controls button:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
 .token-choice {
   display: flex;
   flex-direction: column;
@@ -359,92 +443,20 @@ body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-label
   min-width: 0;
 }
 .token-choice .token { cursor: grab; }
-.token-choice.is-dragging { opacity: .95; box-shadow: 0 8px 18px rgba(16,43,67,.2); }
+.token-choice.is-dragging {
+  opacity: .95;
+  box-shadow: 0 8px 18px rgba(16, 43, 67, .2);
+}
 .token-place {
   width: 100%;
   max-width: 13rem;
-  min-height: 2rem;
+  min-height: 2.5rem;
   border: 1px solid #d7d0c3;
   border-radius: 7px;
-  padding: .25rem .4rem;
+  padding: .35rem .45rem;
   background: #fffdf8;
   color: #102b43;
-  font: 600 12px var(--sans);
-}
-
-/* Room status uses the same navy/paper/gold language as the deck. */
-.failsafe {
-  align-items: center;
-  justify-content: flex-end;
-  padding: clamp(10px, 2vw, 24px);
-  background: rgba(9,22,34,.72);
-  backdrop-filter: blur(5px);
-}
-.failsafe-card {
-  width: min(36rem, 100%);
-  max-height: min(92svh, 52rem);
-  padding: 1.25rem;
-  border: 1px solid rgba(240,212,138,.45);
-  border-top: 5px solid #ba0c2f;
-  border-radius: 16px;
-  background: #102b43;
-  color: #fffdf8;
-  box-shadow: 0 24px 80px rgba(0,0,0,.35);
-}
-.failsafe-head h2 { color: #fffdf8; font: 700 1.6rem/1.1 var(--display); }
-.failsafe-eyebrow { margin: 0 0 .25rem; color: #f0d48a; font: 700 .7rem var(--display); letter-spacing: .16em; }
-.failsafe-close {
-  border: 1px solid rgba(255,253,248,.5);
-  border-radius: 999px;
-  padding: .4rem .75rem;
-  color: #fffdf8;
-  text-decoration: none;
-}
-.failsafe-lead { color: #d9e0e4; max-width: 48ch; }
-.failsafe-status {
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: .6rem;
-  padding: .75rem;
-  border: 1px solid rgba(255,253,248,.13);
-  border-radius: 12px;
-  background: #183a57;
-}
-.failsafe-status > div {
-  display: block;
-  min-width: 0;
-  padding: .45rem .5rem;
-  border-radius: 8px;
-  background: rgba(255,253,248,.06);
-}
-.failsafe-status dt { color: #f0d48a; font: 700 .68rem var(--display); letter-spacing: .08em; text-transform: uppercase; }
-.failsafe-status dd { margin: .2rem 0 0; color: #fffdf8; font-size: .9rem; line-height: 1.3; }
-.failsafe-h { margin: .8rem 0 .45rem; color: #f0d48a; font: 700 .78rem var(--display); letter-spacing: .12em; text-transform: uppercase; }
-.failsafe-cmds { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .5rem; }
-.failsafe-cmds button,
-.failsafe-cmds a.failsafe-backup {
-  border: 1px solid rgba(255,253,248,.15);
-  border-radius: 10px;
-  padding: .7rem .8rem;
-  background: #fffdf8;
-  color: #102b43;
-}
-.failsafe-cmds button:hover,
-.failsafe-cmds a.failsafe-backup:hover { border-color: #f0d48a; background: #f4ead2; }
-.failsafe-cmds strong { font: 700 1rem/1.15 var(--display); }
-.failsafe-cmds span { color: #536475; }
-.failsafe-log { border: 1px solid rgba(240,212,138,.5); background: #183a57; color: #fffdf8; }
-.failsafe-footer { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .5rem; margin-top: .55rem; }
-@media (max-width: 700px) {
-  .failsafe { justify-content: center; }
-  .failsafe-cmds, .failsafe-footer, .failsafe-status { grid-template-columns: minmax(0,1fr); }
-}
-
-
-/* The student audience stylesheet is loaded after this file. The desk selector
-   deliberately wins its later overflow:hidden rule at the same viewport. */
-body.role-part.is-desk .stage {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
+  font: 600 13px var(--sans);
 }
 body.role-part .submit-error {
   margin: .55rem 0 0;
@@ -452,336 +464,158 @@ body.role-part .submit-error {
   font: 600 14px/1.35 var(--sans);
 }
 
-
-/* Figure 3 is a two-column teaching frame: evidence left, question right.
-   This avoids making the room panel fall below the fold on 4:3 laptop screens. */
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]),
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1.2fr) minmax(300px, .88fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  align-content: start;
-  align-items: stretch;
-  column-gap: clamp(10px, 1.4vw, 20px);
-  row-gap: clamp(6px, .8vh, 10px);
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask {
-  display: contents !important;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-kicker,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-kicker {
-  display: none !important;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) h1,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) h1 {
-  grid-column: 1 / -1;
-  grid-row: 1;
-  margin: 0;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split {
-  grid-column: 1;
-  grid-row: 2;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  align-self: start;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .split-viz {
-  width: 100% !important;
-  min-width: 0;
-  height: auto !important;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .help,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .help,
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .chart-source,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .chart-source,
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .chart-note,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .chart-note {
-  display: none !important;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart {
-  height: auto !important;
-  min-height: 0;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) figure.chart::after {
-  width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  aspect-ratio: 1400 / 760;
-  background-size: contain;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
-  grid-column: 2;
-  grid-row: 2;
-  align-self: stretch;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  max-height: none !important;
-  height: auto !important;
-  overflow: visible !important;
-  padding: clamp(12px, 1.5vh, 20px);
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-q {
-  font-size: clamp(17px, 2.1vh, 23px);
-  line-height: 1.18;
-  margin: 0 0 .55rem;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0,1fr)) !important;
-  gap: 8px;
-  margin: .3rem 0 0;
-}
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices button {
-  min-width: 0;
-  min-height: 44px;
-  padding: 9px 10px;
-  font-size: clamp(13px, 1.6vh, 17px);
-  line-height: 1.2;
-  overflow-wrap: anywhere;
-}
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview {
-  display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 8px;
-  margin: .3rem 0 0;
-}
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview li {
-  min-width: 0;
-  margin: 0;
-  padding: 10px;
-  font-size: clamp(13px, 1.55vh, 17px);
-  line-height: 1.2;
-}
-@media (min-width: 800px) and (max-width: 1100px) {
-  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]),
-  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) {
-    grid-template-columns: minmax(0, 1.1fr) minmax(270px, .9fr);
-  }
-  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .choices,
-  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview {
-    grid-template-columns: minmax(0,1fr) !important;
-  }
-}
-@media (max-height: 700px) and (min-width: 800px) {
-  body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .ask-panel {
-    padding: 10px;
-  }
+/* Keyboard focus remains visible against both paper and navy surfaces. */
+body.role-pres :focus-visible,
+body.role-part :focus-visible {
+  outline: 3px solid #f0d48a !important;
+  outline-offset: 3px;
 }
 
-
-/* A chart without a companion claim column owns the full slide width. */
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split {
-  grid-template-columns: minmax(0,1fr) !important;
+/* Presenter room status: scrolls as a single panel if the viewport is short. */
+.failsafe {
+  align-items: center;
+  justify-content: flex-end;
+  padding: clamp(10px, 2vw, 24px);
+  background: rgba(9, 22, 34, .76);
+  backdrop-filter: blur(5px);
 }
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split-viz,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) .split-viz {
-  width: 100% !important;
-  min-width: 0;
+.failsafe-card {
+  width: min(38rem, 100%);
+  max-height: min(92svh, 54rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.25rem;
+  border: 1px solid rgba(240, 212, 138, .45);
+  border-top: 5px solid #ba0c2f;
+  border-radius: 16px;
+  background: #102b43;
+  color: #fffdf8;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .35);
 }
-
-/* The section label already appears in the UGA banner; do not repeat it above
-   the title in the student view. */
-body.role-part.is-desk .slide-kicker { display: none !important; }
-
-
-/* The presenter backup renderer wraps prompt content in .slide-stack rather
-   than .ask; expose its children to the same Figure 3 grid. */
-body.role-part .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-stack,
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .slide-stack {
-  display: contents !important;
+.failsafe-head h2 {
+  color: #fffdf8;
+  font: 700 1.6rem/1.1 var(--display);
 }
-
-
-/* Compact 4:3 laptop fit for Figure 2's single-column graph. */
-@media (min-width: 800px) and (max-width: 1100px) {
-  body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after,
-  body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after {
-    height: clamp(300px, 40vh, 340px) !important;
-    min-height: 300px !important;
-  }
+.failsafe-eyebrow {
+  margin: 0 0 .25rem;
+  color: #f0d48a;
+  font: 700 .7rem var(--display);
+  letter-spacing: .16em;
 }
-
-/* Presenter answer preview should be a compact list, not three stretched tiles. */
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview {
-  align-content: start;
-  grid-auto-rows: min-content;
-}
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .opt-preview li {
-  min-height: 0 !important;
-  height: auto !important;
-  align-self: start;
-}
-
-/* Footer destinations are quiet secondary surfaces, not default blue links. */
-.failsafe-footer .failsafe-backup {
-  display: block;
-  min-width: 0;
-  padding: .7rem .8rem;
-  border: 1px solid rgba(255,253,248,.18);
-  border-radius: 10px;
-  background: #183a57;
+.failsafe-close {
+  border: 1px solid rgba(255, 253, 248, .5);
+  border-radius: 999px;
+  padding: .4rem .75rem;
   color: #fffdf8;
   text-decoration: none;
+}
+.failsafe-lead {
+  color: #d9e0e4;
+  max-width: 52ch;
+}
+.failsafe-status {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .6rem;
+  padding: .75rem;
+  border: 1px solid rgba(255, 253, 248, .13);
+  border-radius: 12px;
+  background: #183a57;
+}
+.failsafe-status > div {
+  min-width: 0;
+  padding: .5rem;
+  border-radius: 8px;
+  background: rgba(255, 253, 248, .06);
+}
+.failsafe-status dt {
+  color: #f0d48a;
+  font: 700 .68rem var(--display);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.failsafe-status dd {
+  margin: .2rem 0 0;
+  color: #fffdf8;
+  font-size: .9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.failsafe-h {
+  margin: .8rem 0 .45rem;
+  color: #f0d48a;
+  font: 700 .78rem var(--display);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.failsafe-cmds {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .5rem;
+}
+.failsafe-cmds button,
+.failsafe-footer .failsafe-backup {
+  min-width: 0;
+  border: 1px solid rgba(255, 253, 248, .15);
+  border-radius: 10px;
+  padding: .7rem .8rem;
+  background: #fffdf8;
+  color: #102b43;
+}
+.failsafe-cmds button:hover {
+  border-color: #f0d48a;
+  background: #f4ead2;
+}
+.failsafe-cmds strong,
+.failsafe-footer .failsafe-backup strong {
+  display: block;
+  margin-bottom: .2rem;
+  color: #102b43;
+  font: 700 1rem/1.15 var(--display);
+}
+.failsafe-cmds span {
+  display: block;
+  color: #536475;
+  font-size: .82rem;
+  line-height: 1.3;
+}
+.failsafe-log {
+  max-height: 11rem;
+  overflow: auto;
+  border: 1px solid rgba(240, 212, 138, .5);
+  background: #183a57;
+  color: #fffdf8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.failsafe-footer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .5rem;
+  margin-top: .55rem;
+}
+.failsafe-footer .failsafe-backup {
+  display: block;
+  text-decoration: none;
+  background: #183a57;
+  color: #fffdf8;
 }
 .failsafe-footer .failsafe-backup:hover {
   border-color: #f0d48a;
   background: #214766;
 }
-.failsafe-footer .failsafe-backup strong {
-  display: block;
-  margin-bottom: .2rem;
-  color: #f0d48a;
-  font: 700 1rem/1.15 var(--display);
-}
+.failsafe-footer .failsafe-backup strong { color: #f0d48a; }
 .failsafe-footer .failsafe-backup span {
   display: block;
   color: #d9e0e4;
   font-size: .82rem;
   line-height: 1.3;
 }
-
-
-/* The backup presenter uses .talk for its non-interactive answer preview. */
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .talk {
-  display: grid !important;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 8px;
-  align-content: start;
-  grid-auto-rows: min-content;
-}
-body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .talk li {
-  min-height: 0 !important;
-  height: auto !important;
-  align-self: start;
-  padding: 10px !important;
-  font-size: clamp(13px,1.55vh,17px);
-  line-height: 1.2;
-}
-@media (min-width: 800px) and (max-width: 1100px) {
-  body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) .talk {
-    grid-template-columns: minmax(0,1fr);
+@media (max-width: 700px) {
+  .failsafe { justify-content: center; }
+  .failsafe-status,
+  .failsafe-cmds,
+  .failsafe-footer {
+    grid-template-columns: minmax(0, 1fr);
   }
-}
-
-
-/* Full-width teaching figures: let the original comparison carry the slide. */
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split {
-  display: block !important;
-}
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-side,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-side,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-side,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-side {
-  display: none !important;
-}
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-viz,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) .split-viz,
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-viz,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .split-viz {
-  width: 100% !important;
-  max-width: none !important;
-}
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after {
-  aspect-ratio: 1500 / 600;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: min(56vh, 470px);
-}
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after {
-  aspect-ratio: 1600 / 620;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: min(56vh, 470px);
-}
-@media (min-width: 800px) and (max-width: 1100px) {
-  body.role-part .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after,
-  body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig1"]) figure.chart::after,
-  body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after,
-  body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after {
-    max-height: 44vh;
-  }
-}
-
-
-/* Figure 2 already carries its title, r-squared and source inside the artwork.
-   Remove the duplicate caption block so the graph is not pushed below the fold. */
-body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart figcaption,
-body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart figcaption {
-  display: none !important;
-}
-@media (min-width: 800px) and (max-width: 1100px) {
-  body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after,
-  body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after {
-    height: 300px !important;
-    min-height: 300px !important;
-  }
-}
-
-
-/* The sample-design activity uses its left column as a teaching canvas:
-   context, Geddes's warning and the question are separate, readable beats. */
-body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask,
-body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask {
-  justify-content: flex-start;
-  gap: clamp(12px, 2vh, 22px);
-}
-body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .slide-stack,
-body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .slide-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 8px;
-}
-body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .lead,
-body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .lead {
-  margin: 0;
-  padding: clamp(16px, 2vw, 24px);
-  border-left: 6px solid #ba0c2f;
-  border-radius: 12px;
-  background: #102b43;
-  color: #fffdf8;
-  font: 600 clamp(19px, 2.4vh, 26px)/1.25 var(--sans);
-  box-shadow: 0 8px 20px rgba(16,43,67,.1);
-}
-body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .quote,
-body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .quote {
-  margin: 0;
-  padding: clamp(18px, 2vw, 26px);
-  border-left: 6px solid #ba0c2f;
-  border-radius: 12px;
-  background: #fffdf8;
-  box-shadow: 0 8px 20px rgba(16,43,67,.08);
-}
-body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .quote p,
-body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .quote p {
-  color: #102b43;
-  font-size: clamp(18px, 2.2vh, 24px);
-  line-height: 1.35;
-}
-body.role-part .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .help,
-body.role-pres .stage.prompt:not(:has(.chart[data-chart="geddes-fig3"])) .ask .help {
-  margin: 0;
-  padding: 14px 18px;
-  border-radius: 10px;
-  background: #dfe8e2;
-  color: #102b43;
-  font-size: clamp(15px, 1.9vh, 19px);
-  line-height: 1.35;
 }
