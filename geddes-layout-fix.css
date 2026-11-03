@@ -283,3 +283,158 @@ body.role-pres .stage {
   overflow-y: auto !important;
   overscroll-behavior: contain;
 }
+
+
+/* Geddes visual system: a single navy stage, paper surfaces, and one red/gold signal. */
+body.role-pres :focus-visible,
+body.role-part :focus-visible {
+  outline: 3px solid #f0d48a !important;
+  outline-offset: 3px;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig2"]) figure.chart::after {
+  height: clamp(390px, 55vh, 560px) !important;
+  min-height: 320px !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) figure.chart::after,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) figure.chart::after {
+  height: clamp(390px, 54vh, 520px) !important;
+  min-height: 320px !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) figure.chart::after {
+  height: clamp(390px, 55vh, 540px) !important;
+  min-height: 320px !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .chart-source,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .chart-source,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .chart-note,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .chart-note,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .chart-source,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .chart-source,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .chart-note,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .chart-note,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .chart-source,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .chart-source,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .chart-note,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .chart-note {
+  display: none !important;
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .ss-win-body,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .ss-win-body,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .ss-win-body,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .ss-win-body,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-body,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-body {
+  padding: clamp(8px, 1vh, 14px) clamp(10px, 1.2vw, 18px);
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .ss-win-label,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig4"]) .ss-win-label,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .ss-win-label,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig5"]) .ss-win-label,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-label,
+body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-label {
+  margin-bottom: .15rem;
+}
+
+/* Keyboard alternatives remain visible beside the drag-first affordance. */
+.rank-list li { grid-template-columns: 1.6rem minmax(0,1fr) auto; }
+.rank-controls { display: inline-flex; gap: .25rem; }
+.rank-controls button {
+  width: 2rem;
+  min-height: 2rem;
+  border: 1px solid #d7d0c3;
+  border-radius: 8px;
+  background: #f6f2e8;
+  color: #102b43;
+  font-weight: 700;
+}
+.rank-controls button:disabled { opacity: .3; cursor: not-allowed; }
+.token-choice {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  min-width: 0;
+}
+.token-choice .token { cursor: grab; }
+.token-choice.is-dragging { opacity: .95; box-shadow: 0 8px 18px rgba(16,43,67,.2); }
+.token-place {
+  width: 100%;
+  max-width: 13rem;
+  min-height: 2rem;
+  border: 1px solid #d7d0c3;
+  border-radius: 7px;
+  padding: .25rem .4rem;
+  background: #fffdf8;
+  color: #102b43;
+  font: 600 12px var(--sans);
+}
+
+/* Room status uses the same navy/paper/gold language as the deck. */
+.failsafe {
+  align-items: center;
+  justify-content: flex-end;
+  padding: clamp(10px, 2vw, 24px);
+  background: rgba(9,22,34,.72);
+  backdrop-filter: blur(5px);
+}
+.failsafe-card {
+  width: min(36rem, 100%);
+  max-height: min(92svh, 52rem);
+  padding: 1.25rem;
+  border: 1px solid rgba(240,212,138,.45);
+  border-top: 5px solid #ba0c2f;
+  border-radius: 16px;
+  background: #102b43;
+  color: #fffdf8;
+  box-shadow: 0 24px 80px rgba(0,0,0,.35);
+}
+.failsafe-head h2 { color: #fffdf8; font: 700 1.6rem/1.1 var(--display); }
+.failsafe-eyebrow { margin: 0 0 .25rem; color: #f0d48a; font: 700 .7rem var(--display); letter-spacing: .16em; }
+.failsafe-close {
+  border: 1px solid rgba(255,253,248,.5);
+  border-radius: 999px;
+  padding: .4rem .75rem;
+  color: #fffdf8;
+  text-decoration: none;
+}
+.failsafe-lead { color: #d9e0e4; max-width: 48ch; }
+.failsafe-status {
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: .6rem;
+  padding: .75rem;
+  border: 1px solid rgba(255,253,248,.13);
+  border-radius: 12px;
+  background: #183a57;
+}
+.failsafe-status > div {
+  display: block;
+  min-width: 0;
+  padding: .45rem .5rem;
+  border-radius: 8px;
+  background: rgba(255,253,248,.06);
+}
+.failsafe-status dt { color: #f0d48a; font: 700 .68rem var(--display); letter-spacing: .08em; text-transform: uppercase; }
+.failsafe-status dd { margin: .2rem 0 0; color: #fffdf8; font-size: .9rem; line-height: 1.3; }
+.failsafe-h { margin: .8rem 0 .45rem; color: #f0d48a; font: 700 .78rem var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.failsafe-cmds { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .5rem; }
+.failsafe-cmds button,
+.failsafe-cmds a.failsafe-backup {
+  border: 1px solid rgba(255,253,248,.15);
+  border-radius: 10px;
+  padding: .7rem .8rem;
+  background: #fffdf8;
+  color: #102b43;
+}
+.failsafe-cmds button:hover,
+.failsafe-cmds a.failsafe-backup:hover { border-color: #f0d48a; background: #f4ead2; }
+.failsafe-cmds strong { font: 700 1rem/1.15 var(--display); }
+.failsafe-cmds span { color: #536475; }
+.failsafe-log { border: 1px solid rgba(240,212,138,.5); background: #183a57; color: #fffdf8; }
+.failsafe-footer { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .5rem; margin-top: .55rem; }
+@media (max-width: 700px) {
+  .failsafe { justify-content: center; }
+  .failsafe-cmds, .failsafe-footer, .failsafe-status { grid-template-columns: minmax(0,1fr); }
+}
