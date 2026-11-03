@@ -898,18 +898,27 @@
       if (event.target.closest("[data-close-figure]")) close();
     });
     document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape" && !viewer.hidden) close();
+      if (viewer.hidden) return;
+      if (event.key === "Escape") {
+        close();
+        return;
+      }
+      if (event.key === "Tab") {
+        event.preventDefault();
+        viewer.querySelector(".figure-viewer-close").focus();
+      }
     });
     stage.addEventListener("click", function (event) {
       var trigger = event.target.closest("[data-expand-figure]");
-      if (!trigger) return;
-      var id = trigger.getAttribute("data-expand-figure");
+      var embed = event.target.closest(".figure-embed");
+      var id = trigger ? trigger.getAttribute("data-expand-figure") : embed && embed.getAttribute("data-figure");
       if (!/^geddes-(selection|fig[1-6])$/.test(id || "")) return;
       var img = viewer.querySelector(".figure-viewer-image");
       img.src = "figures/" + id + ".svg";
-      img.alt = trigger.getAttribute("aria-label") || "Expanded figure";
+      var figure = embed && embed.querySelector("figure.chart");
+      img.alt = (trigger && trigger.getAttribute("aria-label")) || (figure && figure.getAttribute("aria-label")) || "Expanded figure";
       viewer.querySelector(".figure-viewer-caption").textContent = img.alt;
-      viewer._trigger = trigger;
+      viewer._trigger = trigger || (embed && embed.querySelector(".figure-expand"));
       viewer.hidden = false;
       document.body.classList.add("figure-viewer-open");
       viewer.querySelector(".figure-viewer-close").focus();
