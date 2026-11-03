@@ -43,7 +43,8 @@ assert.strictEqual(nics.slots.length, 2);
 assert.strictEqual(nics.names.length, 5);
 
 var withChart = SLIDES.filter(function (s) { return s.chart; });
-assert.strictEqual(withChart.length, 6, "Table 1, Figures 1-6 and Table 2 are represented across the boards");
+assert.strictEqual(withChart.length, 7, "the conceptual diagram, Figures 1-6 and Table 2 are represented across the boards");
+assert.strictEqual(SLIDES.filter(function (s) { return s.id === "ask"; })[0].chart.id, "geddes-selection");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "regions"; })[0].chart.id, "geddes-fig1");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].type, "prompt");
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "regions"; })[0].chart.id, "geddes-fig1");
@@ -178,7 +179,7 @@ assert.ok(css.indexOf("--navy") !== -1);
 assert.ok(css.indexOf("--gold") !== -1);
 assert.ok(fs.existsSync("./join-qr.svg"));
 assert.ok(fs.existsSync("./geddes-figures.css"));
-["geddes-fig1.svg","geddes-fig23.svg","geddes-fig4.svg","geddes-fig5.svg","geddes-fig6.svg"].forEach(function (name) { assert.ok(fs.existsSync("./figures/" + name)); });
+["geddes-selection.svg","geddes-fig1.svg","geddes-fig23.svg","geddes-fig4.svg","geddes-fig5.svg","geddes-fig6.svg"].forEach(function (name) { assert.ok(fs.existsSync("./figures/" + name)); });
 assert.ok(fs.existsSync("./uga-logo.png"));
 assert.ok(admin.indexOf("uga-logo.png") !== -1);
 assert.ok(backup.indexOf("uga-logo.png") !== -1);
