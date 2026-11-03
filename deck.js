@@ -1117,6 +1117,8 @@
       html = '<p class="room-summary-heading">Class tally</p>' + html;
     }
     if (!list.length && !html) html = "";
+    viz.classList.toggle("has-room-summary", s.viz === "bars" || s.viz === "bars-list");
+    viz.classList.toggle("has-room-details", list.length > 0);
     viz.setAttribute("data-response-count", String(list.length));
     viz.classList.toggle("five-responses", list.length >= 5);
     viz.innerHTML = html;
