@@ -23,7 +23,7 @@
   regions.chart = {
     id: "geddes-fig1", title: "Figure 1 · The selected cases and East Asia",
     source: "Geddes (1990), Figure 1",
-    note: "The five selected NICs all have high growth, but repression barely varies. The East Asian panel has a positive association (r² = .56), yet East Asia itself is an unusually fast-growing region.",
+    note: "The five selected NICs show little variation in repression. East Asia shows a positive association (r² = .56), but it is an unusually fast-growing region.",
     plots: []
   };
   regions.title = "Figure 1: a pattern inside one region";
@@ -42,7 +42,7 @@
   fig2.chart = {
     id: "geddes-fig2", title: "Figure 2 · Growth and labour repression in the Third World",
     source: "Geddes (1990), Figure 2",
-    note: "The fitted line slopes slightly down (r² = .07). Geddes's point is that labour repression is also common in slow-growing countries.",
+    note: "r² = .07. Labour repression also appears in slow-growing countries.",
     plots: []
   };
   fig2.claims = [];
@@ -62,7 +62,7 @@
   fits.chart = {
     id: "geddes-fig3", title: "Figure 3 · More advanced Third World countries",
     source: "Geddes (1990), Figure 3",
-    note: "The linear fit is almost flat (r² = .01), but the highest growth rates cluster around repression level 3. Geddes discusses a possible curved relationship and the influence of a few unusually fast-growing NICs.",
+    note: "r² = .01. High growth clusters near score 3; a curve or a few NICs may explain it.",
     plots: []
   };
   fits.claims = [];
@@ -143,9 +143,9 @@
   var f4s = script("figure4"); f4s.title = "Figure 4: test the links: 8:15-9:15";
   var f5s = script("figure5"); f5s.title = "Figure 5: a wider check: 9:15-10:30";
   var ch = script("chile");
-  ch.title = "Figure 6 and the endpoint: 11:30-13:15";
-  ch.say = "Figure 6 carries the Chile series beyond Hirschman's 1961 endpoint. The two low years are no longer the end of the story. Geddes argues that the later record makes it much harder to claim that groups had learned to contain inflation. She points instead to the stabilisation policies under Alessandri.";
-  ch.notes = "RAQUEL · 11:30-13:15\nNo interaction on this slide. Point out the 1961 endpoint marker and the later rise. The 1930-61 values come from Table 2; the extended trend is a schematic redraw of Figure 6, not a digitised annual dataset. Avoid saying this proves Hirschman was wrong about every part of his argument.";
+  ch.title = "Figure 6: what changes by 1972?: 12:00-13:30";
+  ch.say = "Figure 6 carries the Chile series beyond Hirschman's 1961 endpoint. The later rise changes the picture: those low years were not the end of the story. Geddes argues that this makes it harder to claim inflation had been brought under lasting control.";
+  ch.notes = "RAQUEL · 12:00-13:30\nPoint out the 1961 endpoint marker and the later rise. The early selected values come from Table 2; the extended trend is schematic, not a digitised annual dataset. Do not claim this proves every part of Hirschman's argument wrong.";
   var cl = script("close");
   cl.title = "Conclusion: 13:30-15:00";
   /* Timings move the sample question ahead of the graph-reading activity. */
