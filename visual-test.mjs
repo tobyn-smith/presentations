@@ -125,6 +125,9 @@ try {
           return {
             title: stage.querySelector("h1")?.textContent.trim() || "",
             titleJoinHeight: Math.round(stage.querySelector(".title-join")?.getBoundingClientRect().height || 0),
+            titleJoinFontSize: Math.round(parseFloat(getComputedStyle(stage.querySelector(".title-join") || stage).fontSize) || 0),
+            presenterChoicePreviewCount: stage.querySelectorAll(".presenter-choice-preview li").length,
+            presenterChoicePreviewVisible: !!(stage.querySelector(".presenter-choice-preview") && getComputedStyle(stage.querySelector(".presenter-choice-preview")).display !== "none" && stage.querySelector(".presenter-choice-preview").getBoundingClientRect().height > 0),
             scrollWidth: root.scrollWidth,
             pageHeightOverflow: Math.max(0, root.scrollHeight - window.innerHeight),
             viewportWidth: window.innerWidth,
@@ -205,6 +208,12 @@ try {
         }
         if (metrics.chartId === "geddes-fig3" && metrics.askPanelLeft < metrics.chartRight - 8) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 question panel is not beside the graph");
+        }
+        if (index === 0 && mode === "presenter" && metrics.titleJoinFontSize < 20) {
+          report.failures.push(viewport.width + "x" + viewport.height + " title URL is not large enough to read from the room");
+        }
+        if (index === 6 && mode === "presenter" && (metrics.presenterChoicePreviewCount !== 3 || !metrics.presenterChoicePreviewVisible)) {
+          report.failures.push(viewport.width + "x" + viewport.height + " Figure 3 presenter mode is missing its three visible answer choices");
         }
         if (index === 0 && metrics.titleJoinHeight > 45) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " title URL wraps into multiple lines");
