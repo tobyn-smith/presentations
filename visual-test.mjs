@@ -107,6 +107,8 @@ try {
             askPanelLeft: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().left) : 0,
             askRight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().right) : 0,
             askHeight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().height) : 0,
+            askRight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().right) : 0,
+            askHeight: stage.querySelector(".ask") ? Math.round(stage.querySelector(".ask").getBoundingClientRect().height) : 0,
             repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none")
           };
         });
