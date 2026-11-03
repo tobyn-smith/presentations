@@ -71,6 +71,11 @@ try {
           await page.waitForFunction(expected => document.querySelector("#counter")?.textContent.trim() === String(expected), index + 1);
         }
         await page.waitForTimeout(80);
+        await page.evaluate(() => {
+          document.getAnimations().forEach(animation => {
+            try { animation.finish(); } catch (error) {}
+          });
+        });
         const metrics = await page.evaluate(() => {
           const stage = document.querySelector("#stage");
           const root = document.documentElement;
