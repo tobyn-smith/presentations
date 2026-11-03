@@ -213,6 +213,8 @@ assert.ok(deckSrc.indexOf("Room responses") !== -1, "presenter sees response sum
 assert.ok(!/dragHtml\(s, false\)/.test(deckSrc), "presenter view does not render student drag controls");
 assert.ok(deckSrc.indexOf("id=\"drag-send\"") !== -1);
 assert.ok(deckSrc.indexOf("function fitStage") !== -1);
+assert.ok(deckSrc.indexOf('<div class="ask">' + inner + "</div>") !== -1, "student prompt content is grouped separately from the input panel");
+assert.ok(fs.readFileSync("./geddes-figures.css", "utf8").indexOf("Round-two classroom layout fixes") !== -1);
 assert.ok(deckSrc.indexOf("Waiting for votes") === -1);
 assert.ok(user.indexOf("data-role=\"participant\"") !== -1);
 assert.ok(user.indexOf("classList.add(\"is-desk\")") === -1);
