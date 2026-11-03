@@ -8,12 +8,12 @@
 <g stroke="#d8d6cf" stroke-width="2"><path d="M190 560H1240M190 460H1240M190 360H1240M190 260H1240"/></g>
 <g stroke="#142536" stroke-width="3" fill="none"><path d="M190 590V220H1240"/></g>
 <g fill="#142536" font-family="Arial,sans-serif" font-size="20"><text x="160" y="595" text-anchor="end">0</text><text x="160" y="465" text-anchor="end">25</text><text x="160" y="365" text-anchor="end">50</text><text x="160" y="265" text-anchor="end">75</text><text x="160" y="225" text-anchor="end">100</text><text x="190" y="625" text-anchor="middle">1955</text><text x="420" y="625" text-anchor="middle">1956</text><text x="650" y="625" text-anchor="middle">1957</text><text x="880" y="625" text-anchor="middle">1960</text><text x="1010" y="625" text-anchor="middle">1961</text><text x="1240" y="625" text-anchor="middle">1972</text><text x="700" y="655" text-anchor="middle" font-size="22" font-weight="700">Year</text><text x="110" y="405" transform="rotate(-90 110 405)" text-anchor="middle" font-size="21">Inflation rate (%)</text></g>
-<g fill="#ba0c2f" stroke="#ba0c2f"><circle cx="190" cy="250" r="12"/><circle cx="420" cy="440" r="12"/><circle cx="650" cy="510" r="12"/><circle cx="880" cy="560" r="12"/><circle cx="1010" cy="535" r="12"/></g>
-<g fill="#102b43" font-family="Arial,sans-serif" font-size="22" font-weight="700"><text x="190" y="225" text-anchor="middle">84%</text><text x="420" y="415" text-anchor="middle">38%</text><text x="650" y="485" text-anchor="middle">17%</text><text x="880" y="535" text-anchor="middle">5%</text><text x="1010" y="510" text-anchor="middle">10%</text></g>
-<path d="M1010 535C1080 510 1125 400 1240 185" fill="none" stroke="#ba0c2f" stroke-width="6" stroke-dasharray="12 12"/>
+<g fill="#ba0c2f" stroke="#ba0c2f"><circle cx="190" cy="279" r="12"/><circle cx="420" cy="449" r="12"/><circle cx="650" cy="527" r="12"/><circle cx="880" cy="571" r="12"/><circle cx="1010" cy="553" r="12"/></g>
+<g fill="#102b43" font-family="Arial,sans-serif" font-size="22" font-weight="700"><text x="190" y="252" text-anchor="middle">84%</text><text x="420" y="422" text-anchor="middle">38%</text><text x="650" y="500" text-anchor="middle">17%</text><text x="880" y="544" text-anchor="middle">5%</text><text x="1010" y="526" text-anchor="middle">10%</text></g>
+<path d="M1010 553C1080 520 1125 405 1240 185" fill="none" stroke="#ba0c2f" stroke-width="6" stroke-dasharray="12 12"/>
 <circle cx="1240" cy="185" r="13" fill="#ba0c2f"/>
 <rect x="1090" y="205" width="200" height="58" rx="14" fill="#f0d48a"/><text x="1190" y="243" text-anchor="middle" fill="#102b43" font-family="Arial,sans-serif" font-size="24" font-weight="700">1972 · above 100%</text>
-<path d="M1010 215V590" stroke="#477e6a" stroke-width="4" stroke-dasharray="8 9"/>
+<path d="M1010 220V590" stroke="#477e6a" stroke-width="4" stroke-dasharray="8 9"/>
 <text x="1010" y="205" text-anchor="middle" fill="#477e6a" font-family="Arial,sans-serif" font-size="17" font-weight="700">Hirschman's endpoint</text>
 <text x="700" y="720" text-anchor="middle" fill="#536475" font-family="Arial,sans-serif" font-size="16">Table 2's five selected observations are plotted exactly. The dashed extension is schematic, not an annual series.</text>
 </svg>
