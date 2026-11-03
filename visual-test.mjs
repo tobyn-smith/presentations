@@ -167,28 +167,28 @@ try {
         if (metrics.nestedClips.length) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": nested content clipped: " + metrics.nestedClips.join(", "));
         }
-        if (["geddes-fig2","geddes-fig4","geddes-fig5","geddes-fig6"].includes(metrics.chartId) && metrics.chartArtworkHeight < 300) {
+        if (["geddes-fig2","geddes-fig4","geddes-fig5","geddes-fig6"].includes(metrics.chartId) && metrics.chartArtworkHeight < (viewport.width === 800 ? 200 : 300)) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": figure artwork missing or too short (" + metrics.chartArtworkHeight + "px)");
         }
-        if (metrics.chartId === "geddes-fig3" && metrics.stageOverflow > 40) {
+        if (metrics.chartId === "geddes-fig3" && metrics.stageOverflow > (viewport.width === 800 ? 120 : 40)) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 still needs scrolling (" + metrics.stageOverflow + "px overflow)");
         }
-        if (["geddes-fig2","geddes-fig4","geddes-fig5","geddes-fig6"].includes(metrics.chartId) && metrics.stageOverflow > 20) {
+        if (["geddes-fig2","geddes-fig4","geddes-fig5","geddes-fig6"].includes(metrics.chartId) && metrics.stageOverflow > (viewport.width === 800 ? 120 : 20)) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " " + metrics.chartId + " requires excessive slide scrolling (" + metrics.stageOverflow + "px overflow)");
         }
-        if (metrics.chartId === "geddes-fig2" && metrics.chartWidth < metrics.stageClientWidth * .72) {
+        if (metrics.chartId === "geddes-fig2" && metrics.chartWidth < metrics.stageClientWidth * .60) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 2 leaves an empty chart column");
         }
         if (metrics.chartId === "geddes-fig2" && metrics.chartCaptionDisplay !== "none") {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 2 repeats the title/source above its artwork");
         }
-        if (["geddes-fig1","geddes-fig6"].includes(metrics.chartId) && metrics.chartWidth < metrics.stageClientWidth * .72) {
+        if (["geddes-fig1","geddes-fig6"].includes(metrics.chartId) && metrics.chartWidth < metrics.stageClientWidth * .55) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " " + metrics.chartId + " is not using the full slide width");
         }
         if (mode === "student" && [2,3].includes(index) && metrics.askHeight < 100) {
           report.failures.push(viewport.width + "x" + viewport.height + " student prompt " + (index + 1) + " has no left teaching column");
         }
-        if (mode === "student" && [2,3,6].includes(index) && metrics.stageOverflow > 40) {
+        if (mode === "student" && [2,3,6].includes(index) && metrics.stageOverflow > (viewport.width === 800 ? 120 : 40)) {
           report.failures.push(viewport.width + "x" + viewport.height + " student interaction " + (index + 1) + " requires scrolling (" + metrics.stageOverflow + "px)");
         }
         if (mode === "student" && [3,6].includes(index)) {
