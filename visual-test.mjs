@@ -48,62 +48,71 @@ const report = { generatedAt: new Date().toISOString(), route: "/slideshow.html"
 
 try {
   for (const viewport of viewports) {
-    const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
-    page.on("pageerror", error => report.failures.push(viewport.width + "x" + viewport.height + " browser error: " + error.message));
-    await page.goto("http://127.0.0.1:4173/slideshow.html", { waitUntil: "networkidle" });
-    const total = await page.evaluate(() => (window.SLIDES || []).length);
-    report.slides = total;
-    if (total !== 13) report.failures.push("Expected 13 slides, found " + total);
-    const dir = path.join(out, viewport.width + "x" + viewport.height);
-    fs.mkdirSync(dir, { recursive: true });
-
-    for (let index = 0; index < total; index++) {
-      if (index > 0) {
-        await page.keyboard.press("ArrowRight");
-        await page.waitForFunction(expected => document.querySelector("#counter")?.textContent.trim() === String(expected), index + 1);
-      }
-      await page.waitForTimeout(80);
-      const metrics = await page.evaluate(() => {
-        const stage = document.querySelector("#stage");
-        const root = document.documentElement;
-        const clips = [];
-        stage.querySelectorAll(".ask-panel,.ss-win-body,.split-viz,.chart").forEach(el => {
-          const style = getComputedStyle(el);
-          if (/hidden|clip/.test(style.overflowY) && el.scrollHeight > el.clientHeight + 3) {
-            clips.push(el.className || el.tagName.toLowerCase());
-          }
+    for (const mode of ["presenter", "student"]) {
+      const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      page.on("pageerror", error => report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " browser error: " + error.message));
+      await page.goto("http://127.0.0.1:4173/slideshow.html", { waitUntil: "networkidle" });
+      if (mode === "student") {
+        await page.addStyleTag({ path: path.join(root, "audience.css") });
+        await page.evaluate(() => {
+          document.body.classList.remove("role-pres", "is-backup");
+          document.body.classList.add("role-part", "is-desk");
         });
-        const chart = stage.querySelector("figure.chart[data-chart]");
-        const chartId = chart?.getAttribute("data-chart") || "";
-        const artHeight = chart ? Math.round(parseFloat(getComputedStyle(chart, "::after").height) || 0) : 0;
-        return {
-          title: stage.querySelector("h1")?.textContent.trim() || "",
-          scrollWidth: root.scrollWidth,
-          viewportWidth: window.innerWidth,
-          stageClientHeight: stage.clientHeight,
-          stageScrollHeight: stage.scrollHeight,
-          stageOverflow: Math.max(0, stage.scrollHeight - stage.clientHeight),
-          nestedClips: clips,
-          chartId,
-          chartArtworkHeight: artHeight
-        };
-      });
-      if (metrics.scrollWidth > viewport.width + 1) {
-        report.failures.push(viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": horizontal page overflow");
       }
-      if (metrics.nestedClips.length) {
-        report.failures.push(viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": nested content clipped: " + metrics.nestedClips.join(", "));
+      const total = await page.evaluate(() => (window.SLIDES || []).length);
+      report.slides = total;
+      if (total !== 13) report.failures.push("Expected 13 slides, found " + total);
+      const dir = path.join(out, mode, viewport.width + "x" + viewport.height);
+      fs.mkdirSync(dir, { recursive: true });
+
+      for (let index = 0; index < total; index++) {
+        if (index > 0) {
+          await page.keyboard.press("ArrowRight");
+          await page.waitForFunction(expected => document.querySelector("#counter")?.textContent.trim() === String(expected), index + 1);
+        }
+        await page.waitForTimeout(80);
+        const metrics = await page.evaluate(() => {
+          const stage = document.querySelector("#stage");
+          const root = document.documentElement;
+          const clips = [];
+          stage.querySelectorAll(".ask-panel,.ss-win-body,.split-viz,.chart").forEach(el => {
+            const style = getComputedStyle(el);
+            if (/hidden|clip/.test(style.overflowY) && el.scrollHeight > el.clientHeight + 3) {
+              clips.push(el.className || el.tagName.toLowerCase());
+            }
+          });
+          const chart = stage.querySelector("figure.chart[data-chart]");
+          const chartId = chart?.getAttribute("data-chart") || "";
+          const artHeight = chart ? Math.round(parseFloat(getComputedStyle(chart, "::after").height) || 0) : 0;
+          return {
+            title: stage.querySelector("h1")?.textContent.trim() || "",
+            scrollWidth: root.scrollWidth,
+            viewportWidth: window.innerWidth,
+            stageClientHeight: stage.clientHeight,
+            stageScrollHeight: stage.scrollHeight,
+            stageOverflow: Math.max(0, stage.scrollHeight - stage.clientHeight),
+            nestedClips: clips,
+            chartId,
+            chartArtworkHeight: artHeight
+          };
+        });
+        if (metrics.scrollWidth > viewport.width + 1) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": horizontal page overflow");
+        }
+        if (metrics.nestedClips.length) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": nested content clipped: " + metrics.nestedClips.join(", "));
+        }
+        if (["geddes-fig2","geddes-fig4","geddes-fig5","geddes-fig6"].includes(metrics.chartId) && metrics.chartArtworkHeight < 300) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": figure artwork missing or too short (" + metrics.chartArtworkHeight + "px)");
+        }
+        await page.screenshot({
+          path: path.join(dir, "slide-" + String(index + 1).padStart(2, "0") + ".png"),
+          animations: "disabled"
+        });
+        report.viewports.push({ mode, viewport: viewport.width + "x" + viewport.height, slide: index + 1, ...metrics });
       }
-      if (["geddes-fig2","geddes-fig4","geddes-fig5","geddes-fig6"].includes(metrics.chartId) && metrics.chartArtworkHeight < 300) {
-        report.failures.push(viewport.width + "x" + viewport.height + " slide " + (index + 1) + ": figure artwork missing or too short (" + metrics.chartArtworkHeight + "px)");
-      }
-      await page.screenshot({
-        path: path.join(dir, "slide-" + String(index + 1).padStart(2, "0") + ".png"),
-        animations: "disabled"
-      });
-      report.viewports.push({ viewport: viewport.width + "x" + viewport.height, slide: index + 1, ...metrics });
+      await page.close();
     }
-    await page.close();
   }
 } finally {
   await browser.close();
@@ -111,6 +120,6 @@ try {
 }
 
 fs.writeFileSync(path.join(out, "report.json"), JSON.stringify(report, null, 2));
-console.log("Captured " + report.viewports.length + " slide/viewport combinations.");
+console.log("Captured " + report.viewports.length + " slide/mode/viewport combinations.");
 console.log(report.failures.length ? report.failures.join("\n") : "No horizontal overflow or nested clipped content detected.");
 if (report.failures.length) process.exitCode = 1;
