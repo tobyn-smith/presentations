@@ -1088,3 +1088,128 @@ body.role-pres .stage[data-slide-id="close"] .claim-bars p {
   font-size: clamp(19px, 2.3vh, 26px) !important;
   line-height: 1.45;
 }
+
+
+/* Treat the source figures as the slide artwork, not a screenshot in a second card. */
+body.role-part .stage .figure-embed,
+body.role-pres .stage .figure-embed {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+body.role-part .stage .figure-embed > figure.chart,
+body.role-pres .stage .figure-embed > figure.chart {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+body.role-part .stage .figure-embed > figure.chart figcaption,
+body.role-pres .stage .figure-embed > figure.chart figcaption {
+  display: none !important;
+}
+body.role-part .stage .figure-embed > figure.chart::after,
+body.role-pres .stage .figure-embed > figure.chart::after {
+  width: 100%;
+  margin: 0;
+  background-position: center;
+  background-size: contain;
+  border-radius: 12px;
+}
+body.role-part .stage .figure-expand,
+body.role-pres .stage .figure-expand {
+  position: absolute;
+  z-index: 3;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 999px;
+  color: #fffdf8;
+  background: rgba(16,43,67,.92);
+  font: 600 13px/1 var(--body, Arial, sans-serif);
+  cursor: pointer;
+  opacity: .88;
+}
+body.role-part .stage .figure-expand:hover,
+body.role-pres .stage .figure-expand:hover,
+body.role-part .stage .figure-expand:focus-visible,
+body.role-pres .stage .figure-expand:focus-visible {
+  opacity: 1;
+  outline: 3px solid #ba0c2f;
+  outline-offset: 3px;
+}
+.figure-viewer[hidden] { display: none !important; }
+.figure-viewer {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 3vw, 40px);
+}
+.figure-viewer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5,18,30,.94);
+}
+.figure-viewer-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(96vw, 1800px);
+  max-height: 94vh;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 18px;
+  background: #102b43;
+}
+.figure-viewer-close {
+  align-self: flex-end;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 999px;
+  color: #fffdf8;
+  background: transparent;
+  font: 600 14px/1 var(--body, Arial, sans-serif);
+  cursor: pointer;
+}
+.figure-viewer-image {
+  display: block;
+  width: 100%;
+  max-height: calc(94vh - 110px);
+  object-fit: contain;
+}
+.figure-viewer-caption {
+  margin: 0;
+  color: #f0d48a;
+  font-size: 13px;
+  text-align: center;
+}
+body.figure-viewer-open { overflow: hidden; }
+@media (max-width: 900px) {
+  body.role-part .stage .figure-expand,
+  body.role-pres .stage .figure-expand {
+    right: 8px;
+    bottom: 8px;
+    min-height: 32px;
+    font-size: 12px;
+  }
+}
