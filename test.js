@@ -161,7 +161,7 @@ assert.ok(!/^\/6010/m.test(redirects));
 assert.ok(user.indexOf("readings/geddes-1990.js") !== -1);
 assert.ok(user.indexOf("audience.css") !== -1);
 assert.ok(user.indexOf("geddes-figures.css") !== -1);
-assert.ok(!/tobynsmith\.me\/geddes/.test(user), "no student-view join URL in the audience page HTML");
+assert.ok(user.indexOf("class=\"title-join-block\"") === -1, "no visible title URL in the student HTML");
 assert.ok(user.indexOf('class="role-part is-desk"') !== -1);
 assert.ok(user.indexOf("Open this on a laptop") !== -1);
 assert.ok(user.indexOf('id="uga-kicker"') !== -1);
