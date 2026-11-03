@@ -985,3 +985,106 @@ body.role-pres .stage[data-slide-id="quote-sample"] .ss-win:not(.has-answers) {
     max-height: 56px !important;
   }
 }
+
+
+/* Large-room refinements: use the available board width for the evidence,
+   rather than leaving charts constrained inside a second, hidden split. */
+@media (min-width: 1400px) and (min-height: 800px) {
+  body.role-part .stage[data-chart="geddes-fig1"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig1"] figure.chart::after,
+  body.role-part .stage[data-chart="geddes-fig6"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig6"] figure.chart::after {
+    height: clamp(390px, 56vh, 540px) !important;
+  }
+
+  body.role-part .stage[data-chart="geddes-fig2"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig2"] figure.chart::after {
+    height: clamp(400px, 58vh, 560px) !important;
+  }
+
+  body.role-part .stage[data-chart="geddes-fig3"],
+  body.role-pres .stage[data-chart="geddes-fig3"] {
+    grid-template-columns: minmax(0, 1.42fr) minmax(360px, .88fr);
+  }
+
+  body.role-part .stage[data-chart="geddes-fig3"] .split,
+  body.role-pres .stage[data-chart="geddes-fig3"] .split {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  body.role-part .stage[data-chart="geddes-fig3"] .split-viz,
+  body.role-pres .stage[data-chart="geddes-fig3"] .split-viz,
+  body.role-part .stage[data-chart="geddes-fig3"] figure.chart,
+  body.role-pres .stage[data-chart="geddes-fig3"] figure.chart {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  body.role-part .stage[data-chart="geddes-fig3"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig3"] figure.chart::after {
+    max-height: 58vh;
+  }
+
+  body.role-part .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig4"] figure.chart::after,
+  body.role-part .stage[data-chart="geddes-fig5"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig5"] figure.chart::after {
+    height: clamp(480px, 60vh, 590px) !important;
+  }
+
+  body.role-part .stage[data-chart="geddes-fig6"] figure.chart::after,
+  body.role-pres .stage[data-chart="geddes-fig6"] figure.chart::after {
+    height: clamp(400px, 58vh, 560px) !important;
+  }
+}
+
+/* The conclusion should sound like a person finishing the argument, not a
+   three-step framework graphic. Let one clear takeaway do the work. */
+body.role-part .stage[data-slide-id="close"] .claim-bars,
+body.role-pres .stage[data-slide-id="close"] .claim-bars {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  align-content: center;
+  gap: 0;
+  max-width: 1100px;
+  margin: auto;
+}
+
+body.role-part .stage[data-slide-id="close"] .claim-bars li,
+body.role-pres .stage[data-slide-id="close"] .claim-bars li {
+  min-height: 0;
+  height: auto;
+  padding: clamp(28px, 4vw, 64px);
+  border: 0;
+  border-left: 7px solid var(--accent);
+  border-radius: 0 14px 14px 0;
+  box-shadow: none;
+  background: var(--tile) !important;
+  color: var(--ink) !important;
+  justify-content: center;
+  gap: clamp(12px, 2vh, 22px);
+}
+
+body.role-part .stage[data-slide-id="close"] .claim-bars .card-n,
+body.role-pres .stage[data-slide-id="close"] .claim-bars .card-n {
+  display: none !important;
+}
+
+body.role-part .stage[data-slide-id="close"] .claim-bars h2,
+body.role-pres .stage[data-slide-id="close"] .claim-bars h2 {
+  color: var(--navy) !important;
+  font-size: clamp(32px, 4.1vh, 48px) !important;
+  line-height: 1.08;
+}
+
+body.role-part .stage[data-slide-id="close"] .claim-bars p,
+body.role-pres .stage[data-slide-id="close"] .claim-bars p {
+  color: var(--ink-soft) !important;
+  max-width: 66ch;
+  font-size: clamp(19px, 2.3vh, 26px) !important;
+  line-height: 1.45;
+}
