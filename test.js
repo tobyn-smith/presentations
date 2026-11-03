@@ -309,6 +309,7 @@ assert.ok(syncSrc.indexOf("onResponses: function (fn)") !== -1, "presenter respo
 assert.ok(fs.existsSync("./docs/live-room-verification.md"), "live transport and refresh scenarios have a repeatable test plan");
 
 assert.ok(deckSrc.indexOf("pendingSubmissions") !== -1 && deckSrc.indexOf("That did not reach the room") !== -1, "student submission blocks duplicates and provides a retry path");
+assert.ok(deckSrc.indexOf('var inner = \'<div class="ask">\' + q + "</div>";') !== -1, "student prompt includes the teaching column");
 
 assert.ok(syncSrc.indexOf("function startBackup()") !== -1);
 assert.ok(user.indexOf('aria-live="off"') !== -1);
