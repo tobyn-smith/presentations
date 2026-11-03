@@ -578,6 +578,8 @@
     stage.classList.toggle("claims", s.type === "claims");
     stage.classList.toggle("has-split", !!(s.claims || s.chart || s.stats || s.names));
     stage.classList.toggle("has-drag", s.input === "rank" || s.input === "place");
+    stage.setAttribute("data-chart", s.chart && s.chart.id ? String(s.chart.id) : "");
+    stage.setAttribute("data-slide-id", s.id || "");
     if (changed) {
       stage.classList.remove("fade");
       void stage.offsetWidth;
