@@ -698,6 +698,7 @@
   }
 
   function bindRank(s, i, canSend) {
+    if (!canSend || isPres) return;
     var list = document.querySelector("#drag-rank .rank-list");
     if (!list) return;
     var held = null;
@@ -740,6 +741,7 @@
   }
 
   function bindPlace(s, i, canSend) {
+    if (!canSend || isPres) return;
     var board = document.getElementById("drag-place");
     if (!board) return;
     var held = null;
@@ -897,6 +899,7 @@
   }
 
   function submit(s, i, payload) {
+    if (isPres || !DeckSync.seated() || !DeckSync.isPresenting()) return;
     remember(s.id, payload);
     DeckSync.submit(String(i), payload);
     DeckSync.markDone(String(i));
