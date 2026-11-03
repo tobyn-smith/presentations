@@ -967,7 +967,7 @@
       if (!ok) return failed();
       remember(s.id, payload);
       DeckSync.markDone(id);
-      render(i, true);
+      if (DeckSync.getSlide() === i && lastIndex === i) render(i, true);
       return true;
     }).catch(failed);
   }
