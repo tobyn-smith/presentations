@@ -124,7 +124,7 @@ assert.ok(SCRIPT.some(function (s) { return s.id === "skocpol" && /RAQUEL/.test(
   assert.ok(row && /RAQUEL/.test(row.notes), "Raquel owns graph section slide " + id);
 });
 assert.strictEqual(SLIDES.filter(function (s) { return s.id === "fits"; })[0].type, "prompt", "Figure 3 accepts student responses");
-assert.ok(SCRIPT.some(function (s) { return s.id === "hirschman" && /TOBYN/.test(s.notes); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "hirschman" && /RAQUEL/.test(s.notes); }), "Hirschman slide follows the Part 2 speaker label");
 assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /TOBYN/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "nics" && /INTERACTION 1 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "quote-sample" && /INTERACTION 2 OF 3/.test(s.notes); }));
