@@ -968,3 +968,20 @@ body.role-pres .stage[data-chart="geddes-fig5"] figure.chart figcaption {
     line-height: 1.2;
   }
 }
+
+
+/* Do not reserve a presenter response column before anyone has answered.
+   The room panel appears as soon as it has content. */
+body.role-pres .stage[data-slide-id="quote-sample"] .ss-win:not(.has-answers) {
+  display: none !important;
+}
+
+/* At the minimum 800×600 board, trim the Figure 3 explanation field by a
+   few pixels so the Send control remains fully inside its panel. */
+@media (max-height: 650px) and (min-width: 800px) {
+  body.role-part .stage[data-chart="geddes-fig3"] .ask-panel form.answer textarea {
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
+  }
+}
