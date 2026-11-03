@@ -143,6 +143,8 @@ try {
   while(roomData.slide!==2 && Date.now()<slideWriteDeadline) await new Promise(resolve=>setTimeout(resolve,100));
   check(roomData.slide===2,"Firebase has acknowledged the presenter's current slide before failover");
   await student.waitForSelector("#drag-place");
+  check(await student.locator(".drag-instruction").isVisible(),"first interaction explains how to place each statement and submit");
+  check(await student.locator("select[data-token-place]").count()===3,"first interaction provides a visible dropdown for every statement");
   const firstPlace=student.locator('select[data-token-place="Labour was repressed or coopted"]');
   const secondPlace=student.locator('select[data-token-place="That produced fast growth"]');
   const thirdPlace=student.locator('select[data-token-place="Slower-growth countries are missing"]');
@@ -163,6 +165,7 @@ try {
   await presenter.click("#next");
   await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="4",null,{timeout:10000});
   await presenter.waitForSelector("#viz .room-empty-state",{state:"visible",timeout:10000});
+  check(await student.locator(".input-instruction").isVisible(),"slide 4 explains the choice, reason and send steps");
   check((await presenter.locator(".ask-q").innerText()).includes("Which cases would improve the test most?"),"slide 4 presenter shows the activity question before responses");
   check(await presenter.locator("#viz .room-empty-state").isVisible(),"slide 4 presenter clearly shows where responses will appear");
   await student.locator('#choices button[data-choice="Countries with slower growth"]').click();
@@ -174,6 +177,13 @@ try {
   const comparisonAnswer = await presenter.locator("#viz .responses li").innerText();
   check(comparisonAnswer.includes("Countries with slower growth"),"slide 4 selected comparison appears on the presenter screen");
   check(comparisonAnswer.includes("outcome varies"),"slide 4 written explanation appears on the presenter screen");
+  check(await presenter.locator("#stage > #slide-live-results").isVisible(),"slide 4 has a visible full-width response area inside the slide stage");
+  check(await presenter.locator("#slide-live-results").evaluate(el=>{const r=el.getBoundingClientRect(),s=document.querySelector("#stage").getBoundingClientRect();return r.width>0&&r.height>0&&r.left>=s.left&&r.right<=s.right+1&&r.bottom<=s.bottom+1;}),"slide 4 response area is within the visible slide bounds");
+  check((await presenter.locator("#slide-live-results").innerText()).includes("Countries with slower growth"),"slide 4 itself displays the selected answer");
+  check((await presenter.locator("#slide-live-results").innerText()).includes("outcome varies"),"slide 4 itself displays the written reason");
+  check(await presenter.locator("#stage > .ask").isVisible(),"slide 4 teaching content remains visible after the answer arrives");
+  check(await presenter.locator("#stage > .ask-panel").isVisible(),"slide 4 presenter controls remain visible after the answer arrives");
+  check(await presenter.locator("#stage").evaluate(el=>getComputedStyle(el).display==="grid"),"slide 4 uses the intended slide grid rather than the default flex layout");
   check((await student.locator(".submission-receipt").innerText()).includes("Countries with slower growth"),"slide 4 participant sees their submitted choice in the receipt");
   check((await student.locator(".submission-receipt").innerText()).includes("outcome varies"),"slide 4 participant sees their written reason in the receipt");
   await presenter.screenshot({path:path.join(out,"slide4-room-response.png"),animations:"disabled"});
@@ -289,7 +299,13 @@ try {
   await presenter.waitForFunction(()=>document.querySelectorAll("#viz .responses li").length===1,null,{timeout:10000});
   check(await presenter.locator("#viz .responses li").count()===1,"Figure 3 student choice reaches the presenter response panel");
   check((await presenter.locator("#viz .responses li").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 presenter displays the selected interpretation");
-  check((await student.locator(".you").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 participant sees their submitted interpretation");
+  check(await presenter.locator("#stage > #slide-live-results").isVisible(),"slide 7 has a visible full-width response area inside the slide stage");
+  check(await presenter.locator("#slide-live-results").evaluate(el=>{const r=el.getBoundingClientRect(),s=document.querySelector("#stage").getBoundingClientRect();return r.width>0&&r.height>0&&r.left>=s.left&&r.right<=s.right+1&&r.bottom<=s.bottom+1;}),"slide 7 response area is within the visible slide bounds");
+  check((await presenter.locator("#slide-live-results").innerText()).includes("A curve, or a few NICs drive it"),"slide 7 itself displays the selected interpretation");
+  check(await presenter.locator("#stage > .ask").isVisible(),"slide 7 figure and teaching content remain visible after the answer arrives");
+  check(await presenter.locator("#stage > .ask-panel").isVisible(),"slide 7 presenter controls remain visible after the answer arrives");
+  check(await presenter.locator("#stage").evaluate(el=>getComputedStyle(el).display==="grid"),"slide 7 uses the intended slide grid rather than the default flex layout");
+  check((await student.locator(".submission-receipt").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 participant sees their submitted interpretation in the response receipt");
   check(await presenter.locator(".presenter-choice-preview").isVisible(),"Figure 3 choices remain visible alongside incoming responses");
   await presenter.screenshot({path:path.join(out,"figure3-presenter-response.png"),animations:"disabled"});
 

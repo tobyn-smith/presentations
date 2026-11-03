@@ -457,3 +457,15 @@ body.role-part .stage.prompt .slot-empty { font-size: clamp(14px, 1.8vh, 18px); 
   body.role-part .stage { padding-top: 10px; padding-bottom: 10px; }
   body.role-part .stage h1 { font-size: clamp(26px, 4.2vh, 38px); margin-bottom: 8px; }
 }
+
+
+/* Short, visible instructions for the first placement activity and later votes. */
+body.role-part .stage.prompt .drag-instruction,
+body.role-part .stage.prompt .input-instruction {
+  margin: 0 0 .2rem;
+  color: #34485a;
+  font-size: clamp(14px, 1.7vh, 17px);
+  line-height: 1.35;
+  font-weight: 600;
+}
+body.role-part .stage.prompt .drag-instruction { max-width: 68rem; }

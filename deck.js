@@ -467,6 +467,7 @@
     var tokens = s.tokens || [];
     var slots = s.slots || [];
     return '<div class="drag-place" id="drag-place">'
+      + '<p class="drag-instruction">Choose a group for each statement using the dropdown beside it, or drag the statement into a group. Place all three, then select Send.</p>'
       + '<div class="token-tray" data-home="1">'
       + tokens.map(function (t, idx) {
         var selectId = "place-token-" + idx;
@@ -650,9 +651,14 @@
         + "</div></div>";
     }
     if (isPres) {
+      var slideResults = s.input === "choice-text"
+        ? '<section class="slide-live-results" id="slide-live-results" aria-live="polite">'
+          + '<p class="slide-live-results-title">Class responses</p>'
+          + '<div class="slide-live-results-content" id="slide-live-results-content"></div></section>'
+        : "";
       return '<div class="ask">' + q + '</div><div class="ask-panel">'
         + windowHtml("term", "Room responses", askLine + optPreview + '<div id="viz"></div>')
-        + "</div>";
+        + "</div>" + slideResults;
     }
     var inner = '<div class="ask">' + q + "</div>";
     var panel = function (html) {
@@ -687,7 +693,8 @@
     }
     if (s.input === "choice-text") {
       return panel(
-        '<div class="choices" id="choices" tabindex="-1">'
+        '<p class="input-instruction">' + (s.requireText ? "Choose one option, add a short reason, then select Send." : "Choose one option. Add a reason if useful, then select Send.") + "</p>"
+        + '<div class="choices" id="choices" tabindex="-1">'
         + (s.options || []).map(function (o) {
           return '<button type="button" data-choice="' + esc(o) + '">' + esc(o) + "</button>";
         }).join("")
@@ -1105,6 +1112,12 @@
     viz.setAttribute("data-response-count", String(list.length));
     viz.classList.toggle("five-responses", list.length >= 5);
     viz.innerHTML = html;
+    var slideResults = document.getElementById("slide-live-results-content");
+    if (slideResults) {
+      slideResults.innerHTML = html;
+      var slideHost = slideResults.closest(".slide-live-results");
+      if (slideHost) slideHost.classList.toggle("has-responses", list.length > 0);
+    }
     showViz(s);
   }
   function showViz(s) {
