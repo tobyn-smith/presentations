@@ -170,6 +170,23 @@ try {
   check((await student.locator(".submit-error").innerText()).includes("did not reach the room"),"failed submission gives a clear retry message");
   check(responsePosts===0,"failed submission is not counted as delivered");
   check(await presenter.locator(".responses li").count()===0,"failed response is not shown to the presenter");
+
+  /* Slide 4 is a choice-plus-explanation activity. Check that its selected
+     answer and written reason both appear on the presenter screen. */
+  await presenter.click("#next");
+  await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="4",null,{timeout:10000});
+  await student.locator('#choices button[data-choice="Countries with slower growth"]').click();
+  await student.locator("#ans").fill("This gives us cases where growth was slower, so the outcome varies.");
+  await student.locator(".send").click();
+  await student.waitForSelector(".thanks",{state:"visible",timeout:10000});
+  await presenter.waitForFunction(()=>DeckSync.getResponses("3").length===1,null,{timeout:12000});
+  await presenter.waitForFunction(()=>document.querySelectorAll("#viz .responses li").length===1,null,{timeout:10000});
+  const comparisonAnswer = await presenter.locator("#viz .responses li").innerText();
+  check(comparisonAnswer.includes("Countries with slower growth"),"slide 4 selected comparison appears on the presenter screen");
+  check(comparisonAnswer.includes("outcome varies"),"slide 4 written explanation appears on the presenter screen");
+  await presenter.screenshot({path:path.join(out,"slide4-room-response.png"),animations:"disabled"});
+  await presenter.click("#prev");
+  await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="3",null,{timeout:10000});
   await student.screenshot({path:path.join(out,"failed-submission.png"),animations:"disabled"});
 
   ntfyOnline=true;
