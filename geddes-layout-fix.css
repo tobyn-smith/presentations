@@ -970,11 +970,7 @@ body.role-pres .stage[data-chart="geddes-fig5"] figure.chart figcaption {
 }
 
 
-/* Do not reserve a presenter response column before anyone has answered.
-   The room panel appears as soon as it has content. */
-body.role-pres .stage[data-slide-id="quote-sample"] .ss-win:not(.has-answers) {
-  display: none !important;
-}
+/* Keep the prompt and answer choices visible before the first submission. */
 
 /* At the minimum 800×600 board, trim the Figure 3 explanation field by a
    few pixels so the Send control remains fully inside its panel. */
@@ -1455,4 +1451,157 @@ body.role-pres .stage.prompt.has-notes #viz.has-room-details:not(.has-room-summa
 body.role-pres .stage.prompt.has-notes #viz.has-room-details:not(.has-room-summary) .responses {
   grid-column: 1;
   grid-row: 3;
+}
+
+
+/* Room response panel: keep summary and individual submissions in clearly
+   labelled blocks. Do not let child grid placement split headings from data. */
+body.role-pres .stage.prompt.has-notes #viz.has-room-summary {
+  display: grid !important;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  gap: 14px !important;
+  align-items: stretch;
+}
+body.role-pres .stage.prompt.has-notes #viz .room-summary-block,
+body.role-pres .stage.prompt.has-notes #viz .room-detail-block {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.055);
+}
+body.role-pres .stage.prompt.has-notes #viz .room-summary-block {
+  grid-column: 1;
+}
+body.role-pres .stage.prompt.has-notes #viz .room-detail-block {
+  grid-column: 2;
+}
+body.role-pres .stage.prompt.has-notes #viz.has-room-details:not(.has-room-summary) {
+  display: block !important;
+}
+body.role-pres .stage.prompt.has-notes #viz.has-room-details:not(.has-room-summary) .room-detail-block {
+  width: 100%;
+  height: 100%;
+}
+body.role-pres .stage.prompt.has-notes #viz .room-summary-heading,
+body.role-pres .stage.prompt.has-notes #viz .room-responses-heading {
+  margin: 0;
+  color: #f0d48a;
+  font-family: var(--display);
+  font-size: clamp(15px, 1.8vh, 19px);
+  font-weight: 700;
+  letter-spacing: .06em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+body.role-pres .stage.prompt.has-notes #viz .tally {
+  margin: 0;
+  color: #fffdf7;
+  font-size: clamp(14px, 1.7vh, 18px);
+  font-weight: 700;
+}
+body.role-pres .stage.prompt.has-notes #viz .bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+}
+body.role-pres .stage.prompt.has-notes #viz .bar {
+  display: grid;
+  gap: 5px;
+}
+body.role-pres .stage.prompt.has-notes #viz .bar-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: baseline;
+}
+body.role-pres .stage.prompt.has-notes #viz .bar .lab {
+  color: #fffdf7;
+  font-size: clamp(13px, 1.55vh, 17px);
+  line-height: 1.2;
+}
+body.role-pres .stage.prompt.has-notes #viz .bar .n {
+  color: #f0d48a;
+  font-size: 18px;
+  font-weight: 800;
+}
+body.role-pres .stage.prompt.has-notes #viz .responses {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+  padding: 0 3px 5px 0;
+  list-style: none;
+}
+body.role-pres .stage.prompt.has-notes #viz .responses .card {
+  display: block;
+  padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px;
+  background: #fffdf7;
+  color: #16324f;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+body.role-pres .stage.prompt.has-notes #viz .response-index {
+  display: block;
+  margin-bottom: 5px;
+  color: #ba0c2f;
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+body.role-pres .stage.prompt.has-notes #viz .responses .said {
+  margin: 0;
+  color: #16324f;
+  font-size: clamp(15px, 1.9vh, 20px);
+  line-height: 1.3;
+}
+body.role-pres .stage.prompt.has-notes #viz .responses .meta {
+  margin: 7px 0 0;
+  color: #465a6b;
+  font-size: 13px;
+  font-weight: 700;
+}
+body.role-pres .stage.prompt.has-notes #viz .room-empty-state {
+  margin: 0;
+  padding: 14px;
+  border: 1px dashed rgba(255,255,255,.32);
+  border-radius: 10px;
+  color: #fffdf7;
+  font-size: clamp(14px, 1.7vh, 18px);
+  line-height: 1.35;
+}
+body.role-part .stage .submission-receipt {
+  display: grid;
+  gap: 9px;
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--tile-cream);
+  color: var(--ink);
+}
+body.role-part .stage .submission-receipt p {
+  margin: 0;
+}
+body.role-part .stage .submission-receipt .receipt-kicker {
+  color: var(--accent);
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+body.role-part .stage .submission-receipt .thanks {
+  margin-top: 3px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.3;
 }
