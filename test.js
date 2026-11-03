@@ -154,6 +154,12 @@ var user = fs.readFileSync("./index.html", "utf8");
 var backup = fs.readFileSync("./slideshow.html", "utf8");
 var start = fs.readFileSync("./start.html", "utf8");
 var css = fs.readFileSync("./style.css", "utf8");
+var deckSource = fs.readFileSync("./deck.js", "utf8");
+var figureCss = fs.readFileSync("./geddes-layout-fix.css", "utf8");
+assert.ok(/figure-embed/.test(deckSource), "Geddes figures render as slide artwork, not nested paper cards");
+assert.ok(/data-expand-figure/.test(deckSource) && /ensureFigureViewer/.test(deckSource), "figures have an accessible expand viewer");
+assert.ok(/figure-viewer/.test(figureCss), "expanded figures have a styled, closable viewer");
+
 var audienceCss = fs.readFileSync("./audience.css", "utf8");
 var cfg = fs.readFileSync("./config.js", "utf8");
 assert.ok(admin.indexOf("readings/geddes-1990.js") !== -1);
