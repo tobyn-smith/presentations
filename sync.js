@@ -320,7 +320,17 @@
     opt.cache = "no-store";
     opt.headers = opt.headers || {};
     opt.headers["Cache-Control"] = "no-cache";
-    return fetch(url, opt);
+    if (typeof AbortController === "undefined") return fetch(url, opt);
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, 6500);
+    opt.signal = controller.signal;
+    return fetch(url, opt).then(function (response) {
+      clearTimeout(timer);
+      return response;
+    }).catch(function (error) {
+      clearTimeout(timer);
+      throw error;
+    });
   }
 
   function readFbHttp(r, kind) {
