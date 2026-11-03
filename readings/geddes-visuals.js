@@ -13,9 +13,9 @@
   };
   ask.title = "A sample can make a cause look stronger";
   ask.claims = [
-    {n:"01",title:"Choose on the outcome",body:"Start with countries that grew quickly."},
+    {n:"01",title:"Select on the outcome",body:"Choose countries because they grew quickly. Growth is what we want to explain."},
     {n:"02",title:"Spot a shared feature",body:"Notice what those countries have in common."},
-    {n:"03",title:"Ask what is missing",body:"Would the same feature appear where growth was slow?"}
+    {n:"03",title:"Ask what is missing",body:"Would slower-growing countries share that feature too?"}
   ];
 
   var regions = slide("regions");
