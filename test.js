@@ -132,7 +132,7 @@ assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /INTERACTION 3 OF
 assert.ok(SCRIPT.some(function (s) { return s.id === "figure2" && /r-squared is only \.07/.test(s.say); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /Figure 3/.test(s.say); }));
 assert.ok(/15:00/.test(SCRIPT[SCRIPT.length - 1].title));
-assert.deepStrictEqual(SLIDES.map(function (s) { return s.id; }), ["open","ask","nics","regions","quote-sample","figure2","fits","skocpol","figure4","figure5","hirschman","chile","close"]);
+assert.deepStrictEqual(SLIDES.map(function (s) { return s.id; }), ["open","ask","nics","quote-sample","regions","figure2","fits","skocpol","figure4","figure5","hirschman","chile","close"]);
 assert.ok(!/five-minute pairs activity/.test(JSON.stringify(SLIDES)));
 
 var fs = require("fs");
@@ -175,6 +175,7 @@ assert.ok(backup.indexOf("readings/geddes-visuals.js") !== -1);
 assert.ok(backup.indexOf("geddes-figures.css") !== -1);
 assert.ok(backup.indexOf("geddes-layout-fix.css") !== -1, "backup slideshow uses the same anti-clipping layout rules");
 assert.ok(fs.existsSync("./visual-test.mjs"));
+assert.ok(/geddes-chart-enter/.test(fs.readFileSync("./geddes-figures.css", "utf8")), "figure artwork has a restrained entrance animation");
 assert.ok(fs.existsSync("./.github/workflows/geddes-visual-regression.yml"));
 
 assert.ok(start.indexOf("Presenter") !== -1 && start.indexOf("Audience") !== -1 && start.indexOf("Backup slideshow") !== -1);
@@ -204,6 +205,7 @@ var layoutFix = fs.readFileSync("./geddes-layout-fix.css", "utf8");
 assert.ok(layoutFix.indexOf("overflow-y: auto !important") !== -1, "both routes allow internal slide scrolling instead of clipping");
 assert.ok(layoutFix.indexOf("max-width: none !important") !== -1, "graphs are not constrained to the old narrow presenter width");
 assert.ok(layoutFix.indexOf("geddes-fig3") !== -1, "Figure 3 graph and interaction have a dedicated fit");
+assert.ok(layoutFix.indexOf('geddes-fig1') !== -1 && layoutFix.indexOf('geddes-fig6') !== -1, "Figures 1 and 6 use full-width figure layouts");
 assert.ok(layoutFix.indexOf("@media (max-width: 1100px)") !== -1, "compact laptop layouts are handled");
 
 /* Layout regression guards for the Figure 3 nested-scroll/clipping bug. */
