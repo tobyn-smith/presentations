@@ -1,11 +1,9 @@
 /* Readable original-figure redraws for the Geddes seminar. */
 figure.chart[data-chart="geddes-fig1"] .plot-panels,
-figure.chart[data-chart="geddes-fig23"] .plot-panels,
 figure.chart[data-chart="geddes-fig4"] .plot-panels,
 figure.chart[data-chart="geddes-fig5"] .plot-panels,
 figure.chart[data-chart="geddes-fig6"] .plot-panels { display:none !important; }
 figure.chart[data-chart="geddes-fig1"]::after,
-figure.chart[data-chart="geddes-fig23"]::after,
 figure.chart[data-chart="geddes-fig4"]::after,
 figure.chart[data-chart="geddes-fig5"]::after,
 figure.chart[data-chart="geddes-fig6"]::after {
@@ -13,7 +11,6 @@ figure.chart[data-chart="geddes-fig6"]::after {
   background-position:center; background-repeat:no-repeat; background-size:contain;
 }
 figure.chart[data-chart="geddes-fig1"]::after { height:clamp(245px, 38vh, 410px); background-image:url("figures/geddes-fig1.svg"); }
-figure.chart[data-chart="geddes-fig23"]::after { height:clamp(280px, 43vh, 455px); background-image:url("figures/geddes-fig23.svg"); }
 figure.chart[data-chart="geddes-fig4"]::after { height:clamp(260px, 39vh, 405px); background-image:url("figures/geddes-fig4.svg"); }
 figure.chart[data-chart="geddes-fig5"]::after { height:clamp(260px, 39vh, 405px); background-image:url("figures/geddes-fig5.svg"); }
 figure.chart[data-chart="geddes-fig6"]::after { height:clamp(270px, 41vh, 430px); background-image:url("figures/geddes-fig6.svg"); }
@@ -32,3 +29,35 @@ figure.chart[data-chart="geddes-selection"]::after {
   content:""; display:block; width:100%; height:clamp(260px, 40vh, 430px); margin:.35rem auto 0;
   background:url("figures/geddes-selection.svg") center/contain no-repeat;
 }
+
+/* One full-size graph per slide for the two wider samples. */
+figure.chart[data-chart="geddes-fig2"] .plot-panels,
+figure.chart[data-chart="geddes-fig3"] .plot-panels { display:none !important; }
+figure.chart[data-chart="geddes-fig2"]::after,
+figure.chart[data-chart="geddes-fig3"]::after {
+  content:""; display:block; width:100%; height:clamp(330px, 51vh, 510px); margin:.2rem auto 0;
+  background-position:center; background-repeat:no-repeat; background-size:contain;
+}
+figure.chart[data-chart="geddes-fig2"]::after { background-image:url("figures/geddes-fig2.svg"); }
+figure.chart[data-chart="geddes-fig3"]::after { background-image:url("figures/geddes-fig3.svg"); }
+
+/* Figures 4 and 5 use the whole slide: the country names are the evidence. */
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split {
+  grid-template-columns:minmax(0,1fr);
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-side,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-side { display:none !important; }
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .split-viz,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .split-viz { width:100%; }
+body.role-part .stage.claims figure.chart[data-chart="geddes-fig4"]::after,
+body.role-part .stage.claims figure.chart[data-chart="geddes-fig5"]::after {
+  height:clamp(400px, 57vh, 560px);
+}
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .ss-win-body,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .ss-win-body { padding:8px 14px; }
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig4"]) .chart-note,
+body.role-part .stage.claims:has(.chart[data-chart="geddes-fig5"]) .chart-note { display:none; }
+
+/* Student title slide is deliberately clean: no joining URL or QR code. */
+body.role-part .title-join-block { display:none !important; }
