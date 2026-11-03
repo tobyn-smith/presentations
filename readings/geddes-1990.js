@@ -36,7 +36,7 @@
       title: "Reading only winners",
       claims: [
         { n: "1", title: "France, Russia, China", body: "Want revolution, you read those. Want growth, you read Taiwan, Korea, Singapore, Brazil, Mexico." },
-        { n: "2", title: "Slow cases stay off the desk", body: "You never check whether Africa or Bolivia share the same traits." }
+        { n: "2", title: "Slow cases stay off the desk", body: "The slower-growing countries are left out, so you cannot check whether they share the same traits." }
       ],
       fromClass: {
         week: 8,
@@ -120,7 +120,7 @@
       ],
       claims: [
         { n: "1", title: "Country Reports", body: "1980 and 1988. She says the coding is imperfect." },
-        { n: "2", title: "The five are all a 3", body: "Taiwan, Korea, Singapore, Brazil, Mexico. None of them is a slow grower, so the score does not move." }
+        { n: "2", title: "The five do not test the link", body: "All five are fast growers with repressed or coopted labour. That alone cannot show that repression caused growth." }
       ],
       fromClass: {
         week: 10,
@@ -145,7 +145,7 @@
       },
       claims: [
         { n: "1", title: "Figure 1, East Asia", body: "r squared 0.56. Growth highest at labour score 3." },
-        { n: "2", title: "Figure 2 is 0.07", body: "Figure 3, the more advanced set, is 0.01. In a wider sample the link is gone. She is not calling that a disproof." }
+        { n: "2", title: "The wider samples", body: "Figure 2 is 0.07 and Figure 3 is 0.01. The simple link weakens, but she warns that a few East Asian cases may drive the result and a curved relationship is possible." }
       ]
     },
     {
@@ -165,9 +165,9 @@
       title: "France, Russia, China",
       names: ["France", "Russia", "China"],
       claims: [
-        { n: "1", title: "War, then reform", body: "A foreign military threat is what gets the state to try." },
-        { n: "2", title: "The landed class can split", body: "If they have their own base and already share power, reform can peel them off the state." },
-        { n: "3", title: "Villages on their own", body: "A split at the top is not enough. Revolution only if villages are autonomous. Page 12." }
+        { n: "1", title: "War, then reform", body: "An external military threat pushes state officials to try reforms." },
+        { n: "2", title: "The landed class can split", body: "A landed class with its own economic base and a share of power can resist reform, splitting the elite." },
+        { n: "3", title: "Villages on their own", body: "An elite split is not enough. Peasant rebellion also depends on villages being autonomous from landlords." }
       ]
     },
     {
@@ -202,11 +202,11 @@
       id: "figure5",
       type: "claims",
       kicker: "Case 2. Skocpol on revolutions",
-      title: "Figure 5, nine countries",
+      title: "Figure 5, nine Spanish American cases",
       chart: {
         id: "figure5",
         title: "Figure 5. Defeat in war and revolution",
-        note: "I counted the cells she printed. Printed p. 20. Nine Spanish American countries. Lost war plus invasion or lost land. Up to 20 years to revolution.",
+        note: "Counts of cases in Figure 5, printed p. 20, not a count of nine separate countries in each bar. Defeat means losing a war with invasion and/or loss of territory; revolution is tracked over the following 20 years.",
         max: 7,
         bars: [
           { label: "Defeat, no revolution", n: 7 },
@@ -215,8 +215,8 @@
         ]
       },
       claims: [
-        { n: "1", title: "Mexico and Nicaragua", body: "Seven lost a war and had no revolution. Mexico 1910 and Nicaragua 1979 had a revolution with no such defeat." },
-        { n: "2", title: "Bolivia, 1935 and 1952", body: "That is the one match. She says treat the whole set as doubt. The threat score is crude." }
+        { n: "1", title: "Seven, two, and one", body: "Seven defeat cases had no revolution. Two revolutions had no such defeat. These are instances in her comparison, not nine country labels." },
+        { n: "2", title: "Bolivia is the one match", body: "The result raises doubt, not a final rejection. Geddes says the threat measure is imperfect and the cases are not a random sample." }
       ]
     },
     {
@@ -226,8 +226,8 @@
       title: "Hirschman stops in 1961",
       chart: {
         id: "figure6",
-        title: "Figure 6, from Table 2",
-        note: "Printed years from Table 2, pp. 22 to 23. Hirschman ends in 1961. Figure 6 continues to 1972. I did not plot years she did not print as numbers.",
+        title: "Table 2. Chilean inflation, selected years",
+        note: "Selected figures from Table 2, printed pp. 22 to 23. Figure 6 is a separate series that continues to 1972; these five bars are not the full Figure 6 data.",
         max: 84,
         unit: "%",
         bars: [
@@ -240,7 +240,7 @@
       },
       claims: [
         { n: "1", title: "84, then 5 and 10", body: "Chile inflation, 1930 to 1961. 84 per cent in 1955. 5 in 1960. 10 in 1961." },
-        { n: "2", title: "Figure 6 to 1972", body: "She writes that it no longer looks solved. Later the series goes past 100 per cent." }
+        { n: "2", title: "The series continues", body: "Figure 6 extends to 1972 and changes the picture. Geddes suggests the earlier fall may reflect orthodox stabilisation under Alessandri." }
       ]
     },
     {
@@ -265,10 +265,10 @@
       id: "close",
       type: "claims",
       kicker: "Close",
-      title: "Studying only the cases where something happened can inspire a new theory, but only cases where it did not happen as well can test it.",
+      title: "What case selection does",
       claims: [
-        { n: "1", title: "France can start an idea", body: "So can the five NICs. That is fine. It is not a test." },
-        { n: "2", title: "Put the misses in", body: "Countries where revolution or growth did not happen still belong in the sample. So do the later years." }
+        { n: "1", title: "Selected cases can start ideas", body: "France can help develop an explanation for revolution. The five fast growers can do the same for growth." },
+        { n: "2", title: "Testing needs a wider set", body: "To test the explanation, include cases where the outcome did not happen and think carefully about where the historical series ends." }
       ]
     },
     {
@@ -333,13 +333,13 @@
     {
       id: "scores",
       title: "Labour scores",
-      say: "She scores labour from 1 to 4. The five famous growers all sit at 3. Repression does not vary in that set.",
+      say: "She scores labour from 1 to 4, using country reports. The five are all fast growers with repressed or coopted labour. That tells us what the selected cases share, but not whether it caused growth.",
       notes: "Criteria sit on the pages just before Figure 1.\nWeek 10: how you define the score, and which cases you count, can change her answer."
     },
     {
       id: "fits",
       title: "Three samples",
-      say: "East Asia alone, r squared of .56. A wider set, .07. As advanced as South Korea, .01. The link vanishes. That is not a disproof.",
+      say: "East Asia gives an r squared of .56. The wider Third World set gives .07, and the more advanced set .01. The simple link weakens. She is careful not to call that a disproof: the relationship could be curved, and other factors may matter.",
       notes: "Figure 1 printed p. 8. Figure 2 printed p. 10. Figure 3 is the more advanced set.\nLast labour board. Then the second quote, then Raquel."
     },
     {
@@ -351,7 +351,7 @@
     {
       id: "skocpol",
       title: "Three links",
-      say: "Same habit, on revolutions. Threat, then reform, then a split where the dominant class has its own base, then revolution only if villages are autonomous.",
+      say: "Raquel takes the same problem into Skocpol’s work on revolutions. An external threat pushes reform, reform can split the elite, and peasant rebellion is possible where villages are autonomous from landlords.",
       notes: "Raquel.\nPart 2.\nSkocpol section starts printed p. 12."
     },
     {
@@ -375,7 +375,7 @@
     {
       id: "hirschman",
       title: "Hirschman",
-      say: "He stops in 1961 on a low. 1955 was 84 per cent. Figure 6 runs to 1972. The end of the series shapes the story.",
+      say: "Hirschman’s account ends in 1961, when inflation is still relatively low. Geddes carries the series on to 1972, and the later years change the picture. She suggests the earlier fall may be linked to Alessandri’s orthodox stabilisation policies.",
       notes: "Tobyn.\nCase 3.\nTable 2, printed pp. 22 to 23.\nFigure 6 follows the table. I did not invent yearly bars after 1961."
     },
     {
@@ -387,13 +387,13 @@
     {
       id: "close",
       title: "Last claim",
-      say: "Cases where it happened can start a theory. Cases where it did not have to be in the test. Same rule on our papers.",
+      say: "Cases where the outcome happened can help us develop a theory or spot something worth explaining. But they cannot test it on their own. For that, we need cases where the outcome did not happen as well.",
       notes: "Tobyn.\nClose.\nPrinted pp. 24 to 25."
     },
     {
       id: "discuss",
       title: "Discussion",
-      say: "Three questions. Friendly cases. Too many cases. Where a series ends.",
+      say: "There are three questions to leave with: what happens when we only keep familiar cases, how we choose when there are too many cases to study, and when we decide a historical series has ended.",
       notes: "Tobyn.\nStay on this if the room is talking."
     },
     {
