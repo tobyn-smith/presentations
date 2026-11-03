@@ -109,5 +109,10 @@
   var cl = script("close");
   cl.title = "Conclusion: 13:15–15:00";
   /* Timings move the sample question ahead of the graph-reading activity. */
-  script("regions").title = "The wider comparison: 3:30–4:20";
+  script("regions").title = "The wider comparison: 3:30-4:20";
+  r.script.forEach(function (item) {
+    ["title","say","notes"].forEach(function (key) {
+      if (typeof item[key] === "string") item[key] = item[key].replace(/[–—]/g, "-");
+    });
+  });
 })();
