@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 760" role="img" aria-labelledby="t d">
 <title id="t">Geddes Figure 4: Skocpol's case comparisons</title>
-<desc id="d">A two-by-two matrix. Rows distinguish economically independent dominant classes that share power from dependent dominant classes excluded from power. Columns distinguish elite splits from elites remaining cohesive. France and China after the Taiping Rebellion are in the upper-left cell; Russia during World War I is in the lower-left; Prussia, Japan, China before Taiping, and Russia before World War I are in the lower-right. The upper-right cell has no cases listed. Britain during the Civil War and Prussia in 1848 are discussed separately as low-village-autonomy contrasts.</desc>
+<desc id="d">A two-by-two matrix. Rows distinguish economically independent dominant classes that share power from dependent dominant classes excluded from power. Columns distinguish elite splits from elites remaining cohesive. France and China after the Taiping Rebellion are in the upper-left cell; Russia, World War I is in the lower-left; Prussia, Japan, China before Taiping, and Russia before World War I are in the lower-right. The upper-right cell has no cases listed. Britain during the Civil War and Prussia in 1848 are discussed separately as low-village-autonomy contrasts.</desc>
 <rect width="1600" height="760" rx="24" fill="#102b43"/>
 <text x="70" y="70" fill="#f0d48a" font-family="Arial,sans-serif" font-size="22" font-weight="700" letter-spacing="4">FIGURE 4 · SKOCPOL'S CASE COMPARISONS</text>
 <text x="70" y="126" fill="#fffdf8" font-family="Arial,sans-serif" font-size="38" font-weight="700">External threat does not produce one uniform elite response</text>
@@ -23,7 +23,7 @@
 <rect x="470" y="250" width="145" height="38" rx="19" fill="#ba0c2f"/><text x="542" y="276" text-anchor="middle" fill="#fffdf8" font-size="18" font-weight="700">FRANCE</text>
 <text x="470" y="335" font-size="27" font-weight="700">China after the</text><text x="470" y="372" font-size="27">Taiping Rebellion</text>
 <text x="1217" y="330" text-anchor="middle" fill="#536475" font-size="24">No cases listed in this cell</text>
-<rect x="470" y="490" width="350" height="50" rx="14" fill="#102b43"/><text x="645" y="523" text-anchor="middle" fill="#f0d48a" font-size="24" font-weight="700">RUSSIA · WORLD WAR I</text>
+<rect x="470" y="490" width="350" height="50" rx="14" fill="#102b43"/><text x="645" y="523" text-anchor="middle" fill="#f0d48a" font-size="24" font-weight="700">RUSSIA, WORLD WAR I</text>
 <rect x="940" y="490" width="145" height="38" rx="19" fill="#477e6a"/><text x="1012" y="516" text-anchor="middle" fill="#fffdf8" font-size="18" font-weight="700">PRUSSIA</text>
 <text x="940" y="580" font-size="26">Japan</text><text x="940" y="620" font-size="26">China before Taiping</text><text x="940" y="660" font-size="26">Russia before World War I</text>
 </g>
