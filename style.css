@@ -1337,6 +1337,17 @@ button { cursor: pointer; }
   color: var(--ink-faint);
   font-size: clamp(12px, 1.55vh, 15px);
 }
+.role-pres .stage.claims:not(:has(.split)):not(:has(.pair-row)) .quote {
+  flex: 1 1 auto;
+  margin-top: clamp(0.8em, 2vh, 1.4em);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--paper, #fff);
+  border-radius: 1.4em;
+  padding: clamp(1.2em, 3.5vh, 2.4em) clamp(1.2em, 3vw, 2.2em);
+  border-left: 8px solid var(--accent);
+}
 
 .role-pres .stage.story,
 .role-pres .stage.compare,

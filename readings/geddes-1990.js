@@ -46,9 +46,19 @@
       }
     },
     {
+      id: "quote-universe",
+      type: "claims",
+      kicker: "From the paper",
+      title: "How do you even pick?",
+      quote: {
+        text: "The two tasks crucial to testing any hypothesis are to identify the universe of cases to which the hypothesis should apply and to find or develop measures of the variables. If the universe is too large to make examining every case feasible, cases should be selected from it at random.",
+        cite: "Geddes, IGS Working Paper 90-13, 1990."
+      }
+    },
+    {
       id: "nics",
       type: "prompt",
-      kicker: "The five",
+      kicker: "Case 1. Labour and growth",
       title: "What do the five actually give you?",
       help: "",
       input: "place",
@@ -74,7 +84,7 @@
     {
       id: "regions",
       type: "claims",
-      kicker: "Regions",
+      kicker: "Case 1. Labour and growth",
       title: "What happens if you pick East Asia?",
       chart: {
         id: "table1",
@@ -102,7 +112,7 @@
     {
       id: "scores",
       type: "claims",
-      kicker: "Labour",
+      kicker: "Case 1. Labour and growth",
       title: "How did she score the unions?",
       stats: [
         { value: "1", label: "Free unions, own leaders, strikes happen. India, Jamaica, Venezuela." },
@@ -112,7 +122,7 @@
       ],
       claims: [
         { n: "1", title: "Country Reports, 1980 and 1988", body: "She calls the score imperfect." },
-        { n: "2", title: "South Korea and Brazil sit at 3", body: "Fine for a methodological point. Not a perfect labour index." }
+        { n: "2", title: "The five all sit at 3", body: "Singapore, South Korea, Taiwan, Brazil, Mexico. Repression does not vary. There is no slow country in that set." }
       ],
       fromClass: {
         week: 10,
@@ -122,7 +132,7 @@
     {
       id: "fits",
       type: "claims",
-      kicker: "Samples",
+      kicker: "Case 1. Labour and growth",
       title: "Does the claim travel?",
       chart: {
         id: "r2",
@@ -136,47 +146,110 @@
         ]
       },
       claims: [
-        { n: "1", title: "No real link among the five", body: "Slow countries repress labour too." },
-        { n: "2", title: "That picture does not travel", body: "This simple check cannot disconfirm the claim." }
+        { n: "1", title: "East Asia looks tidy", body: "Figure 1, r squared 0.56. Growth is highest at repression 3." },
+        { n: "2", title: "A wider set does not", body: "Figure 2, 0.07. Figure 3, 0.01. Two readings: a curve, or a few unusual cases." },
+        { n: "3", title: "Not a disproof", body: "The test does not prove the claim false. The link vanishes in a representative sample." }
       ]
+    },
+    {
+      id: "quote-sample",
+      type: "claims",
+      kicker: "From the paper",
+      title: "What can a small sample claim?",
+      quote: {
+        text: "One should not make inferences based on small samples selected on the dependent variable. This is not to say that a relationship found within the sample will never characterize the population, but only that one cannot assume that it does.",
+        cite: "Geddes, IGS Working Paper 90-13, 1990."
+      }
     },
     {
       id: "skocpol",
       type: "claims",
-      kicker: "Revolutions",
-      title: "Same habit, different outcome?",
+      kicker: "Case 2. Skocpol on revolutions",
+      title: "What are the three links?",
       names: ["France", "Russia", "China"],
       claims: [
-        { n: "1", title: "France, Russia and China", body: "She picks the three because they had revolutions. Then a few misses. Printed p. 12." },
-        { n: "2", title: "Threat, blocked reform, a split", body: "An outside military threat, reforms the dominant class can block, a split at the top. Solidary villages rebel." },
-        { n: "3", title: "Nine Spanish-American countries", body: "Geddes holds village and class still. She does not test every link." }
+        { n: "1", title: "Threat leads to reform", body: "A foreign military threat pushes the state to try reform." },
+        { n: "2", title: "Reform can split the elite", body: "The split comes where the dominant class has its own base and shares power." },
+        { n: "3", title: "A split is not enough", body: "Revolution follows only where villages are autonomous. Printed p. 12." }
       ]
+    },
+    {
+      id: "contrast",
+      type: "claims",
+      kicker: "Case 2. Skocpol on revolutions",
+      title: "Where does the chain break?",
+      claims: [
+        { n: "1", title: "Prussia and Japan", body: "The threat was as bad as in France. The dominant class had no independent base. No elite split. No revolution." },
+        { n: "2", title: "Britain 1640 to 1660", body: "The elite split. Villages were not autonomous. No revolution." },
+        { n: "3", title: "Prussia 1848", body: "Same break. Split at the top. Villages not free. No revolution." }
+      ]
+    },
+    {
+      id: "figure4",
+      type: "compare",
+      kicker: "Case 2. Skocpol on revolutions",
+      title: "What does Figure 4 actually show?",
+      lead: "I redrew the two tables on p. 14. I did not add counts she did not print.",
+      left: {
+        label: "After a military threat",
+        title: "Who stays together",
+        body: "Independent class that shares power: France. China after the Taiping Rebellion. Dependent class kept from power: Prussia, Japan, Russia before the First World War, China before the Taiping Rebellion."
+      },
+      right: {
+        label: "After an elite split",
+        title: "Who gets a revolution",
+        body: "Villages autonomous: Russia, France, Communist areas of China. Villages not autonomous: Britain 1640 to 1660, Germany 1848, China before the Communists."
+      }
     },
     {
       id: "figure5",
       type: "claims",
-      kicker: "The check",
+      kicker: "Case 2. Skocpol on revolutions",
       title: "What did the nine countries show?",
       chart: {
         id: "figure5",
         title: "Figure 5. Defeat in war and revolution",
-        note: "I counted the cells she printed. Printed p. 20. Threat here is a lost war plus invasion or lost land.",
+        note: "I counted the cells she printed. Printed p. 20. Nine Spanish American countries. Lost war plus invasion or lost land. Up to 20 years to revolution.",
         max: 7,
         bars: [
-          { label: "Extreme threat, no revolution", n: 7 },
-          { label: "Revolution, no such threat", n: 2 },
+          { label: "Defeat, no revolution", n: 7 },
+          { label: "Revolution, no such defeat", n: 2 },
           { label: "Both. Bolivia 1935 and 1952", n: 1 }
         ]
       },
       claims: [
-        { n: "1", title: "Figure 5, printed p. 20", body: "Threat: a lost war plus invasion or lost land." },
-        { n: "2", title: "Not a definitive disconfirmation", body: "The set is not random, and her threat score is crude." }
+        { n: "1", title: "Seven, two, and one", body: "Mexico 1910 and Nicaragua 1979 had no such defeat. Bolivia fits: 1935 defeat, 1952 revolution." },
+        { n: "2", title: "Doubt, not disproof", body: "The set is not random, and her threat score is crude. She calls this doubt, not a disproof." }
+      ]
+    },
+    {
+      id: "hirschman",
+      type: "claims",
+      kicker: "Case 3. Hirschman on Chile",
+      title: "What if the series stops early?",
+      chart: {
+        id: "figure6",
+        title: "Figure 6, from Table 2",
+        note: "Printed years from Table 2, pp. 22 to 23. Hirschman ends in 1961. Figure 6 continues to 1972. I did not plot years she did not print as numbers.",
+        max: 84,
+        unit: "%",
+        bars: [
+          { label: "1955", n: 84 },
+          { label: "1956", n: 38 },
+          { label: "1957", n: 17 },
+          { label: "1960", n: 5 },
+          { label: "1961", n: 10 }
+        ]
+      },
+      claims: [
+        { n: "1", title: "He stops on a low", body: "Chile 1930 to 1961. 1955 is 84 per cent. 1960 and 1961 are 5 and 10." },
+        { n: "2", title: "The end shapes the story", body: "Figure 6 runs to 1972. She says it does not look solved. Later it goes past 100 per cent." }
       ]
     },
     {
       id: "chile",
       type: "prompt",
-      kicker: "Chile",
+      kicker: "Case 3. Hirschman on Chile",
       title: "Which comparison would you trust?",
       help: "",
       input: "choice-text",
@@ -188,34 +261,39 @@
         "The five growers",
         "Her wider Third World set",
         "Skocpol's three revolutions",
-        "The nine Spanish-American cases"
-      ],
-      chart: {
-        id: "table2",
-        title: "Table 2. Chilean inflation",
-        note: "Four years from Table 2, printed pp. 22 to 23. Hirschman ends the series in 1961.",
-        max: 84,
-        unit: "%",
-        bars: [
-          { label: "1955", n: 84 },
-          { label: "1957", n: 17 },
-          { label: "1960", n: 5 },
-          { label: "1961", n: 10 }
-        ]
-      },
-      claims: [
-        { n: "1", title: "Hirschman stops in 1961", body: "1955 was 84 per cent. 1960 and 1961 are 5 and 10. Printed pp. 22 to 23." }
+        "The nine Spanish American cases"
       ]
     },
     {
       id: "close",
       type: "claims",
       kicker: "Close",
-      title: "What is this paper for?",
+      title: "Studying only the cases where something happened can inspire a new theory, but only cases where it did not happen as well can test it.",
       claims: [
-        { n: "1", title: "She re-ran three checks", body: "Labour and growth, Skocpol, and Hirschman on Chile." },
-        { n: "2", title: "Good for a hunch", body: "Good for how a thing happened. Not, on their own, a test." },
-        { n: "3", title: "The wrong answer, often", body: "If you pick cases because they already have the outcome. Printed p. 24." }
+        { n: "1", title: "Compare the outcomes", body: "Winners can start a theory. Cases where it did not happen have to be in the test." },
+        { n: "2", title: "Check your sample", body: "A link in a small selected sample may vanish in a broader one. The years you study can change the conclusion." },
+        { n: "3", title: "Generating is not testing", body: "A hunch from the winners is fine. It is not a test. Same rule on our own papers." }
+      ]
+    },
+    {
+      id: "discuss",
+      type: "claims",
+      kicker: "Discussion",
+      title: "What do you want to argue with?",
+      claims: [
+        { n: "1", title: "Only the friendly cases", body: "What is the danger of working only with cases that support the argument?" },
+        { n: "2", title: "Too many cases", body: "If the universe is huge, how do you choose?" },
+        { n: "3", title: "Where the series ends", body: "How do you pick an endpoint? Must you always use the most recent data?" }
+      ]
+    },
+    {
+      id: "pairs",
+      type: "claims",
+      kicker: "Five minutes",
+      title: "How are you picking cases?",
+      claims: [
+        { n: "1", title: "Your own research", body: "How are you selecting cases for your own work? This is the Research Design assignment." },
+        { n: "2", title: "The missing outcome", body: "Would your selection include cases where the outcome did not occur?" }
       ]
     }
   ],
@@ -239,6 +317,12 @@
       notes: "Unit: the country.\nWeek 8: class called this sampling on the dependent variable. That is her habit."
     },
     {
+      id: "quote-universe",
+      title: "Universe quote",
+      say: "She says the two tasks are to name the universe the claim should cover, and to measure the variables. If you cannot read every case, pick at random.",
+      notes: "Exact lines from the labour section. Checked against the IGS PDF."
+    },
+    {
       id: "nics",
       title: "Five growers",
       say: "Taiwan, South Korea, Singapore, Brazil, Mexico. Labour was repressed or coopted. What do the five actually give you?",
@@ -253,38 +337,74 @@
     {
       id: "scores",
       title: "Labour scores",
-      say: "She scores labour from 1 to 4. South Korea and Brazil sit at 3. She calls the score imperfect.",
+      say: "She scores labour from 1 to 4. The five famous growers all sit at 3. Repression does not vary in that set.",
       notes: "Criteria sit on the pages just before Figure 1.\nWeek 10: how you define the score, and which cases you count, can change her answer."
     },
     {
       id: "fits",
       title: "Three samples",
-      say: "East Asia alone, r squared of .56. A wider set, .07. As advanced as South Korea, .01. Among the five there was no real link.",
-      notes: "Figure 1 printed p. 8. Figure 2 printed p. 10."
+      say: "East Asia alone, r squared of .56. A wider set, .07. As advanced as South Korea, .01. The link vanishes. That is not a disproof.",
+      notes: "Figure 1 printed p. 8. Figure 2 printed p. 10. Figure 3 is the more advanced set.\nLast labour board. Then the second quote, then Raquel."
+    },
+    {
+      id: "quote-sample",
+      title: "Sample quote",
+      say: "A link inside a small selected sample might be true in the population. You cannot assume that it is.",
+      notes: "Exact lines from the paper. Checked against the IGS PDF."
     },
     {
       id: "skocpol",
-      title: "Skocpol",
-      say: "Same habit, on revolutions. She picks France, Russia and China because they had them. Geddes holds village and class still in nine Spanish-American countries.",
-      notes: "Raquel.\nPart 2.\nSkocpol section starts printed p. 12. The nine are Mexico, Guatemala, El Salvador, Honduras, Nicaragua, Ecuador, Peru, Bolivia, Paraguay."
+      title: "Three links",
+      say: "Same habit, on revolutions. Threat, then reform, then a split where the dominant class has its own base, then revolution only if villages are autonomous.",
+      notes: "Raquel.\nPart 2.\nSkocpol section starts printed p. 12."
+    },
+    {
+      id: "contrast",
+      title: "Where it breaks",
+      say: "Prussia and Japan: threat, no split. Britain 1640 to 1660 and Prussia 1848: split, villages not free. No revolution.",
+      notes: "Printed with Figure 4 on p. 14."
+    },
+    {
+      id: "figure4",
+      title: "Figure 4",
+      say: "Two small tables. I redrew what she printed. No extra numbers.",
+      notes: "Figure 4, printed p. 14."
     },
     {
       id: "figure5",
       title: "Seven, two, one",
-      say: "Seven extreme threats, no revolution. Two revolutions with no such threat. One fit, Bolivia. She says this is not a definitive disconfirmation.",
+      say: "Nine Spanish American countries. Seven defeats, no revolution. Mexico 1910 and Nicaragua 1979 with no such defeat. Bolivia fits. Doubt, not disproof.",
       notes: "Figure 5, printed p. 20."
+    },
+    {
+      id: "hirschman",
+      title: "Hirschman",
+      say: "He stops in 1961 on a low. 1955 was 84 per cent. Figure 6 runs to 1972. The end of the series shapes the story.",
+      notes: "Tobyn.\nCase 3.\nTable 2, printed pp. 22 to 23.\nFigure 6 follows the table. I did not invent yearly bars after 1961."
     },
     {
       id: "chile",
       title: "Which comparison",
-      say: "Hirschman stops in 1961. 1955 was 84 per cent. 1960 and 1961 are 5 and 10. Which comparison would you trust, and why?",
-      notes: "Table 2, printed pp. 22 to 23.\n1957 is 17, as she prints it.\nLeave it up. Give them a minute.\nAsk one person from two different picks."
+      say: "Which comparison would you trust, and why?",
+      notes: "Leave it up. Give them a minute.\nAsk one person from two different picks."
     },
     {
       id: "close",
-      title: "Last slide",
-      say: "Case studies are good for how a thing happened, and for a hunch. They cannot, on their own, test the theory they just wrote.",
-      notes: "Tobyn.\nClose.\nPrinted pp. 24 to 25.\nStop."
+      title: "Last claim",
+      say: "Cases where it happened can start a theory. Cases where it did not have to be in the test. Same rule on our papers.",
+      notes: "Tobyn.\nClose.\nPrinted pp. 24 to 25."
+    },
+    {
+      id: "discuss",
+      title: "Discussion",
+      say: "Three questions. Friendly cases. Too many cases. Where a series ends.",
+      notes: "Tobyn.\nStay on this if the room is talking."
+    },
+    {
+      id: "pairs",
+      title: "Pairs",
+      say: "Five minutes. How are you picking cases, and would you include cases where the outcome did not happen?",
+      notes: "Tobyn.\nOptional. Research Design assignment.\nSkip if time is gone."
     }
   ]
 });
