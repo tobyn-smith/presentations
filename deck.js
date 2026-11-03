@@ -1054,7 +1054,7 @@
         html += "</ol>";
       }
     }
-    if (!list.length && !html) html = '<p class="empty">No answers yet.</p>';
+    if (!list.length && !html) html = "";
     viz.setAttribute("data-response-count", String(list.length));
     viz.innerHTML = html;
     showViz(s);
