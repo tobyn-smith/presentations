@@ -634,10 +634,10 @@
       : "";
     if (isPres && (s.input === "place" || s.input === "rank")) {
       return '<div class="ask">' + kickerHtml(s) + "<h1>" + esc(s.title) + "</h1>" + "</div>"
-        + '<div class="split has-viz has-drag-main">'
+        + '<div class="split has-viz">'+
         + '<div class="split-viz">' + vizHtml(s) + "</div>"
         + '<div class="split-side">'
-        + windowHtml("term", "The trays", dragHtml(s, false) + '<div id="viz"></div>')
+        + windowHtml("term", "Room responses", '<div id="viz"></div>')
         + "</div></div>";
     }
     if (isPres) {
