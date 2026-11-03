@@ -48,16 +48,16 @@
   fig2.claims = [];
   fits.type = "prompt";
   fits.kicker = "PART 2 - RAQUEL";
-  fits.title = "Figure 3: the more advanced countries";
-  fits.help = "Read the near-flat line, then choose what Geddes says may still be going on.";
-  fits.ask = "What does Geddes leave open?";
+  fits.title = "Can a straight line miss a curve?";
+  fits.help = "Look at the almost-flat line and the cluster near score 3.";
+  fits.ask = "Which reading fits Geddes's caution?";
   fits.input = "choice-text";
   fits.requireText = false;
   fits.placeholder = "";
   fits.options = [
-    "A curved pattern, or a few NICs driving it",
-    "The wider sample disproves the claim",
-    "A strong straight-line relationship"
+    "A curve, or a few NICs drive it",
+    "The wider sample disproves it",
+    "A strong linear link"
   ];
   fits.chart = {
     id: "geddes-fig3", title: "Figure 3 · More advanced Third World countries",
