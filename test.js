@@ -124,7 +124,7 @@ assert.ok(SCRIPT.some(function (s) { return s.id === "close" && /TOBYN/.test(s.n
 assert.ok(SCRIPT.some(function (s) { return s.id === "nics" && /INTERACTION 1 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "quote-sample" && /INTERACTION 2 OF 3/.test(s.notes); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /INTERACTION 3 OF 3/.test(s.notes); }));
-assert.ok(SCRIPT.some(function (s) { return s.id === "figure2" && /r-squared/.test(s.say); }));
+assert.ok(SCRIPT.some(function (s) { return s.id === "figure2" && /weak/.test(s.say); }));
 assert.ok(SCRIPT.some(function (s) { return s.id === "fits" && /Figure 3/.test(s.say); }));
 assert.ok(/15:00/.test(SCRIPT[SCRIPT.length - 1].title));
 assert.deepStrictEqual(SLIDES.map(function (s) { return s.id; }), ["open","ask","nics","regions","quote-sample","figure2","fits","skocpol","figure4","figure5","hirschman","chile","close"]);
