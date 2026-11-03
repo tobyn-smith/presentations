@@ -4267,3 +4267,80 @@ html.reading-off .reading { display: none; }
   .role-part .claim-bars li { box-shadow: none; }
   .role-part .chart-note { max-width: none; }
 }
+
+
+/* Geddes seminar fixes: readable comparison cards and compact source plots. */
+.role-pres .stage.compare {
+  overflow-y: auto;
+  padding-top: 2.8%;
+  padding-bottom: 2.4%;
+}
+.role-pres .stage.compare > h1 { margin-bottom: 0.45rem; }
+.role-pres .stage.compare .lead {
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
+}
+.role-pres .stage.compare .pair {
+  background: var(--navy);
+  color: var(--tile);
+  border: 0;
+  min-height: 0;
+}
+.role-pres .stage.compare .pair-label { color: var(--gold); }
+.role-pres .stage.compare .pair h2 { color: var(--gold); }
+.role-pres .stage.compare .pair p:not(.pair-label) { color: var(--tile-cream); }
+.role-pres .stage.compare .pair-quote { border-left-color: var(--gold); }
+.plot-panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0.5rem 0 0.65rem;
+}
+.plot-panel { min-width: 0; }
+.plot-panel h3 {
+  font-family: var(--display);
+  color: var(--navy);
+  font-size: clamp(12px, 1.55vh, 16px);
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+.plot-panel > p {
+  color: var(--ink-faint);
+  font-size: clamp(11px, 1.35vh, 13px);
+  margin-top: 0.15rem;
+}
+.plot-area {
+  height: clamp(100px, 16vh, 150px);
+  position: relative;
+  margin: 0.15rem 0.45rem 0.3rem 1.35rem;
+  border-left: 1px solid #6d6d6d;
+  border-bottom: 1px solid #6d6d6d;
+  background-image: linear-gradient(to top, transparent 49.5%, #dedbd2 50%, transparent 50.5%);
+}
+.plot-area i {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translate(-50%, 50%);
+}
+.plot-y {
+  position: absolute;
+  left: -1.35rem;
+  top: 0;
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+.plot-x {
+  position: absolute;
+  right: 0;
+  bottom: -1.1rem;
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+@media (max-width: 720px) {
+  .plot-panels { grid-template-columns: 1fr 1fr; }
+  .plot-area { height: 90px; }
+}
