@@ -237,6 +237,8 @@ assert.ok(deckSrc.indexOf('if (isPres) {\n      render(n);') !== -1, "presenter 
 assert.ok(deckSrc.indexOf('if (wasReload && shouldResume)') !== -1 && deckSrc.indexOf('DeckSync.present();') !== -1, "presenter refresh restores the live room");
 assert.ok(syncSrc.indexOf("function queueBackupResponse(msg)") !== -1 && syncSrc.indexOf("function flushBackupResponses()") !== -1, "backup responses are queued and persisted after reconnection");
 assert.ok(syncSrc.indexOf('lastError = "Firebase read HTTP " + r.status') !== -1, "Firebase read failures trigger backup mode");
+assert.ok(syncSrc.indexOf('if (msg.t === "resp") {\n      return publishLive(msg).then') !== -1, "failed response delivery is not broadcast to local presenter windows");
+assert.ok(syncSrc.indexOf('if (wantLive && global.DeckSync) global.DeckSync.present();') !== -1, "live room is republished after Firebase reconnects");
 assert.ok(syncSrc.indexOf('sessionStorage.setItem("deck-resume-live", "1")') !== -1, "live presenter state is preserved during refresh");
 assert.ok(fs.existsSync("./live-room-test.mjs"), "live transport regression tests are included");
 assert.ok(fs.readFileSync("./.github/workflows/geddes-visual-regression.yml", "utf8").indexOf("node live-room-test.mjs") !== -1, "live transport tests run in CI");
