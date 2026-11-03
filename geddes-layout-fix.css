@@ -276,7 +276,7 @@ body.role-pres .stage.prompt:has(.chart[data-chart="geddes-fig3"]) #viz {
 
 /* The base audience stylesheet loads after the shared patch. Match its
    specificity explicitly so the stage, not a child card, owns scrolling. */
-body.role-part .stage,
+body.role-part.is-desk .stage,
 body.role-pres .stage {
   min-height: 0;
   overflow-x: hidden !important;
@@ -437,4 +437,17 @@ body.role-pres .stage.claims:has(.chart[data-chart="geddes-fig6"]) .ss-win-label
 @media (max-width: 700px) {
   .failsafe { justify-content: center; }
   .failsafe-cmds, .failsafe-footer, .failsafe-status { grid-template-columns: minmax(0,1fr); }
+}
+
+
+/* The student audience stylesheet is loaded after this file. The desk selector
+   deliberately wins its later overflow:hidden rule at the same viewport. */
+body.role-part.is-desk .stage {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+body.role-part .submit-error {
+  margin: .55rem 0 0;
+  color: #ffd9df;
+  font: 600 14px/1.35 var(--sans);
 }
