@@ -53,9 +53,14 @@
   var localOnly = /[?&]local=1\b/.test(location.search);
   var forceFirebase = /[?&]firebase=1\b/.test(location.search);
   var ntfySource = null;
+  var fbSource = null;
   var usingFirebase = false;
   var fbReachable = false;
+  var fbLocked = false;
+  var backupOn = false;
   var lastError = "";
+  var lastFbHttp = 0;
+  var fbErrs = 0;
   var bc = null;
   try { bc = new BroadcastChannel("deck-" + room); } catch (e) { bc = null; }
 
@@ -286,15 +291,17 @@
   function shout(msg) {
     msg.session = session;
     apply(msg, "local");
-    try { if (bc) bc.postMessage(msg); } catch (e) {}
+    if (backupOn || localOnly || !usingFirebase) {
+      try { if (bc) bc.postMessage(msg); } catch (e) {}
+    }
     publishLive(msg);
   }
 
   var publishNtfy = function () {};
   var publishFb = function () {};
   function publishLive(msg) {
-    publishNtfy(msg);
-    publishFb(msg);
+    if (usingFirebase && !fbLocked) publishFb(msg);
+    else publishNtfy(msg);
   }
 
   function firebaseConfigured() {
@@ -316,7 +323,22 @@
     return fetch(url, opt);
   }
 
-  function fbWrite(sub, value) {
+  function readFbHttp(r, kind) {
+    lastFbHttp = r && r.status ? r.status : 0;
+    if (!r) return false;
+    if (r.status === 401 || r.status === 403) {
+      lastError = "HTTP " + r.status;
+      lockFirebase(r.status);
+      return false;
+    }
+    if (!r.ok) {
+      lastError = (kind || "Firebase") + " HTTP " + r.status;
+      return false;
+    }
+    return true;
+  }
+
+  function fbPut(sub, value) {
     var url = fbUrl(sub);
     if (!url) return Promise.resolve(false);
     var opt = { method: value === null ? "DELETE" : "PUT" };
@@ -325,13 +347,36 @@
       opt.body = JSON.stringify(value);
     }
     return fbFetch(url, opt).then(function (r) {
-      if (!r.ok) throw new Error(String(r.status));
+      if (!readFbHttp(r, "write")) return false;
       markFirebaseLive();
       return true;
-    }).catch(function (err) {
+    }).catch(function () {
       lastError = "Firebase write failed" + (sub ? " (" + sub + ")" : "");
+      if (!usingFirebase) lockFirebase(0);
       return false;
     });
+  }
+
+  function fbPatch(obj) {
+    var url = fbUrl("");
+    if (!url) return Promise.resolve(false);
+    return fbFetch(url, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(obj)
+    }).then(function (r) {
+      if (!readFbHttp(r, "patch")) return false;
+      markFirebaseLive();
+      return true;
+    }).catch(function () {
+      lastError = "Firebase patch failed";
+      if (!usingFirebase) lockFirebase(0);
+      return false;
+    });
+  }
+
+  function fbWrite(sub, value) {
+    return fbPut(sub, value);
   }
 
   function takeHere(v, force) {
@@ -424,8 +469,11 @@
     var data = packData();
     lastPackSig = packSig(data);
     var msg = { t: "pack", session: session, data: data };
-    try { if (bc) bc.postMessage(msg); } catch (e) {}
-    if (firebaseConfigured()) fbWrite("pack", data);
+    if (backupOn) {
+      try { if (bc) bc.postMessage(msg); } catch (e) {}
+    }
+    if (usingFirebase && !fbLocked) fbPut("pack", data);
+    if (!backupOn) return;
     var raw = JSON.stringify(data);
     var CHUNK = 2400;
     if (raw.length <= CHUNK) {
@@ -522,7 +570,7 @@
 
   function takeRoom(data) {
     if (!data || typeof data !== "object") {
-      takeHere(null);
+      if (!wantLive && !presenting) takeHere(null);
       return;
     }
     takeKicks(data.kicks);
@@ -538,91 +586,177 @@
     takeResponses(data.responses);
   }
 
+  function setSyncLine(mode, detail, phones) {
+    status.live = mode !== "local";
+    status.mode = mode;
+    status.detail = detail;
+    status.phones = !!phones;
+    emitStatus();
+  }
+
   function markFirebaseLive() {
     fbReachable = true;
-    status.live = true;
-    status.phones = true;
-    if (status.mode !== "ntfy") {
-      status.mode = "firebase";
-      status.detail = "";
+    fbLocked = false;
+    usingFirebase = true;
+    fbErrs = 0;
+    setSyncLine("firebase", "Live sync: Firebase", true);
+  }
+
+  function startBackup() {
+    if (localOnly || backupOn || forceFirebase) return;
+    backupOn = true;
+    if (bc && !bc.onmessage) {
+      bc.onmessage = function (ev) { apply(ev.data, "bc"); };
     }
-    emitStatus();
+    useNtfy();
+    setSyncLine("backup", "Live sync: backup, Firebase locked", true);
+  }
+
+  function lockFirebase(code) {
+    if (code) lastFbHttp = code;
+    fbReachable = false;
+    fbLocked = true;
+    usingFirebase = false;
+    startBackup();
+    setSyncLine("backup", "Live sync: backup, Firebase locked", true);
+  }
+
+  function bindPublishFb() {
+    publishFb = function (msg) {
+      if (msg.t === "slide") fbPut("slide", msg.n);
+      else if (msg.t === "resp") fbPut("responses/" + msg.slide + "/" + msg.sid, {
+        text: msg.text || "", choice: msg.choice || "", at: msg.at || Date.now(), bin: msg.bin || ""
+      });
+      else if (msg.t === "reset") fbPut("responses/" + msg.slide, null);
+      else if (msg.t === "wipe") fbPut("responses", null);
+      else if (msg.t === "here") fbPatch({ goneAt: null, here: msg.at || Date.now() });
+      else if (msg.t === "gone") fbPatch({ here: null, goneAt: msg.at || Date.now() });
+      else if (msg.t === "kick") {
+        fbPut("seats/" + msg.sid, null);
+        fbPut("hands/" + msg.sid, null);
+        fbPut("kicks/" + msg.sid, { name: msg.name || "", at: msg.at || Date.now() });
+      } else if (msg.t === "unkick") fbPut("kicks", null);
+      else if (msg.t === "seat") fbPut("seats/" + msg.sid, {
+        at: msg.at || Date.now()
+      });
+      else if (msg.t === "leave") {
+        fbPut("seats/" + msg.sid, null);
+        fbPut("hands/" + msg.sid, null);
+      } else if (msg.t === "hand") {
+        if (msg.up) fbPut("hands/" + msg.sid, {
+          slide: msg.slide, up: true, at: msg.at || Date.now()
+        });
+        else fbPut("hands/" + msg.sid, null);
+      }
+    };
+  }
+
+  function applyFbPath(path, data) {
+    var p = String(path || "/").replace(/^\//, "");
+    if (!p || p === "/") {
+      if (data && typeof data === "object") takeRoom(data);
+      return;
+    }
+    if (p === "slide") takeSlide(data);
+    else if (p === "here") takeHere(data, data == null);
+    else if (p === "goneAt") { if (data) noteGone(data); }
+    else if (p === "seats") takeSeats(data);
+    else if (p === "hands") takeHands(data);
+    else if (p === "responses") takeResponses(data);
+    else if (p === "pack") takePack(data);
+    else if (p === "roster") takeRoster(data);
+    else if (p === "kicks") takeKicks(data);
+    else if (p.indexOf("seats/") === 0) {
+      var seatId = p.slice(6);
+      if (!seatId) return;
+      if (data == null) {
+        delete seats[seatId];
+        lastSeatSig = "";
+        emitSeats();
+      } else {
+        apply({ t: "seat", sid: seatId, at: data.at }, "fb");
+      }
+    } else if (p.indexOf("hands/") === 0) {
+      var handId = p.slice(6);
+      if (!handId) return;
+      if (data == null) apply({ t: "hand", sid: handId, up: false }, "fb");
+      else apply({ t: "hand", sid: handId, up: true, slide: data.slide, at: data.at }, "fb");
+    }
+  }
+
+  function onFbStream(e) {
+    try {
+      var body = JSON.parse(e.data);
+      var path = body && body.path != null ? body.path : "/";
+      var data = body && Object.prototype.hasOwnProperty.call(body, "data") ? body.data : body;
+      markFirebaseLive();
+      applyFbPath(path, data);
+    } catch (err) {}
+  }
+
+  function openFbStream() {
+    if (fbSource || !fbUrl("")) return;
+    try {
+      fbSource = new EventSource(fbUrl(""));
+      fbSource.addEventListener("put", onFbStream);
+      fbSource.addEventListener("patch", onFbStream);
+      fbSource.onerror = function () {
+        fbErrs += 1;
+        if (fbErrs >= 3 && !backupOn) lockFirebase(lastFbHttp || 0);
+      };
+    } catch (e) {
+      lockFirebase(0);
+    }
+  }
+
+  function closeFbStream() {
+    if (!fbSource) return;
+    try { fbSource.close(); } catch (e) {}
+    fbSource = null;
   }
 
   function enableFirebaseRest() {
     if (!firebaseConfigured() || !fbUrl("")) return false;
-    publishFb = function (msg) {
-      if (msg.t === "slide") fbWrite("slide", msg.n);
-      else if (msg.t === "resp") fbWrite("responses/" + msg.slide + "/" + msg.sid, {
-        text: msg.text || "", choice: msg.choice || "", at: msg.at || Date.now(), bin: msg.bin || ""
-      });
-      else if (msg.t === "reset") fbWrite("responses/" + msg.slide, null);
-      else if (msg.t === "wipe") fbWrite("responses", null);
-      else if (msg.t === "here") {
-        fbWrite("goneAt", null);
-        fbWrite("here", msg.at || Date.now());
-      } else if (msg.t === "gone") {
-        fbWrite("here", null);
-        fbWrite("goneAt", msg.at || Date.now());
-      } else if (msg.t === "kick") {
-        fbWrite("seats/" + msg.sid, null);
-        fbWrite("hands/" + msg.sid, null);
-        fbWrite("kicks/" + msg.sid, { name: msg.name || "", at: msg.at || Date.now() });
-      } else if (msg.t === "unkick") fbWrite("kicks", null);
-      else if (msg.t === "seat") fbWrite("seats/" + msg.sid, {
-        at: msg.at || Date.now()
-      });
-      else if (msg.t === "leave") {
-        fbWrite("seats/" + msg.sid, null);
-        fbWrite("hands/" + msg.sid, null);
-      } else if (msg.t === "hand") {
-        if (msg.up) fbWrite("hands/" + msg.sid, {
-          slide: msg.slide, up: true, at: msg.at || Date.now()
-        });
-        else fbWrite("hands/" + msg.sid, null);
+    bindPublishFb();
+    fbFetch(fbUrl("")).then(function (r) {
+      lastFbHttp = r.status;
+      if (r.status === 401 || r.status === 403) {
+        lastError = "HTTP " + r.status;
+        lockFirebase(r.status);
+        return;
       }
-    };
-    if (presenting) publishFb({ t: "here", at: lastHere || Date.now(), session: session });
-    if (me) publishFb({
-      t: "seat", sid: sid(), at: Date.now(), session: session
+      if (!r.ok) {
+        lastError = "HTTP " + r.status;
+        lockFirebase(r.status);
+        return;
+      }
+      return r.json().then(function (data) {
+        if (data && typeof data === "object") takeRoom(data);
+        markFirebaseLive();
+        openFbStream();
+        if (presenting) publishFb({ t: "here", at: lastHere || Date.now(), session: session });
+        if (me) publishFb({ t: "seat", sid: sid(), at: Date.now(), session: session });
+      });
+    }).catch(function () {
+      lastError = lastError || "Firebase unreachable";
+      lockFirebase(0);
     });
-    function pollHere() {
-      fbFetch(fbUrl("here")).then(function (r) {
-        if (!r.ok) throw new Error(String(r.status));
-        return r.json();
-      }).then(function (data) {
-        takeHere(data);
-        markFirebaseLive();
-      }).catch(function () {});
-    }
-    function poll() {
-      fbFetch(fbUrl("")).then(function (r) {
-        if (!r.ok) throw new Error(String(r.status));
-        return r.json();
-      }).then(function (data) {
-        takeRoom(data);
-        markFirebaseLive();
-      }).catch(function () {});
-    }
-    pollHere();
-    poll();
-    setInterval(pollHere, 500);
-    setInterval(poll, 2000);
-    try {
-      var es = new EventSource(fbUrl("here"));
-      function onHere(e) {
-        try {
-          var body = JSON.parse(e.data);
-          var data = body && Object.prototype.hasOwnProperty.call(body, "data") ? body.data : body;
-          takeHere(data, data == null);
-          markFirebaseLive();
-        } catch (err) {}
-      }
-      es.addEventListener("put", onHere);
-      es.addEventListener("patch", onHere);
-    } catch (e) {}
-    usingFirebase = true;
     return true;
+  }
+
+  function retryFirebase() {
+    if (localOnly || !firebaseConfigured() || usingFirebase) return;
+    fbFetch(fbUrl("")).then(function (r) {
+      lastFbHttp = r.status;
+      if (!r.ok) return;
+      return r.json().then(function (data) {
+        bindPublishFb();
+        if (data && typeof data === "object") takeRoom(data);
+        markFirebaseLive();
+        closeFbStream();
+        openFbStream();
+      });
+    }).catch(function () {});
   }
 
   function useNtfy() {
@@ -665,10 +799,7 @@
       if (lastPack) apply(lastPack, "ntfy");
       if (lastSlide) apply(lastSlide, "ntfy");
       if (lastLive) apply(lastLive, "ntfy");
-      status.live = true;
-      status.mode = "ntfy";
-      status.detail = "";
-      emitStatus();
+      if (!usingFirebase) setSyncLine("backup", "Live sync: backup, Firebase locked", true);
     }).catch(function () {});
     try {
       var es = new EventSource(url + "/sse");
@@ -677,10 +808,7 @@
       es.onerror = function () {};
       es.onopen = function () {
         sseOpen = true;
-        status.live = true;
-        status.mode = "ntfy";
-        status.detail = "";
-        emitStatus();
+        if (!usingFirebase) setSyncLine("backup", "Live sync: backup, Firebase locked", true);
       };
     } catch (e) {}
     return sseOpen;
@@ -692,8 +820,10 @@
       emitStatus();
       return;
     }
-    enableFirebaseRest();
-    if (!forceFirebase) useNtfy();
+    if (bc) bc.onmessage = function (ev) { apply(ev.data, "bc"); };
+    if (firebaseConfigured()) enableFirebaseRest();
+    else startBackup();
+    setInterval(retryFirebase, 20000);
   }
 
   if (document.readyState === "loading") {
@@ -841,6 +971,7 @@
         seats: seatList().map(function (r) { return r.sid; }),
         status: { live: status.live, mode: status.mode, detail: status.detail, phones: !!status.phones },
         firebase: fbReachable,
+        firebaseHttp: lastFbHttp,
         error: lastError,
         hereUrl: fbUrl("here")
       };
@@ -848,21 +979,39 @@
     probe: function () {
       var token = Date.now();
       var firebase = fbUrl("_probe")
-        ? fbWrite("_probe", token).then(function (ok) {
-            if (!ok) return { ok: false, write: false, read: false, error: lastError || "write failed" };
-            return fbFetch(fbUrl("_probe")).then(function (r) {
-              if (!r.ok) throw new Error(String(r.status));
-              return r.json();
-            }).then(function (v) {
-              fbWrite("_probe", null);
-              var read = v === token || +v === token;
-              return { ok: read, write: true, read: read, value: v };
+        ? fbFetch(fbUrl("_probe"), {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(token)
+          }).then(function (r) {
+            lastFbHttp = r.status;
+            if (r.status === 401 || r.status === 403) {
+              lastError = "HTTP " + r.status;
+              lockFirebase(r.status);
+              return { ok: false, write: false, read: false, status: r.status, error: "HTTP " + r.status };
+            }
+            if (!r.ok) {
+              lastError = "HTTP " + r.status;
+              return { ok: false, write: false, read: false, status: r.status, error: "HTTP " + r.status };
+            }
+            return fbFetch(fbUrl("_probe")).then(function (readRes) {
+              lastFbHttp = readRes.status;
+              if (!readRes.ok) {
+                return { ok: false, write: true, read: false, status: readRes.status, error: "HTTP " + readRes.status };
+              }
+              return readRes.json().then(function (v) {
+                fbPut("_probe", null);
+                var read = v === token || +v === token;
+                markFirebaseLive();
+                return { ok: read, write: true, read: read, status: readRes.status, value: v };
+              });
             });
           }).catch(function () {
-            lastError = "Firebase probe failed";
-            return { ok: false, write: false, read: false, error: lastError };
+            lastError = lastError || "Firebase probe failed";
+            if (!usingFirebase) lockFirebase(lastFbHttp || 0);
+            return { ok: false, write: false, read: false, status: lastFbHttp || 0, error: lastError };
           })
-        : Promise.resolve({ ok: false, write: false, read: false, error: "No Firebase URL" });
+        : Promise.resolve({ ok: false, write: false, read: false, status: 0, error: "No Firebase URL" });
       var ntfyBase = String(cfg.ntfyBase || "https://ntfy.sh").replace(/\/$/, "") + "/" + room;
       var ntfy = localOnly
         ? Promise.resolve({ ok: false, skipped: true })
@@ -877,14 +1026,23 @@
       var url = fbUrl("");
       if (!url) return Promise.resolve(false);
       return fbFetch(url).then(function (r) {
-        if (!r.ok) throw new Error(String(r.status));
-        return r.json();
-      }).then(function (data) {
-        takeRoom(data);
-        markFirebaseLive();
-        return true;
+        lastFbHttp = r.status;
+        if (r.status === 401 || r.status === 403) {
+          lastError = "HTTP " + r.status;
+          lockFirebase(r.status);
+          return false;
+        }
+        if (!r.ok) {
+          lastError = "HTTP " + r.status;
+          return false;
+        }
+        return r.json().then(function (data) {
+          if (data && typeof data === "object") takeRoom(data);
+          markFirebaseLive();
+          return true;
+        });
       }).catch(function () {
-        lastError = "Firebase pull failed";
+        lastError = lastError || "Firebase pull failed";
         return false;
       });
     },
@@ -899,19 +1057,37 @@
       var at = Math.max(Date.now(), lastGoneAt + 1);
       lastHere = at;
       setPresenting(true);
-      return fbWrite("here", at).then(function (ok) {
-        if (!ok) return { ok: false, wrote: false, read: null, error: lastError || "Firebase write failed" };
+      if (fbLocked || !firebaseConfigured()) {
+        return Promise.resolve({
+          ok: backupOn,
+          wrote: backupOn,
+          read: backupOn ? at : null,
+          status: lastFbHttp,
+          error: backupOn ? "" : (lastError || "HTTP " + lastFbHttp)
+        });
+      }
+      return fbPatch({ goneAt: null, here: at }).then(function (ok) {
+        if (!ok) {
+          return {
+            ok: backupOn,
+            wrote: backupOn,
+            read: backupOn ? at : null,
+            status: lastFbHttp,
+            error: lastError || "HTTP " + lastFbHttp
+          };
+        }
         return fbFetch(fbUrl("here")).then(function (r) {
+          lastFbHttp = r.status;
           if (!r.ok) throw new Error(String(r.status));
           return r.json();
         }).then(function (v) {
           var n = typeof v === "number" ? v : (v && v.at);
           takeHere(n, true);
-          return { ok: !!n, wrote: true, read: n, error: n ? "" : "Wrote Go live but read-back was empty" };
+          return { ok: !!n, wrote: true, read: n, status: lastFbHttp, error: n ? "" : "Wrote Go live but read-back was empty" };
         });
       }).catch(function () {
         lastError = lastError || "Firebase read-back failed";
-        return { ok: false, wrote: true, read: null, error: lastError };
+        return { ok: backupOn, wrote: true, read: backupOn ? at : null, status: lastFbHttp, error: lastError };
       });
     },
     republish: function () {

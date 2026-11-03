@@ -1074,8 +1074,9 @@
       ["Room", snap.localOnly ? "This computer only" : snap.room],
       ["Session", snap.session],
       ["Go live", snap.presenting ? "On · last push " + failsafeAge(snap.hereAgeMs) : "Off · phones on Hold"],
-      ["Phones", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Firebase path is open" : "Not confirmed yet")],
-      ["Transport", snap.status.detail || snap.status.mode],
+      ["Phones", snap.localOnly ? "Blocked by ?local=1" : (snap.status.phones ? "Can join" : "Not confirmed yet")],
+      ["Live sync", snap.localOnly ? "This computer only" : (snap.status.detail || snap.status.mode)],
+      ["Firebase HTTP", snap.firebaseHttp ? String(snap.firebaseHttp) : "none"],
       ["Checked in", String(snap.seats.length)],
       ["Join", (snap.join || "").replace(/^https:\/\//, "")],
       ["Slide", String((snap.slide || 0) + 1)],
@@ -1116,15 +1117,9 @@
       if (local) {
         note.textContent = on ? "This computer only" : "";
         note.className = "live-status";
-      } else if (on && !st.phones) {
-        note.textContent = "Phones may still be on Hold";
-        note.className = "live-status warn";
-      } else if (on) {
-        note.textContent = st.detail || "Phones can join";
-        note.className = "live-status";
       } else {
-        note.textContent = st.live ? (st.detail || "Ready") : "Connecting…";
-        note.className = "live-status";
+        note.textContent = st.detail || (st.live ? "Live sync: backup, Firebase locked" : "Connecting…");
+        note.className = st.mode === "backup" ? "live-status warn" : "live-status";
       }
     }
     var fs = document.getElementById("failsafe");
@@ -1303,10 +1298,12 @@
         var fb = res.firebase || {};
         var nt = res.ntfy || {};
         var lines = [
+          "Firebase HTTP " + (fb.status != null ? fb.status : "?"),
           "Firebase write: " + (fb.write ? "ok" : "failed"),
           "Firebase read: " + (fb.read ? "ok" : "failed"),
-          "ntfy: " + (nt.skipped ? "skipped (this computer only)" : (nt.ok ? "ok" : "blocked")),
           fb.error ? "Firebase error: " + fb.error : "",
+          "ntfy: " + (nt.skipped ? "skipped (this computer only)" : (nt.ok ? "ok HTTP " + nt.status : "blocked HTTP " + (nt.status || 0))),
+          res.snap && res.snap.status && res.snap.status.detail ? res.snap.status.detail : "",
           res.snap && res.snap.localOnly ? "?local=1 is on, so remove it for class." : ""
         ].filter(Boolean);
         failsafeLog(lines.join("\n"));

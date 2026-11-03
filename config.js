@@ -12,6 +12,6 @@ window.DECK = {
   ntfyBase: "https://ntfy.sh",
   firebase: {
     apiKey: "",
-    databaseURL: ""
+    databaseURL: "https://intl6010-default-rtdb.firebaseio.com"
   }
 };
