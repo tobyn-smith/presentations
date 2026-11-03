@@ -99,7 +99,7 @@
   var chile = slide("chile");
   chile.kicker = "PART 3 - TOBYN";
   chile.type = "claims";
-  chile.title = "What changes when we keep looking?";
+  chile.title = "The endpoint changes the story";
   chile.chart = {
     id: "geddes-fig6", title: "Figure 6 · Inflation in Chile, 1930–1972",
     source: "Geddes (1990), Figure 6; Table 2 supplies the 1930–1961 values",
