@@ -422,7 +422,7 @@ body.role-part .stage.prompt .slot-empty { font-size: clamp(14px, 1.8vh, 18px); 
 
 /* Mobile / narrow screens are deliberately not a supported audience view. */
 .desktop-notice { display: none; }
-@media (max-width: 959px) {
+@media (max-width: 799px) {
   body.role-part { display: block; min-width: 0; background: #101820; }
   body.role-part .deck { display: none !important; }
   body.role-part .desktop-notice {
