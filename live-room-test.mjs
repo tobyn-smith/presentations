@@ -162,6 +162,9 @@ try {
      answer and written reason both appear on the presenter screen. */
   await presenter.click("#next");
   await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="4",null,{timeout:10000});
+  await presenter.waitForSelector("#viz .room-empty-state",{state:"visible",timeout:10000});
+  check((await presenter.locator(".ask-q").innerText()).includes("Which cases would improve the test most?"),"slide 4 presenter shows the activity question before responses");
+  check(await presenter.locator("#viz .room-empty-state").isVisible(),"slide 4 presenter clearly shows where responses will appear");
   await student.locator('#choices button[data-choice="Countries with slower growth"]').click();
   await student.locator("#ans").fill("This gives us cases where growth was slower, so the outcome varies.");
   await student.locator(".send").click();
@@ -171,8 +174,8 @@ try {
   const comparisonAnswer = await presenter.locator("#viz .responses li").innerText();
   check(comparisonAnswer.includes("Countries with slower growth"),"slide 4 selected comparison appears on the presenter screen");
   check(comparisonAnswer.includes("outcome varies"),"slide 4 written explanation appears on the presenter screen");
-  check((await student.locator(".you").innerText()).includes("Countries with slower growth"),"slide 4 participant sees their submitted choice");
-  check((await student.locator(".you").innerText()).includes("outcome varies"),"slide 4 participant sees their written reason");
+  check((await student.locator(".submission-receipt").innerText()).includes("Countries with slower growth"),"slide 4 participant sees their submitted choice in the receipt");
+  check((await student.locator(".submission-receipt").innerText()).includes("outcome varies"),"slide 4 participant sees their written reason in the receipt");
   await presenter.screenshot({path:path.join(out,"slide4-room-response.png"),animations:"disabled"});
   await presenter.click("#prev");
   await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="3",null,{timeout:10000});
@@ -289,6 +292,25 @@ try {
   check((await student.locator(".you").innerText()).includes("A curve, or a few NICs drive it"),"Figure 3 participant sees their submitted interpretation");
   check(await presenter.locator(".presenter-choice-preview").isVisible(),"Figure 3 choices remain visible alongside incoming responses");
   await presenter.screenshot({path:path.join(out,"figure3-presenter-response.png"),animations:"disabled"});
+
+  /* Revisit slide 3 and verify that the placement activity produces both a
+     class tally and a readable individual response card. */
+  for (let step=0;step<4;step++) await presenter.click("#prev");
+  await presenter.waitForFunction(()=>document.querySelector("#counter")?.textContent.trim()==="3",null,{timeout:10000});
+  await student.waitForFunction(()=>(document.querySelector("#counter")?.textContent||"").split("/")[0].trim()==="3",null,{timeout:10000});
+  await student.locator('select[data-token-place="Labour was repressed or coopted"]').selectOption("shown");
+  await student.locator('select[data-token-place="That produced fast growth"]').selectOption("not");
+  await student.locator('select[data-token-place="Slower-growth countries are missing"]').selectOption("shown");
+  await student.click("#drag-send");
+  await student.waitForSelector(".thanks",{state:"visible",timeout:10000});
+  await presenter.waitForFunction(()=>DeckSync.getResponses("2").length===1,null,{timeout:12000});
+  await presenter.waitForSelector("#viz .room-summary-block",{state:"visible",timeout:10000});
+  await presenter.waitForSelector("#viz .room-detail-block .responses li",{state:"visible",timeout:10000});
+  const placementResult=await presenter.locator("#viz .room-detail-block .responses li").innerText();
+  check(placementResult.includes("Labour was repressed or coopted") && placementResult.includes("That produced fast growth") && placementResult.includes("Slower-growth countries are missing"),"slide 3 presenter shows all three placement decisions");
+  check(await presenter.locator("#viz .room-summary-block .bars .bar").count()===2,"slide 3 presenter shows the two class-tally categories");
+  check(await presenter.locator("#viz .room-detail-block .responses li").count()===1,"slide 3 presenter shows the individual placement response");
+  await presenter.screenshot({path:path.join(out,"slide3-room-results.png"),animations:"disabled"});
 
   console.log("Live-room checks: "+checks.length);
   checks.forEach(x=>console.log("PASS "+x));
