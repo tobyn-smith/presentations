@@ -96,6 +96,8 @@ try {
             chartArtworkHeight: artHeight,
             chartWidth: chart ? Math.round(chart.getBoundingClientRect().width) : 0,
             stageClientWidth: stage.clientWidth,
+            chartRight: chart ? Math.round(chart.getBoundingClientRect().right) : 0,
+            askPanelLeft: stage.querySelector(".ask-panel") ? Math.round(stage.querySelector(".ask-panel").getBoundingClientRect().left) : 0,
             repeatedSectionKicker: Array.from(stage.querySelectorAll(".slide-kicker")).some(el => getComputedStyle(el).display !== "none")
           };
         });
@@ -113,6 +115,9 @@ try {
         }
         if (metrics.chartId === "geddes-fig2" && metrics.chartWidth < metrics.stageClientWidth * .72) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 2 leaves an empty chart column");
+        }
+        if (metrics.chartId === "geddes-fig3" && metrics.askPanelLeft < metrics.chartRight - 8) {
+          report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " Figure 3 question panel is not beside the graph");
         }
         if (metrics.repeatedSectionKicker) {
           report.failures.push(mode + " " + viewport.width + "x" + viewport.height + " repeats the section label above the slide title");
